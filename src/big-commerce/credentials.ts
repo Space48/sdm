@@ -1,5 +1,5 @@
 import * as commander from "commander";
-import * as action from "../action";
+import * as action from "@space48/json-pipe";
 import { Config } from "../config";
 
 export type ConfigSchema = {[storeHash: string]: Credentials};

@@ -1,4 +1,4 @@
-import * as action from "../action";
+import * as action from "@space48/json-pipe";
 import Magento2, { SearchIdField } from "./client";
 import { getAllCategories, Category } from "./category";
 import { flatten, distinct } from "../util";

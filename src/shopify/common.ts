@@ -1,4 +1,4 @@
-import * as action from "../action";
+import * as action from "@space48/json-pipe";
 import { Response } from "got";
 
 const concurrency = 20;

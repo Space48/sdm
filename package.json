@@ -19,7 +19,7 @@
     "url": "git+https://github.com/Space48/sdm.git"
   },
   "author": "Josh Di Fabio <joshdifabio@gmail.com>",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/Space48/sdm/issues"
   },
@@ -28,6 +28,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
+    "@space48/json-pipe": "^0.1.0",
     "commander": "^5.0.0",
     "conf": "^6.2.4",
     "node-fetch": "^2.6.0",

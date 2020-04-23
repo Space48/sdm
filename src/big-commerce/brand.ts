@@ -1,6 +1,6 @@
 import { sink } from "./common";
 import BigCommerce from "./client";
-import { source } from "../action";
+import { source } from "@space48/json-pipe";
 
 export const actions = {
     create: (bigCommerce: BigCommerce) => sink(data => bigCommerce.post('v3/catalog/brands', data)),

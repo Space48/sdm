@@ -1,5 +1,5 @@
 import Magento2, { SearchIdField } from "./client";
-import { collect, source } from "../action";
+import { collect, source } from "@space48/json-pipe";
 
 const idField: SearchIdField = {query: 'entity_id', response: 'id'};
 

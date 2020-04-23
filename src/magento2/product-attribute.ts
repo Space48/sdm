@@ -1,4 +1,4 @@
-import * as action from "../action";
+import * as action from "@space48/json-pipe";
 import Magento2, { SearchIdField } from "./client";
 
 const idField: SearchIdField = {query: 'attribute_id', response: 'attribute_id'};
