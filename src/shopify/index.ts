@@ -11,7 +11,7 @@ export function getCommands(config: Config<ConfigSchema>) {
     const credentialsConfig = config.select('credentials');
     const actionToCommand = commandFactory((shopName: string): Shopify => {
         const clientCredentials = credentials.getClientCredentials(credentialsConfig, shopName);
-        const client = new Shopify({...clientCredentials, apiVersion: '2019-07'}) as any;
+        const client = new Shopify({...clientCredentials, apiVersion: '2019-10'}) as any;
         const requestFn = client.request.bind(client);
         client.request = backoff(requestFn);
         return client;
