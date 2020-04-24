@@ -6,38 +6,38 @@ import pRetry from "p-retry";
 export default class BigCommerce {
     constructor(private credentials: Credentials) {}
 
-    async get<T>(uri: string, params?: Record<string, any>): Promise<T> {
+    async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
         const paramsString = params ? `?${stringify(params)}` : '';
         return await this.fetch(uri + paramsString);
     }
 
-    async post<T>(uri: string, content: any): Promise<T> {
+    async post<T = any>(uri: string, content: any): Promise<T> {
         return this.makeUnsafeRequest('POST', uri, content);
     }
 
-    async put<T>(uri: string, content: any): Promise<T> {
+    async put<T = any>(uri: string, content: any): Promise<T> {
         return this.makeUnsafeRequest('PUT', uri, content);
     }
 
-    async patch<T>(uri: string, content: any): Promise<T> {
+    async patch<T = any>(uri: string, content: any): Promise<T> {
         return this.makeUnsafeRequest('PATCH', uri, content);
     }
 
-    async delete<T>(uri: string, content?: any): Promise<T> {
-        return this.makeUnsafeRequest('DELETE', uri, content);
+    async delete(uri: string, content?: any): Promise<void> {
+        await this.makeUnsafeRequest('DELETE', uri, content);
     }
 
     private async makeUnsafeRequest<T>(method: string, uri: string, content: any): Promise<T> {
         return await this.fetch(uri, {
             method,
-            headers: {
+            headers: content && {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(content),
+            body: content && JSON.stringify(content),
         });
     }
 
-    private async fetch<T>(relativeUri: string, init?: RequestInit): Promise<T> {
+    private async fetch(relativeUri: string, init?: RequestInit): Promise<any> {
         const absoluteUri = `https://api.bigcommerce.com/stores/${this.credentials.storeHash}/${relativeUri}`;
         const initResolved = this.init(init);
         const response = await pRetry(
@@ -57,6 +57,9 @@ export default class BigCommerce {
                 body: await response.text(),
             }
             throw error;
+        }
+        if (response.status === 204) {
+            return null;
         }
         return await response.json();
     }
