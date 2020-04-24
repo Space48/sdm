@@ -2,11 +2,14 @@ import * as commander from "commander";
 import * as action from "@space48/json-pipe";
 import { Config } from "../config";
 import Magento2 from "./client";
+import { parse as parseUrl } from "url";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
 export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Magento2 => {
-    const instanceConfig = config.get(baseUrl);
+    const urlExcludingScheme = computeUrlForComparison(baseUrl);
+    const instanceConfig = config.get(baseUrl)
+        || Object.values(config.getAll() || {}).find(candidate => urlExcludingScheme === computeUrlForComparison(candidate.baseUrl));
     if (!(instanceConfig?.credentials || instanceConfig?.token)) {
         throw new Error(`Magento2: No credentials available for instance ${baseUrl}.`);
     }
@@ -16,12 +19,12 @@ export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Ma
             if (!instanceConfig?.credentials) {
                 throw new Error();
             }
-            token = await getToken(baseUrl, instanceConfig.credentials);
-            config.set(baseUrl, {...instanceConfig, token});
+            token = await getToken(instanceConfig.baseUrl, instanceConfig.credentials);
+            config.set(instanceConfig.baseUrl, {...instanceConfig, token});
         }
         return token.value;
     };
-    return new Magento2(baseUrl, {auth: tokenResolver});
+    return new Magento2(instanceConfig.baseUrl, {auth: tokenResolver});
 }
 
 export function getCommands(config: Config<ConfigSchema>) {
@@ -78,4 +81,9 @@ async function getToken(baseUrl: string, credentials: Credentials): Promise<Toke
         value: tokenValue,
         expiration: fourHoursFromNow.toISOString(),
     }
+}
+
+const computeUrlForComparison = (urlish: string) => {
+    const {host, path} = parseUrl(urlish);
+    return `${host || ''}${path}`.replace(/\/$/, '');
 }
