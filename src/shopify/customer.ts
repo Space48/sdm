@@ -7,6 +7,8 @@ export const actions = {
 
     update: ({customer}: Shopify) => sink(({id, ...rest}: Partial<Shopify.ICustomer>) => customer.update(id!, rest)),
 
+    delete: ({customer}: Shopify) => sink((id: number|string) => customer.delete(+id)),
+
     save: (shopify: Shopify) => sink(async (customer: Partial<Shopify.ICustomer>) => {
         const customerId = customer.id || (customer.email && await getCustomerId(shopify.customer, customer.email));
         if (!customerId) {
@@ -17,7 +19,16 @@ export const actions = {
             : await shopify.customer.create(customer);
     }),
 
-    list: ({customer}: Shopify) => action.source(customer.list({})),
+    list: (shopify: Shopify) => action.source((async function* () {
+        let params = { limit: 250 };
+        do {
+            const result = await shopify.customer.list(params);
+            for (const customer of result) {
+                yield customer;
+            }
+            params = (result as any).nextPageParameters;
+        } while (params);
+    })()),
 
     count: ({customer}: Shopify) => action.source([customer.count()]),
 };
