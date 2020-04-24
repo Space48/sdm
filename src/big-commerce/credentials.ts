@@ -1,6 +1,7 @@
 import * as commander from "commander";
 import * as action from "@space48/json-pipe";
 import { Config } from "../config";
+import BigCommerce from "./client";
 
 export type ConfigSchema = {[storeHash: string]: Credentials};
 
@@ -22,11 +23,13 @@ export function getCommands(config: Config<ConfigSchema>) {
     return [
         new commander.Command('set')
             .arguments('<store>')
+            .requiredOption('--store-hash <value>')
             .requiredOption('--access-token <value>')
             .requiredOption('--client-id <value>')
-            .action((storeHash: string, command: commander.Command) => {
-                const {accessToken, clientId} = command.opts();
-                config.set(storeHash, {storeHash, accessToken, clientId});
+            .action(async (storeAlias: string, command: commander.Command) => {
+                const {storeHash, accessToken, clientId} = command.opts();
+                const credentials = {storeHash, accessToken, clientId};
+                config.set(storeAlias, credentials);
             }),
 
         new commander.Command('get')
@@ -34,7 +37,7 @@ export function getCommands(config: Config<ConfigSchema>) {
             .action((storeHash: string) => action.source([config.get(storeHash)].filter(Boolean))),
 
         new commander.Command('list')
-            .action(() => action.source(Object.values(config.getAll() || {}))),
+            .action(() => action.source(Object.entries(config.getAll() || {}))),
 
         new commander.Command('list-stores')
             .action(() => action.source(Object.keys(config.getAll() || {}))),
