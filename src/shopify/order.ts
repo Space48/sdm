@@ -1,5 +1,5 @@
 import * as action from "@space48/json-pipe";
-import * as Shopify from "shopify-api-node";
+import Shopify from "shopify-api-node";
 import { sink } from "./common";
 
 export const actions = {

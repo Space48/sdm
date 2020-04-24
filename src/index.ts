@@ -2,9 +2,9 @@ import * as bigCommerce from './big-commerce';
 import * as magento1 from './magento1';
 import * as magento2 from './magento2';
 import * as shopify from './shopify';
-import * as commander  from 'commander';
+import commander  from 'commander';
 import { Config } from './config';
-import * as Conf from 'conf';
+import Conf from 'conf';
 
 const program = new commander.Command();
 

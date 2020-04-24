@@ -3,7 +3,7 @@ import * as action from "@space48/json-pipe";
 import { Config } from "../config";
 import Magento1 from "./client";
 import { OAuth } from "oauth";
-import * as open from "open";
+import open from "open";
 import * as rl from "readline";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};

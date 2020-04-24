@@ -4,7 +4,7 @@ import * as customer from './customer';
 import * as order from './order';
 import * as product from './product';
 import { Config } from '../config';
-import * as Shopify from 'shopify-api-node';
+import Shopify from 'shopify-api-node';
 import pRetry from 'p-retry';
 
 export function getCommands(config: Config<ConfigSchema>) {
