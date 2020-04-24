@@ -1,6 +1,6 @@
 {
   "name": "@space48/sdm",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Command line tools for piping data in and out of APIs",
   "main": "./lib/index.js",
   "bin": {
