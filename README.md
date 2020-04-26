@@ -3,7 +3,7 @@
 
 ## Getting Started
 
-* Create github access token with read packages privs: [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new)
+* Create github access token with `read packages` and `repo` privs: [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new)
 * Using your github user access token as password, run `npm login --registry=https://npm.pkg.github.com --scope=@space48`
 * Install sdm: `npm i -g @space48/sdm`
 * Install jq: `brew install jq`
