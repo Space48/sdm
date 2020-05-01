@@ -1,8 +1,10 @@
 import * as commander from 'commander';
 import * as credentials from './credentials';
+import * as customCollection from './custom-collection';
 import * as customer from './customer';
 import * as order from './order';
 import * as product from './product';
+import * as smartCollection from './smart-collection';
 import { Config } from '../config';
 import Shopify from 'shopify-api-node';
 import pRetry from 'p-retry';
@@ -18,9 +20,11 @@ export function getCommands(config: Config<ConfigSchema>) {
     });
     return {
         creds: credentials.getCommands(credentialsConfig),
+        'custom-collection': Object.entries(customCollection.actions).map(actionToCommand),
         customer: Object.entries(customer.actions).map(actionToCommand),
         order: Object.entries(order.actions).map(actionToCommand),
         product: Object.entries(product.actions).map(actionToCommand),
+        'smart-collection': Object.entries(smartCollection.actions).map(actionToCommand),
     };
 }
 
