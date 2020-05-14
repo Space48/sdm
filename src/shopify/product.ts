@@ -11,9 +11,7 @@ export const actions = {
         let params = { limit: 250 };
         do {
             const result = await shopify.product.list(params);
-            for (const product of result) {
-                yield product;
-            }
+            yield* result;
             params = (result as any).nextPageParameters;
         } while (params);
     })()),
@@ -32,7 +30,7 @@ type Product = Shopify.IProduct & {
 # Notes
 
 - Shopify permits Duplicate variant SKUs across different products (not tested on a single product)
-- Shopify appends a -2, -3, etc., suffix to handles when they are non-unique
+- Shopify sometimes appends a -2, -3, etc., suffix to handles when they are non-unique, while sometimes it errors
 - Shopify ignores ids on create -- there's no need to remove them
 - When updating a product, Shopify identifies variants by their SKU if the variant ID is not specified
 
