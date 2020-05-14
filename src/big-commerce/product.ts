@@ -7,13 +7,7 @@ export const actions = {
 
     delete: (bigCommerce: BigCommerce) => sink(productId => bigCommerce.delete(`v3/catalog/products/${productId}`)),
 
-    list: (bigCommerce: BigCommerce) => source((async function* () {
-        for (let page = 1;; page++) {
-            const items = (await bigCommerce.get('v3/catalog/products', {page})).data;
-            if (items.length === 0) {
-                break;
-            }
-            yield* items;
-        }
-    })()),
+    list: (bigCommerce: BigCommerce) => source(bigCommerce.list('v3/catalog/products', {include})),
 };
+
+const include = 'variants,images,custom_fields,bulk_pricing_rules,primary_image,modifiers,options,videos';

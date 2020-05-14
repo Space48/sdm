@@ -2,7 +2,9 @@ import * as commander from 'commander';
 import * as brand from './brand';
 import * as category from './category';
 import * as credentials from './credentials';
+import * as order from './order';
 import * as product from './product';
+import * as productOption from './product-option';
 import * as store from './store';
 import { Config } from '../config';
 import BigCommerce from './client';
@@ -17,7 +19,9 @@ export function getCommands(config: Config<ConfigSchema>) {
         brand: Object.entries(brand.actions).map(actionToCommand),
         category: Object.entries(category.actions).map(actionToCommand),
         creds: credentials.getCommands(credentialsConfig),
+        order: Object.entries(order.actions).map(actionToCommand),
         product: Object.entries(product.actions).map(actionToCommand),
+        'product-option': Object.entries(productOption.actions).map(actionToCommand),
         store: Object.entries(store.actions).map(actionToCommand),
     };
 }

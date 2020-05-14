@@ -3,12 +3,31 @@ import { stringify } from 'query-string'
 import { Credentials } from "./credentials";
 import pRetry from "p-retry";
 
+const listConcurrency = 50;
+
 export default class BigCommerce {
     constructor(private credentials: Credentials) {}
 
     async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
         const paramsString = params ? `?${stringify(params)}` : '';
         return await this.fetch(uri + paramsString);
+    }
+
+    async* list<T = any>(uri: string, params?: Record<string, any>): AsyncIterable<T> {
+        const threads = [...new Array(listConcurrency).keys()];
+        for (let page = 1;; page += listConcurrency) {
+            const pages = await Promise.all(threads.map(
+                threadId => this.get<{data: T[]}>(uri, {page: page + threadId, ...(params || {})})
+            ));
+            const items = pages
+                .map(page => page.data)
+                .reduce((previousItems, pageItems) => [...previousItems, ...pageItems]);
+            yield* items;
+            const lastPage = pages.slice(-1)[0];
+            if (lastPage.data.length === 0) {
+                break;
+            }
+        }
     }
 
     async post<T = any>(uri: string, content: any): Promise<T> {

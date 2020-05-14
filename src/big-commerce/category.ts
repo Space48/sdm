@@ -5,15 +5,7 @@ import { source } from "@space48/json-pipe";
 export const actions = {
     create: (bigCommerce: BigCommerce) => sink(data => bigCommerce.post('v3/catalog/categories', data)),
 
-    list: (bigCommerce: BigCommerce) => source((async function* () {
-        for (let page = 1;; page++) {
-            const items = (await bigCommerce.get<{data: Category[]}>('v3/catalog/categories', {page})).data;
-            if (items.length === 0) {
-                break;
-            }
-            yield* items;
-        }
-    })()),
+    list: (bigCommerce: BigCommerce) => source(bigCommerce.list('v3/catalog/categories')),
 
     tree: (bigCommerce: BigCommerce) => source(bigCommerce.get('v3/catalog/categories/tree').then((body: any) => body.data)),
 

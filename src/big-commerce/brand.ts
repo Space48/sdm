@@ -5,15 +5,7 @@ import { source } from "@space48/json-pipe";
 export const actions = {
     create: (bigCommerce: BigCommerce) => sink(data => bigCommerce.post('v3/catalog/brands', data)),
 
-    list: (bigCommerce: BigCommerce) => source((async function* () {
-        for (let page = 1;; page++) {
-            const items = (await bigCommerce.get<{data: Brand[]}>('v3/catalog/brands', {page})).data;
-            if (items.length === 0) {
-                break;
-            }
-            yield* items;
-        }
-    })()),
+    list: (bigCommerce: BigCommerce) => source(bigCommerce.list<Brand>('v3/catalog/brands')),
 
     delete: (bigCommerce: BigCommerce) => sink(brandId => bigCommerce.delete(`v3/catalog/brands/${brandId}`)),
 };
