@@ -2,8 +2,11 @@ import fetch, { RequestInit } from "node-fetch";
 import { stringify } from 'query-string'
 import { Credentials } from "./credentials";
 import pRetry from "p-retry";
+import { flatten } from "../util";
 
 const listConcurrency = 50;
+
+type ListPage<T> = T[] | {data: T[]} | null;
 
 export default class BigCommerce {
     constructor(private credentials: Credentials) {}
@@ -17,14 +20,15 @@ export default class BigCommerce {
         const threads = [...new Array(listConcurrency).keys()];
         for (let page = 1;; page += listConcurrency) {
             const pages = await Promise.all(threads.map(
-                threadId => this.get<{data: T[]}>(uri, {page: page + threadId, ...(params || {})})
+                threadId => this.get<ListPage<T>>(uri, {page: page + threadId, ...(params || {})})
             ));
             const items = pages
-                .map(page => page.data)
-                .reduce((previousItems, pageItems) => [...previousItems, ...pageItems]);
+                .map(page => Array.isArray(page) ? page : page?.data || [])
+                .reduce(flatten);
             yield* items;
             const lastPage = pages.slice(-1)[0];
-            if (lastPage.data.length === 0) {
+            const lastPageItems = Array.isArray(lastPage) ? lastPage : lastPage?.data || [];
+            if (lastPageItems.length === 0) {
                 break;
             }
         }
