@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf lib",
-    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json"
+    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json && chmod +x lib/bin/sdm.js"
   },
   "engines": {
     "node": ">= 10.3.0"
