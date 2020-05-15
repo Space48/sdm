@@ -26,10 +26,14 @@ export type ConfigSchema = {
     credentials: credentials.ConfigSchema,
 };
 
-type Action = (magento: Magento2, ...args: any[]) => void | Promise<void>;
+type Action = (magento: Magento2, concurrency: number, ...args: any[]) => void | Promise<void>;
 const commandFactory = (getClient: (shopName: string) => Magento2) => <T extends Action>([name, action]: [string, T]) => {
     const command = new commander.Command(name);
+    command.option('--concurrency <number>', 'Max number of concurrent API requests.', parseInt);
     command.arguments('<base-url>');
-    command.action((baseUrl: string) => action(getClient(baseUrl)));
+    command.action((baseUrl: string) => {
+        const {concurrency = 1} = command.opts();
+        action(getClient(baseUrl), concurrency);
+    });
     return command;
 };

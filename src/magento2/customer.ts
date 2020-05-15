@@ -6,7 +6,7 @@ const idField: SearchIdField = {query: 'entity_id', response: 'id'};
 export const actions = {
     list: (magento: Magento2) => action.source(magento.search('customers/search', {idField})),
 
-    create: (magento: Magento2) => action.sink(customer => magento.post('customers', {customer})),
+    create: (magento: Magento2, concurrency: number) => action.sink({concurrency}, customer => magento.post('customers', {customer})),
 };
 
 export type Customer = {
