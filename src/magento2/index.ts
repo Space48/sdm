@@ -29,7 +29,7 @@ export type ConfigSchema = {
 type Action = (magento: Magento2, concurrency: number, ...args: any[]) => void | Promise<void>;
 const commandFactory = (getClient: (shopName: string) => Magento2) => <T extends Action>([name, action]: [string, T]) => {
     const command = new commander.Command(name);
-    command.option('--concurrency <number>', 'Max concurrency of API requests.', parseInt, 1);
+    command.option('--concurrency <number>', 'Max concurrency of API requests.', (value: string) => parseInt(value), 1);
     command.arguments('<base-url>');
     command.action((baseUrl: string) => {
         const {concurrency = 1} = command.opts();
