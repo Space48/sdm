@@ -5,31 +5,34 @@ import * as shopify from './shopify';
 import commander  from 'commander';
 import { Config } from './config';
 import Conf from 'conf';
+import { hyphenate } from './util';
+import { Action } from './action';
+import createCommand from './command';
 
 const program = new commander.Command();
 
 const globalConfig = new Config<ConfigSchema>(new Conf());
 
-type CommandTree = commander.Command[] | {[namespace: string]: CommandTree};
+type ActionTree = Action[] | {[namespace: string]: ActionTree};
 
 const flatten = <T>(result: T[], el: T[]) => [...result, ...el];
-const flattenCommands = (namespace: string, tree: CommandTree): commander.Command[] => {
+const getCommands = (namespace: string, tree: ActionTree): commander.Command[] => {
     const commands = 
-        Array.isArray(tree) ? tree
-        : Object.entries(tree).map(args => flattenCommands(...args)).reduce(flatten, []);
-    commands.forEach(command => command.name(`${namespace}:${command.name()}`));
+        Array.isArray(tree) ? tree.map(action => createCommand(action))
+        : Object.entries(tree).map(args => getCommands(...args)).reduce(flatten, []);
+    commands.forEach(command => command.name(`${hyphenate(namespace)}:${command.name()}`));
     return commands;
 };
 
-const commands = [
-    ...flattenCommands('bc', bigCommerce.getCommands(globalConfig.select('bigCommerce'))),
-    ...flattenCommands('m1', magento1.getCommands(globalConfig.select('magento1'))),
-    ...flattenCommands('m2', magento2.getCommands(globalConfig.select('magento2'))),
-    ...flattenCommands('shopify', shopify.getCommands(globalConfig.select('shopify'))),
+const actions = [
+    ...getCommands('bc', bigCommerce.getActions(globalConfig.select('bigCommerce'))),
+    ...getCommands('m1', magento1.getActions(globalConfig.select('magento1'))),
+    ...getCommands('m2', magento2.getActions(globalConfig.select('magento2'))),
+    ...getCommands('shopify', shopify.getActions(globalConfig.select('shopify'))),
 ];
 
-commands.sort((command1, command2) => command1.name().localeCompare(command2.name()));
-commands.forEach(program.addCommand.bind(program));
+actions.sort((command1, command2) => command1.name().localeCompare(command2.name()));
+actions.forEach(program.addCommand.bind(program));
 
 program.parseAsync(process.argv);
 

@@ -6,8 +6,6 @@ import { flatten } from "../util";
 
 const listConcurrency = 50;
 
-type ListPage<T> = T[] | {data: T[]} | null;
-
 export default class BigCommerce {
     constructor(private credentials: Credentials) {}
 
@@ -20,15 +18,12 @@ export default class BigCommerce {
         const threads = [...new Array(listConcurrency).keys()];
         for (let page = 1;; page += listConcurrency) {
             const pages = await Promise.all(threads.map(
-                threadId => this.get<ListPage<T>>(uri, {page: page + threadId, ...(params || {})})
+                threadId => this.get<T[]|null>(uri, {page: page + threadId, ...(params || {})})
             ));
-            const items = pages
-                .map(page => Array.isArray(page) ? page : page?.data || [])
-                .reduce(flatten);
-            yield* items;
+            const nonNullPages = pages.filter(Boolean) as T[][];
+            yield* nonNullPages.reduce(flatten);
             const lastPage = pages.slice(-1)[0];
-            const lastPageItems = Array.isArray(lastPage) ? lastPage : lastPage?.data || [];
-            if (lastPageItems.length === 0) {
+            if (!lastPage?.length) {
                 break;
             }
         }
@@ -84,7 +79,8 @@ export default class BigCommerce {
         if (response.status === 204) {
             return null;
         }
-        return await response.json();
+        const content = await response.json();
+        return relativeUri.startsWith('v3') ? content['data'] : content;
     }
 
     private init(init?: RequestInit): RequestInit {

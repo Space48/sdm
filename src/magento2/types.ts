@@ -1,13 +1,77 @@
-import * as action from "@space48/json-pipe";
-import Magento2, { SearchIdField } from "./client";
+// these types exist for reference purposes only -- they are not used at all by sdm
 
-const idField: SearchIdField = {query: 'entity_id', response: 'entity_id'};
-
-export const actions = {
-    list: (magento: Magento2) => action.source(magento.search('orders', {idField})),
+type Customer = {
+    id: number,
+    group_id: number,
+    default_billing: string,
+    default_shipping: string,
+    confirmation: string,
+    created_at: string,
+    updated_at: string,
+    created_in: string,
+    dob: string,
+    email: string,
+    firstname: string,
+    lastname: string,
+    middlename: string,
+    prefix: string,
+    suffix: string,
+    gender: number,
+    store_id: number,
+    taxvat: string,
+    website_id: number,
+    addresses: Array<{
+        id: number,
+        customer_id: number,
+        region: {
+            region_code: string,
+            region: string,
+            region_id: number,
+            extension_attributes: {}
+        },
+        region_id: number,
+        country_id: string,
+        street: Array<string>,
+        company: string,
+        telephone: string,
+        fax: string,
+        postcode: string,
+        city: string,
+        firstname: string,
+        lastname: string,
+        middlename: string,
+        prefix: string,
+        suffix: string,
+        vat_id: string,
+        default_shipping: boolean,
+        default_billing: boolean,
+        extension_attributes: {},
+        custom_attributes: Array<{
+            attribute_code: string,
+            value: string
+        }>
+    }>,
+    disable_auto_group_change: number,
+    extension_attributes: {
+        company_attributes: {
+            customer_id: number,
+            company_id: number,
+            job_title: string,
+            status: number,
+            telephone: string,
+            extension_attributes: {}
+        },
+        is_subscribed: boolean,
+        amazon_id: string,
+        vertex_customer_code: string
+    },
+    custom_attributes: Array<{
+        attribute_code: string,
+        value: string
+    }>
 };
 
-export type Order = {
+type Order = {
     adjustment_negative: number,
     adjustment_positive: number,
     applied_rule_ids: string,
@@ -141,7 +205,7 @@ export type Order = {
     weight: number,
     x_forwarded_for: string,
     items: Array<OrderItem>,
-    billing_address: Address,
+    billing_address: OrderAddress,
     payment: {
         account_status: string,
         additional_data: string,
@@ -227,7 +291,7 @@ export type Order = {
     extension_attributes: {
         shipping_assignments: Array<{
                 shipping: {
-                    address: Address,
+                    address: OrderAddress,
                     method: string,
                     total: {
                         base_shipping_amount: number,
@@ -406,7 +470,7 @@ export type Order = {
     }
 };
 
-export type OrderItem = {
+type OrderItem = {
     additional_data: string,
     amount_refunded: number,
     applied_rule_ids: string,
@@ -572,7 +636,7 @@ export type OrderItem = {
     }
 };
 
-export type Address = {
+type OrderAddress = {
     address_type: string,
     city: string,
     company: string,
@@ -605,4 +669,267 @@ export type Address = {
             value: string
         }>
     },
+};
+
+type Product = {
+    id: number,
+    sku: string,
+    name: string,
+    attribute_set_id: number,
+    price: number,
+    status: number,
+    visibility: number,
+    type_id: string,
+    created_at: string,
+    updated_at: string,
+    weight: number,
+    extension_attributes: Partial<{
+        website_ids: Array<number>,
+        category_links: Array<{
+            position: number,
+            category_id: string,
+            extension_attributes: Record<string, any>
+        }>,
+        bundle_product_options: Array<{
+            option_id: number,
+            title: string,
+            required: boolean,
+            type: string,
+            position: number,
+            sku: string,
+            product_links: Array<{
+                id: string,
+                sku: string,
+                option_id: number,
+                qty: number,
+                position: number,
+                is_default: boolean,
+                price: number,
+                price_type: number,
+                can_change_quantity: number,
+                extension_attributes: Record<string, any>
+            }>,
+            extension_attributes: Record<string, any>
+        }>,
+        stock_item: {
+            item_id: number,
+            product_id: number,
+            stock_id: number,
+            qty: number,
+            is_in_stock: boolean,
+            is_qty_decimal: boolean,
+            show_default_notification_message: boolean,
+            use_config_min_qty: boolean,
+            min_qty: number,
+            use_config_min_sale_qty: number,
+            min_sale_qty: number,
+            use_config_max_sale_qty: boolean,
+            max_sale_qty: number,
+            use_config_backorders: boolean,
+            backorders: number,
+            use_config_notify_stock_qty: boolean,
+            notify_stock_qty: number,
+            use_config_qty_increments: boolean,
+            qty_increments: number,
+            use_config_enable_qty_inc: boolean,
+            enable_qty_increments: boolean,
+            use_config_manage_stock: boolean,
+            manage_stock: boolean,
+            low_stock_date: string,
+            is_decimal_divided: boolean,
+            stock_status_changed_auto: number,
+            extension_attributes: Record<string, any>
+        },
+        configurable_product_options: Array<{
+            id: number,
+            attribute_id: string,
+            label: string,
+            position: number,
+            is_use_default: boolean,
+            values: Array<{
+                value_index: number,
+                extension_attributes: Record<string, any>
+            }>,
+            extension_attributes: Record<string, any>,
+            product_id: number
+        }>,
+        configurable_product_links: Array<number>,
+        downloadable_product_links: Array<{
+            id: number,
+            title: string,
+            sort_order: number,
+            is_shareable: number,
+            price: number,
+            number_of_downloads: number,
+            link_type: string,
+            link_file: string,
+            link_file_content: {
+                file_data: string,
+                name: string,
+                extension_attributes: Record<string, any>
+            },
+            link_url: string,
+            sample_type: string,
+            sample_file: string,
+            sample_file_content: {
+                file_data: string,
+                name: string,
+                extension_attributes: Record<string, any>
+            },
+            sample_url: string,
+            extension_attributes: Record<string, any>
+        }>,
+        downloadable_product_samples: Array<{
+            id: number,
+            title: string,
+            sort_order: number,
+            sample_type: string,
+            sample_file: string,
+            sample_file_content: {
+                file_data: string,
+                name: string,
+                extension_attributes: Record<string, any>
+            },
+            sample_url: string,
+            extension_attributes: Record<string, any>
+        }>,
+        giftcard_amounts: Array<{
+            attribute_id: number,
+            website_id: number,
+            value: number,
+            website_value: number,
+            extension_attributes: Record<string, any>
+        }>
+    }>,
+    product_links: Array<{
+        sku: string,
+        link_type: string,
+        linked_product_sku: string,
+        linked_product_type: string,
+        position: number,
+        extension_attributes: {
+            qty: number
+        }
+    }>,
+    options: Array<{
+        product_sku: string,
+        option_id: number,
+        title: string,
+        type: string,
+        sort_order: number,
+        is_require: boolean,
+        price: number,
+        price_type: string,
+        sku: string,
+        file_extension: string,
+        max_characters: number,
+        image_size_x: number,
+        image_size_y: number,
+        values: Array<{
+            title: string,
+            sort_order: number,
+            price: number,
+            price_type: string,
+            sku: string,
+            option_type_id: number
+        }>,
+        extension_attributes: {
+            vertex_flex_field: string
+        }
+    }>,
+    media_gallery_entries: Array<{
+        id: number,
+        media_type: string,
+        label: string,
+        position: number,
+        disabled: boolean,
+        types: Array<string>,
+        file: string,
+        content: {
+            base64_encoded_data: string,
+            type: string,
+            name: string
+        },
+        extension_attributes: {
+            video_content: {
+                media_type: string,
+                video_provider: string,
+                video_url: string,
+                video_title: string,
+                video_description: string,
+                video_metadata: string
+            }
+        }
+    }>,
+    tier_prices: Array<{
+        customer_group_id: number,
+        qty: number,
+        value: number,
+        extension_attributes: {
+            percentage_value: number,
+            website_id: number
+        }
+    }>,
+    custom_attributes: Array<{
+        attribute_code: string,
+        value: string
+    }>
+};
+
+type ProductAttribute = {
+    is_wysiwyg_enabled: boolean,
+    is_html_allowed_on_front: boolean,
+    used_for_sort_by: boolean,
+    is_filterable: boolean,
+    is_filterable_in_search: boolean,
+    is_used_in_grid: boolean,
+    is_visible_in_grid: boolean,
+    is_filterable_in_grid: boolean,
+    position: number,
+    apply_to: Array<string>,
+    is_searchable: string,
+    is_visible_in_advanced_search: string,
+    is_comparable: string,
+    is_used_for_promo_rules: string,
+    is_visible_on_front: string,
+    used_in_product_listing: string,
+    is_visible: boolean,
+    scope: string,
+    extension_attributes: Record<string, any>,
+    attribute_id: number,
+    attribute_code: string,
+    frontend_input: string,
+    entity_type_id: string,
+    is_required: boolean,
+    options: Array<{
+        label: string,
+        value: string,
+        sort_order: number,
+        is_default: boolean,
+        store_labels: Array<{
+            store_id: number,
+            label: string
+          }>
+      }>,
+    is_user_defined: boolean,
+    default_frontend_label: string,
+    frontend_labels: Array<{
+        store_id: number,
+        label: string
+      }>,
+    note: string,
+    backend_type: string,
+    backend_model: string,
+    source_model: string,
+    default_value: string,
+    is_unique: string,
+    frontend_class: string,
+    validation_rules: Array<{
+        key: string,
+        value: string
+      }>,
+    custom_attributes: Array<{
+        attribute_code: string,
+        value: string
+      }>
 };

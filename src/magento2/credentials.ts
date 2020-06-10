@@ -1,12 +1,11 @@
-import * as commander from "commander";
-import * as action from "@space48/json-pipe";
 import { Config } from "../config";
-import Magento2 from "./client";
+import Magento2, { Magento2ClientOptions } from "./client";
 import { parse as parseUrl } from "url";
+import action, { Field } from "../action";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Magento2 => {
+export const createClient = (config: Config<ConfigSchema>, baseUrl: string, options: Omit<Magento2ClientOptions, 'auth'> = {}): Magento2 => {
     const urlExcludingScheme = computeUrlForComparison(baseUrl);
     const instanceConfig = config.get(baseUrl)
         || Object.values(config.getAll() || {}).find(candidate => urlExcludingScheme === computeUrlForComparison(candidate.baseUrl));
@@ -24,36 +23,46 @@ export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Ma
         }
         return token.value;
     };
-    return new Magento2(instanceConfig.baseUrl, {auth: tokenResolver});
+    return new Magento2(instanceConfig.baseUrl, {...options, auth: tokenResolver});
 }
 
-export function getCommands(config: Config<ConfigSchema>) {
+export function getActions(config: Config<ConfigSchema>) {
     return [
-        new commander.Command('set')
-            .arguments('<base-url>')
-            .requiredOption('--username <value>')
-            .requiredOption('--password <value>')
-            .action((baseUrl: string, command: commander.Command) => {
-                const {username, password} = command.opts();
-                config.set(baseUrl, {baseUrl, credentials: {username, password}});
-            }),
+        action({
+            name: 'set',
+            params: {
+                baseUrl: Field.string().required(),
+                username: Field.string().required(),
+                password: Field.string().required(),
+            },
+            source: () => async ({baseUrl, username, password}) => config.set(baseUrl, {baseUrl, credentials: {username, password}}),
+        }),
 
-        new commander.Command('get')
-            .arguments('<base-url>')
-            .action((baseUrl: string) => action.source([config.get(baseUrl)].filter(Boolean))),
+        action({
+            name: 'get',
+            params: {
+                baseUrl: Field.string().required(),
+            },
+            source: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
+        }),
 
-        new commander.Command('list')
-            .action(() => action.source(Object.values(config.getAll() || {}))),
+        action({
+            name: 'list',
+            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+        }),
 
-        new commander.Command('list-base-urls')
-            .action(() => action.source(Object.keys(config.getAll() || {}))),
+        action({
+            name: 'list-base-urls',
+            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+        }),
 
-        new commander.Command('delete')
-            .arguments('<base-url>')
-            .action((baseUrl: string) => config.delete(baseUrl)),
-
-        new commander.Command('delete-all')
-            .action(() => config.clear()),
+        action({
+            name: 'delete',
+            params: {
+                baseUrl: Field.string().required(),
+            },
+            source: () => async ({baseUrl}) => config.delete(baseUrl),
+        }),
     ];
 }
 

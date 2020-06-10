@@ -1,14 +1,13 @@
-import * as commander from "commander";
-import * as action from "@space48/json-pipe";
 import { Config } from "../config";
-import Magento1 from "./client";
+import Magento1, { Magento1ClientOptions } from "./client";
 import { OAuth } from "oauth";
 import open from "open";
 import * as rl from "readline";
+import action, { Field } from "../action";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Magento1 => {
+export const createClient = (config: Config<ConfigSchema>, baseUrl: string, options: Omit<Magento1ClientOptions, 'auth'> = {}): Magento1 => {
     const instanceConfig = config.get(baseUrl);
     if (!(instanceConfig?.credentials && instanceConfig?.accessToken)) {
         throw new Error(`Magento1: No access token available for instance ${baseUrl}.`);
@@ -16,39 +15,52 @@ export const getClient = (config: Config<ConfigSchema>) => (baseUrl: string): Ma
     const accessToken = instanceConfig.accessToken;
     const oauth = getOauthClient(baseUrl, instanceConfig.credentials);
     return new Magento1(baseUrl, {
+        ...options,
         auth: (method, url) => oauth.authHeader(url, accessToken.token, accessToken.tokenSecret, method),
     });
 }
 
-export function getCommands(config: Config<ConfigSchema>) {
+export function getActions(config: Config<ConfigSchema>) {
     return [
-        new commander.Command('set')
-            .arguments('<base-url>')
-            .requiredOption('--key <value>')
-            .requiredOption('--secret <value>')
-            .action(async (baseUrl: string, command: commander.Command) => {
-                const {key, secret} = command.opts();
+        action({
+            name: 'set',
+            params: {
+                baseUrl: Field.string().required(),
+                key: Field.string().required(),
+                secret: Field.string().required(),
+            },
+            source: () => async ({baseUrl, key, secret}) => {
                 const credentials = {key, secret};
                 const accessToken = await getAccessToken(baseUrl, credentials)
                 config.set(baseUrl, {baseUrl, credentials, accessToken});
-            }),
+            },
+        }),
 
-        new commander.Command('get')
-            .arguments('<base-url>')
-            .action((baseUrl: string) => action.source([config.get(baseUrl)].filter(Boolean))),
+        action({
+            name: 'get',
+            params: {
+                baseUrl: Field.string().required(),
+            },
+            source: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
+        }),
 
-        new commander.Command('list')
-            .action(() => action.source(Object.values(config.getAll() || {}))),
+        action({
+            name: 'list',
+            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+        }),
 
-        new commander.Command('list-base-urls')
-            .action(() => action.source(Object.keys(config.getAll() || {}))),
+        action({
+            name: 'list-base-urls',
+            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+        }),
 
-        new commander.Command('delete')
-            .arguments('<base-url>')
-            .action((baseUrl: string) => config.delete(baseUrl)),
-
-        new commander.Command('delete-all')
-            .action(() => config.clear()),
+        action({
+            name: 'delete',
+            params: {
+                baseUrl: Field.string().required(),
+            },
+            source: () => async ({baseUrl}) => config.delete(baseUrl),
+        }),
     ];
 }
 

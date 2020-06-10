@@ -1,39 +1,75 @@
-import * as commander from 'commander';
-import * as category from './category';
 import * as credentials from './credentials';
-import * as customer from './customer';
-import * as order from './order';
-import * as product from './product';
-import * as productAttribute from './product-attribute';
 import { Config } from '../config';
-import Magento2 from './client';
-
-export function getCommands(config: Config<ConfigSchema>) {
-    const credentialsConfig = config.select('credentials');
-    const actionToCommand = commandFactory(credentials.getClient(credentialsConfig));
-
-    return {
-        creds: credentials.getCommands(credentialsConfig),
-        category: Object.entries(category.actions).map(actionToCommand),
-        customer: Object.entries(customer.actions).map(actionToCommand),
-        order: Object.entries(order.actions).map(actionToCommand),
-        product: Object.entries(product.actions).map(actionToCommand),
-        'product-attribute': Object.entries(productAttribute.actions).map(actionToCommand),
-    };
-}
+import { Magento2ActionFactory } from './action';
+import { Field, FieldType, Action } from '../action';
 
 export type ConfigSchema = {
     credentials: credentials.ConfigSchema,
 };
 
-type Action = (magento: Magento2, concurrency: number, ...args: any[]) => void | Promise<void>;
-const commandFactory = (getClient: (shopName: string) => Magento2) => <T extends Action>([name, action]: [string, T]) => {
-    const command = new commander.Command(name);
-    command.option('--concurrency <number>', 'Max concurrency of API requests.', parseInt, 1);
-    command.arguments('<base-url>');
-    command.action((baseUrl: string) => {
-        const {concurrency = 1} = command.opts();
-        action(getClient(baseUrl), concurrency);
-    });
-    return command;
-};
+export function getActions(config: Config<ConfigSchema>): Record<string, Action[]> {
+    const action = new Magento2ActionFactory(config);
+
+    return {
+        category: [
+            ...action.crud({
+                uri: 'categories',
+                key: { attributeCode: 'id', type: FieldType.Integer },
+                list: {
+                    uri: 'categories/list',
+                    sortKey: { query: 'entity_id', response: 'id' },
+                },
+            }),
+
+            action.source({
+                name: 'get-tree',
+                params: { rootCategoryId: Field.integer().default(1) },
+                fn: m2 => ({rootCategoryId}) => m2.get('categories', {rootCategoryId}),
+            }),
+        ],
+
+        creds: credentials.getActions(config.select('credentials')),
+
+        customer: action.crud({
+            uri: 'customers',
+            key: { attributeCode: 'id', type: FieldType.Integer },
+            list: {
+                uri: 'customers/search',
+                sortKey: { query: 'entity_id', response: 'id' },
+            },
+        }),
+
+        order: action.crud({
+            uri: 'orders',
+            key: { attributeCode: 'id', type: FieldType.Integer },
+            list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
+        }),
+
+        product: action.crud({
+            uri: 'products',
+            key: { attributeCode: 'sku', type: FieldType.String },
+            list: { sortKey: { query: 'entity_id', response: 'id' } },
+        }),
+
+        'product-attribute': [
+            action.list('products/attributes', { query: 'attribute_id', response: 'attribute_id' }),
+    
+            action.source({
+                name: 'list-options',
+                params: { attribute_code: Field.string() },
+                fn: m2 => async function* ({attribute_code}) {
+                    if (attribute_code) {
+                        const options = await m2.get<Array<any>>(`products/attributes/${attribute_code}/options`);
+                        yield* options.filter(({value}) => value !== '');
+                    } else {
+                        const attributes = m2.search('products/attributes', { sortKey: { query: 'attribute_id', response: 'attribute_id' } });
+                        for await (const attribute of attributes) {
+                            const options = await m2.get<Array<any>>(`products/attributes/${attribute.attribute_code}/options`);
+                            yield* options.filter(({value}) => value !== '');
+                        }
+                    }
+                },
+            }),
+        ],
+    };
+}

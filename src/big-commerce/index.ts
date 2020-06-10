@@ -1,39 +1,54 @@
-import * as commander from 'commander';
-import * as brand from './brand';
-import * as category from './category';
 import * as credentials from './credentials';
-import * as order from './order';
-import * as product from './product';
-import * as productOption from './product-option';
-import * as store from './store';
 import { Config } from '../config';
-import BigCommerce from './client';
-
-export function getCommands(config: Config<ConfigSchema>) {
-    const credentialsConfig = config.select('credentials');
-    const actionToCommand = commandFactory((storeHash: string): BigCommerce => {
-        const clientCredentials = credentials.getClientCredentials(credentialsConfig, storeHash);
-        return new BigCommerce(clientCredentials);
-    });
-    return {
-        brand: Object.entries(brand.actions).map(actionToCommand),
-        category: Object.entries(category.actions).map(actionToCommand),
-        creds: credentials.getCommands(credentialsConfig),
-        order: Object.entries(order.actions).map(actionToCommand),
-        product: Object.entries(product.actions).map(actionToCommand),
-        'product-option': Object.entries(productOption.actions).map(actionToCommand),
-        store: Object.entries(store.actions).map(actionToCommand),
-    };
-}
+import { BigCommerceActionFactory } from './action';
+import { Action, Field } from '../action';
 
 export type ConfigSchema = {
     credentials: credentials.ConfigSchema,
 };
 
-type Action = (bigCommerce: BigCommerce, ...args: any[]) => void | Promise<void>;
-const commandFactory = (getClient: (storeHash: string) => BigCommerce) => <T extends Action>([name, action]: [string, T]) => {
-    const command = new commander.Command(name);
-    command.arguments('<store>');
-    command.action((storeHash: string) => action(getClient(storeHash)));
-    return command;
-};
+export function getActions(config: Config<ConfigSchema>): Record<string, Action[]> {
+    const action = new BigCommerceActionFactory(config);
+
+    return {
+        brand: action.crud('v3/catalog/brands'),
+
+        category: [
+            ...action.crud('v3/catalog/categories'),
+            
+            action.source({
+                name: 'tree',
+                fn: bc => () => bc.get('v3/catalog/categories/tree'),
+            }),
+        ],
+
+        creds: credentials.getActions(config.select('credentials')),
+
+        order: action.crud('v2/orders', ['products']),
+
+        product: [
+            action.source({
+                name: 'get',
+                params: {
+                    id: Field.integer().required(),
+                    include: Field.string().default('variants,images,custom_fields,bulk_pricing_rules,primary_image,modifiers,options,videos'),
+                    includes: Field.boolean().default(true),
+                },
+                fn: bigCommerce => ({id, includes, include}) => bigCommerce.get(`v3/catalog/products/${id}`, includes ? {include} : {}),
+            }),
+
+            action.source({
+                name: 'list',
+                params: {
+                    include: Field.string().default('variants,images,custom_fields,bulk_pricing_rules,primary_image,modifiers,options,videos'),
+                    includes: Field.boolean().default(true),
+                },
+                fn: bigCommerce => ({includes, include}) => bigCommerce.list(`v3/catalog/products`, includes ? {include} : {}),
+            }),
+
+            ...action.write('v3/catalog/products'),
+        ],
+
+        store: [action.get('v2/store')],
+    };
+}

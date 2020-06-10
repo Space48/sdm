@@ -6,14 +6,20 @@ import { objectFromEntries, flatten } from "../util";
 
 type AuthResolver = ({refresh}: {refresh: boolean}) => Promise<string>;
 
+export type Magento2ClientOptions = {
+    auth?: AuthResolver,
+    insecure?: boolean,
+};
+
 export default class Magento2 {
     private agent?: Agent;
 
     constructor(
         private baseUrl: string,
-        private options?: {auth?: AuthResolver},
+        private options?: Magento2ClientOptions,
     ) {
-        this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: false}) : undefined;
+        console.error({rejectUnauthorized: !options?.insecure})
+        this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: !options?.insecure}) : undefined;
     }
 
     async get<T>(uri: string, params?: QueryParams): Promise<T> {
@@ -24,14 +30,14 @@ export default class Magento2 {
 
     async* search<T extends Record<string, any> = any>(
         uri: string,
-        {idField, filters=[]}: {idField: SearchIdField, filters?: Filter[]}
+        {sortKey, filters=[]}: {sortKey: SortKey, filters?: Filter[]}
     ): AsyncIterable<T> {
         let additionalFilters: Filter[] = [];
         while (1) {
             const {items} = await this.get<{items: T[]}>(uri, {searchCriteria: {
                 filterGroups: [...filters, ...additionalFilters]
                     .map(([field, conditionType, value]) => ({filters: [{field, conditionType, value}]})),
-                sortOrders: [{field: idField.query, direction: 'asc'}],
+                sortOrders: [{field: sortKey.query, direction: 'asc'}],
                 pageSize: 100,
                 currentPage: 1,
             }});
@@ -39,9 +45,9 @@ export default class Magento2 {
                 break;
             }
             yield* items;
-            const lastId = items.slice(-1)[0][idField.response] as string|number;
+            const lastId = items.slice(-1)[0][sortKey.response] as string|number;
             additionalFilters = [[
-                idField.query,
+                sortKey.query,
                 'gt',
                 lastId,
             ]];
@@ -60,7 +66,7 @@ export default class Magento2 {
         return this.makeUnsafeRequest('PATCH', uri, content);
     }
 
-    async delete<T>(uri: string, content: any): Promise<T> {
+    async delete<T>(uri: string, content?: any): Promise<T> {
         return this.makeUnsafeRequest('DELETE', uri, content);
     }
 
@@ -145,7 +151,7 @@ function flattenParam(name: string, value: QueryParam): string[][] {
 type FilterCondition = 'eq' | 'gt' | 'in';
 type Filter = [string, FilterCondition, string|number|string[]|number[]];
 
-export type SearchIdField = {
+export type SortKey = {
     query: string,
     response: string,
 };

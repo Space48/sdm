@@ -10,7 +10,8 @@
       "node_modules/@types"
     ],
     "lib": ["ES2017"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }

@@ -1,11 +1,10 @@
-import * as commander from "commander";
-import * as action from "@space48/json-pipe";
 import { Config } from "../config";
-import BigCommerce from "./client";
+import action, { Field } from "../action";
 
-export type ConfigSchema = {[storeHash: string]: Credentials};
+export type ConfigSchema = {[storeAlias: string]: Credentials};
 
 export type Credentials = {
+    storeAlias: string,
     storeHash: string,
     clientId: string,
     accessToken: string,
@@ -19,34 +18,45 @@ export const getClientCredentials = (config: Config<ConfigSchema>, storeHash: st
     return credentials;
 }
 
-export function getCommands(config: Config<ConfigSchema>) {
+export function getActions(config: Config<ConfigSchema>) {
     return [
-        new commander.Command('set')
-            .arguments('<store>')
-            .requiredOption('--store-hash <value>')
-            .requiredOption('--access-token <value>')
-            .requiredOption('--client-id <value>')
-            .action(async (storeAlias: string, command: commander.Command) => {
-                const {storeHash, accessToken, clientId} = command.opts();
-                const credentials = {storeHash, accessToken, clientId};
-                config.set(storeAlias, credentials);
-            }),
+        action({
+            name: 'set',
+            params: {
+                storeAlias: Field.string().required(),
+                storeHash: Field.string().required(),
+                accessToken: Field.string().required(),
+                clientId: Field.string().required(),
+            },
+            source: () => async ({storeAlias, storeHash, accessToken, clientId}) => {
+                config.set(storeAlias, {storeAlias, storeHash, accessToken, clientId});
+            },
+        }),
 
-        new commander.Command('get')
-            .arguments('<store>')
-            .action((storeHash: string) => action.source([config.get(storeHash)].filter(Boolean))),
+        action({
+            name: 'get',
+            params: {
+                storeAlias: Field.string().required(),
+            },
+            source: () => async ({storeAlias}) => config.get(storeAlias) ?? null,
+        }),
 
-        new commander.Command('list')
-            .action(() => action.source(Object.entries(config.getAll() || {}))),
+        action({
+            name: 'list',
+            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+        }),
 
-        new commander.Command('list-stores')
-            .action(() => action.source(Object.keys(config.getAll() || {}))),
+        action({
+            name: 'list-stores',
+            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+        }),
 
-        new commander.Command('delete')
-            .arguments('<store>')
-            .action((storeHash: string) => config.delete(storeHash)),
-
-        new commander.Command('delete-all')
-            .action(() => config.clear()),
+        action({
+            name: 'delete',
+            params: {
+                storeAlias: Field.string().required(),
+            },
+            source: () => async ({storeAlias}) => config.delete(storeAlias),
+        }),
     ];
 }

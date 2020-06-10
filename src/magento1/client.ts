@@ -6,14 +6,19 @@ import { objectFromEntries, flatten } from "../util";
 
 type AuthResolver = (method: string, url: string) => string;
 
+export type Magento1ClientOptions = {
+    auth?: AuthResolver,
+    insecure?: boolean,
+};
+
 export default class Magento1 {
     private agent?: Agent;
 
     constructor(
         private baseUrl: string,
-        private options?: {auth?: AuthResolver},
+        private options?: Magento1ClientOptions,
     ) {
-        this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: false}) : undefined;
+        this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: !options?.insecure}) : undefined;
     }
 
     async get<T>(uri: string, params?: QueryParams): Promise<T> {
@@ -24,14 +29,14 @@ export default class Magento1 {
 
     async* search<T extends Record<string, any> = any>(
         uri: string,
-        {idField, filters=[]}: {idField: string, filters?: Filter[]}
+        {sortKey, filters=[]}: {sortKey: string, filters?: Filter[]}
     ): AsyncIterable<T> {
         let additionalFilters: Filter[] = [];
         while (1) {
             const content = await this.get<Record<string, T>>(uri, {
                 filter: [...filters, ...additionalFilters]
                     .map(([attribute, conditionType, value]) => ({attribute, [conditionType]: value})),
-                order: idField,
+                order: sortKey,
                 dir: 'asc',
                 limit: 100,
             });
@@ -40,9 +45,9 @@ export default class Magento1 {
                 break;
             }
             yield* items;
-            const lastId = items.slice(-1)[0][idField] as string|number;
+            const lastId = items.slice(-1)[0][sortKey] as string|number;
             additionalFilters = [[
-                idField,
+                sortKey,
                 'gt',
                 lastId,
             ]];
@@ -61,7 +66,7 @@ export default class Magento1 {
         return this.makeUnsafeRequest('PATCH', uri, content);
     }
 
-    async delete<T>(uri: string, content: any): Promise<T> {
+    async delete<T>(uri: string, content?: any): Promise<T> {
         return this.makeUnsafeRequest('DELETE', uri, content);
     }
 
