@@ -18,7 +18,7 @@ export function getActions(config: Config<ConfigSchema>): Record<string, Action[
             
             action.source({
                 name: 'tree',
-                fn: bc => () => bc.get('v3/catalog/categories/tree'),
+                fn: bc => async function* () { yield* await bc.get('v3/catalog/categories/tree') },
             }),
         ],
 
