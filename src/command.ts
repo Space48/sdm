@@ -33,7 +33,10 @@ function source<Context extends Fields = {}, Params extends Fields = {}>(config:
                 jsonSource(result as AsyncIterable<any>);
             } else {
                 jsonSource((async function* () {
-                    yield await result;
+                    const _result = await result;
+                    if (_result !== undefined) {
+                        yield _result;
+                    }
                 })());
             }
         } else {
