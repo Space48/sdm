@@ -25,7 +25,10 @@ function getResourceActions(resource: Resource, factory: ShopifyActionFactory) {
 // all of the disabled endpoints can potentially be enabled -- JDF
 const resourceConfigs: ResourceConfigs = {
     applicationCharge: false,
-    article: false,
+    article: {
+        authors: ActionType.NoIdList,
+        tags: ActionType.List,
+    },
     balance: false,
     cancellationRequest: false,
     checkout: false,
@@ -125,7 +128,7 @@ type Endpoints<R extends keyof ShopifyAugmented> = ShopifyAugmented[R] extends R
     ? {[K in keyof ShopifyAugmented[R]]: ShopifyAugmented[R][K] extends Function ? ShopifyAugmented[R][K] : never}
     : never;
 
-// at the time of writing, he following endpoints are missing from the shopify-api-node type declarations
+// at the time of writing, the following endpoints are missing from the shopify-api-node type declarations
 declare class ShopifyAugmented extends Shopify {
     customer: Shopify['customer'] & {
         orders: (id: number, params?: any) => Promise<any>,
