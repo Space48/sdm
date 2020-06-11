@@ -73,6 +73,7 @@ export class Field<T extends FieldType = FieldType, Req extends boolean = false,
 
     required(value?: true): Field<T, true, Def>;
     required(value: false): Field<T, false, Def>;
+    required(value: boolean): Field<T, boolean, Def>;
     required(value: boolean = true): Field<T, boolean, Def> {
         return new Field({ ...this.data, required: value });
     }
@@ -112,7 +113,7 @@ export enum FieldType {
     String,
 };
 
-export type FieldValues<T extends Fields> = {[K in keyof T]: FieldValue<T[K]>};
+export type FieldValues<T extends Fields = {}> = {[K in keyof T]: FieldValue<T[K]>};
 type FieldValue<P extends Field> =
     P extends Field<infer T, infer R, infer D> ? 
         R extends true ? ValueType<T>
