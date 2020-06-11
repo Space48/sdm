@@ -10,18 +10,23 @@ export default class BigCommerce {
     constructor(private credentials: Credentials) {}
 
     async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
-        const paramsString = params ? `?${stringify(params)}` : '';
-        return await this.fetch(uri + paramsString);
+        return unwrap(await this.doGet(uri, params));
     }
 
     async* list<T = any>(uri: string, params?: Record<string, any>): AsyncIterable<T> {
-        const threads = [...new Array(listConcurrency).keys()];
-        for (let page = 1;; page += listConcurrency) {
+        // a lot of list reqs involve a single page or don't support pagination, only do one req in those cases
+        const firstPage = await this.doGet(uri, {page: 1, ...(params || {})});
+        yield* unwrap(firstPage);
+
+        const totalPages = uri.startsWith('v3') ? (firstPage.meta?.pagination?.total_pages || 1) : Number.MAX_SAFE_INTEGER;
+        const concurrency = Math.min(totalPages, listConcurrency);
+        const threads = [...new Array(concurrency).keys()];
+        for (let page = 2; page <= totalPages; page += concurrency) {
             const pages = await Promise.all(threads.map(
                 threadId => this.get<T[]|null>(uri, {page: page + threadId, ...(params || {})})
             ));
             const nonNullPages = pages.filter(Boolean) as T[][];
-            yield* nonNullPages.reduce(flatten);
+            yield* nonNullPages.reduce(flatten, []);
             const lastPage = pages.slice(-1)[0];
             if (!lastPage?.length) {
                 break;
@@ -45,14 +50,19 @@ export default class BigCommerce {
         await this.makeUnsafeRequest('DELETE', uri, content);
     }
 
+    private async doGet<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
+        const paramsString = params ? `?${stringify(params)}` : '';
+        return await this.fetch(uri + paramsString);
+    }
+
     private async makeUnsafeRequest<T>(method: string, uri: string, content: any): Promise<T> {
-        return await this.fetch(uri, {
+        return unwrap(await this.fetch(uri, {
             method,
             headers: content && {
                 'Content-Type': 'application/json',
             },
             body: content && JSON.stringify(content),
-        });
+        }));
     }
 
     private async fetch(relativeUri: string, init?: RequestInit): Promise<any> {
@@ -79,8 +89,7 @@ export default class BigCommerce {
         if (response.status === 204) {
             return null;
         }
-        const content = await response.json();
-        return relativeUri.startsWith('v3') ? content['data'] : content;
+        return await response.json();
     }
 
     private init(init?: RequestInit): RequestInit {
@@ -95,4 +104,8 @@ export default class BigCommerce {
             headers,
         };
     }
+}
+
+function unwrap(content: any) {
+    return content?.data === undefined ? content : content.data;
 }

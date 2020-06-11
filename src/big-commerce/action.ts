@@ -1,96 +1,90 @@
 import { Config } from "../config";
 import { ConfigSchema } from ".";
-import action, { Field, ActionConfig, Fields, Action } from "../action";
+import action, { Field, ActionConfig, Fields, Action, FieldValues } from "../action";
 import BigCommerce from "./client";
+import { objectFromEntries, flatten } from "../util";
+import { compose, flatMap } from "@space48/json-pipe";
+
+type ReadOptions = {
+    get?: boolean,
+    list?: boolean,
+};
+type WriteOptions = {
+    create?: boolean,
+    update?: boolean,
+    delete?: boolean,
+};
 
 export class BigCommerceActionFactory {
     constructor(private config: Config<ConfigSchema>) {}
 
     // CRUD convenience methods
 
-    crud(uri: string, children: string[] = []): Action[] {
+    crud(uriTemplate: string, options?: ReadOptions & WriteOptions): Action[] {
         return [
-            ...this.read(uri, children),
-            ...this.write(uri),
+            ...this.read(uriTemplate, options),
+            ...this.write(uriTemplate, options),
         ];
     }
 
-    read(uri: string, children: string[] = []): Action[] {
+    read(uriTemplate: string, options?: ReadOptions): Action[] {
         return [
-            this.get(uri),
-            this.list(uri),
-            ...children.map(child => this.listChildren(`list-${child}`, uri, child)),
-        ];
+            (options?.get || true) && this.get(`${uriTemplate}/{id}`),
+            (options?.list || true) && this.list(uriTemplate),
+        ].filter(Boolean);
     }
 
-    write(uri: string): Action[] {
+    write(uriTemplate: string, options?: WriteOptions): Action[] {
         return [
-            this.create(uri),
-            this.update(uri),
-            this.delete(uri),
-        ];
+            (options?.create || true) && this.create(uriTemplate),
+            (options?.update || true) && this.update(`${uriTemplate}/{id}`),
+            (options?.delete || true) && this.delete(`${uriTemplate}/{id}`),
+        ].filter(Boolean);
     }
 
-    create(uri: string) {
+    create(uriTemplate: string) {
         return this.sink({
             name: 'create',
-            fn: bc => data => bc.post(uri, data),
+            params: getIdFields(uriTemplate),
+            fn: bc => (data, ids) => bc.post(UriTemplate.uri(uriTemplate, ids), data),
         });
     }
 
-    get(uri: string, params?: Record<string, any>) {
+    get(uriTemplate: string, requestParams?: Record<string, any>) {
         return this.source({
             name: 'get',
-            params: {
-                id: Field.integer().required(),
-            },
-            fn: bc => ({id}) => bc.get(`${uri}/${id}`, params),
+            params: getIdFields(uriTemplate),
+            fn: bc => ids => bc.get(UriTemplate.uri(uriTemplate, ids), requestParams),
         });
     }
 
-    list(uri: string, params?: Record<string, any>) {
+    list(uriTemplate: string, requestParams?: Record<string, any>) {
+        const that = this;
         return this.source({
             name: 'list',
-            fn: bc => () => bc.list(uri, params),
-        });
-    }
-
-    listChildren(name: string, parentUri: string, uriSuffix: string, params?: Record<string, any>) {
-        return this.source({
-            name,
-            params: {
-                id: Field.integer(),
-            },
-            fn: bc => async function* ({id}) {
-                if (id) {
-                    yield* await bc.get<Array<unknown>>(`${parentUri}/${id}/${uriSuffix}`, params);
-                } else {
-                    const parentEntities = bc.list(parentUri);
-                    for await (const parentEntity of parentEntities) {
-                        yield* await bc.get<Array<unknown>>(`${parentUri}/${parentEntity.id}/${uriSuffix}`, params);
-                    }
+            params: getIdFields(uriTemplate, false),
+            fn: bc => async function* (partialIds) {
+                const listUris = that.resolveListUris(bc, UriTemplate.applyValues(uriTemplate, partialIds));
+                for await (const uri of listUris) {
+                    yield* bc.list(uri, requestParams);
                 }
             },
-        })
-    }
-
-    update(uri: string) {
-        return this.sink({
-            name: 'update',
-            params: {
-                id: Field.integer().required(),
-            },
-            fn: m2 => (data, {id}) => m2.put(`${uri}/${id}`, data),
         });
     }
 
-    delete(uri: string) {
+    update(uriTemplate: string) {
+        return this.sink({
+            name: 'update',
+            params: getIdFields(uriTemplate),
+            fn: m2 => (data, ids) => m2.put(UriTemplate.uri(uriTemplate, ids), data),
+        });
+    }
+
+    delete(uriTemplate: string) {
         return this.source({
             name: 'delete',
-            params: {
-                id: Field.integer().required(),
-            },
-            fn: bc => ({id}) => bc.delete(`${uri}/${id}`),
+            params: getIdFields(uriTemplate),
+            fn: bc => ids => bc.delete(UriTemplate.uri(uriTemplate, ids)),
         });
     }
 
@@ -134,6 +128,33 @@ export class BigCommerceActionFactory {
         }
         return new BigCommerce(credentials);
     }
+
+    private async* resolveListUris(client: BigCommerce, maybeUri: string): AsyncIterable<string> {
+        const missingIds = UriTemplate.fields(maybeUri);
+        if (missingIds.length === 0) {
+            yield maybeUri;
+            return;
+        }
+        const lastMissingId = missingIds.slice(-1)[0];
+        const [beforeMissingId, afterMissingId] = UriTemplate.split(maybeUri, lastMissingId);
+        const listUris = this.resolveListUris(client, beforeMissingId);
+        for await (const uri of listUris) {
+            for await (const entity of client.list(uri)) {
+                yield `${uri}${entity.id}${afterMissingId}`;
+            }
+        }
+    }
+
+    private async* _resolveListUris(client: BigCommerce, maybeUri: string): AsyncIterable<string> {
+        const missingIds = UriTemplate.fields(maybeUri);
+        if (missingIds.length === 0) {
+            yield maybeUri;
+            return;
+        }
+        compose(
+            flatMap(foo => ['foo', 'bar']),
+        );
+    }
 }
 
 type SourceConfig<P extends Fields = {}> = {
@@ -147,3 +168,36 @@ type SinkConfig<P extends Fields = {}> = {
     params?: P,
     fn: (client: BigCommerce) => ReturnType<NonNullable<ActionConfig<any, P>['sink']>>,
 };
+
+function getIdFields(uriTemplate: string, required: boolean = true) {
+    return objectFromEntries(
+        UriTemplate.fields(uriTemplate).map(fieldName => [fieldName, Field.integer().required(required)])
+    );
+}
+
+class UriTemplate {
+    static uri(uriTemplate: string, fieldValues: Record<string, any>): string {
+        const uri = UriTemplate.applyValues(uriTemplate, fieldValues);
+        const missingValues = UriTemplate.fields(uri);
+        if (UriTemplate.fields(uri).length > 0) {
+            throw new Error(`Missing URI fields ${missingValues.join(', ')}`);
+        }
+        return uri;
+    }
+
+    static split(uriTemplate: string, field: string): [string, string] {
+        const parts = uriTemplate.split(`{${field}}`);
+        return [parts[0], parts[1] ?? ''];
+    }
+
+    static applyValues(uriTemplate: string, fieldValues: Record<string, any>): string {
+        return UriTemplate.fields(uriTemplate)
+            .filter(field => (fieldValues[field] ?? null) !== null)
+            .reduce((uri, field) => uri.replace(`{${field}}`, String(fieldValues[field])), uriTemplate);
+    }
+
+    static fields(uriTemplate: string): string[] {
+        // todo: convert to matchAll once we support ES2020
+        return uriTemplate.match(/\{[^}]+\}/g)?.map(match => match.substring(1, match.length - 1)) || [];
+    }
+}
