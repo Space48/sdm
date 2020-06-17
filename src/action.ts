@@ -4,24 +4,32 @@ export class Action {
     get config(): Readonly<ActionConfig<any, any>> {
         return Object.freeze(this._config);
     }
+
+    static source<Context extends Fields, Params extends Fields>(config: SourceConfig<Context, Params>): Action {
+        const {fn, ...rest} = config;
+        return new Action({ ...rest, source: fn });
+    }
+
+    static sink<Context extends Fields, Params extends Fields>(config: SinkConfig<Context, Params>): Action {
+        const {fn, ...rest} = config;
+        return new Action({ ...rest, sink: fn });
+    }
 }
+
+export type SourceConfig<Context extends Fields = {}, Params extends Fields = {}> =
+    Omit<ActionConfig<Context, Params>, 'source' | 'sink'> & {fn: ActionConfig<Context, Params>['source']};
+
+export type SinkConfig<Context extends Fields = {}, Params extends Fields = {}> =
+    Omit<ActionConfig<Context, Params>, 'source' | 'sink'> & {fn: ActionConfig<Context, Params>['sink']};
 
 export type ActionConfig<Context extends Fields = {}, Params extends Fields = {}> = {
     name: string,
     context?: Context,
     params?: Params,
-    ordered?: boolean, // = FALSE. whether or not output order must be consistent with input order
     concurrency?: ConcurrencyOptions, // = {default: 1, min: 1, max: INF}
     source?: (context: FieldValues<Context>) => (params: FieldValues<Params>) => Promise<unknown>|AsyncIterable<unknown>,
     sink?: (context: FieldValues<Context>) => (input: any, params: FieldValues<Params>) => Promise<unknown>|AsyncIterable<unknown>,
 };
-
-export default function action<Context extends Fields = {}, Params extends Fields = {}>(config: ActionConfig<Context, Params>): Action {
-    if (Boolean(config.sink) === Boolean(config.source)) {
-        throw new Error();
-    }
-    return new Action(config);
-}
 
 export type Fields = Record<string, Field<any, any, any>>;
 
@@ -121,7 +129,7 @@ type FieldValue<P extends Field> =
         : ValueType<T>|null
     : never;
 
-type ValueType<P extends FieldType> = 
+export type ValueType<P extends FieldType> = 
     P extends FieldType.Boolean ? boolean
     : P extends FieldType.Integer ? number
     : P extends FieldType.String ? string

@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import action, { Field } from "../action";
+import { Field, Action } from "../action";
 
 export type ConfigSchema = {[shopName: string]: Credentials};
 
@@ -19,40 +19,40 @@ export const getClientCredentials = (config: Config<ConfigSchema>, shopName: str
 
 export function getActions(config: Config<ConfigSchema>) {
     return [
-        action({
+        Action.source({
             name: 'set',
             params: {
                 shopName: Field.string().required(),
                 apiKey: Field.string().required(),
                 password: Field.string().required(),
             },
-            source: () => async ({shopName, apiKey, password}) => config.set(shopName, {shopName, apiKey, password}),
+            fn: () => async ({shopName, apiKey, password}) => config.set(shopName, {shopName, apiKey, password}),
         }),
 
-        action({
+        Action.source({
             name: 'get',
             params: {
                 shopName: Field.string().required(),
             },
-            source: () => async ({shopName}) => config.get(shopName) ?? null,
+            fn: () => async ({shopName}) => config.get(shopName) ?? null,
         }),
 
-        action({
+        Action.source({
             name: 'list',
-            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.values(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'list-shops',
-            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.keys(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'delete',
             params: {
                 shopName: Field.string().required(),
             },
-            source: () => async ({shopName}) => config.delete(shopName),
+            fn: () => async ({shopName}) => config.delete(shopName),
         }),
     ];
 }

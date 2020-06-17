@@ -3,7 +3,7 @@ import Magento1, { Magento1ClientOptions } from "./client";
 import { OAuth } from "oauth";
 import open from "open";
 import * as rl from "readline";
-import action, { Field } from "../action";
+import { Field, Action } from "../action";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
@@ -22,44 +22,44 @@ export const createClient = (config: Config<ConfigSchema>, baseUrl: string, opti
 
 export function getActions(config: Config<ConfigSchema>) {
     return [
-        action({
+        Action.source({
             name: 'set',
             params: {
                 baseUrl: Field.string().required(),
                 key: Field.string().required(),
                 secret: Field.string().required(),
             },
-            source: () => async ({baseUrl, key, secret}) => {
+            fn: () => async ({baseUrl, key, secret}) => {
                 const credentials = {key, secret};
                 const accessToken = await getAccessToken(baseUrl, credentials)
                 config.set(baseUrl, {baseUrl, credentials, accessToken});
             },
         }),
 
-        action({
+        Action.source({
             name: 'get',
             params: {
                 baseUrl: Field.string().required(),
             },
-            source: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
+            fn: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
         }),
 
-        action({
+        Action.source({
             name: 'list',
-            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.values(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'list-base-urls',
-            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.keys(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'delete',
             params: {
                 baseUrl: Field.string().required(),
             },
-            source: () => async ({baseUrl}) => config.delete(baseUrl),
+            fn: () => async ({baseUrl}) => config.delete(baseUrl),
         }),
     ];
 }

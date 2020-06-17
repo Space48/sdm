@@ -1,9 +1,9 @@
 import { Config } from "../config";
 import { ConfigSchema } from ".";
-import action, { Field, ActionConfig, Fields, Action, FieldValues } from "../action";
+import { Field, ActionConfig, Fields, Action } from "../action";
 import BigCommerce from "./client";
-import { objectFromEntries, flatten } from "../util";
-import { compose, flatMap } from "@space48/json-pipe";
+import { objectFromEntries } from "../util";
+import { compose, flatMapAsync } from "@space48/json-pipe";
 
 type ReadOptions = {
     get?: boolean,
@@ -64,10 +64,8 @@ export class BigCommerceActionFactory {
             name: 'list',
             params: getIdFields(uriTemplate, false),
             fn: bc => async function* (partialIds) {
-                const listUris = that.resolveListUris(bc, UriTemplate.applyValues(uriTemplate, partialIds));
-                for await (const uri of listUris) {
-                    yield* bc.list(uri, requestParams);
-                }
+                const idsStream = that.resolveIds(bc, uriTemplate, partialIds);
+                yield* flatMapAsync(50, (ids: any) => bc.list(UriTemplate.uri(uriTemplate, ids), requestParams))(idsStream);
             },
         });
     }
@@ -91,12 +89,12 @@ export class BigCommerceActionFactory {
     // advanced methods
 
     source<P extends Fields = {}>({name, params, fn}: SourceConfig<P>) {
-        return action({
+        return Action.source({
             name,
             context: BigCommerceActionFactory.clientContext,
             params,
             concurrency: {default: 100},
-            source: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },
@@ -104,12 +102,12 @@ export class BigCommerceActionFactory {
     }
 
     sink<P extends Fields = {}>({name, params, fn}: SinkConfig<P>) {
-        return action({
+        return Action.sink({
             name,
             context: BigCommerceActionFactory.clientContext,
             params,
             concurrency: {default: 100},
-            sink: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },
@@ -129,31 +127,21 @@ export class BigCommerceActionFactory {
         return new BigCommerce(credentials);
     }
 
-    private async* resolveListUris(client: BigCommerce, maybeUri: string): AsyncIterable<string> {
+    private resolveIds(client: BigCommerce, uriTemplate: string, partialIds: Record<string, any>): AsyncIterable<Record<string, any>> {
+        const maybeUri = UriTemplate.applyValues(uriTemplate, partialIds);
         const missingIds = UriTemplate.fields(maybeUri);
-        if (missingIds.length === 0) {
-            yield maybeUri;
-            return;
-        }
-        const lastMissingId = missingIds.slice(-1)[0];
-        const [beforeMissingId, afterMissingId] = UriTemplate.split(maybeUri, lastMissingId);
-        const listUris = this.resolveListUris(client, beforeMissingId);
-        for await (const uri of listUris) {
-            for await (const entity of client.list(uri)) {
-                yield `${uri}${entity.id}${afterMissingId}`;
-            }
-        }
-    }
-
-    private async* _resolveListUris(client: BigCommerce, maybeUri: string): AsyncIterable<string> {
-        const missingIds = UriTemplate.fields(maybeUri);
-        if (missingIds.length === 0) {
-            yield maybeUri;
-            return;
-        }
-        compose(
-            flatMap(foo => ['foo', 'bar']),
+        const transform = compose(
+            ...missingIds.map(missingId => {
+                const [_uriTemplate] = UriTemplate.split(maybeUri, missingId);
+                return flatMapAsync(10, async function* (ids: Record<string, any>) {
+                    const uri = UriTemplate.uri(_uriTemplate, ids);
+                    for await (const entity of client.list(uri)) {
+                        yield { ...ids, [missingId]: entity.id };
+                    }
+                });
+            })
         );
+        return transform((async function* () { yield partialIds })());
     }
 }
 

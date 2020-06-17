@@ -41,7 +41,7 @@ function source<Context extends Fields = {}, Params extends Fields = {}>(config:
             }
         } else {
             jsonTransform(
-                mapAsync(concurrency, transform((input: any) => fn(resolveParams(input))))
+                mapAsync({concurrency, preserveOrder: true}, transform((input: any) => fn(resolveParams(input))))
             );
         }
     });
@@ -65,7 +65,7 @@ function sink<Context extends Fields = {}, Params extends Fields = {}>(config: A
         const concurrency = getConcurrency();
         const fn = config.sink!(context);
         jsonTransform(
-            mapAsync(concurrency, transform(input => fn(input, resolveParams(input))))
+            mapAsync({concurrency, preserveOrder: true}, transform(input => fn(input, resolveParams(input))))
         );
     });
 

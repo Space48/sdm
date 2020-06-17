@@ -2,7 +2,7 @@ import { Config } from "../config";
 import { ConfigSchema } from ".";
 import Magento1 from "./client";
 import { createClient } from './credentials';
-import action, { Field, ActionConfig, Fields, Action } from "../action";
+import { Field, ActionConfig, Fields, Action } from "../action";
 
 export class Magento1ActionFactory {
     constructor(private config: Config<ConfigSchema>) {}
@@ -98,11 +98,11 @@ export class Magento1ActionFactory {
     // advanced methods
 
     source<P extends Fields = {}>({name, params, fn}: SourceConfig<P>) {
-        return action({
+        return Action.source({
             name,
             context: Magento1ActionFactory.clientContext,
             params,
-            source: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },
@@ -110,11 +110,11 @@ export class Magento1ActionFactory {
     }
 
     sink<P extends Fields = {}>({name, params, fn}: SinkConfig<P>) {
-        return action({
+        return Action.sink({
             name,
             context: Magento1ActionFactory.clientContext,
             params,
-            sink: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },

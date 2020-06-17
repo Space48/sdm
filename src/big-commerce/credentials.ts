@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import action, { Field } from "../action";
+import { Field, Action } from "../action";
 
 export type ConfigSchema = {[storeAlias: string]: Credentials};
 
@@ -20,7 +20,7 @@ export const getClientCredentials = (config: Config<ConfigSchema>, storeHash: st
 
 export function getActions(config: Config<ConfigSchema>) {
     return [
-        action({
+        Action.source({
             name: 'set',
             params: {
                 storeAlias: Field.string().required(),
@@ -28,35 +28,35 @@ export function getActions(config: Config<ConfigSchema>) {
                 accessToken: Field.string().required(),
                 clientId: Field.string().required(),
             },
-            source: () => async ({storeAlias, storeHash, accessToken, clientId}) => {
+            fn: () => async ({storeAlias, storeHash, accessToken, clientId}) => {
                 config.set(storeAlias, {storeAlias, storeHash, accessToken, clientId});
             },
         }),
 
-        action({
+        Action.source({
             name: 'get',
             params: {
                 storeAlias: Field.string().required(),
             },
-            source: () => async ({storeAlias}) => config.get(storeAlias) ?? null,
+            fn: () => async ({storeAlias}) => config.get(storeAlias) ?? null,
         }),
 
-        action({
+        Action.source({
             name: 'list',
-            source: () => async function* () { yield* Object.values(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.values(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'list-stores',
-            source: () => async function* () { yield* Object.keys(config.getAll() || {}) },
+            fn: () => async function* () { yield* Object.keys(config.getAll() || {}) },
         }),
 
-        action({
+        Action.source({
             name: 'delete',
             params: {
                 storeAlias: Field.string().required(),
             },
-            source: () => async ({storeAlias}) => config.delete(storeAlias),
+            fn: () => async ({storeAlias}) => config.delete(storeAlias),
         }),
     ];
 }

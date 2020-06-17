@@ -2,7 +2,7 @@ import { Config } from "../config";
 import { ConfigSchema } from ".";
 import Magento2, { SortKey } from "./client";
 import { createClient } from './credentials';
-import action, { Fields, FieldType, Field, ActionConfig, Action } from "../action";
+import { Fields, FieldType, Field, ActionConfig, Action } from "../action";
 
 type Key = {
     attributeCode: string,
@@ -103,11 +103,11 @@ export class Magento2ActionFactory {
     // advanced methods
 
     source<P extends Fields = {}>({name, params, fn}: SourceConfig<P>) {
-        return action({
+        return Action.source({
             name,
             context: Magento2ActionFactory.clientContext,
             params,
-            source: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },
@@ -115,11 +115,11 @@ export class Magento2ActionFactory {
     }
 
     sink<P extends Fields = {}>({name, params, fn}: SinkConfig<P>) {
-        return action({
+        return Action.sink({
             name,
             context: Magento2ActionFactory.clientContext,
             params,
-            sink: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return fn(client);
             },

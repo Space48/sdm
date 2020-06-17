@@ -4,7 +4,7 @@ import { getClientCredentials } from './credentials';
 import Shopify from "shopify-api-node";
 import pRetry from "p-retry";
 import { ResourceKey, getParentKeyPath } from "./resource";
-import action, { Field, Fields, FieldValues, Action } from "../action";
+import { Field, Fields, FieldValues, Action } from "../action";
 import { objectFromEntries } from "../util";
 
 export enum ActionType { Source, NoIdSource, List, NoIdList, Sink, NoIdSink };
@@ -38,11 +38,11 @@ export class ShopifyActionFactory {
     }
 
     private source<P extends Fields>(endpointName: string, params: P, fn: (client: Shopify, paramValues: FieldValues<P>) => any) {
-        return action({
+        return Action.source({
             name: endpointName,
             context: ShopifyActionFactory.clientContext,
             params,
-            source: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return paramValues => fn(client, paramValues);
             },
@@ -50,12 +50,12 @@ export class ShopifyActionFactory {
     }
 
     private list<P extends Fields>(endpointName: string, params: P, fn: (client: Shopify, paramValues: FieldValues<P>, shopifyParams: any) => any) {
-        return action({
+        return Action.source({
             name: endpointName,
             context: ShopifyActionFactory.clientContext,
             params,
             concurrency: {default: 10},
-            source: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return async function* (paramValues) {
                     let _params = { limit: 250 };
@@ -70,12 +70,12 @@ export class ShopifyActionFactory {
     }
 
     private sink<P extends Fields>(endpointName: string, params: P, fn: (client: Shopify, paramValues: FieldValues<P>, shopifyParams: any) => any) {
-        return action({
+        return Action.sink({
             name: endpointName,
             context: ShopifyActionFactory.clientContext,
             params,
             concurrency: {default: 10},
-            sink: context => {
+            fn: context => {
                 const client = this.getClient(context);
                 return (input, paramValues) => fn(client, paramValues, input);
             },
