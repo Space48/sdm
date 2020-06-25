@@ -45,7 +45,7 @@ export class Magento1ActionFactory {
             params: {
                 entity_id: Field.integer().required(),
             },
-            fn: m1 => ({entity_id}) => m1.get(`${uri}/${entity_id}`),
+            fn: m1 => ({params: {entity_id}}) => m1.get(`${uri}/${entity_id}`),
         });
     }
 
@@ -62,7 +62,7 @@ export class Magento1ActionFactory {
             params: {
                 entity_id: Field.integer(),
             },
-            fn: m1 => async function* ({entity_id}) {
+            fn: m1 => async function* ({params: {entity_id}}) {
                 if (entity_id) {
                     yield* await m1.get<Array<unknown>>(`${parentUri}/${entity_id}/${uriSuffix}`);
                 } else {
@@ -81,7 +81,7 @@ export class Magento1ActionFactory {
             params: {
                 entity_id: Field.integer().required(),
             },
-            fn: m2 => (data, {entity_id}) => m2.put(`${uri}/${entity_id}`, data),
+            fn: m2 => ({input, params: {entity_id}}) => m2.put(`${uri}/${entity_id}`, input),
         });
     }
 
@@ -91,7 +91,7 @@ export class Magento1ActionFactory {
             params: {
                 entity_id: Field.integer().required(),
             },
-            fn: m1 => ({entity_id}) => m1.delete(`${uri}/${entity_id}`),
+            fn: m1 => ({params: {entity_id}}) => m1.delete(`${uri}/${entity_id}`),
         });
     }
 

@@ -18,7 +18,6 @@ export default class Magento2 {
         private baseUrl: string,
         private options?: Magento2ClientOptions,
     ) {
-        console.error({rejectUnauthorized: !options?.insecure})
         this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: !options?.insecure}) : undefined;
     }
 

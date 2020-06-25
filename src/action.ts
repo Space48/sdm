@@ -24,11 +24,12 @@ export type SinkConfig<Context extends Fields = {}, Params extends Fields = {}> 
 
 export type ActionConfig<Context extends Fields = {}, Params extends Fields = {}> = {
     name: string,
+    help?: string,
     context?: Context,
     params?: Params,
     concurrency?: ConcurrencyOptions, // = {default: 1, min: 1, max: INF}
-    source?: (context: FieldValues<Context>) => (params: FieldValues<Params>) => Promise<unknown>|AsyncIterable<unknown>,
-    sink?: (context: FieldValues<Context>) => (input: any, params: FieldValues<Params>) => Promise<unknown>|AsyncIterable<unknown>,
+    source?: (context: FieldValues<Context>) => (args: {input?: any, params: FieldValues<Params>}) => Promise<unknown>|AsyncIterable<unknown>,
+    sink?: (context: FieldValues<Context>) => (args: {input: any, params: FieldValues<Params>}) => Promise<unknown>|AsyncIterable<unknown>,
 };
 
 export type Fields = Record<string, Field<any, any, any>>;

@@ -26,7 +26,7 @@ export function getActions(config: Config<ConfigSchema>) {
                 apiKey: Field.string().required(),
                 password: Field.string().required(),
             },
-            fn: () => async ({shopName, apiKey, password}) => config.set(shopName, {shopName, apiKey, password}),
+            fn: () => async ({params: {shopName, apiKey, password}}) => config.set(shopName, {shopName, apiKey, password}),
         }),
 
         Action.source({
@@ -34,7 +34,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 shopName: Field.string().required(),
             },
-            fn: () => async ({shopName}) => config.get(shopName) ?? null,
+            fn: () => async ({params: {shopName}}) => config.get(shopName) ?? null,
         }),
 
         Action.source({
@@ -52,7 +52,11 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 shopName: Field.string().required(),
             },
-            fn: () => async ({shopName}) => config.delete(shopName),
+            fn: () => async ({params: {shopName}}) => config.delete(shopName),
         }),
     ];
+}
+
+export function getShops(config: Config<ConfigSchema>): string[] {
+    return Object.keys(config.getAll() || {});
 }

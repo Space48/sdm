@@ -29,7 +29,7 @@ export function getActions(config: Config<ConfigSchema>) {
                 key: Field.string().required(),
                 secret: Field.string().required(),
             },
-            fn: () => async ({baseUrl, key, secret}) => {
+            fn: () => async ({params: {baseUrl, key, secret}}) => {
                 const credentials = {key, secret};
                 const accessToken = await getAccessToken(baseUrl, credentials)
                 config.set(baseUrl, {baseUrl, credentials, accessToken});
@@ -41,7 +41,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
+            fn: () => async ({params: {baseUrl}}) => config.get(baseUrl) ?? null,
         }),
 
         Action.source({
@@ -59,7 +59,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({baseUrl}) => config.delete(baseUrl),
+            fn: () => async ({params: {baseUrl}}) => config.delete(baseUrl),
         }),
     ];
 }

@@ -1,9 +1,9 @@
 import commander from "commander";
-import { objectFromEntries, filterProperties, hyphenate } from "./util";
-import { jsonSource, jsonTransform, mapAsync } from "@space48/json-pipe";
+import { objectFromEntries, filterProperties, hyphenate, camelCase } from "./util";
+import { streamJson, mapAsync, transformJson } from "@space48/json-pipe";
 import { ActionConfig, Fields, FieldValues, ConcurrencyOptions, Field, FieldType, Action } from "./action";
 
-export default function createCommand(action: Action): commander.Command {
+export function actionCommand(action: Action): commander.Command {
     const config = action.config;
     if (Boolean(config.sink) === Boolean(config.source)) {
         throw new Error();
@@ -28,11 +28,11 @@ function source<Context extends Fields = {}, Params extends Fields = {}>(config:
         const fn = config.source!(context as any);
         if (process.stdin.isTTY) {
             const params = resolveParams({});
-            const result = fn(params);
+            const result = fn({params});
             if (Symbol.asyncIterator in result) {
-                jsonSource(result as AsyncIterable<any>);
+                streamJson(result as AsyncIterable<any>);
             } else {
-                jsonSource((async function* () {
+                streamJson((async function* () {
                     const _result = await result;
                     if (_result !== undefined) {
                         yield _result;
@@ -40,11 +40,13 @@ function source<Context extends Fields = {}, Params extends Fields = {}>(config:
                 })());
             }
         } else {
-            jsonTransform(
-                mapAsync({concurrency, preserveOrder: true}, transform((input: any) => fn(resolveParams(input))))
+            transformJson(
+                mapAsync({concurrency, preserveOrder: true}, transform(input => fn({input, params: resolveParams(input)})))
             );
         }
     });
+
+    config.help && command.usage(`\n\n${config.help}`);
 
     return command;
 }
@@ -64,10 +66,12 @@ function sink<Context extends Fields = {}, Params extends Fields = {}>(config: A
         const context = resolveContext();
         const concurrency = getConcurrency();
         const fn = config.sink!(context);
-        jsonTransform(
-            mapAsync({concurrency, preserveOrder: true}, transform(input => fn(input, resolveParams(input))))
+        transformJson(
+            mapAsync({concurrency, preserveOrder: true}, transform(input => fn({input, params: resolveParams(input)})))
         );
     });
+
+    config.help && command.usage(`\n\n${config.help}`);
 
     return command;
 }
@@ -202,9 +206,3 @@ function getOptionValues(names: string[], command: commander.Command) {
     const options = command.opts();
     return objectFromEntries(names.map(name => [name, options[camelCase(name)]]));
 }
-
-const camelCase = (value: string): string => (
-    value
-        .replace(/^[A-Z]/, g => g.toLowerCase())
-        .replace(/[-_][a-z]/g, g => g[1].toUpperCase())
-);

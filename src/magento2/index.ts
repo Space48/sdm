@@ -1,75 +1,111 @@
 import * as credentials from './credentials';
 import { Config } from '../config';
-import { Magento2ActionFactory } from './action';
-import { Field, FieldType, Action } from '../action';
+import { FieldType, Action, Field } from '../action';
+import { Magento2ResourceFactory } from './resource';
+import { ResourceCollection, resourceAction } from '../resource';
 
 export type ConfigSchema = {
     credentials: credentials.ConfigSchema,
 };
 
 export function getActions(config: Config<ConfigSchema>): Record<string, Action[]> {
-    const action = new Magento2ActionFactory(config);
-
+    const credentialsConfig = config.select('credentials');
+    const getResourceAction = (baseUrl: string) => resourceAction(baseUrl, getResources(baseUrl, credentialsConfig));
     return {
-        category: [
-            ...action.crud({
-                uri: 'categories',
-                key: { attributeCode: 'id', type: FieldType.Integer },
+        creds: credentials.getActions(credentialsConfig),
+        _: credentials.getBaseUrls(credentialsConfig).map(getResourceAction),
+    };
+}
+
+function getResources(baseUrl: string, config: Config<ConfigSchema['credentials']>) {
+    const resource = new Magento2ResourceFactory(baseUrl, config);
+
+    return ResourceCollection.configure({
+        context: Magento2ResourceFactory.context,
+
+        resources: {
+            categories: resource.create('categories', {
+                key: { name: 'id', type: Field.integer() },
+                create: true,
+                get: true,
                 list: {
                     uri: 'categories/list',
                     sortKey: { query: 'entity_id', response: 'id' },
                 },
+                update: true,
+                delete: true,
             }),
 
-            action.source({
-                name: 'get-tree',
-                params: { rootCategoryId: Field.integer().default(1) },
-                fn: m2 => ({rootCategoryId}) => m2.get('categories', {rootCategoryId}),
+            categoryTree: resource.create('categories?rootCategoryId=1', {
+                get: true,
             }),
-        ],
 
-        creds: credentials.getActions(config.select('credentials')),
+            configurableProducts: {
+                ...resource.create('configurable-products', {
+                    key: { name: 'sku', type: Field.string() },
+                }),
 
-        customer: action.crud({
-            uri: 'customers',
-            key: { attributeCode: 'id', type: FieldType.Integer },
-            list: {
-                uri: 'customers/search',
-                sortKey: { query: 'entity_id', response: 'id' },
-            },
-        }),
+                children: {
+                    children: resource.create('configurable-products/{sku}/children', {
+                        get: true,
+                    }),
 
-        order: action.crud({
-            uri: 'orders',
-            key: { attributeCode: 'id', type: FieldType.Integer },
-            list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
-        }),
-
-        product: action.crud({
-            uri: 'products',
-            key: { attributeCode: 'sku', type: FieldType.String },
-            list: { sortKey: { query: 'entity_id', response: 'id' } },
-        }),
-
-        'product-attribute': [
-            action.list('products/attributes', { query: 'attribute_id', response: 'attribute_id' }),
-    
-            action.source({
-                name: 'list-options',
-                params: { attribute_code: Field.string() },
-                fn: m2 => async function* ({attribute_code}) {
-                    if (attribute_code) {
-                        const options = await m2.get<Array<any>>(`products/attributes/${attribute_code}/options`);
-                        yield* options.filter(({value}) => value !== '');
-                    } else {
-                        const attributes = m2.search('products/attributes', { sortKey: { query: 'attribute_id', response: 'attribute_id' } });
-                        for await (const attribute of attributes) {
-                            const options = await m2.get<Array<any>>(`products/attributes/${attribute.attribute_code}/options`);
-                            yield* options.filter(({value}) => value !== '');
-                        }
-                    }
+                    options: resource.create('configurable-products/{sku}/options/all', {
+                        get: true,
+                    }),
                 },
+            },
+
+            customers: resource.create('customers', {
+                key: { name: 'id', type: Field.integer() },
+                create: true,
+                get: true,
+                list: {
+                    uri: 'customers/search',
+                    sortKey: { query: 'entity_id', response: 'id' },
+                },
+                update: true,
+                delete: true,
             }),
-        ],
-    };
+
+            orders: resource.create('orders', {
+                key: { name: 'entity_id', type: Field.integer() },
+                get: true,
+                list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
+                update: true,
+                delete: true,
+            }),
+    
+            products: {
+                ...resource.create('products', {
+                    key: { name: 'sku', type: Field.string() },
+                    create: true,
+                    get: true,
+                    list: { sortKey: { query: 'entity_id', response: 'id' } },
+                    update: true,
+                    delete: true,
+                }),
+
+                children: {
+                    links: resource.create('products/{sku}/links', {
+                        key: { name: 'type', type: Field.string() },
+                        get: true,
+                    }),
+                },
+            },
+
+            productAttributes: {
+                ...resource.create('products/attributes', {
+                    key: { name: 'attribute_code', type: Field.string() },
+                    list: { sortKey: { query: 'attribute_id', response: 'attribute_id' } },
+                }),
+
+                children: {
+                    options: resource.create('products/attributes/{attributeCode}/options', {
+                        get: true,
+                    }),
+                },
+            },
+        }
+    });
 }

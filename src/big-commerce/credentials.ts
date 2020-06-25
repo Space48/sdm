@@ -28,7 +28,7 @@ export function getActions(config: Config<ConfigSchema>) {
                 accessToken: Field.string().required(),
                 clientId: Field.string().required(),
             },
-            fn: () => async ({storeAlias, storeHash, accessToken, clientId}) => {
+            fn: () => async ({params: {storeAlias, storeHash, accessToken, clientId}}) => {
                 config.set(storeAlias, {storeAlias, storeHash, accessToken, clientId});
             },
         }),
@@ -38,7 +38,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 storeAlias: Field.string().required(),
             },
-            fn: () => async ({storeAlias}) => config.get(storeAlias) ?? null,
+            fn: () => async ({params: {storeAlias}}) => config.get(storeAlias) ?? null,
         }),
 
         Action.source({
@@ -56,7 +56,11 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 storeAlias: Field.string().required(),
             },
-            fn: () => async ({storeAlias}) => config.delete(storeAlias),
+            fn: () => async ({params: {storeAlias}}) => config.delete(storeAlias),
         }),
     ];
+}
+
+export function getStoreAliases(config: Config<ConfigSchema>): string[] {
+    return Object.keys(config.getAll() || {});
 }

@@ -3,6 +3,10 @@ import Magento2, { Magento2ClientOptions } from "./client";
 import { parse as parseUrl } from "url";
 import { Field, Action } from "../action";
 
+export function getBaseUrls(config: Config<ConfigSchema>): string[] {
+    return Object.keys(config.getAll() || {}).map(computeUrlForComparison);
+}
+
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
 export const createClient = (config: Config<ConfigSchema>, baseUrl: string, options: Omit<Magento2ClientOptions, 'auth'> = {}): Magento2 => {
@@ -35,7 +39,7 @@ export function getActions(config: Config<ConfigSchema>) {
                 username: Field.string().required(),
                 password: Field.string().required(),
             },
-            fn: () => async ({baseUrl, username, password}) => config.set(baseUrl, {baseUrl, credentials: {username, password}}),
+            fn: () => async ({params: {baseUrl, username, password}}) => config.set(baseUrl, {baseUrl, credentials: {username, password}}),
         }),
 
         Action.source({
@@ -43,7 +47,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({baseUrl}) => config.get(baseUrl) ?? null,
+            fn: () => async ({params: {baseUrl}}) => config.get(baseUrl) ?? null,
         }),
 
         Action.source({
@@ -61,7 +65,7 @@ export function getActions(config: Config<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({baseUrl}) => config.delete(baseUrl),
+            fn: () => async ({params: {baseUrl}}) => config.delete(baseUrl),
         }),
     ];
 }
