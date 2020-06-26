@@ -3,7 +3,7 @@ import { getClientCredentials, ConfigSchema } from './credentials';
 import Shopify from "shopify-api-node";
 import pRetry from "p-retry";
 import { FieldValues, Action, Field, ActionError } from "../action";
-import { EndpointArgs, ResourceCollection, ResourceConfig, resourceAction, EndpointConfig, EndpointScope, Cardinality, SingletonResourceConfig, DocumentCollectionConfig, MapEndpointFn, FlatMapEndpointFn } from "../resource";
+import { EndpointPayload, ResourceCollection, ResourceConfig, resourceAction, EndpointConfig, EndpointScope, Cardinality, SingletonResourceConfig, DocumentCollectionConfig, MapEndpointFn, FlatMapEndpointFn } from "../resource";
 import { mapProperties } from '../util';
 import { compose, map } from "@space48/json-pipe";
 
@@ -21,12 +21,12 @@ export type ShopifyCustomEndpoint = MapEndpoint | FlatMapEndpoint;
 type MapEndpoint = {
     scope: EndpointScope,
     cardinality: Cardinality.One,
-    fn: (shopify: Shopify) => (input: EndpointArgs) => Promise<any>,
+    fn: (shopify: Shopify) => (input: EndpointPayload) => Promise<any>,
 };
 type FlatMapEndpoint = {
     scope: EndpointScope,
     cardinality: Cardinality.Many,
-    fn: (shopify: Shopify) => (input: EndpointArgs) => AsyncIterable<any>,
+    fn: (shopify: Shopify) => (input: EndpointPayload) => AsyncIterable<any>,
 };
 
 export type ShopifyContext = typeof ShopifyActionFactory.context;
@@ -49,9 +49,9 @@ export class ShopifyActionFactory {
             ? {
                 key: {name: 'id', type: Field.integer()},
                 listKeys: resource.clientKey && resource.endpoints?.list && (context => {
-                    const listDocs = this.flatMap(shop, (client, {path, data}) => (client[resource.clientKey!] as any).list(...path, data))(context);
+                    const listDocs = this.flatMap(shop, (client, {keys, data}) => (client[resource.clientKey!] as any).list(...keys, data))(context);
                     return compose(
-                        path => ({path}),
+                        keys => ({keys}),
                         listDocs,
                         map(doc => doc.id)
                     );
@@ -72,13 +72,13 @@ export class ShopifyActionFactory {
                         return {
                             ...config,
                             cardinality: Cardinality.One,
-                            fn: this.map(shop, (client, {path, data}) => (client[resource.clientKey!] as any)[name](...path, data))
+                            fn: this.map(shop, (client, {keys, data}) => (client[resource.clientKey!] as any)[name](...keys, data))
                         };
                     case Cardinality.Many:
                         return {
                             ...config,
                             cardinality: Cardinality.Many,
-                            fn: this.flatMap(shop, (client, {path, data}) => (client[resource.clientKey!] as any)[name](...path, data))
+                            fn: this.flatMap(shop, (client, {keys, data}) => (client[resource.clientKey!] as any)[name](...keys, data))
                         };
                 }
             }),
@@ -97,7 +97,7 @@ export class ShopifyActionFactory {
         return mapProperties(resource.children || {}, (child, name) => this.resource(shop, child));
     }
 
-    private map(shop: string, fn: (client: Shopify, input: EndpointArgs) => Promise<any>): MapEndpointFn<ShopifyContext> {
+    private map(shop: string, fn: (client: Shopify, input: EndpointPayload) => Promise<any>): MapEndpointFn<ShopifyContext> {
         return context => {
             const client = this.getClient(shop, context);
             return input => {
@@ -106,13 +106,13 @@ export class ShopifyActionFactory {
         };
     }
 
-    private flatMap(shop: string, fn: (client: Shopify, input: EndpointArgs) => Promise<any>): FlatMapEndpointFn<ShopifyContext> {
+    private flatMap(shop: string, fn: (client: Shopify, input: EndpointPayload) => Promise<any>): FlatMapEndpointFn<ShopifyContext> {
         return context => {
             const client = this.getClient(shop, context);
-            return async function* ({path}) {
+            return async function* ({keys, data: _, ...rest}) {
                 let _params = { limit: 250 };
                 do {
-                    const result = await fn(client, {path, data: _params});
+                    const result = await fn(client, {keys, data: _params, ...rest});
                     yield* result;
                     _params = (result as any).nextPageParameters;
                 } while (_params);

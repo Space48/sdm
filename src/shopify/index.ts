@@ -156,7 +156,7 @@ const resourceConfigs: ResourceConfigs = {
                     get: {
                         scope: EndpointScope.Resource,
                         cardinality: Cardinality.One,
-                        fn: shopify => ({path: [productId]}) => shopify.metafield.list({
+                        fn: shopify => ({keys: [productId]}) => shopify.metafield.list({
                             metafield: { owner_resource: 'product', owner_id: productId }
                         }),
                     }

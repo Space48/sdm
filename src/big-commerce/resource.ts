@@ -47,7 +47,7 @@ export class BigCommerceResourceFactory {
             listKeys: options.list && (context => {
                 const client = this.getClient(context);
                 return compose(
-                    path => client.list(UriTemplate.uri(uriTemplate, path)),
+                    keys => client.list(UriTemplate.uri(uriTemplate, keys)),
                     map(doc => doc.id),
                 );
             }),
@@ -85,7 +85,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path, data}) => client.post(UriTemplate.uri(uriTemplate, path), data);
+                    return ({keys, data}) => client.post(UriTemplate.uri(uriTemplate, keys), data);
                 }
             }
         };
@@ -98,7 +98,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.get(UriTemplate.uri(uriTemplate, path), requestParams);
+                    return ({keys}) => client.get(UriTemplate.uri(uriTemplate, keys), requestParams);
                 }
             }
         };
@@ -111,7 +111,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.Many,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.list(UriTemplate.uri(uriTemplate, path), requestParams);
+                    return ({keys}) => client.list(UriTemplate.uri(uriTemplate, keys), requestParams);
                 }
             }
         };
@@ -124,7 +124,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path, data}) => client.put(UriTemplate.uri(uriTemplate, path), data);
+                    return ({keys, data}) => client.put(UriTemplate.uri(uriTemplate, keys), data);
                 }
             }
         };
@@ -137,7 +137,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.delete(UriTemplate.uri(uriTemplate, path));
+                    return ({keys}) => client.delete(UriTemplate.uri(uriTemplate, keys));
                 }
             }
         };

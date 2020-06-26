@@ -52,7 +52,7 @@ export class Magento2ResourceFactory {
             listKeys: options?.list && options.key && (context => {
                 const client = this.getClient(context);
                 return compose(
-                    path => client.search(UriTemplate.uri(uriTemplate, path), {sortKey: options!.list!.sortKey}),
+                    keys => client.search(UriTemplate.uri(uriTemplate, keys), {sortKey: options!.list!.sortKey}),
                     map(doc => doc[options.key!.name]),
                 );
             }),
@@ -66,7 +66,7 @@ export class Magento2ResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path, data}) => client.post(UriTemplate.uri(uriTemplate, path), data);
+                    return ({keys, data}) => client.post(UriTemplate.uri(uriTemplate, keys), data);
                 }
             }
         };
@@ -79,7 +79,7 @@ export class Magento2ResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.get(UriTemplate.uri(uriTemplate, path));
+                    return ({keys}) => client.get(UriTemplate.uri(uriTemplate, keys));
                 }
             },
         };
@@ -92,7 +92,7 @@ export class Magento2ResourceFactory {
                 cardinality: Cardinality.Many,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.search(UriTemplate.uri(uriTemplate, path), {sortKey});
+                    return ({keys}) => client.search(UriTemplate.uri(uriTemplate, keys), {sortKey});
                 },
             },
         };
@@ -105,7 +105,7 @@ export class Magento2ResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path, data}) => client.put(UriTemplate.uri(uriTemplate, path), data);
+                    return ({keys, data}) => client.put(UriTemplate.uri(uriTemplate, keys), data);
                 },
             },
         };
@@ -118,7 +118,7 @@ export class Magento2ResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({path}) => client.delete(UriTemplate.uri(uriTemplate, path));
+                    return ({keys}) => client.delete(UriTemplate.uri(uriTemplate, keys));
                 },
             },
         };

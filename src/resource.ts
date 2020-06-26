@@ -1,5 +1,5 @@
 import { Fields, FieldValues, Field, FieldType, Action } from "./action";
-import { flatMapAsync, map, Transform, compose, first } from "@space48/json-pipe";
+import { flatMapAsync, map, Transform, compose, first, reduce } from "@space48/json-pipe";
 import { camelCase, flatten, hyphenate, underscore } from "./util";
 
 export type ResourceCollectionConfig<Context extends Fields> = {
@@ -18,7 +18,7 @@ export type SingletonResourceConfig<Context extends Fields> = {
 
 export type DocumentCollectionConfig<Context extends Fields, Key extends FieldType> = {
     key: DocumentCollectionKey<Key>;
-    listKeys?: ((context: FieldValues<Context>) => (path: string[]) => AsyncIterable<string>) | Falsy;
+    listKeys?: ((context: FieldValues<Context>) => (keys: string[]) => AsyncIterable<string>) | Falsy;
     endpoints?: Record<string, EndpointConfig<Context, Key>|Falsy>;
     children?: Record<string, ResourceConfig<any>|Falsy>;
 }
@@ -31,22 +31,28 @@ export type MapEndpointConfig<Context extends Fields, Key extends FieldType> = {
     cardinality: Cardinality.One,
     fn: MapEndpointFn<Context>,
 }
-export type MapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointArgs) => Promise<any>;
+export type MapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointPayload) => Promise<any>;
 
 export type FlatMapEndpointConfig<Context extends Fields, Key extends FieldType> = {
     scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
     cardinality: Cardinality.Many,
     fn: FlatMapEndpointFn<Context>,
 };
-export type FlatMapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointArgs) => AsyncIterable<any>;
+export type FlatMapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>;
 
 export type DocumentCollectionKey<Type extends FieldType = FieldType> = {name: string, type: Field<Type>};
 
 export type EndpointFn<Context extends Fields, Key extends FieldType|never, C extends Cardinality> =
-    C extends Cardinality.One ? (context: FieldValues<Context>) => (input: EndpointArgs) => Promise<any>
-    : C extends Cardinality.Many ? (context: FieldValues<Context>) => (input: EndpointArgs) => AsyncIterable<any>
+    C extends Cardinality.One ? (context: FieldValues<Context>) => (input: EndpointPayload) => Promise<any>
+    : C extends Cardinality.Many ? (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>
     : never;
-export type EndpointArgs = {path: string[], data?: any};
+export type EndpointPayload = {
+    keys: string[],
+    data?: any,
+};
+type EndpointPayloadInternal = EndpointPayload & {
+    path: string[],
+};
 
 export enum EndpointScope {
     Resource,
@@ -71,7 +77,7 @@ export class ResourceCollection<Context extends Fields> {
     }
 
     execute(command: Command<Context>) {
-        const pathTransforms: Transform<EndpointArgs, EndpointArgs>[] = [];
+        const payloadTransforms: Transform<EndpointPayloadInternal, EndpointPayloadInternal>[] = [];
         let resource: ResourceConfig<any>;
 
         for (
@@ -83,6 +89,8 @@ export class ResourceCollection<Context extends Fields> {
             if (!(resourceKey && resources[resourceKey])) {
                 throw new Error(`The resource '${resourcePath.name()}' does not exist.`);
             }
+
+            payloadTransforms.push(map(({path, ...rest}) => ({path: [...path, resourceKey], ...rest})));
             
             resource = nonFalsy(resources[resourceKey]);
 
@@ -90,17 +98,17 @@ export class ResourceCollection<Context extends Fields> {
                 continue;
             }
     
-            const pathKeySegment = resourcePath.key();
+            const documentKeySegment = resourcePath.key();
 
-            if (!pathKeySegment) {
+            if (!documentKeySegment) {
                 // todo: check the command does not require a key ?
                 break;
             }
 
-            switch (pathKeySegment.type) {
+            switch (documentKeySegment.type) {
                 case 'constant': {
-                    const key = pathKeySegment.value;
-                    pathTransforms.push(map(({path, ...rest}) => ({path: [...path, key], ...rest})));
+                    const key = documentKeySegment.value;
+                    payloadTransforms.push(map(({keys, ...rest}) => ({keys: [...keys, key], ...rest})));
                     break;
                 }
     
@@ -109,22 +117,24 @@ export class ResourceCollection<Context extends Fields> {
                         throw new Error();
                     }
                     const listKeys = resource.listKeys(command.context);
-                    pathTransforms.push(flatMapAsync({concurrency: 50}, ({path, ...rest}) => {
-                        const listPaths = compose(
-                            listKeys,
-                            map(key => ({path: [...path, key], ...rest})),
-                        );
-                        return listPaths(path);
-                    }));
+                    payloadTransforms.push(flatMapAsync({concurrency: 50}, ({keys, ...rest}) => (
+                        compose(listKeys, map(key => ({keys: [...keys, key], ...rest})))(keys)
+                    )));
                     break;
                 }
                 
                 case 'parameter': {
-                    const paramName = pathKeySegment.name;
-                    pathTransforms.push(map(({path, data}) => ({path: [...path, data[paramName]], data})));
+                    const paramName = documentKeySegment.name;
+                    payloadTransforms.push(map(({keys, data, ...rest}) => ({keys: [...keys, data[paramName]], data, ...rest})));
                     break;
                 }
             }
+
+            payloadTransforms.push(map(({path, keys, ...rest}) => ({
+                path: [...path, keys[keys.length - 1]],
+                keys,
+                ...rest
+            })));
         }
 
         const endpointKey = Object.keys(resource!.endpoints || {}).find(matching(command.name));
@@ -135,19 +145,30 @@ export class ResourceCollection<Context extends Fields> {
         const endpointConfig = nonFalsy(nonFalsy(resource!.endpoints!)[endpointKey]);
         const endpointFn = endpointConfig.fn(command.context);
 
-        const generateOutput = compose(
-            async function* (data: any) { yield {path: [], data} },
-            ...pathTransforms,
-            flatMapAsync({concurrency: 50}, async function* (args) {
-                const result = endpointFn(args);
+        const pathIncludesWildcard = command.path.includesWildcard();
+        const wrapOutput = (path: string[], output: any) => ({path: path.join(ResourcePath.separator), output});
+        const processor = pathIncludesWildcard
+            ? (async function* (payload: EndpointPayloadInternal) {
+                const result = endpointFn(payload);
+                if (typeof result === 'object' && (result as any).then) {
+                    yield wrapOutput(payload.path, await result as Promise<any>);
+                } else {
+                    yield wrapOutput(payload.path, await collectArray(result as AsyncIterable<any>));
+                }
+            }) : (async function* (payload: EndpointPayloadInternal) {
+                const result = endpointFn(payload);
                 if (typeof result === 'object' && (result as any).then) {
                     yield await result as Promise<any>;
                 } else {
                     yield* result as AsyncIterable<any>;
                 }
-            }),
+            });
+        const generateOutput = compose(
+            async function* (data: any) { yield {path: [], keys: [], data} },
+            compose(...payloadTransforms),
+            flatMapAsync({concurrency: 50}, processor),
         );
-        const isSingleton = endpointConfig.cardinality === Cardinality.One && !command.path.includesWildcard();
+        const isSingleton = endpointConfig.cardinality === Cardinality.One && !pathIncludesWildcard;
         return isSingleton ? compose(generateOutput, first()) : generateOutput;
     }
 
@@ -294,4 +315,12 @@ export function resourceAction<Context extends Fields>(name: string, resources: 
         },
         help: resources.help(),
     });
+}
+
+async function collectArray<T>(input: AsyncIterable<T>): Promise<T[]> {
+    const result: T[] = [];
+    for await (const el of input) {
+        result.push(el);
+    }
+    return result;
 }
