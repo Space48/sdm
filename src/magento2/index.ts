@@ -25,7 +25,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
 
         resources: {
             categories: resource.create('categories', {
-                key: { name: 'id', type: Field.integer() },
+                docKey: { name: 'id', type: Field.integer() },
                 create: true,
                 get: true,
                 list: {
@@ -42,7 +42,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
 
             configurableProducts: {
                 ...resource.create('configurable-products', {
-                    key: { name: 'sku', type: Field.string() },
+                    docKey: { name: 'sku', type: Field.string() },
                 }),
 
                 children: {
@@ -57,7 +57,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
             },
 
             customers: resource.create('customers', {
-                key: { name: 'id', type: Field.integer() },
+                docKey: { name: 'id', type: Field.integer() },
                 create: true,
                 get: true,
                 list: {
@@ -69,7 +69,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
             }),
 
             orders: resource.create('orders', {
-                key: { name: 'entity_id', type: Field.integer() },
+                docKey: { name: 'entity_id', type: Field.integer() },
                 get: true,
                 list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
                 update: true,
@@ -78,7 +78,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
     
             products: {
                 ...resource.create('products', {
-                    key: { name: 'sku', type: Field.string() },
+                    docKey: { name: 'sku', type: Field.string() },
                     create: true,
                     get: true,
                     list: { sortKey: { query: 'entity_id', response: 'id' } },
@@ -88,7 +88,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
 
                 children: {
                     links: resource.create('products/{sku}/links', {
-                        key: { name: 'type', type: Field.string() },
+                        docKey: { name: 'type', type: Field.string() },
                         get: true,
                     }),
                 },
@@ -96,7 +96,7 @@ function getResources(baseUrl: string, config: Config<ConfigSchema['credentials'
 
             productAttributes: {
                 ...resource.create('products/attributes', {
-                    key: { name: 'attribute_code', type: Field.string() },
+                    docKey: { name: 'attribute_code', type: Field.string() },
                     list: { sortKey: { query: 'attribute_id', response: 'attribute_id' } },
                 }),
 

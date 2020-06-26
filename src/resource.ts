@@ -10,15 +10,15 @@ export type ResourceCollectionConfig<Context extends Fields> = {
 export type ResourceConfig<Context extends Fields> = SingletonResourceConfig<Context> | DocumentCollectionConfig<Context, any>;
 
 export type SingletonResourceConfig<Context extends Fields> = {
-    key?: Falsy;
-    listKeys?: Falsy;
+    docKey?: Falsy;
+    listDocKeys?: Falsy;
     endpoints?: Record<string, EndpointConfig<Context, never>|Falsy>;
     children?: Record<string, ResourceConfig<any>|Falsy>;
 };
 
 export type DocumentCollectionConfig<Context extends Fields, Key extends FieldType> = {
-    key: DocumentCollectionKey<Key>;
-    listKeys?: ((context: FieldValues<Context>) => (keys: string[]) => AsyncIterable<string>) | Falsy;
+    docKey: DocumentKeyDefinition<Key>;
+    listDocKeys?: ((context: FieldValues<Context>) => (keys: string[]) => AsyncIterable<string>) | Falsy;
     endpoints?: Record<string, EndpointConfig<Context, Key>|Falsy>;
     children?: Record<string, ResourceConfig<any>|Falsy>;
 }
@@ -40,14 +40,14 @@ export type FlatMapEndpointConfig<Context extends Fields, Key extends FieldType>
 };
 export type FlatMapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>;
 
-export type DocumentCollectionKey<Type extends FieldType = FieldType> = {name: string, type: Field<Type>};
+export type DocumentKeyDefinition<Type extends FieldType = FieldType> = {name: string, type: Field<Type>};
 
 export type EndpointFn<Context extends Fields, Key extends FieldType|never, C extends Cardinality> =
     C extends Cardinality.One ? (context: FieldValues<Context>) => (input: EndpointPayload) => Promise<any>
     : C extends Cardinality.Many ? (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>
     : never;
 export type EndpointPayload = {
-    keys: string[],
+    docKeys: string[],
     data?: any,
 };
 type EndpointPayloadInternal = EndpointPayload & {
@@ -83,7 +83,7 @@ export class ResourceCollection<Context extends Fields> {
         for (
             let resourcePath: ResourcePath|undefined = command.path, resources = this.resources;
             resourcePath !== undefined;
-            resourcePath = resourcePath.child(resource.key !== null), resources = resource.children || {}
+            resourcePath = resourcePath.child(resource.docKey !== null), resources = resource.children || {}
         ) {
             const resourceKey = Object.keys(resources).find(matching(resourcePath!.name()));
             if (!(resourceKey && resources[resourceKey])) {
@@ -94,7 +94,7 @@ export class ResourceCollection<Context extends Fields> {
             
             resource = nonFalsy(resources[resourceKey]);
 
-            if (resource.key === null) {
+            if (resource.docKey === null) {
                 continue;
             }
     
@@ -107,32 +107,32 @@ export class ResourceCollection<Context extends Fields> {
 
             switch (documentKeySegment.type) {
                 case 'constant': {
-                    const key = documentKeySegment.value;
-                    payloadTransforms.push(map(({keys, ...rest}) => ({keys: [...keys, key], ...rest})));
+                    const docKey = documentKeySegment.value;
+                    payloadTransforms.push(map(({docKeys, ...rest}) => ({docKeys: [...docKeys, docKey], ...rest})));
                     break;
                 }
     
                 case 'wildcard': {
-                    if (!(resource.key && resource.listKeys)) {
+                    if (!(resource.docKey && resource.listDocKeys)) {
                         throw new Error();
                     }
-                    const listKeys = resource.listKeys(command.context);
-                    payloadTransforms.push(flatMapAsync({concurrency: 50}, ({keys, ...rest}) => (
-                        compose(listKeys, map(key => ({keys: [...keys, key], ...rest})))(keys)
+                    const listDocKeys = resource.listDocKeys(command.context);
+                    payloadTransforms.push(flatMapAsync({concurrency: 50}, ({docKeys, ...rest}) => (
+                        compose(listDocKeys, map(docKey => ({docKeys: [...docKeys, docKey], ...rest})))(docKeys)
                     )));
                     break;
                 }
                 
                 case 'parameter': {
                     const paramName = documentKeySegment.name;
-                    payloadTransforms.push(map(({keys, data, ...rest}) => ({keys: [...keys, data[paramName]], data, ...rest})));
+                    payloadTransforms.push(map(({docKeys, data, ...rest}) => ({docKeys: [...docKeys, data[paramName]], data, ...rest})));
                     break;
                 }
             }
 
-            payloadTransforms.push(map(({path, keys, ...rest}) => ({
-                path: [...path, keys[keys.length - 1]],
-                keys,
+            payloadTransforms.push(map(({path, docKeys, ...rest}) => ({
+                path: [...path, docKeys[docKeys.length - 1]],
+                docKeys,
                 ...rest
             })));
         }
@@ -164,7 +164,7 @@ export class ResourceCollection<Context extends Fields> {
                 }
             });
         const generateOutput = compose(
-            async function* (data: any) { yield {path: [], keys: [], data} },
+            async function* (data: any) { yield {path: [], docKeys: [], data} },
             compose(...payloadTransforms),
             flatMapAsync({concurrency: 50}, processor),
         );
@@ -181,8 +181,8 @@ export class ResourceCollection<Context extends Fields> {
             .filter(([, config]) => Boolean(config))
             .map(([name, _config]) => {
                 const config = nonFalsy(_config);
-                const keyParam = config.key && ResourcePath.formatParameterName(config.key.name);
-                const keyPart = config.key ? (config.listKeys ? `{${keyParam}|${ResourcePath.wildcard}}` : `{${keyParam}}`) : null;
+                const keyParam = config.docKey && ResourcePath.formatParameterName(config.docKey.name);
+                const keyPart = config.docKey ? (config.listDocKeys ? `{${keyParam}|${ResourcePath.wildcard}}` : `{${keyParam}}`) : null;
                 const endpoints = Object.entries(config.endpoints || {})
                     .filter(([, endpoint]) => Boolean(endpoint)) as [string, EndpointConfig<any, any>][];
                 const resourceEndpointsHelp = endpoints

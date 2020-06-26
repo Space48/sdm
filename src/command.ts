@@ -22,25 +22,29 @@ function source<Context extends Fields = {}, Params extends Fields = {}>(config:
     const resolveParams = applyParamsConfig(config.params || {} as Params, command);
     const getConcurrency = applyConcurrencyConfig(config.concurrency || null, command);
 
-    command.action(() => {
+    command.action(async () => {
         const context = resolveContext();
         const concurrency = getConcurrency();
         const fn = config.source!(context as any);
         if (process.stdin.isTTY) {
             const params = resolveParams({});
             const result = fn({params});
-            if (Symbol.asyncIterator in result) {
-                streamJson(result as AsyncIterable<any>);
-            } else {
-                streamJson((async function* () {
-                    const _result = await result;
-                    if (_result !== undefined) {
-                        yield _result;
-                    }
-                })());
+            try {
+                if (Symbol.asyncIterator in result) {
+                    await streamJson(result as AsyncIterable<any>);
+                } else {
+                    await streamJson((async function* () {
+                        const _result = await result;
+                        if (_result !== undefined) {
+                            yield _result;
+                        }
+                    })());
+                }
+            } catch (e) {
+                console.error(e.detail || e.message);
             }
         } else {
-            transformJson(
+            await transformJson(
                 mapAsync({concurrency, preserveOrder: true}, transform(input => fn({input, params: resolveParams(input)})))
             );
         }
@@ -62,11 +66,11 @@ function sink<Context extends Fields = {}, Params extends Fields = {}>(config: A
     const resolveParams = applyParamsConfig(config.params || {} as Params, command);
     const getConcurrency = applyConcurrencyConfig(config.concurrency || null, command);
 
-    command.action(() => {
+    command.action(async () => {
         const context = resolveContext();
         const concurrency = getConcurrency();
         const fn = config.sink!(context);
-        transformJson(
+        await transformJson(
             mapAsync({concurrency, preserveOrder: true}, transform(input => fn({input, params: resolveParams(input)})))
         );
     });

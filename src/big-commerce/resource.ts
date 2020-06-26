@@ -8,7 +8,7 @@ import { FieldValues, Field } from "../action";
 type ReadOptions = {
     get?: boolean,
     list?: boolean,
-    listKeys?: boolean,
+    listDocKeys?: boolean,
 };
 type WriteOptions = {
     create?: boolean,
@@ -19,7 +19,7 @@ type WriteOptions = {
 const defaultOptions: ReadOptions & WriteOptions = {
     get: true,
     list: true,
-    listKeys: true,
+    listDocKeys: true,
     create: true,
     update: true,
     delete: true,
@@ -37,17 +37,17 @@ export class BigCommerceResourceFactory {
 
     documentCollection(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): DocumentCollectionConfig<BigCommerceContext, any> {
         return {
-            key: {name: 'id', type: Field.integer()},
+            docKey: {name: 'id', type: Field.integer()},
 
             endpoints: {
                 ...this.read(EndpointScope.Document, uriTemplate, options),
                 ...this.write(EndpointScope.Document, uriTemplate, options),
             },
 
-            listKeys: options.list && (context => {
+            listDocKeys: options.list && (context => {
                 const client = this.getClient(context);
                 return compose(
-                    keys => client.list(UriTemplate.uri(uriTemplate, keys)),
+                    docKeys => client.list(UriTemplate.uri(uriTemplate, docKeys)),
                     map(doc => doc.id),
                 );
             }),
@@ -85,7 +85,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({keys, data}) => client.post(UriTemplate.uri(uriTemplate, keys), data);
+                    return ({docKeys: docKeys, data}) => client.post(UriTemplate.uri(uriTemplate, docKeys), data);
                 }
             }
         };
@@ -98,7 +98,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({keys}) => client.get(UriTemplate.uri(uriTemplate, keys), requestParams);
+                    return ({docKeys: docKeys}) => client.get(UriTemplate.uri(uriTemplate, docKeys), requestParams);
                 }
             }
         };
@@ -111,7 +111,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.Many,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({keys}) => client.list(UriTemplate.uri(uriTemplate, keys), requestParams);
+                    return ({docKeys: docKeys}) => client.list(UriTemplate.uri(uriTemplate, docKeys), requestParams);
                 }
             }
         };
@@ -124,7 +124,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({keys, data}) => client.put(UriTemplate.uri(uriTemplate, keys), data);
+                    return ({docKeys: docKeys, data}) => client.put(UriTemplate.uri(uriTemplate, docKeys), data);
                 }
             }
         };
@@ -137,7 +137,7 @@ export class BigCommerceResourceFactory {
                 cardinality: Cardinality.One,
                 fn: context => {
                     const client = this.getClient(context);
-                    return ({keys}) => client.delete(UriTemplate.uri(uriTemplate, keys));
+                    return ({docKeys: docKeys}) => client.delete(UriTemplate.uri(uriTemplate, docKeys));
                 }
             }
         };

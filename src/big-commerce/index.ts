@@ -48,7 +48,7 @@ function getResources(storeAlias: string, config: Config<ConfigSchema['credentia
                 },
             },
 
-            channels: resource.documentCollection('v3/channel', {create: true, update: true, list: true, listKeys: true, get: true}),
+            channels: resource.documentCollection('v3/channel', {create: true, update: true, list: true, listDocKeys: true, get: true}),
 
             customers: resource.documentCollection('v3/customers'),
 
@@ -56,7 +56,7 @@ function getResources(storeAlias: string, config: Config<ConfigSchema['credentia
 
             giftCertificates: resource.documentCollection('v3/gift_certificates'),
 
-            paymentMethods: resource.documentCollection('v3/payments/methods', {list: true, listKeys: true}),
+            paymentMethods: resource.documentCollection('v3/payments/methods', {list: true, listDocKeys: true}),
 
             products: {
                 ...resource.documentCollection('v3/catalog/products'),
