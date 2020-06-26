@@ -103,7 +103,7 @@ function transform(fn: (input: any) => Promise<unknown>|AsyncIterable<unknown>) 
                 input,
                 duration: Date.now() - startTime.getTime(),
                 success: false,
-                error: error.message,
+                error: error.detail || error.message,
             };
         }
     };

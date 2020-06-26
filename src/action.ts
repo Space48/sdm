@@ -141,3 +141,12 @@ export type ConcurrencyOptions = number | {
     max?: number,
     default?: number,
 };
+
+export class ActionError extends Error {
+    readonly detail: any;
+
+    constructor({message, detail}: {message?: string, detail?: any}) {
+        super(message);
+        this.detail = detail;
+    }
+}

@@ -2,7 +2,7 @@ import { Config } from "../config";
 import { getClientCredentials, ConfigSchema } from './credentials';
 import Shopify from "shopify-api-node";
 import pRetry from "p-retry";
-import { FieldValues, Action, Field } from "../action";
+import { FieldValues, Action, Field, ActionError } from "../action";
 import { EndpointArgs, ResourceCollection, ResourceConfig, resourceAction, EndpointConfig, EndpointScope, Cardinality, SingletonResourceConfig, DocumentCollectionConfig, MapEndpointFn, FlatMapEndpointFn } from "../resource";
 import { mapProperties } from '../util';
 import { compose, map } from "@space48/json-pipe";
@@ -140,7 +140,11 @@ const backoff = <F extends Fn>(fn: F) => (...args: Parameters<F>) => {
         try {
             return await fn(...args);
         } catch (e) {
-            throw e.response?.statusCode == 429 ? e : new pRetry.AbortError(e);
+            const actionError = new ActionError({
+                message: e.message,
+                detail: typeof e.response.body === 'object' ? e.response.body.errors : null,
+            })
+            throw e.response?.statusCode == 429 ? actionError : new pRetry.AbortError(actionError);
         }
     };
     return pRetry(run, {retries: 50});
