@@ -1,11 +1,32 @@
-# sdm
+sdm
+===
 
+Installation
+------------
 
-## Getting Started
+Check the [pre-requisites for installation](#pre-requisites-for-installation) and then install sdm using npm:
+```bash
+npm i -g @space48/sdm
+```
 
-* Create github access token with `read packages` and `repo` privs: [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new)
-* Using your github user access token as password, run `npm login --registry=https://npm.pkg.github.com --scope=@space48`
-* Install sdm: `npm i -g @space48/sdm`
-* Install jq: `brew install jq`
-* Authenticate an m2 instance `sdm m2:creds:set http://foobar.test --username foo --password bar`
-* Get a product from m2 `sdm m2:product:list http://foobar.test | head -n1 | jq`
+Pre-requisites for installation
+-------------------------------
+
+### Configure @space48 npm scope
+
+sdm is distributed as a private npm package in the @space48 scope. To install sdm and other private Space 48 npm
+packages, you must first configure the @space48 scope in npm.
+
+1. [Create a github access token](https://github.com/settings/tokens/new) with `read packages` and `repo` privileges
+2. Configure npm so that you can install sdm and other private Space 48 packages
+
+    ```bash
+    npm login --registry=https://npm.pkg.github.com --scope=@space48
+    ```
+
+### Enable node 10
+
+sdm requires node 10. Use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to enable node 10:
+```bash
+nvm use 10
+```
