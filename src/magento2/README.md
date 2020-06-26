@@ -1,6 +1,6 @@
 Magento 2
 =========
 
-Authenticating an instance
---------------------------
+Adding an instance to sdm
+-------------------------
 
