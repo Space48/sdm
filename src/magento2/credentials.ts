@@ -22,7 +22,8 @@ export const createClient = (config: Config<ConfigSchema>, baseUrl: string, opti
             if (!instanceConfig?.credentials) {
                 throw new Error();
             }
-            token = await getToken(instanceConfig.baseUrl, instanceConfig.credentials);
+            const client = new Magento2(instanceConfig.baseUrl, options);
+            token = await getToken(client, instanceConfig.credentials);
             config.set(instanceConfig.baseUrl, {...instanceConfig, token});
         }
         return token.value;
@@ -86,8 +87,7 @@ type Token = {
     expiration: string,
 };
 
-async function getToken(baseUrl: string, credentials: Credentials): Promise<Token> {
-    const client = new Magento2(baseUrl);
+async function getToken(client: Magento2, credentials: Credentials): Promise<Token> {
     const fourHoursFromNow = new Date(Date.now() + 4 * 3_600_000);
     const tokenValue = await client.post<string>('integration/admin/token', credentials);
     return {
