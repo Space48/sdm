@@ -90,7 +90,8 @@ export class ResourceCollection<Context extends Fields> {
                 throw new Error(`The resource '${resourcePath.name()}' does not exist.`);
             }
 
-            payloadTransforms.push(map(({path, ...rest}) => ({path: [...path, resourceKey], ...rest})));
+            const resourcePathSegment = ResourcePath.formatStaticSegment(resourceKey);
+            payloadTransforms.push(map(({path, ...rest}) => ({path: [...path, resourcePathSegment], ...rest})));
             
             resource = nonFalsy(resources[resourceKey]);
 
@@ -145,15 +146,13 @@ export class ResourceCollection<Context extends Fields> {
         const endpointConfig = nonFalsy(nonFalsy(resource!.endpoints!)[endpointKey]);
         const endpointFn = endpointConfig.fn(command.context);
 
-        const pathIncludesWildcard = command.path.includesWildcard();
-        const wrapOutput = (path: string[], output: any) => ({path: path.join(ResourcePath.separator), output});
-        const processor = pathIncludesWildcard
+        const processor = command.path.includesWildcard()
             ? (async function* (payload: EndpointPayloadInternal) {
                 const result = endpointFn(payload);
                 if (typeof result === 'object' && (result as any).then) {
-                    yield wrapOutput(payload.path, await result as Promise<any>);
+                    yield addPathToOutput(payload.path, await result as Promise<any>);
                 } else {
-                    yield wrapOutput(payload.path, await collectArray(result as AsyncIterable<any>));
+                    yield addPathToOutput(payload.path, await collectArray(result as AsyncIterable<any>));
                 }
             }) : (async function* (payload: EndpointPayloadInternal) {
                 const result = endpointFn(payload);
@@ -168,7 +167,7 @@ export class ResourceCollection<Context extends Fields> {
             compose(...payloadTransforms),
             flatMapAsync({concurrency: 50}, processor),
         );
-        const isSingleton = endpointConfig.cardinality === Cardinality.One && !pathIncludesWildcard;
+        const isSingleton = endpointConfig.cardinality === Cardinality.One && !command.path.includesWildcard();
         return isSingleton ? compose(generateOutput, first()) : generateOutput;
     }
 
@@ -324,3 +323,5 @@ async function collectArray<T>(input: AsyncIterable<T>): Promise<T[]> {
     }
     return result;
 }
+
+const addPathToOutput = (path: string[], output: any) => ({path: path.join(ResourcePath.separator), output});
