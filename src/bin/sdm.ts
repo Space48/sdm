@@ -4,7 +4,7 @@ import { Command, executeCommand, getAvailableCommands } from "../resource";
 import { connectors } from "..";
 import { flatten, distinct } from "../util";
 import * as readline from "readline";
-import { compose, streamJson, takeWhile, transformJson } from "@space48/json-pipe";
+import { compose, streamJson, takeWhile, transformJson, mapAsync } from "@space48/json-pipe";
 
 function main() {
     return process.argv[2] === 'help' ? runHelpMode()
@@ -41,18 +41,17 @@ async function runInteractiveMode() {
     while (true) {
         const command = await askForCommand(scope, availableCommands);
         let interrupted = false;
-        process.once('SIGINT', () => {
+        readlineInterface().once('SIGINT', () => {
             interrupted = true;
-            // readline doesn't seem to work after sigint
-            rl?.close();
-            rl = undefined;
         });
         const runUntilSigint = compose(
             () => executeCommand(resources, command),
+            mapAsync(output => new Promise(resolve => setImmediate(() => resolve(output)))),
             takeWhile(() => !interrupted),
         );
         try {
             await streamJson(runUntilSigint(null));
+            process.stderr.write('\n');
         } catch (e) {
             console.error(e.message);
         }
@@ -122,7 +121,7 @@ async function askForCommand(scope: string, availableCommands: Command[]): Promi
 
 let rl: readline.Interface|undefined = undefined;
 let rlCompleter: readline.Completer|undefined = undefined;
-async function ask(options: {question: string, completer?: readline.Completer}): Promise<string> {
+function readlineInterface(): readline.Interface {
     if (!rl) {
         rl = readline.createInterface({
             input: process.stdin,
@@ -130,8 +129,11 @@ async function ask(options: {question: string, completer?: readline.Completer}):
             completer: (line: string) => rlCompleter?.(line),
         });
     }
+    return rl;
+}
+async function ask(options: {question: string, completer?: readline.Completer}): Promise<string> {
     rlCompleter = options?.completer;
-    const result = await new Promise<string>(resolve => rl!.question(options.question, resolve));
+    const result = await new Promise<string>(resolve => readlineInterface().question(options.question, resolve));
     rlCompleter = undefined;
     return result;
 }
