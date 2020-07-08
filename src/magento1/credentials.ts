@@ -1,4 +1,4 @@
-import { Config } from "../config";
+import { ConfigStore } from "../config-store";
 import Magento1, { Magento1ClientOptions } from "./client";
 import { OAuth } from "oauth";
 import open from "open";
@@ -7,7 +7,7 @@ import { Field, Action } from "../action";
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const createClient = (config: Config<ConfigSchema>, baseUrl: string, options: Omit<Magento1ClientOptions, 'auth'> = {}): Magento1 => {
+export const createClient = (config: ConfigStore<ConfigSchema>, baseUrl: string, options: Omit<Magento1ClientOptions, 'auth'> = {}): Magento1 => {
     const instanceConfig = config.get(baseUrl);
     if (!(instanceConfig?.credentials && instanceConfig?.accessToken)) {
         throw new Error(`Magento1: No access token available for instance ${baseUrl}.`);
@@ -20,7 +20,7 @@ export const createClient = (config: Config<ConfigSchema>, baseUrl: string, opti
     });
 }
 
-export function getActions(config: Config<ConfigSchema>) {
+export function getActions(config: ConfigStore<ConfigSchema>) {
     return [
         Action.source({
             name: 'set',

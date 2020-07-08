@@ -1,8 +1,8 @@
-import { Config } from "../config";
-import { ConfigSchema, createClient } from "./credentials";
+import { ConfigStore } from "../config-store";
+import { ConfigSchema, createClient } from "./config";
 import Magento2, { SortKey } from "./client";
 import { ResourceConfig, DocumentKeyDefinition, EndpointScope, Cardinality } from "../resource";
-import { FieldValues, Field, FieldType } from "../action";
+import { Field } from "../action";
 import { compose, map } from "@space48/json-pipe";
 
 type Options = {
@@ -18,8 +18,6 @@ type ListOptions = {
     sortKey: SortKey,
 };
 
-type Magento2Context = typeof Magento2ResourceFactory.context;
-
 export class Magento2ResourceFactory {
     static readonly context = {
         insecure: Field.boolean(),
@@ -27,10 +25,10 @@ export class Magento2ResourceFactory {
 
     constructor(
         private baseUrl: string,
-        private config: Config<ConfigSchema>
+        private config: ConfigStore<ConfigSchema>
     ) {}
 
-    create(uriTemplate: string, options: Options): ResourceConfig<Magento2Context> {
+    create(uriTemplate: string, options: Options): ResourceConfig {
         const keySuffix = options.docKey ? '/{key}' : '';
         const scope = options.docKey ? EndpointScope.Document : EndpointScope.Resource;
         
@@ -49,86 +47,68 @@ export class Magento2ResourceFactory {
         return {
             docKey: options.docKey,
             endpoints,
-            listDocKeys: options?.list && options.docKey && (context => {
-                const client = this.getClient(context);
-                return compose(
-                    docKeys => client.search(UriTemplate.uri(uriTemplate, docKeys), {sortKey: options!.list!.sortKey}),
-                    map(doc => doc[options.docKey!.name]),
-                );
-            }),
+            listDocKeys: options?.list && options.docKey && compose(
+                docKeys => this.getClient().search(UriTemplate.uri(uriTemplate, docKeys), {sortKey: options!.list!.sortKey}),
+                map(doc => doc[options.docKey!.name]),
+            ),
         };
     }
 
-    private _create(uriTemplate: string): ResourceConfig<Magento2Context>['endpoints'] {
+    private _create(uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             create: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys, data}) => client.post(UriTemplate.uri(uriTemplate, docKeys), data);
-                }
+                fn: ({docKeys, data}) => this.getClient().post(UriTemplate.uri(uriTemplate, docKeys), data),
             }
         };
     }
 
-    private get(scope: EndpointScope, uriTemplate: string): ResourceConfig<Magento2Context>['endpoints'] {
+    private get(scope: EndpointScope, uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             get: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys}) => client.get(UriTemplate.uri(uriTemplate, docKeys));
-                }
+                fn: ({docKeys}) => this.getClient().get(UriTemplate.uri(uriTemplate, docKeys)),
             },
         };
     }
 
-    private list(uriTemplate: string, sortKey: SortKey): ResourceConfig<Magento2Context>['endpoints'] {
+    private list(uriTemplate: string, sortKey: SortKey): ResourceConfig['endpoints'] {
         return {
             list: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.Many,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys}) => client.search(UriTemplate.uri(uriTemplate, docKeys), {sortKey});
-                },
+                fn: ({docKeys}) => this.getClient().search(UriTemplate.uri(uriTemplate, docKeys), {sortKey}),
             },
         };
     }
 
-    private update(scope: EndpointScope, uriTemplate: string): ResourceConfig<Magento2Context>['endpoints'] {
+    private update(scope: EndpointScope, uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             update: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys, data}) => client.put(UriTemplate.uri(uriTemplate, docKeys), data);
-                },
+                fn: ({docKeys, data}) => this.getClient().put(UriTemplate.uri(uriTemplate, docKeys), data),
             },
         };
     }
 
-    private delete(scope: EndpointScope, uriTemplate: string): ResourceConfig<Magento2Context>['endpoints'] {
+    private delete(scope: EndpointScope, uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             delete: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys}) => client.delete(UriTemplate.uri(uriTemplate, docKeys));
-                },
+                fn: ({docKeys}) => this.getClient().delete(UriTemplate.uri(uriTemplate, docKeys)),
             },
         };
     }
 
     private client: Magento2|undefined;
 
-    private getClient({insecure}: FieldValues<Magento2Context>): Magento2 {
+    private getClient(): Magento2 {
         if (!this.client) {
-            this.client = createClient(this.config, this.baseUrl, {insecure});
+            this.client = createClient(this.config, this.baseUrl);
         }
         return this.client;
     }

@@ -1,9 +1,9 @@
-import { Config } from "../config";
-import { ConfigSchema, getClientCredentials } from "./credentials";
+import { ConfigStore } from "../config-store";
+import { ConfigSchema, getClientCredentials } from "./config";
 import BigCommerce from "./client";
 import { map, compose } from "@space48/json-pipe";
 import { ResourceConfig, DocumentCollectionConfig, SingletonResourceConfig, EndpointScope, Cardinality } from "../resource";
-import { FieldValues, Field } from "../action";
+import { Field } from "../action";
 
 type ReadOptions = {
     get?: boolean,
@@ -25,17 +25,15 @@ const defaultOptions: ReadOptions & WriteOptions = {
     delete: true,
 };
 
-type BigCommerceContext = typeof BigCommerceResourceFactory.context;
-
 export class BigCommerceResourceFactory {
     static readonly context = {};
 
     constructor(
         private storeAlias: string,
-        private config: Config<ConfigSchema>
+        private config: ConfigStore<ConfigSchema>
     ) {}
 
-    documentCollection(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): DocumentCollectionConfig<BigCommerceContext, any> {
+    documentCollection(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): DocumentCollectionConfig<any> {
         return {
             docKey: {name: 'id', type: Field.integer()},
 
@@ -44,17 +42,14 @@ export class BigCommerceResourceFactory {
                 ...this.write(EndpointScope.Document, uriTemplate, options),
             },
 
-            listDocKeys: options.list && (context => {
-                const client = this.getClient(context);
-                return compose(
-                    docKeys => client.list(UriTemplate.uri(uriTemplate, docKeys)),
-                    map(doc => doc.id),
-                );
-            }),
+            listDocKeys: options.list && compose(
+                docKeys => this.getClient().list(UriTemplate.uri(uriTemplate, docKeys)),
+                map(doc => doc.id),
+            ),
         };
     }
 
-    singletonResource(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): SingletonResourceConfig<BigCommerceContext> {
+    singletonResource(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): SingletonResourceConfig {
         return {
             endpoints: {
                 ...this.read(EndpointScope.Resource, uriTemplate, options),
@@ -63,14 +58,14 @@ export class BigCommerceResourceFactory {
         };
     }
 
-    private read(scope: EndpointScope, uriTemplate: string, options: ReadOptions): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private read(scope: EndpointScope, uriTemplate: string, options: ReadOptions): ResourceConfig['endpoints'] {
         return {
             ...(options?.get ? this.get(scope, `${uriTemplate}/{id}`) : {}),
             ...(options?.list ? this.list(uriTemplate) : {}),
         };
     }
 
-    private write(scope: EndpointScope, uriTemplate: string, options?: WriteOptions): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private write(scope: EndpointScope, uriTemplate: string, options?: WriteOptions): ResourceConfig['endpoints'] {
         return {
             ...(options?.create ? this._create(uriTemplate) : {}),
             ...(options?.update ? this.update(scope, `${uriTemplate}/{id}`) : {}),
@@ -78,74 +73,59 @@ export class BigCommerceResourceFactory {
         };
     }
 
-    private _create(uriTemplate: string): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private _create(uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             create: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys: docKeys, data}) => client.post(UriTemplate.uri(uriTemplate, docKeys), data);
-                }
+                fn: ({docKeys: docKeys, data}) => this.getClient().post(UriTemplate.uri(uriTemplate, docKeys), data),
             }
         };
     }
 
-    private get(scope: EndpointScope, uriTemplate: string, requestParams?: Record<string, any>): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private get(scope: EndpointScope, uriTemplate: string, requestParams?: Record<string, any>): ResourceConfig['endpoints'] {
         return {
             get: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys: docKeys}) => client.get(UriTemplate.uri(uriTemplate, docKeys), requestParams);
-                }
+                fn: ({docKeys: docKeys}) => this.getClient().get(UriTemplate.uri(uriTemplate, docKeys), requestParams),
             }
         };
     }
 
-    private list(uriTemplate: string, requestParams?: Record<string, any>): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private list(uriTemplate: string, requestParams?: Record<string, any>): ResourceConfig['endpoints'] {
         return {
             list: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.Many,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys: docKeys}) => client.list(UriTemplate.uri(uriTemplate, docKeys), requestParams);
-                }
+                fn: ({docKeys: docKeys}) => this.getClient().list(UriTemplate.uri(uriTemplate, docKeys), requestParams),
             }
         };
     }
 
-    private update(scope: EndpointScope, uriTemplate: string): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private update(scope: EndpointScope, uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             update: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys: docKeys, data}) => client.put(UriTemplate.uri(uriTemplate, docKeys), data);
-                }
+                fn: ({docKeys: docKeys, data}) => this.getClient().put(UriTemplate.uri(uriTemplate, docKeys), data),
             }
         };
     }
 
-    private delete(scope: EndpointScope, uriTemplate: string): ResourceConfig<BigCommerceContext>['endpoints'] {
+    private delete(scope: EndpointScope, uriTemplate: string): ResourceConfig['endpoints'] {
         return {
             delete: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: context => {
-                    const client = this.getClient(context);
-                    return ({docKeys: docKeys}) => client.delete(UriTemplate.uri(uriTemplate, docKeys));
-                }
+                fn: ({docKeys: docKeys}) => this.getClient().delete(UriTemplate.uri(uriTemplate, docKeys)),
             }
         };
     }
 
     private client: BigCommerce|undefined;
 
-    private getClient(_: FieldValues<BigCommerceContext>): BigCommerce {
+    private getClient(): BigCommerce {
         if (!this.client) {
             const credentials = getClientCredentials(this.config, this.storeAlias);
             if (!credentials)  {

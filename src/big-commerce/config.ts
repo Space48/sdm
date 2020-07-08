@@ -1,4 +1,4 @@
-import { Config } from "../config";
+import { ConfigStore } from "../config-store";
 import { Field, Action } from "../action";
 
 export type ConfigSchema = {[storeAlias: string]: Credentials};
@@ -10,7 +10,7 @@ export type Credentials = {
     accessToken: string,
 };
 
-export const getClientCredentials = (config: Config<ConfigSchema>, storeHash: string): Credentials => {
+export const getClientCredentials = (config: ConfigStore<ConfigSchema>, storeHash: string): Credentials => {
     const credentials = config.get(storeHash);
     if (!credentials) {
         throw new Error(`BigCommerce: No credentials available for store ${storeHash}.`);
@@ -18,7 +18,7 @@ export const getClientCredentials = (config: Config<ConfigSchema>, storeHash: st
     return credentials;
 }
 
-export function getActions(config: Config<ConfigSchema>) {
+export function getActions(config: ConfigStore<ConfigSchema>) {
     return [
         Action.source({
             name: 'set',
@@ -61,6 +61,6 @@ export function getActions(config: Config<ConfigSchema>) {
     ];
 }
 
-export function getStoreAliases(config: Config<ConfigSchema>): string[] {
+export function getStoreAliases(config: ConfigStore<ConfigSchema>): string[] {
     return Object.keys(config.getAll() || {});
 }

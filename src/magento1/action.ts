@@ -1,11 +1,11 @@
-import { Config } from "../config";
+import { ConfigStore } from "../config-store";
 import { ConfigSchema } from ".";
 import Magento1 from "./client";
 import { createClient } from './credentials';
 import { Field, ActionConfig, Fields, Action } from "../action";
 
 export class Magento1ActionFactory {
-    constructor(private config: Config<ConfigSchema>) {}
+    constructor(private config: ConfigStore<ConfigSchema>) {}
 
     // CRUD convenience methods
 

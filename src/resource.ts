@@ -1,50 +1,57 @@
-import { Fields, FieldValues, Field, FieldType, Action } from "./action";
-import { flatMapAsync, map, Transform, compose, first, reduce } from "@space48/json-pipe";
-import { camelCase, flatten, hyphenate, underscore } from "./util";
+import { Field, FieldType } from "./action";
+import { flatMapAsync, map, mapAsync, Transform, compose, first } from "@space48/json-pipe";
+import { camelCase, hyphenate, underscore, flatten } from "./util";
 
-export type ResourceCollectionConfig<Context extends Fields> = {
-    context: Context,
-    resources: Record<string, ResourceConfig<Context> | Falsy>,
-};
+export type ResourceCollection = Record<string, ResourceConfig | Falsy>;
 
-export type ResourceConfig<Context extends Fields> = SingletonResourceConfig<Context> | DocumentCollectionConfig<Context, any>;
+export type ResourceConfig = SingletonResourceConfig | DocumentCollectionConfig<any>;
 
-export type SingletonResourceConfig<Context extends Fields> = {
+export type SingletonResourceConfig = {
     docKey?: Falsy;
     listDocKeys?: Falsy;
-    endpoints?: Record<string, EndpointConfig<Context, never>|Falsy>;
-    children?: Record<string, ResourceConfig<any>|Falsy>;
+    endpoints?: Record<string, EndpointConfig<never, any>|Falsy>;
+    children?: ResourceCollection;
 };
 
-export type DocumentCollectionConfig<Context extends Fields, Key extends FieldType> = {
+export type DocumentCollectionConfig<Key extends FieldType> = {
     docKey: DocumentKeyDefinition<Key>;
-    listDocKeys?: ((context: FieldValues<Context>) => (keys: string[]) => AsyncIterable<string>) | Falsy;
-    endpoints?: Record<string, EndpointConfig<Context, Key>|Falsy>;
-    children?: Record<string, ResourceConfig<any>|Falsy>;
+    listDocKeys?: ((keys: string[]) => AsyncIterable<string>) | Falsy;
+    endpoints?: Record<string, EndpointConfig<Key, any>|Falsy>;
+    children?: ResourceCollection;
 }
 
-export type EndpointConfig<Context extends Fields, Key extends FieldType> =
-    MapEndpointConfig<Context, Key> | FlatMapEndpointConfig<Context, Key>;
+export type EndpointConfig<Key extends FieldType, Cardinality extends Cardinality.One> = {
+    scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
+    cardinality: Cardinality,
+    fn: Cardinality extends Cardinality.One ? MapEndpointFn : FlatMapEndpointFn,
+};
+export type MapEndpointFn = (input: EndpointPayload) => Promise<any>;
+export type FlatMapEndpointFn = (input: EndpointPayload) => AsyncIterable<any>;
 
-export type MapEndpointConfig<Context extends Fields, Key extends FieldType> = {
+/*
+export type EndpointConfig<Key extends FieldType> =
+    MapEndpointConfig<Key> | FlatMapEndpointConfig<Key>;
+
+export type MapEndpointConfig<Key extends FieldType> = {
     scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
     cardinality: Cardinality.One,
-    fn: MapEndpointFn<Context>,
+    fn: MapEndpointFn,
 }
-export type MapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointPayload) => Promise<any>;
+export type MapEndpointFn = (input: EndpointPayload) => Promise<any>;
 
-export type FlatMapEndpointConfig<Context extends Fields, Key extends FieldType> = {
+export type FlatMapEndpointConfig<Key extends FieldType> = {
     scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
     cardinality: Cardinality.Many,
-    fn: FlatMapEndpointFn<Context>,
+    fn: FlatMapEndpointFn,
 };
-export type FlatMapEndpointFn<Context extends Fields> = (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>;
+export type FlatMapEndpointFn = (input: EndpointPayload) => AsyncIterable<any>;
+*/
 
 export type DocumentKeyDefinition<Type extends FieldType = FieldType> = {name: string, type: Field<Type>};
 
-export type EndpointFn<Context extends Fields, Key extends FieldType|never, C extends Cardinality> =
-    C extends Cardinality.One ? (context: FieldValues<Context>) => (input: EndpointPayload) => Promise<any>
-    : C extends Cardinality.Many ? (context: FieldValues<Context>) => (input: EndpointPayload) => AsyncIterable<any>
+export type EndpointFn<Key extends FieldType|never, C extends Cardinality> =
+    C extends Cardinality.One ? (input: EndpointPayload) => Promise<any>
+    : C extends Cardinality.Many ? (input: EndpointPayload) => AsyncIterable<any>
     : never;
 export type EndpointPayload = {
     docKeys: string[],
@@ -64,155 +71,133 @@ export enum Cardinality {
     Many,
 };
 
-type Falsy = false | 0 | "" | null | undefined;
+export type Command = Readonly<{
+    name: string,
+    path: string,
+}>;
 
-export class ResourceCollection<Context extends Fields> {
-    private constructor(
-        public readonly context: Context,
-        private resources: Record<string, ResourceConfig<Context>|Falsy>
-    ) {}
+export function executeCommand(resources: ResourceCollection, command: Command, input?: AsyncIterable<any>): AsyncIterable<any> {
+    const commandPath = ResourcePath.of(command.path);
+    const payloadTransforms: Transform<EndpointPayloadInternal, EndpointPayloadInternal>[] = [];
+    let resource: ResourceConfig;
 
-    static configure<Context extends Fields>({context, resources}: ResourceCollectionConfig<Context>): ResourceCollection<Context> {
-        return new ResourceCollection(context, resources);
-    }
+    for (
+        let resourcePath: ResourcePath|undefined = commandPath, _resources = resources;
+        resourcePath !== undefined;
+        resourcePath = resourcePath.child(resource.docKey !== null), _resources = resource.children || {}
+    ) {
+        const resourceKey = Object.keys(_resources).find(matching(resourcePath!.name()));
+        if (!(resourceKey && _resources[resourceKey])) {
+            throw new Error(`The resource '${resourcePath.name()}' does not exist.`);
+        }
 
-    execute(command: Command<Context>) {
-        const payloadTransforms: Transform<EndpointPayloadInternal, EndpointPayloadInternal>[] = [];
-        let resource: ResourceConfig<any>;
+        const resourcePathSegment = ResourcePath.formatStaticSegment(resourceKey);
+        payloadTransforms.push(map(({path, ...rest}) => ({path: [...path, resourcePathSegment], ...rest})));
+        
+        resource = nonFalsy(_resources[resourceKey]);
 
-        for (
-            let resourcePath: ResourcePath|undefined = command.path, resources = this.resources;
-            resourcePath !== undefined;
-            resourcePath = resourcePath.child(resource.docKey !== null), resources = resource.children || {}
-        ) {
-            const resourceKey = Object.keys(resources).find(matching(resourcePath!.name()));
-            if (!(resourceKey && resources[resourceKey])) {
-                throw new Error(`The resource '${resourcePath.name()}' does not exist.`);
-            }
+        if (resource.docKey === null) {
+            continue;
+        }
 
-            const resourcePathSegment = ResourcePath.formatStaticSegment(resourceKey);
-            payloadTransforms.push(map(({path, ...rest}) => ({path: [...path, resourcePathSegment], ...rest})));
-            
-            resource = nonFalsy(resources[resourceKey]);
+        const documentKeySegment = resourcePath.key();
 
-            if (resource.docKey === null) {
-                continue;
-            }
-    
-            const documentKeySegment = resourcePath.key();
+        if (!documentKeySegment) {
+            // todo: check the command does not require a key ?
+            break;
+        }
 
-            if (!documentKeySegment) {
-                // todo: check the command does not require a key ?
+        switch (documentKeySegment.type) {
+            case 'constant': {
+                const docKey = documentKeySegment.value;
+                payloadTransforms.push(map(({docKeys, ...rest}) => ({docKeys: [...docKeys, docKey], ...rest})));
                 break;
             }
 
-            switch (documentKeySegment.type) {
-                case 'constant': {
-                    const docKey = documentKeySegment.value;
-                    payloadTransforms.push(map(({docKeys, ...rest}) => ({docKeys: [...docKeys, docKey], ...rest})));
-                    break;
+            case 'wildcard': {
+                if (!(resource.docKey && resource.listDocKeys)) {
+                    throw new Error();
                 }
-    
-                case 'wildcard': {
-                    if (!(resource.docKey && resource.listDocKeys)) {
-                        throw new Error();
-                    }
-                    const listDocKeys = resource.listDocKeys(command.context);
-                    payloadTransforms.push(flatMapAsync({concurrency: 50}, ({docKeys, ...rest}) => (
-                        compose(listDocKeys, map(docKey => ({docKeys: [...docKeys, docKey], ...rest})))(docKeys)
-                    )));
-                    break;
-                }
-                
-                case 'parameter': {
-                    const paramName = documentKeySegment.name;
-                    payloadTransforms.push(map(({docKeys, data, ...rest}) => ({docKeys: [...docKeys, data[paramName]], data, ...rest})));
-                    break;
-                }
+                const {listDocKeys} = resource;
+                payloadTransforms.push(flatMapAsync({concurrency: 50}, ({docKeys, ...rest}) => (
+                    compose(
+                        listDocKeys,
+                        map(docKey => ({docKeys: [...docKeys, docKey], ...rest}))
+                    )(docKeys)
+                )));
+                break;
             }
-
-            payloadTransforms.push(map(({path, docKeys, ...rest}) => ({
-                path: [...path, docKeys[docKeys.length - 1]],
-                docKeys,
-                ...rest
-            })));
+            
+            case 'parameter': {
+                const paramName = documentKeySegment.name;
+                payloadTransforms.push(map(({docKeys, data, ...rest}) => ({docKeys: [...docKeys, data[paramName]], data, ...rest})));
+                break;
+            }
         }
 
-        const endpointKey = Object.keys(resource!.endpoints || {}).find(matching(command.name));
-        if (!(endpointKey && nonFalsy(resource!.endpoints)[endpointKey])) {
-            throw new Error(`No such command '${command.name}'.`);
-        }
-
-        const endpointConfig = nonFalsy(nonFalsy(resource!.endpoints!)[endpointKey]);
-        const endpointFn = endpointConfig.fn(command.context);
-
-        const processor = command.path.includesWildcard()
-            ? (async function* (payload: EndpointPayloadInternal) {
-                const result = endpointFn(payload);
-                if (typeof result === 'object' && (result as any).then) {
-                    yield addPathToOutput(payload.path, await result as Promise<any>);
-                } else {
-                    yield addPathToOutput(payload.path, await collectArray(result as AsyncIterable<any>));
-                }
-            }) : (async function* (payload: EndpointPayloadInternal) {
-                const result = endpointFn(payload);
-                if (typeof result === 'object' && (result as any).then) {
-                    yield await result as Promise<any>;
-                } else {
-                    yield* result as AsyncIterable<any>;
-                }
-            });
-        const generateOutput = compose(
-            async function* (data: any) { yield {path: [], docKeys: [], data} },
-            compose(...payloadTransforms),
-            flatMapAsync({concurrency: 50}, processor),
-        );
-        const isSingleton = endpointConfig.cardinality === Cardinality.One && !command.path.includesWildcard();
-        return isSingleton ? compose(generateOutput, first()) : generateOutput;
+        payloadTransforms.push(map(({path, docKeys, ...rest}) => ({
+            path: [...path, docKeys[docKeys.length - 1]],
+            docKeys,
+            ...rest
+        })));
     }
 
-    help(): string {
-        return `Resources\n---------\n\n${this.resourcesHelp([], this.resources).join('\n\n')}`;
+    const endpointKey = Object.keys(resource!.endpoints || {}).find(matching(command.name));
+    if (!(endpointKey && nonFalsy(resource!.endpoints)[endpointKey])) {
+        throw new Error(`No such command '${command.name}'.`);
     }
 
-    private resourcesHelp(path: string[], resources: Record<string, ResourceConfig<Context> | Falsy>): string[] {
-        return Object.entries(resources)
-            .filter(([, config]) => Boolean(config))
-            .map(([name, _config]) => {
-                const config = nonFalsy(_config);
-                const keyParam = config.docKey && ResourcePath.formatParameterName(config.docKey.name);
-                const keyPart = config.docKey ? (config.listDocKeys ? `{${keyParam}|${ResourcePath.wildcard}}` : `{${keyParam}}`) : null;
-                const endpoints = Object.entries(config.endpoints || {})
-                    .filter(([, endpoint]) => Boolean(endpoint)) as [string, EndpointConfig<any, any>][];
-                const resourceEndpointsHelp = endpoints
-                    .filter(([, endpoint]) => endpoint.scope === EndpointScope.Resource)
-                    .map(this.endpointHelp)
-                    .join(', ');
-                const documentEndpoints = endpoints
-                    .filter(([, endpoint]) => endpoint.scope === EndpointScope.Document)
-                    .map(this.endpointHelp)
-                    .join(', ');
-                const resourcePath = [...path, ResourcePath.formatStaticSegment(name)];
-                return [
-                    resourceEndpointsHelp ? `${resourcePath.join(ResourcePath.separator)}\n  ${resourceEndpointsHelp}` : '',
-                    documentEndpoints.length ? `${[...resourcePath, keyPart].join(ResourcePath.separator)}\n  ${documentEndpoints}` : '',
-                    ...this.resourcesHelp(keyPart ? [...resourcePath, keyPart] : resourcePath, config.children || {}),
-                ];
-            })
-            .reduce(flatten, [] as string[])
-            .filter(str => str.length > 0);
-    }
+    const endpointConfig = nonFalsy(nonFalsy(resource!.endpoints!)[endpointKey]);
 
-    private endpointHelp([name, config]: [string, EndpointConfig<any, any>]): string {
-        return `${name}${config.cardinality === Cardinality.Many ? '[]' : ''}`;
+    const processor = commandPath.includesWildcard()
+        ? (async function* (payload: EndpointPayloadInternal) {
+            const result = endpointConfig.fn(payload);
+            if (typeof result === 'object' && (result as any).then) {
+                yield addPathToOutput(payload.path, await result as Promise<any>);
+            } else {
+                yield addPathToOutput(payload.path, await collectArray(result as AsyncIterable<any>));
+            }
+        }) : (async function* (payload: EndpointPayloadInternal) {
+            const result = endpointConfig.fn(payload);
+            if (typeof result === 'object' && (result as any).then) {
+                yield await result as Promise<any>;
+            } else {
+                yield* result as AsyncIterable<any>;
+            }
+        });
+    const generateOutput = compose(
+        async function* (data: any) { yield {path: [], docKeys: [], data} },
+        compose(...payloadTransforms),
+        flatMapAsync({concurrency: 50}, processor),
+    );
+
+    if (input) {
+        const isSingleton = endpointConfig.cardinality === Cardinality.One && !commandPath.includesWildcard();
+        const inputHandler = isSingleton ? compose(generateOutput, first()) : compose(generateOutput, collectArray);
+        return mapAsync({concurrency: 50}, async _input => {
+            const startTime = new Date();
+            try {
+                return {
+                    timestamp: startTime.toISOString(),
+                    input: _input,
+                    duration: Date.now() - startTime.getTime(),
+                    success: true,
+                    output: await inputHandler(_input),
+                };
+            } catch (error) {
+                return {
+                    timestamp: startTime.toISOString(),
+                    input: _input,
+                    duration: Date.now() - startTime.getTime(),
+                    success: false,
+                    error: error.detail || error.message,
+                };
+            }
+        })(input);
+    } else {
+        return generateOutput(null);
     }
 }
-
-export type Command<Context extends Fields> = Readonly<{
-    name: string,
-    path: ResourcePath,
-    context: FieldValues<Context>,
-}>;
 
 class ResourcePath {
     static readonly wildcard = '*';
@@ -295,27 +280,6 @@ function nonFalsy<T>(value: T): Exclude<T, Falsy> {
     return value as Exclude<T, Falsy>;
 }
 
-export function resourceAction<Context extends Fields>(name: string, resources: ResourceCollection<Context>): Action {
-    return Action.source({
-        name,
-        context: {
-            command: Field.string().required(),
-            resourcePath: Field.string().required(),
-            ...resources.context,
-        },
-        fn: ({command: commandName, resourcePath, ...context}) => {
-            const command: Command<Context> = {
-                name: commandName as string,
-                context: context as FieldValues<Context>,
-                path: ResourcePath.of(resourcePath as string),
-            };
-            const inputHandler = resources.execute(command);
-            return ({input}) => inputHandler(input);
-        },
-        help: resources.help(),
-    });
-}
-
 async function collectArray<T>(input: AsyncIterable<T>): Promise<T[]> {
     const result: T[] = [];
     for await (const el of input) {
@@ -325,3 +289,30 @@ async function collectArray<T>(input: AsyncIterable<T>): Promise<T[]> {
 }
 
 const addPathToOutput = (path: string[], output: any) => ({path: path.join(ResourcePath.separator), output});
+
+type Falsy = false | 0 | "" | null | undefined;
+
+export function getAvailableCommands(resources: ResourceCollection): Command[] {
+    return Object.entries(resources)
+        .map(([name, config]) => config ? getResourceCommands([ResourcePath.formatStaticSegment(name)], config) : [])
+        .reduce(flatten, []);
+}
+
+function getResourceCommands(resourcePath: string[], resource: ResourceConfig): Command[] {
+    const keyParam = resource.docKey && ResourcePath.formatParameterName(resource.docKey.name);
+    const keyPart = resource.docKey ? (resource.listDocKeys ? `{${keyParam}|${ResourcePath.wildcard}}` : `{${keyParam}}`) : null;
+    const childPath = keyPart ? [...resourcePath, keyPart] : resourcePath;
+
+    return [
+        ...Object.entries(resource.endpoints || {})
+            .filter(([, config]) => config)
+            .map(([name, config]) => ({
+                name,
+                path: resourcePath.join('/') + (config && (config as any).scope === EndpointScope.Document ? `/${keyPart}` : ''),
+            })),
+
+        ...Object.entries(resource.children || {})
+            .map(([name, config]) => config ? getResourceCommands([...childPath, ResourcePath.formatStaticSegment(name)], config) : [])
+            .reduce(flatten, []),
+    ];
+}

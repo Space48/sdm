@@ -1,111 +1,118 @@
-import * as credentials from './credentials';
-import { Config } from '../config';
-import { FieldType, Action, Field } from '../action';
-import { Magento2ResourceFactory } from './resource';
-import { ResourceCollection, resourceAction } from '../resource';
+import * as config from './config';
+import { ConfigStore } from '../config-store';
+import { Field } from '../action';
+import { Magento2ResourceFactory } from './resource-factory';
+import { Connector } from '../connector';
 
 export type ConfigSchema = {
-    credentials: credentials.ConfigSchema,
+    credentials: config.ConfigSchema,
 };
 
-export function getActions(config: Config<ConfigSchema>): Record<string, Action[]> {
-    const credentialsConfig = config.select('credentials');
-    const getResourceAction = (baseUrl: string) => resourceAction(baseUrl, getResources(baseUrl, credentialsConfig));
-    return {
-        creds: credentials.getActions(credentialsConfig),
-        _: credentials.getBaseUrls(credentialsConfig).map(getResourceAction),
-    };
+export default class Magento2Connector implements Connector {
+    constructor(private configStore: ConfigStore<ConfigSchema>) {}
+
+    getConfigActions() {
+        return config.getActions(this.configStore.select('credentials'));
+    }
+
+    getScopes() {
+        return config.getBaseUrls(this.configStore.select('credentials'));
+    }
+
+    getTypicalResources() {
+        return {};
+    }
+
+    getScopeResources(baseUrl: string) {
+        return getResources(baseUrl, this.configStore.select('credentials'));
+    }
 }
 
-function getResources(baseUrl: string, config: Config<ConfigSchema['credentials']>) {
+function getResources(baseUrl: string, config: ConfigStore<ConfigSchema['credentials']>) {
     const resource = new Magento2ResourceFactory(baseUrl, config);
 
-    return ResourceCollection.configure({
-        context: Magento2ResourceFactory.context,
-
-        resources: {
-            categories: resource.create('categories', {
-                docKey: { name: 'id', type: Field.integer() },
-                create: true,
-                get: true,
-                list: {
-                    uri: 'categories/list',
-                    sortKey: { query: 'entity_id', response: 'id' },
-                },
-                update: true,
-                delete: true,
-            }),
-
-            categoryTree: resource.create('categories?rootCategoryId=1', {
-                get: true,
-            }),
-
-            configurableProducts: {
-                ...resource.create('configurable-products', {
-                    docKey: { name: 'sku', type: Field.string() },
-                }),
-
-                children: {
-                    children: resource.create('configurable-products/{sku}/children', {
-                        get: true,
-                    }),
-
-                    options: resource.create('configurable-products/{sku}/options/all', {
-                        get: true,
-                    }),
-                },
+    return {
+        categories: resource.create('categories', {
+            docKey: { name: 'id', type: Field.integer() },
+            create: true,
+            get: true,
+            list: {
+                uri: 'categories/list',
+                sortKey: { query: 'entity_id', response: 'id' },
             },
+            update: true,
+            delete: true,
+        }),
 
-            customers: resource.create('customers', {
-                docKey: { name: 'id', type: Field.integer() },
-                create: true,
-                get: true,
-                list: {
-                    uri: 'customers/search',
-                    sortKey: { query: 'entity_id', response: 'id' },
-                },
-                update: true,
-                delete: true,
+        categoryTree: resource.create('categories?rootCategoryId=1', {
+            get: true,
+        }),
+
+        configurableProducts: {
+            ...resource.create('configurable-products', {
+                docKey: { name: 'sku', type: Field.string() },
             }),
 
-            orders: resource.create('orders', {
-                docKey: { name: 'entity_id', type: Field.integer() },
-                get: true,
-                list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
-                update: true,
-                delete: true,
-            }),
-    
-            products: {
-                ...resource.create('products', {
-                    docKey: { name: 'sku', type: Field.string() },
-                    create: true,
+            children: {
+                children: resource.create('configurable-products/{sku}/children', {
                     get: true,
-                    list: { sortKey: { query: 'entity_id', response: 'id' } },
-                    update: true,
-                    delete: true,
                 }),
 
-                children: {
-                    links: resource.create('products/{sku}/links', {
-                        docKey: { name: 'type', type: Field.string() },
-                        get: true,
-                    }),
-                },
-            },
-
-            productAttributes: {
-                ...resource.create('products/attributes', {
-                    docKey: { name: 'attribute_code', type: Field.string() },
-                    list: { sortKey: { query: 'attribute_id', response: 'attribute_id' } },
+                options: resource.create('configurable-products/{sku}/options/all', {
+                    get: true,
                 }),
-
-                children: {
-                    options: resource.create('products/attributes/{attributeCode}/options', {
-                        get: true,
-                    }),
-                },
             },
-        }
-    });
+        },
+
+        customers: resource.create('customers', {
+            docKey: { name: 'id', type: Field.integer() },
+            create: true,
+            get: true,
+            list: {
+                uri: 'customers/search',
+                sortKey: { query: 'entity_id', response: 'id' },
+            },
+            update: true,
+            delete: true,
+        }),
+
+        orders: resource.create('orders', {
+            docKey: { name: 'entity_id', type: Field.integer() },
+            get: true,
+            list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
+            update: true,
+            delete: true,
+        }),
+
+        products: {
+            ...resource.create('products', {
+                docKey: { name: 'sku', type: Field.string() },
+                create: true,
+                get: true,
+                list: { sortKey: { query: 'entity_id', response: 'id' } },
+                update: true,
+                delete: true,
+            }),
+
+            children: {
+                links: resource.create('products/{sku}/links', {
+                    docKey: { name: 'type', type: Field.string() },
+                    get: true,
+                }),
+            },
+        },
+
+        productAttributes: {
+            ...resource.create('products/attributes', {
+                docKey: { name: 'attribute_code', type: Field.string() },
+                list: { sortKey: { query: 'attribute_id', response: 'attribute_id' } },
+            }),
+
+            children: {
+                options: resource.create('products/attributes/{attributeCode}/options', {
+                    get: true,
+                }),
+            },
+        },
+    };
 }

@@ -1,4 +1,4 @@
-import { Config } from "../config";
+import { ConfigStore } from "../config-store";
 import { Field, Action } from "../action";
 
 export type ConfigSchema = {[shopName: string]: Credentials};
@@ -9,7 +9,7 @@ type Credentials = {
     password: string,
 };
 
-export const getClientCredentials = (config: Config<ConfigSchema>, shopName: string): Credentials => {
+export const getClientCredentials = (config: ConfigStore<ConfigSchema>, shopName: string): Credentials => {
     const credentials = config.get(shopName);
     if (!credentials) {
         throw new Error(`Shopify: No credentials available for shop ${shopName}.`);
@@ -17,7 +17,7 @@ export const getClientCredentials = (config: Config<ConfigSchema>, shopName: str
     return credentials;
 }
 
-export function getActions(config: Config<ConfigSchema>) {
+export function getActions(config: ConfigStore<ConfigSchema>) {
     return [
         Action.source({
             name: 'set',
@@ -57,6 +57,6 @@ export function getActions(config: Config<ConfigSchema>) {
     ];
 }
 
-export function getShops(config: Config<ConfigSchema>): string[] {
+export function getShops(config: ConfigStore<ConfigSchema>): string[] {
     return Object.keys(config.getAll() || {});
 }

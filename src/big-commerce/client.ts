@@ -1,6 +1,6 @@
 import fetch, { RequestInit } from "node-fetch";
 import { stringify } from 'query-string'
-import { Credentials } from "./credentials";
+import { Credentials } from "./config";
 import pRetry from "p-retry";
 import { flatten } from "../util";
 

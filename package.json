@@ -4,7 +4,8 @@
   "description": "Command line tools for piping data in and out of APIs",
   "main": "./lib/index.js",
   "bin": {
-    "sdm": "./lib/bin/sdm.js"
+    "sdm": "./lib/bin/sdm.js",
+    "sdm-config": "./lib/bin/sdm-config.js"
   },
   "scripts": {
     "build": "tsc",
@@ -28,7 +29,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
-    "@space48/json-pipe": "^0.4.1",
+    "@space48/json-pipe": "^0.4.2",
     "commander": "^5.0.0",
     "conf": "^6.2.4",
     "node-fetch": "^2.6.0",

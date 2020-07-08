@@ -1,6 +1,6 @@
 import * as Conf from "conf";
 
-export class Config<T extends Record<string, any>> {
+export class ConfigStore<T extends Record<string, any>> {
     constructor(
         private config: Conf,
         private context: string[] = [],
@@ -41,8 +41,8 @@ export class Config<T extends Record<string, any>> {
         }
     }
 
-    select<K extends keyof SubConfigs<T>>(key: K): Config<T[K]> {
-        return new Config<T[K]>(this.config, this.context.concat(key as string));
+    select<K extends keyof SubConfigs<T>>(key: K): ConfigStore<T[K]> {
+        return new ConfigStore<T[K]>(this.config, this.context.concat(key as string));
     }
 }
 

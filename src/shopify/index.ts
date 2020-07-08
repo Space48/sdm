@@ -1,11 +1,41 @@
-import * as credentials from './credentials';
-import { Config } from '../config';
-import { Action } from '../action';
-import { ConfiguredResource, ShopifyActionFactory, ShopifyCustomEndpoint, ShopifyVanillaEndpoint } from './action';
+import * as config from './config';
+import { ConfigStore } from '../config-store';
+import { ConfiguredResource, ShopifyCustomEndpoint, ShopifyVanillaEndpoint, ShopifyResourceFactory } from './resource-factory';
 import { ResourceKey, resources, Resource } from './resource';
 import Shopify from 'shopify-api-node';
 import { objectFromEntries } from '../util';
 import { EndpointScope, Cardinality } from '../resource';
+import { Connector } from '../connector';
+
+export default class ShopifyConnector implements Connector {
+    constructor(private configStore: ConfigStore<ConfigSchema>) {}
+
+    getConfigActions() {
+        return config.getActions(this.configStore.select('credentials'));
+    }
+
+    getScopes() {
+        return config.getShops(this.configStore.select('credentials'));
+    }
+
+    getTypicalResources() {
+        return {};
+    }
+
+    getScopeResources(shop: string) {
+        return this.getResourceFactory().getResources(shop);
+    }
+
+    private resourceFactory: ShopifyResourceFactory|undefined;
+
+    private getResourceFactory() {
+        if (!this.resourceFactory) {
+            const config = buildConfig();
+            this.resourceFactory = new ShopifyResourceFactory(this.configStore.select('credentials'), config);
+        }
+        return this.resourceFactory;
+    }
+}
 
 // all of the disabled endpoints can potentially be enabled -- JDF
 const resourceConfigs: ResourceConfigs = {
@@ -156,7 +186,7 @@ const resourceConfigs: ResourceConfigs = {
                     get: {
                         scope: EndpointScope.Resource,
                         cardinality: Cardinality.One,
-                        fn: shopify => ({docKeys: [productId]}) => shopify.metafield.list({
+                        fn: (shopify, {docKeys: [productId]}) => shopify.metafield.list({
                             metafield: { owner_resource: 'product', owner_id: productId }
                         }),
                     }
@@ -192,20 +222,10 @@ const resourceConfigs: ResourceConfigs = {
 };
 
 export type ConfigSchema = {
-    credentials: credentials.ConfigSchema,
+    credentials: config.ConfigSchema,
 };
 
-export const getActions = (config: Config<ConfigSchema>): Record<string, Action[]> => {
-    const credentialsConfig = config.select('credentials');
-    const configuredResources = applyConfig();
-    const resourceFactory = new ShopifyActionFactory(credentialsConfig);
-    return {
-        creds: credentials.getActions(credentialsConfig),
-        _: credentials.getShops(credentialsConfig).map(shop => resourceFactory.getAction(shop, configuredResources)),
-    };
-};
-
-function applyConfig(): Record<string, ConfiguredResource> {
+function buildConfig(): Record<string, ConfiguredResource> {
     const resourcesByParentName: Map<string, Resource[]> = new Map();
     const enabledResources = Object.values(resources).filter(resource => resourceConfigs[resource.key] !== false);
     

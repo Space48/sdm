@@ -1,15 +1,15 @@
-import { Config } from "../config";
+import { ConfigStore } from "../config-store";
 import Magento2, { Magento2ClientOptions } from "./client";
 import { parse as parseUrl } from "url";
 import { Field, Action } from "../action";
 
-export function getBaseUrls(config: Config<ConfigSchema>): string[] {
+export function getBaseUrls(config: ConfigStore<ConfigSchema>): string[] {
     return Object.keys(config.getAll() || {}).map(computeUrlForComparison);
 }
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const createClient = (config: Config<ConfigSchema>, baseUrl: string, options: Omit<Magento2ClientOptions, 'auth'> = {}): Magento2 => {
+export const createClient = (config: ConfigStore<ConfigSchema>, baseUrl: string): Magento2 => {
     const urlExcludingScheme = computeUrlForComparison(baseUrl);
     const instanceConfig = config.get(baseUrl)
         || Object.values(config.getAll() || {}).find(candidate => urlExcludingScheme === computeUrlForComparison(candidate.baseUrl));
@@ -22,16 +22,16 @@ export const createClient = (config: Config<ConfigSchema>, baseUrl: string, opti
             if (!instanceConfig?.credentials) {
                 throw new Error();
             }
-            const client = new Magento2(instanceConfig.baseUrl, options);
+            const client = new Magento2(instanceConfig.baseUrl, {insecure: instanceConfig.insecure});
             token = await getToken(client, instanceConfig.credentials);
             config.set(instanceConfig.baseUrl, {...instanceConfig, token});
         }
         return token.value;
     };
-    return new Magento2(instanceConfig.baseUrl, {...options, auth: tokenResolver});
+    return new Magento2(instanceConfig.baseUrl, {insecure: instanceConfig.insecure, auth: tokenResolver});
 }
 
-export function getActions(config: Config<ConfigSchema>) {
+export function getActions(config: ConfigStore<ConfigSchema>) {
     return [
         Action.source({
             name: 'set',
@@ -75,6 +75,7 @@ type Instance = {
     baseUrl: string,
     credentials?: Credentials,
     token?: Token,
+    insecure?: boolean,
 };
 
 type Credentials = {
