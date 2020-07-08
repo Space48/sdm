@@ -28,25 +28,6 @@ export type EndpointConfig<Key extends FieldType, Cardinality extends Cardinalit
 export type MapEndpointFn = (input: EndpointPayload) => Promise<any>;
 export type FlatMapEndpointFn = (input: EndpointPayload) => AsyncIterable<any>;
 
-/*
-export type EndpointConfig<Key extends FieldType> =
-    MapEndpointConfig<Key> | FlatMapEndpointConfig<Key>;
-
-export type MapEndpointConfig<Key extends FieldType> = {
-    scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
-    cardinality: Cardinality.One,
-    fn: MapEndpointFn,
-}
-export type MapEndpointFn = (input: EndpointPayload) => Promise<any>;
-
-export type FlatMapEndpointConfig<Key extends FieldType> = {
-    scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
-    cardinality: Cardinality.Many,
-    fn: FlatMapEndpointFn,
-};
-export type FlatMapEndpointFn = (input: EndpointPayload) => AsyncIterable<any>;
-*/
-
 export type DocumentKeyDefinition<Type extends FieldType = FieldType> = {name: string, type: Field<Type>};
 
 export type EndpointFn<Key extends FieldType|never, C extends Cardinality> =
@@ -78,11 +59,73 @@ export type Command = Readonly<{
 
 export function executeCommand(resources: ResourceCollection, command: Command, input?: AsyncIterable<any>): AsyncIterable<any> {
     const commandPath = ResourcePath.of(command.path);
+    
+    const {resource, payloadTransform} = resolveResourceAndPayloads(resources, commandPath);
+
+    const endpointKey = Object.keys(resource!.endpoints || {}).find(matching(command.name));
+    if (!(endpointKey && nonFalsy(resource!.endpoints)[endpointKey])) {
+        throw new Error(`No such command '${command.name}'.`);
+    }
+
+    const endpoint = nonFalsy(resource!.endpoints![endpointKey]);
+
+    const processor = commandPath.includesWildcard()
+        ? (async function* (payload: EndpointPayloadInternal) {
+            const result = endpoint.fn(payload);
+            if (typeof result === 'object' && (result as any).then) {
+                yield addPathToOutput(payload.path, await result as Promise<any>);
+            } else {
+                yield addPathToOutput(payload.path, await collectArray(result as AsyncIterable<any>));
+            }
+        }) : (async function* (payload: EndpointPayloadInternal) {
+            const result = endpoint.fn(payload);
+            if (typeof result === 'object' && (result as any).then) {
+                yield await result as Promise<any>;
+            } else {
+                yield* result as AsyncIterable<any>;
+            }
+        });
+
+    const generateOutput = compose(
+        async function* (data: any) { yield {path: [], docKeys: [], data} },
+        payloadTransform,
+        flatMapAsync({concurrency: 50}, processor),
+    );
+
+    if (input) {
+        const isSingleton = endpoint.cardinality === Cardinality.One && !commandPath.includesWildcard();
+        const inputHandler = isSingleton ? compose(generateOutput, first()) : compose(generateOutput, collectArray);
+        return mapAsync({concurrency: 50}, async _input => {
+            const startTime = new Date();
+            try {
+                return {
+                    timestamp: startTime.toISOString(),
+                    input: _input,
+                    duration: Date.now() - startTime.getTime(),
+                    success: true,
+                    output: await inputHandler(_input),
+                };
+            } catch (error) {
+                return {
+                    timestamp: startTime.toISOString(),
+                    input: _input,
+                    duration: Date.now() - startTime.getTime(),
+                    success: false,
+                    error: error.detail || error.message,
+                };
+            }
+        })(input);
+    } else {
+        return generateOutput(null);
+    }
+}
+
+function resolveResourceAndPayloads(resources: ResourceCollection, path: ResourcePath) {
     const payloadTransforms: Transform<EndpointPayloadInternal, EndpointPayloadInternal>[] = [];
     let resource: ResourceConfig;
 
     for (
-        let resourcePath: ResourcePath|undefined = commandPath, _resources = resources;
+        let resourcePath: ResourcePath|undefined = path, _resources = resources;
         resourcePath !== undefined;
         resourcePath = resourcePath.child(resource.docKey !== null), _resources = resource.children || {}
     ) {
@@ -142,61 +185,10 @@ export function executeCommand(resources: ResourceCollection, command: Command, 
         })));
     }
 
-    const endpointKey = Object.keys(resource!.endpoints || {}).find(matching(command.name));
-    if (!(endpointKey && nonFalsy(resource!.endpoints)[endpointKey])) {
-        throw new Error(`No such command '${command.name}'.`);
-    }
-
-    const endpointConfig = nonFalsy(nonFalsy(resource!.endpoints!)[endpointKey]);
-
-    const processor = commandPath.includesWildcard()
-        ? (async function* (payload: EndpointPayloadInternal) {
-            const result = endpointConfig.fn(payload);
-            if (typeof result === 'object' && (result as any).then) {
-                yield addPathToOutput(payload.path, await result as Promise<any>);
-            } else {
-                yield addPathToOutput(payload.path, await collectArray(result as AsyncIterable<any>));
-            }
-        }) : (async function* (payload: EndpointPayloadInternal) {
-            const result = endpointConfig.fn(payload);
-            if (typeof result === 'object' && (result as any).then) {
-                yield await result as Promise<any>;
-            } else {
-                yield* result as AsyncIterable<any>;
-            }
-        });
-    const generateOutput = compose(
-        async function* (data: any) { yield {path: [], docKeys: [], data} },
-        compose(...payloadTransforms),
-        flatMapAsync({concurrency: 50}, processor),
-    );
-
-    if (input) {
-        const isSingleton = endpointConfig.cardinality === Cardinality.One && !commandPath.includesWildcard();
-        const inputHandler = isSingleton ? compose(generateOutput, first()) : compose(generateOutput, collectArray);
-        return mapAsync({concurrency: 50}, async _input => {
-            const startTime = new Date();
-            try {
-                return {
-                    timestamp: startTime.toISOString(),
-                    input: _input,
-                    duration: Date.now() - startTime.getTime(),
-                    success: true,
-                    output: await inputHandler(_input),
-                };
-            } catch (error) {
-                return {
-                    timestamp: startTime.toISOString(),
-                    input: _input,
-                    duration: Date.now() - startTime.getTime(),
-                    success: false,
-                    error: error.detail || error.message,
-                };
-            }
-        })(input);
-    } else {
-        return generateOutput(null);
-    }
+    return {
+        resource: resource!,
+        payloadTransform: compose(...payloadTransforms),
+    };
 }
 
 class ResourcePath {
