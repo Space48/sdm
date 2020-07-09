@@ -4,7 +4,9 @@ import { Command, executeCommand, getAvailableCommands } from "../resource";
 import { connectors } from "..";
 import { flatten, distinct } from "../util";
 import * as readline from "readline";
-import { compose, streamJson, takeWhile, transformJson, mapAsync } from "@space48/json-pipe";
+import { compose, takeWhile, tap } from "@space48/json-pipe";
+import { streamAndReportProgress, transformAndReportProgress } from "../watch";
+import chalk from "chalk";
 
 function main() {
     return process.argv[2] === 'help' ? runHelpMode()
@@ -27,10 +29,11 @@ async function runNonInteractiveMode() {
     const resources = connectors[connectorId].getScopeResources(connectorScope);
     const command = {name: process.argv[3], path: process.argv[4]};
     if (process.stdin.isTTY) {
-        await streamJson(executeCommand(resources, command));
+        await streamAndReportProgress(scope, command, () => executeCommand(resources, command));
     } else {
-        await transformJson(input => executeCommand(resources, command, input));
+        await transformAndReportProgress(scope, command, input => executeCommand(resources, command, input));
     }
+    process.exit();
 }
 
 async function runInteractiveMode() {
@@ -41,19 +44,22 @@ async function runInteractiveMode() {
     while (true) {
         const command = await askForCommand(scope, availableCommands);
         let interrupted = false;
-        readlineInterface().once('SIGINT', () => {
+        const sigintListener = () => {
             interrupted = true;
-        });
+        };
+        readlineInterface().once('SIGINT', sigintListener);
         const runUntilSigint = compose(
             () => executeCommand(resources, command),
-            mapAsync(output => new Promise(resolve => setImmediate(() => resolve(output)))),
+            tap(() => new Promise(setImmediate)),
             takeWhile(() => !interrupted),
         );
         try {
-            await streamJson(runUntilSigint(null));
+            await streamAndReportProgress(scope, command, () => runUntilSigint(null));
             process.stderr.write('\n');
         } catch (e) {
             console.error(e.message);
+        } finally {
+            readlineInterface().removeListener('SIGINT', sigintListener);
         }
     }
 }
@@ -198,7 +204,7 @@ ${helpForCommands.join('\n')}
 }
 
 function title(value: string) {
-    return `${value}\n${'-'.repeat(value.length)}`;
+    return chalk.underline(value);
 }
 
 main()

@@ -139,7 +139,7 @@ const backoff = <F extends Fn>(fn: F) => (...args: Parameters<F>) => {
         } catch (e) {
             const actionError = new ActionError({
                 message: e.message,
-                detail: typeof e.response.body === 'object' ? e.response.body.errors : null,
+                detail: typeof e.response?.body === 'object' ? e.response.body.errors : null,
             })
             throw e.response?.statusCode == 429 ? actionError : new pRetry.AbortError(actionError);
         }
