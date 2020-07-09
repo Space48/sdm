@@ -3,6 +3,7 @@ import { stringify } from 'query-string'
 import { Credentials } from "./config";
 import pRetry from "p-retry";
 import { flatten } from "../util";
+import { ActionError } from "../action";
 
 const listConcurrency = 50;
 
@@ -79,12 +80,13 @@ export default class BigCommerce {
             {retries: 50}
         );
         if (!response.ok) {
-            const error = new Error(`${response.status} ${response.statusText}`);
-            (error as any).response = {
-                status: response.status,
-                body: await response.text(),
-            }
-            throw error;
+            throw new ActionError({
+                message: `${response.status} ${response.statusText}`,
+                detail: await response.text()
+                    .then(JSON.parse)
+                    .then(data => data?.errors ?? data)
+                    .catch(),
+            });
         }
         if (response.status === 204) {
             return null;
