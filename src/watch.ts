@@ -13,6 +13,7 @@ export async function streamAndReportProgress(scope: string, command: Command, p
         progress.finish();
     } catch (e) {
         progress.finish(e);
+        throw e;
     }
 }
 
@@ -27,6 +28,7 @@ export async function transformAndReportProgress(scope: string, command: Command
         progress.finish();
     } catch (e) {
         progress.finish(e);
+        throw e;
     }
 }
 
