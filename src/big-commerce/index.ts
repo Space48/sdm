@@ -2,6 +2,7 @@ import * as config from './config';
 import { ConfigStore } from '../config-store';
 import { Connector } from '../connector';
 import { BigCommerceResourceFactory } from './resource-factory';
+import { ResourceCollection } from '../resource';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -27,7 +28,7 @@ export default class BigCommerceConnector implements Connector {
     }
 };
 
-function getResources(storeAlias: string, config: ConfigStore<ConfigSchema['credentials']>) {
+function getResources(storeAlias: string, config: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
     const resource = new BigCommerceResourceFactory(storeAlias, config);
 
     return {
@@ -62,6 +63,14 @@ function getResources(storeAlias: string, config: ConfigStore<ConfigSchema['cred
         customerAddresses: resource.documentCollection('v3/customers/addresses'),
 
         giftCertificates: resource.documentCollection('v3/gift_certificates'),
+        
+        orders: {
+            ...resource.documentCollection('v2/orders'),
+
+            children: {
+                transactions: resource.singletonResource('v3/orders/{id}/payment_actions/refunds', {get: true}),
+            },
+        },
 
         paymentMethods: resource.documentCollection('v3/payments/methods', {list: true, listDocKeys: true}),
 

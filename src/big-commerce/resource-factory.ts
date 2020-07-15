@@ -60,7 +60,7 @@ export class BigCommerceResourceFactory {
 
     private read(scope: EndpointScope, uriTemplate: string, options: ReadOptions): ResourceConfig['endpoints'] {
         return {
-            ...(options?.get ? this.get(scope, `${uriTemplate}/{id}`) : {}),
+            ...(options?.get ? this.get(scope, scope === EndpointScope.Resource ? uriTemplate : `${uriTemplate}/{id}`) : {}),
             ...(options?.list ? this.list(uriTemplate) : {}),
         };
     }
@@ -68,8 +68,8 @@ export class BigCommerceResourceFactory {
     private write(scope: EndpointScope, uriTemplate: string, options?: WriteOptions): ResourceConfig['endpoints'] {
         return {
             ...(options?.create ? this._create(uriTemplate) : {}),
-            ...(options?.update ? this.update(scope, `${uriTemplate}/{id}`) : {}),
-            ...(options?.delete ? this.delete(scope, `${uriTemplate}/{id}`) : {}),
+            ...(options?.update ? this.update(scope, scope === EndpointScope.Resource ? uriTemplate : `${uriTemplate}/{id}`) : {}),
+            ...(options?.delete ? this.delete(scope, scope === EndpointScope.Resource ? uriTemplate : `${uriTemplate}/{id}`) : {}),
         };
     }
 
