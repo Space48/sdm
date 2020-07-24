@@ -36,19 +36,20 @@ export default class BigCommerce {
     }
 
     async post<T = any>(uri: string, content: any): Promise<T> {
-        return this.makeUnsafeRequest('POST', uri, content);
+        return this.makeRequestWithContent('POST', uri, content);
     }
 
     async put<T = any>(uri: string, content: any): Promise<T> {
-        return this.makeUnsafeRequest('PUT', uri, content);
+        return this.makeRequestWithContent('PUT', uri, content);
     }
 
     async patch<T = any>(uri: string, content: any): Promise<T> {
-        return this.makeUnsafeRequest('PATCH', uri, content);
+        return this.makeRequestWithContent('PATCH', uri, content);
     }
 
-    async delete(uri: string, content?: any): Promise<void> {
-        await this.makeUnsafeRequest('DELETE', uri, content);
+    async delete(uri: string, params?: Record<string, any>): Promise<void> {
+        const paramsString = params ? `?${stringify(params)}` : '';
+        return unwrap(await this.fetch(uri + paramsString, params));
     }
 
     private async doGet<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
@@ -56,7 +57,7 @@ export default class BigCommerce {
         return await this.fetch(uri + paramsString);
     }
 
-    private async makeUnsafeRequest<T>(method: string, uri: string, content: any): Promise<T> {
+    private async makeRequestWithContent<T>(method: string, uri: string, content: any): Promise<T> {
         return unwrap(await this.fetch(uri, {
             method,
             headers: content && {

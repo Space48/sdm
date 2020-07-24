@@ -2,7 +2,8 @@ import * as config from './config';
 import { ConfigStore } from '../config-store';
 import { Connector } from '../connector';
 import { BigCommerceResourceFactory } from './resource-factory';
-import { ResourceCollection } from '../resource';
+import { Cardinality, ResourceCollection, EndpointScope } from '../resource';
+import { Field } from '../action';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -28,8 +29,9 @@ export default class BigCommerceConnector implements Connector {
     }
 };
 
-function getResources(storeAlias: string, config: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
-    const resource = new BigCommerceResourceFactory(storeAlias, config);
+function getResources(storeAlias: string, configStore: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
+    const client = config.getBigCommerceClient(configStore, storeAlias);
+    const resource = new BigCommerceResourceFactory(client);
 
     return {
         blogPosts: resource.documentCollection('v2/blog/post'),
@@ -62,13 +64,67 @@ function getResources(storeAlias: string, config: ConfigStore<ConfigSchema['cred
 
         customerAddresses: resource.documentCollection('v3/customers/addresses'),
 
+        customerAttributes: resource.documentCollection('v3/customers/attributes', {
+            list: true,
+
+            customEndpoints: {
+                create: {
+                    scope: EndpointScope.Resource,
+                    cardinality: Cardinality.One,
+                    fn: ({data}) => client.post('v3/customers/attributes', [data]).then(results => results[0]),
+                },
+                delete: {
+                    scope: EndpointScope.Document,
+                    cardinality: Cardinality.One,
+                    fn: ({docKeys: [id]}) => client.delete('v3/customers/attributes', {'id:in': id}),
+                },
+                update: {
+                    scope: EndpointScope.Document,
+                    cardinality: Cardinality.One,
+                    fn: ({docKeys: [id], data}) => client.put('v3/customers/attributes', [{...data, id}]).then(result => result[0]),
+                },
+            },
+
+            children: {
+                values: {
+                    endpoints: {
+                        list: {
+                            scope: EndpointScope.Resource,
+                            cardinality: Cardinality.Many,
+                            fn: ({docKeys: [attributeId], data}) => client.list('v3/customers/attribute-values', {
+                                ...data,
+                                'attribute_id:in': attributeId,
+                            }),
+                        },
+                    },
+                },
+            },
+        }),
+
+        customerAttributeValues: resource.documentCollection('v3/customers/attribute-values', {
+            list: true,
+
+            customEndpoints: {
+                delete: {
+                    scope: EndpointScope.Document,
+                    cardinality: Cardinality.One,
+                    fn: ({docKeys: [id]}) => client.delete('v3/customers/attribute-values', {'id:in': id}),
+                },
+                set: {
+                    scope: EndpointScope.Resource,
+                    cardinality: Cardinality.One,
+                    fn: ({data}) => client.put('v3/customers/attribute-values', [data]).then(result => result[0]),
+                },
+            },
+        }),
+
         giftCertificates: resource.documentCollection('v3/gift_certificates'),
         
         orders: {
             ...resource.documentCollection('v2/orders'),
 
             children: {
-                transactions: resource.singletonResource('v3/orders/{id}/payment_actions/refunds', {get: true}),
+                refunds: resource.singletonResource('v3/orders/{id}/payment_actions/refunds', {get: true}),
             },
         },
 

@@ -16,14 +16,14 @@ export type SingletonResourceConfig = {
 export type DocumentCollectionConfig<Key extends FieldType> = {
     docKey: DocumentKeyDefinition<Key>;
     listDocKeys?: ((keys: string[]) => AsyncIterable<string>) | Falsy;
-    endpoints?: Record<string, EndpointConfig<Key, any>|Falsy>;
+    endpoints?: Record<string, EndpointConfig<Key, Cardinality>|Falsy>;
     children?: ResourceCollection;
 }
 
-export type EndpointConfig<Key extends FieldType, Cardinality extends Cardinality.One> = {
+export type EndpointConfig<Key extends FieldType, C extends Cardinality> = {
     scope: [Key] extends [never] ? EndpointScope.Resource : EndpointScope,
-    cardinality: Cardinality,
-    fn: Cardinality extends Cardinality.One ? MapEndpointFn : FlatMapEndpointFn,
+    cardinality: C,
+    fn: C extends Cardinality.One ? MapEndpointFn : FlatMapEndpointFn,
 };
 export type MapEndpointFn = (input: EndpointPayload) => Promise<any>;
 export type FlatMapEndpointFn = (input: EndpointPayload) => AsyncIterable<any>;
@@ -235,14 +235,6 @@ class ResourcePath {
 
     segments(): string[] {
         return this.value.split(ResourcePath.separator);
-    }
-
-    endsWithWildcard(): boolean {
-        return this.segments().slice(-1)[0] === ResourcePath.wildcard;
-    }
-
-    withoutTrailingWildcard(): ResourcePath {
-        return this.endsWithWildcard() ? ResourcePath.ofSegments(this.segments().slice(0, -1)) : this;
     }
 
     includesWildcard(): boolean {
