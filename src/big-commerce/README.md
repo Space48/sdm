@@ -9,7 +9,7 @@ Adding a store to sdm
   
   NB. store alias can be any string to help you identify the store, the store hash can be found at the beginning of the admin url
 
-``` sdm-config bc:set --store-alias={S48-test-store} --store-hash={HASH}, --access-token={ACCESS-TOKEN}, --client-id={CLIENT-ID}```
+``` sdm-config bc:set --store-alias={S48-test-store} --store-hash={HASH} --access-token={ACCESS-TOKEN} --client-id={CLIENT-ID}```
 
 
 **Removing a store from sdm**
