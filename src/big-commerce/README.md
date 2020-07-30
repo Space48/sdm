@@ -4,24 +4,35 @@ Big Commerce
 Adding a store to sdm
 ---------------------
 
-1. [Generate API credentials][create-api-account] for the desired Big Commerce store
-2. Use those credentials link the store to sdm. 
-  NB store alias can be any string to help you identify the store, Store hash can be found in the url of the admin panel
+1. [Generate API credentials][create-bc-api-creds] for the desired Big Commerce store
+2. Use those credentials in the following command 
+  NB store alias can be any string to help you identify the store, the store hash can be found at the beginning of the admin url
 
 ``` sdm-config bc:set --store-alias={S48-test-store} --store-hash={HASH}, --access-token={ACCESS-TOKEN}, --client-id={CLIENT-ID}```
 
 
-Deleting a store to sdm
----------------------
+**Removing an instance from sdm**
+---------------------------------
+
+```sdm-config bc:delete --store-alias={S48-test-store}```
 
 
+**List all instances' name and credentials linked to sdm**
+----------------------------------------------------------
+
+```sdm-config bc:list```
 
 
-View all sdm configuration commands
------------------------------------
+**List all instances' name linked to sdm**
+------------------------------------------
 
-```sdm-config```
+```sdm-config bc:list-stores```
 
 
+**Get a linked instances' name and credentials**
+------------------------------------------------
 
-[create-api-account]: https://support.bigcommerce.com/s/article/Store-API-Accounts#creating
+```sdm-config bc:get --store-alias={S48-test-store}```
+
+
+[create-bc-api-creds]: https://support.bigcommerce.com/s/article/Store-API-Accounts#creating
