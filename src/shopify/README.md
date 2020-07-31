@@ -34,4 +34,11 @@ Adding a shop to sdm
 ```sdm-config shopify:get --shop-name={S48-test-store}```
 
 
+**IMPORTANT**
+-------------
+
+If you are migrating order data to a shopify shop then you need to ensure that when generating api credentials in the admin and setting read/write privileges 
+***DO NOT*** check the Storefront API checkbox. Doing so will trigger order confirmation emails to be sent to **ALL** customers who have previously made an order on the original store.
+
+
 [create-shopify-api-creds]: https://shopify.dev/tutorials/generate-api-credentials
