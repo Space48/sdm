@@ -49,7 +49,10 @@ export default class BigCommerce {
 
     async delete(uri: string, params?: Record<string, any>): Promise<void> {
         const paramsString = params ? `?${stringify(params)}` : '';
-        return unwrap(await this.fetch(uri + paramsString, params));
+        return unwrap(await this.fetch(uri + paramsString, {
+            ...params,
+            method: 'DELETE',
+        }));
     }
 
     private async doGet<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
