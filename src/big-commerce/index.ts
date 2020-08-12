@@ -1,9 +1,9 @@
 import * as config from './config';
 import { ConfigStore } from '../config-store';
-import { Connector } from '../connector';
+import { Connector, ConnectorScope } from '../connector';
 import { BigCommerceResourceFactory } from './resource-factory';
 import { Cardinality, ResourceCollection, EndpointScope } from '../resource';
-import { Field } from '../action';
+import BigCommerce from './client';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -17,20 +17,59 @@ export default class BigCommerceConnector implements Connector {
     }
 
     getScopes() {
-        return config.getStoreAliases(this.configStore.select('credentials'));
+        const credentialsConfig = this.configStore.select('credentials');
+        return config.getStoreAliases(credentialsConfig);
+    }
+
+    getScope(storeAlias: string) {
+        const credentialsConfig = this.configStore.select('credentials');
+        return new BigCommerceScope(storeAlias, credentialsConfig);
     }
 
     getTypicalResources() {
         return {};
     }
+}
 
-    getScopeResources(baseUrl: string) {
-        return getResources(baseUrl, this.configStore.select('credentials'));
+class BigCommerceScope implements ConnectorScope {
+    constructor(
+        private storeAlias: string,
+        private configStore: ConfigStore<ConfigSchema['credentials']>,
+    ) {}
+
+    get name() {
+        return this.storeAlias;
     }
-};
 
-function getResources(storeAlias: string, configStore: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
-    const client = config.getBigCommerceClient(configStore, storeAlias);
+    async getWarningMessage() {
+        try {
+            const store = await this.client.get('v2/store');
+            if (store.status === 'live') {
+                return `Store is LIVE at ${store.domain}`;
+            }
+            if (!store.domain.endsWith('.mybigcommerce.com')) {
+                return `Store is using custom domain ${store.domain}`
+            }
+        } catch {
+            return 'Failed to fetch store data from BigCommerce API. This could be a live store.';
+        }
+    }
+
+    getResources() {
+        return getResources(this.client);
+    }
+
+    private _client: BigCommerce|undefined;
+
+    private get client() {
+        if (!this._client) {
+            this._client = config.createBigCommerceClient(this.configStore, this.storeAlias);
+        }
+        return this._client;
+    }
+}
+
+function getResources(client: BigCommerce): ResourceCollection {
     const resource = new BigCommerceResourceFactory(client);
 
     return {
@@ -163,5 +202,9 @@ function getResources(storeAlias: string, configStore: ConfigStore<ConfigSchema[
         },
 
         // 'price-list-record': todo: this would be useful, but it requires bespoke sources and sinks
+
+        store: resource.singletonResource('v2/store', {
+            get: true,
+        }),
     };
 }

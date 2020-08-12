@@ -1,5 +1,7 @@
 import { ConfigStore } from "../config-store";
-import { Field, Action } from "../action";
+import { Field, Action, ActionError } from "../action";
+import Shopify from "shopify-api-node";
+import pRetry from "p-retry";
 
 export type ConfigSchema = {[shopName: string]: Credentials};
 
@@ -9,12 +11,15 @@ type Credentials = {
     password: string,
 };
 
-export const getClientCredentials = (config: ConfigStore<ConfigSchema>, shopName: string): Credentials => {
+export function createShopifyClient(config: ConfigStore<ConfigSchema>, shopName: string): Shopify {
     const credentials = config.get(shopName);
     if (!credentials) {
         throw new Error(`Shopify: No credentials available for shop ${shopName}.`);
     }
-    return credentials;
+    const client = new Shopify({...credentials, apiVersion: '2019-10'});
+    const requestFn = (client as any).request.bind(client);
+    (client as any).request = backoff(requestFn);
+    return client;
 }
 
 export function getActions(config: ConfigStore<ConfigSchema>) {
@@ -60,3 +65,19 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
 export function getShops(config: ConfigStore<ConfigSchema>): string[] {
     return Object.keys(config.getAll() || {});
 }
+
+type Fn = (...args: any[]) => Promise<any>;
+const backoff = <F extends Fn>(fn: F) => (...args: Parameters<F>) => {
+    const run = async () => {
+        try {
+            return await fn(...args);
+        } catch (e) {
+            const actionError = new ActionError({
+                message: e.message,
+                detail: typeof e.response?.body === 'object' ? (e.response.body.errors ?? e.response.body) : null,
+            })
+            throw e.response?.statusCode == 429 ? actionError : new pRetry.AbortError(actionError);
+        }
+    };
+    return pRetry(run, {retries: 50});
+};

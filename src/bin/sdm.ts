@@ -7,39 +7,65 @@ import * as readline from "readline";
 import { compose, takeWhile, tap } from "@space48/json-pipe";
 import { streamAndReportProgress, transformAndReportProgress } from "../watch";
 import chalk from "chalk";
+import { ConnectorScope } from "../connector";
+
+enum Flag {
+    Force = 'force',
+}
+const availableFlags = Object.values(Flag) as string[];
+
+const argsExcludingFlags = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
+const flags = process.argv.slice(2)
+    .filter(arg => arg.startsWith('--'))
+    .map(arg => arg.slice(2));
+const invalidFlags = flags.filter(flag => !availableFlags.includes(flag));
+if (invalidFlags.length > 0) {
+    const renderOptions = (options: string[]) => options.map(flag => `--${flag}`).join(', ');
+    process.stderr.write(`Invalid option${invalidFlags.length > 1 ? 's' : ''} ${renderOptions(invalidFlags)}. `);
+    process.stderr.write(`Valid options are ${renderOptions(availableFlags)}.\n`);
+    process.exit(1);
+}
 
 function main() {
-    return process.argv[2] === 'help' ? runHelpMode()
-        : process.argv[3] ? runNonInteractiveMode()
+    return argsExcludingFlags[0] === 'help' ? runHelpMode()
+        : argsExcludingFlags[1] ? runNonInteractiveMode()
         : runInteractiveMode();
 }
 
 async function runHelpMode() {
-    const scope = await resolveScope(process.argv[3], true);
+    const scope = await resolveScope(argsExcludingFlags[1], true);
     const [connectorId, connectorScope] = scope.split(':', 2);
-    const resources = connectors[connectorId].getScopeResources(connectorScope);
+    const resources = connectors[connectorId].getScope(connectorScope)!.getResources();
     const availableCommands = getAvailableCommands(resources);
     process.stderr.write(explainCommands(availableCommands, `sdm ${scope}`));
     process.exit(0);
 }
 
 async function runNonInteractiveMode() {
-    const scope = await resolveScope(process.argv[2], false);
-    const [connectorId, connectorScope] = scope.split(':', 2);
-    const resources = connectors[connectorId].getScopeResources(connectorScope);
-    const command = {name: process.argv[3], path: process.argv[4]};
-    if (process.stdin.isTTY) {
-        await streamAndReportProgress(scope, command, () => executeCommand(resources, command));
-    } else {
-        await transformAndReportProgress(scope, command, input => executeCommand(resources, command, input));
+    const scope = await resolveScope(argsExcludingFlags[0], false);
+    const [connectorId, connectorScopeName] = scope.split(':', 2);
+    const connectorScope = connectors[connectorId].getScope(connectorScopeName)!;
+    const resources = connectorScope.getResources();
+    const command = {name: argsExcludingFlags[1], path: argsExcludingFlags[2]};
+    await warnUserIfNecessary(connectorId, connectorScope, command);
+    try {
+        if (process.stdin.isTTY) {
+            await streamAndReportProgress(scope, command, () => executeCommand(resources, command));
+        } else {
+            await transformAndReportProgress(scope, command, input => executeCommand(resources, command, input));
+        }
+        process.exit(0);
+    } catch (e) {
+        process.stderr.write(e.message + '\n');
+        process.exit(1);
     }
-    process.exit();
 }
 
 async function runInteractiveMode() {
-    const scope = await resolveScope(process.argv[2], true);
-    const [connectorId, connectorScope] = scope.split(':', 2);
-    const resources = connectors[connectorId].getScopeResources(connectorScope);
+    const scope = await resolveScope(argsExcludingFlags[0], true);
+    const [connectorId, connectorScopeName] = scope.split(':', 2);
+    const connectorScope = connectors[connectorId].getScope(connectorScopeName)!;
+    const resources = connectorScope.getResources();
     const availableCommands = getAvailableCommands(resources);
     while (true) {
         const command = await askForCommand(scope, availableCommands);
@@ -53,11 +79,14 @@ async function runInteractiveMode() {
             tap(() => new Promise(setImmediate)),
             takeWhile(() => !interrupted),
         );
+        await warnUserIfNecessary(connectorId, connectorScope, command);
         try {
-            await streamAndReportProgress(scope, command, () => runUntilSigint(null));
-            process.stderr.write('\n');
+            if (!interrupted) {
+                await streamAndReportProgress(scope, command, () => runUntilSigint(null));
+                process.stderr.write('\n');
+            }
         } catch (e) {
-            console.error(e.message);
+            process.stderr.write(`${e.message}\n`);
         } finally {
             readlineInterface().removeListener('SIGINT', sigintListener);
         }
@@ -204,7 +233,39 @@ ${helpForCommands.join('\n')}
 }
 
 function title(value: string) {
-    return chalk.underline(value);
+    return chalk.underline.bold(value);
 }
 
-main()
+const safeCommands = ['get', 'list'];
+async function warnUserIfNecessary(connectorId: string, scope: ConnectorScope, command: Command): Promise<void> {
+    if (flags.includes(Flag.Force) || safeCommands.includes(command.name)) {
+        return;
+    }
+
+    const warning = await scope.getWarningMessage()
+    if (!warning) {
+        return;
+    }
+    const commandString = `${connectorId}:${scope.name} ${command.name} ${command.path}`;
+    process.stderr.write(chalk.redBright.bold(`\nWARNING: ${warning}\n\n`));
+
+    const delaySecs = 15;
+    const interactiveMode = process.stdin.isTTY;
+    process.stderr.write(chalk.yellow(
+        interactiveMode
+            ? `Press enter or wait ${delaySecs}s to proceed anyway. Press ctrl+c to abort.\n\n`
+            : `sdm will proceed with command in ${delaySecs}s. Press ctrl+c to abort.\n\n`
+    ));
+    const timeout = new Promise(resolve => setTimeout(resolve, delaySecs * 1000));
+    await Promise.race([
+        timeout,
+        new Promise(resolve => {
+            if (process.stdin.isTTY) {
+                process.stdin.once('data', resolve);
+                timeout.finally(() => process.stdin.removeListener('data', resolve));
+            }
+        }),
+    ]);
+}
+
+main();

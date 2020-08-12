@@ -11,7 +11,7 @@ export type Credentials = {
     accessToken: string,
 };
 
-export function getBigCommerceClient(configStore: ConfigStore<ConfigSchema>, storeAlias: string) {
+export function createBigCommerceClient(configStore: ConfigStore<ConfigSchema>, storeAlias: string) {
     const credentials = configStore.get(storeAlias);
     if (!credentials)  {
         const allAliases = Object.keys(configStore.select('credentials').getAll() || {});

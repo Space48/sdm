@@ -1,5 +1,5 @@
 import { ConfigStore } from "../config-store";
-import Magento2, { Magento2ClientOptions } from "./client";
+import Magento2 from "./client";
 import { parse as parseUrl } from "url";
 import { Field, Action } from "../action";
 

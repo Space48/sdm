@@ -1,11 +1,11 @@
 import * as config from './config';
 import { ConfigStore } from '../config-store';
-import { ConfiguredResource, ShopifyCustomEndpoint, ShopifyVanillaEndpoint, ShopifyResourceFactory } from './resource-factory';
+import { ConfiguredResource, ShopifyCustomEndpoint, ShopifyVanillaEndpoint, getResources } from './resource-factory';
 import { ResourceKey, resources, Resource } from './resource';
 import Shopify from 'shopify-api-node';
 import { objectFromEntries } from '../util';
 import { EndpointScope, Cardinality } from '../resource';
-import { Connector } from '../connector';
+import { Connector, ConnectorScope } from '../connector';
 
 export default class ShopifyConnector implements Connector {
     constructor(private configStore: ConfigStore<ConfigSchema>) {}
@@ -15,25 +15,55 @@ export default class ShopifyConnector implements Connector {
     }
 
     getScopes() {
-        return config.getShops(this.configStore.select('credentials'));
+        const credentialsConfig = this.configStore.select('credentials');
+        return config.getShops(credentialsConfig);
+    }
+
+    getScope(shop: string) {
+        const credentialsConfig = this.configStore.select('credentials');
+        return new ShopifyScope(shop, credentialsConfig)
     }
 
     getTypicalResources() {
         return {};
     }
+}
 
-    getScopeResources(shop: string) {
-        return this.getResourceFactory().getResources(shop);
+class ShopifyScope implements ConnectorScope {
+    constructor(
+        private shop: string,
+        private configStore: ConfigStore<ConfigSchema['credentials']>,
+    ) {}
+
+    get name() {
+        return this.shop;
     }
 
-    private resourceFactory: ShopifyResourceFactory|undefined;
-
-    private getResourceFactory() {
-        if (!this.resourceFactory) {
-            const config = buildConfig();
-            this.resourceFactory = new ShopifyResourceFactory(this.configStore.select('credentials'), config);
+    async getWarningMessage() {
+        try {
+            const shop = await this.client.shop.get();
+            if (!shop.password_enabled) {
+                return `Shop is LIVE at ${shop.domain}`;
+            }
+            if (shop.domain !== shop.myshopify_domain) {
+                return `Shop is using custom domain ${shop.domain}`
+            }
+        } catch {
+            return 'Failed to fetch shop data from Shopify API. This could be a live shop.';
         }
-        return this.resourceFactory;
+    }
+
+    getResources() {
+        return getResources(buildConfig(), this.client);
+    }
+
+    private _client: Shopify|undefined;
+
+    private get client() {
+        if (!this._client) {
+            this._client = config.createShopifyClient(this.configStore, this.shop);
+        }
+        return this._client;
     }
 }
 
@@ -205,6 +235,10 @@ const resourceConfigs: ResourceConfigs = {
             calculate: false,
         }
     },
+    shop: {
+        hasId: false,
+        endpoints: {},
+    },
     smartCollection: {
         endpoints: {
             order: false,
@@ -225,7 +259,12 @@ export type ConfigSchema = {
     credentials: config.ConfigSchema,
 };
 
+let _config: Record<string, ConfiguredResource>|undefined = undefined;
 function buildConfig(): Record<string, ConfiguredResource> {
+    if (_config) {
+        return _config;
+    }
+
     const resourcesByParentName: Map<string, Resource[]> = new Map();
     const enabledResources = Object.values(resources).filter(resource => resourceConfigs[resource.key] !== false);
     
@@ -259,7 +298,7 @@ function buildConfig(): Record<string, ConfiguredResource> {
         };
     }
     
-    return objectFromEntries(
+    return _config = objectFromEntries(
         enabledResources
             .filter(resource => !resource.parentName)
             .map(resource => [resource.name, processResource(resource)])

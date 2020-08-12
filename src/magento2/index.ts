@@ -2,11 +2,11 @@ import * as config from './config';
 import { ConfigStore } from '../config-store';
 import { Field } from '../action';
 import { Magento2ResourceFactory } from './resource-factory';
-import { Connector } from '../connector';
+import { Connector, ConnectorScope } from '../connector';
 import { ResourceCollection, EndpointScope, Cardinality } from '../resource';
 import { compose, flatMap, map, mapAsync, batch, collectArray } from "@space48/json-pipe";
 import { flatten } from '../util';
-import { SortKey } from './client';
+import Magento2, { SortKey } from './client';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -20,20 +20,41 @@ export default class Magento2Connector implements Connector {
     }
 
     getScopes() {
-        return config.getBaseUrls(this.configStore.select('credentials'));
+        const credentialsConfig = this.configStore.select('credentials');
+        return config.getBaseUrls(credentialsConfig);
+    }
+
+    getScope(baseUrl: string) {
+        const credentialsConfig = this.configStore.select('credentials');
+        return new Magento2Scope(baseUrl, credentialsConfig);
     }
 
     getTypicalResources() {
         return {};
     }
+}
 
-    getScopeResources(baseUrl: string) {
-        return getResources(baseUrl, this.configStore.select('credentials'));
+class Magento2Scope implements ConnectorScope {
+    constructor(
+        private baseUrl: string,
+        private configStore: ConfigStore<ConfigSchema['credentials']>,
+    ) {}
+
+    get name() {
+        return this.baseUrl;
+    }
+
+    async getWarningMessage() {
+        return undefined;
+    }
+
+    getResources() {
+        const client = config.createMagentoClient(this.configStore, this.baseUrl);
+        return getResources(client);
     }
 }
 
-function getResources(baseUrl: string, configStore: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
-    const client = config.createMagentoClient(configStore, baseUrl);
+function getResources(client: Magento2): ResourceCollection {
     const resource = new Magento2ResourceFactory(client);
 
     return {
