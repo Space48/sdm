@@ -3,6 +3,10 @@ import { ConfigStore } from '../config-store';
 import { Field } from '../action';
 import { Magento2ResourceFactory } from './resource-factory';
 import { Connector } from '../connector';
+import { ResourceCollection, EndpointScope, Cardinality } from '../resource';
+import { compose, flatMap, map, mapAsync, batch, collectArray } from "@space48/json-pipe";
+import { flatten } from '../util';
+import { SortKey } from './client';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -28,8 +32,9 @@ export default class Magento2Connector implements Connector {
     }
 }
 
-function getResources(baseUrl: string, config: ConfigStore<ConfigSchema['credentials']>) {
-    const resource = new Magento2ResourceFactory(baseUrl, config);
+function getResources(baseUrl: string, configStore: ConfigStore<ConfigSchema['credentials']>): ResourceCollection {
+    const client = config.createMagentoClient(configStore, baseUrl);
+    const resource = new Magento2ResourceFactory(client);
 
     return {
         categories: resource.create('categories', {
@@ -89,7 +94,7 @@ function getResources(baseUrl: string, config: ConfigStore<ConfigSchema['credent
                 docKey: { name: 'sku', type: Field.string() },
                 create: true,
                 get: true,
-                list: { sortKey: { query: 'entity_id', response: 'id' } },
+                list: { sortKey: productSortKey },
                 update: true,
                 delete: true,
             }),
@@ -116,3 +121,5 @@ function getResources(baseUrl: string, config: ConfigStore<ConfigSchema['credent
         },
     };
 }
+
+const productSortKey: SortKey = { query: 'entity_id', response: 'id' };

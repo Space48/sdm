@@ -9,7 +9,7 @@ export function getBaseUrls(config: ConfigStore<ConfigSchema>): string[] {
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const createClient = (config: ConfigStore<ConfigSchema>, baseUrl: string): Magento2 => {
+export const createMagentoClient = (config: ConfigStore<ConfigSchema>, baseUrl: string): Magento2 => {
     const urlExcludingScheme = computeUrlForComparison(baseUrl);
     const instanceConfig = config.get(baseUrl)
         || Object.values(config.getAll() || {}).find(candidate => urlExcludingScheme === computeUrlForComparison(candidate.baseUrl));

@@ -33,13 +33,12 @@ export default class Magento2 {
     ): AsyncIterable<T> {
         let additionalFilters: Filter[] = [];
         while (1) {
-            const {items} = await this.get<{items: T[]}>(uri, {searchCriteria: {
-                filterGroups: [...filters, ...additionalFilters]
-                    .map(([field, conditionType, value]) => ({filters: [{field, conditionType, value}]})),
-                sortOrders: [{field: sortKey.query, direction: 'asc'}],
+            const items = await this.fetchSearchResultsPage<T>(uri, {
+                filters: [...filters, ...additionalFilters],
+                sortOrders: [[sortKey.query, 'asc']],
                 pageSize: 100,
                 currentPage: 1,
-            }});
+            });
             if (items.length === 0) {
                 break;
             }
@@ -67,6 +66,22 @@ export default class Magento2 {
 
     async delete<T>(uri: string, content?: any): Promise<T> {
         return this.makeUnsafeRequest('DELETE', uri, content);
+    }
+
+    private async fetchSearchResultsPage<T extends Record<string, any> = any>(
+        uri: string,
+        options: {filters?: Filter[], pageSize: number, currentPage?: number, sortOrders?: SortOrder[]}
+    ): Promise<T[]> {
+        const { filters=[], pageSize, currentPage=1, sortOrders=[] } = options;
+        const {items} = await this.get<{items: T[]}>(uri, {
+            searchCriteria: {
+                filterGroups: filters.map(([field, conditionType, value]) => ({filters: [{field, conditionType, value}]})),
+                sortOrders: sortOrders.map(([field, direction]) => ({field, direction})),
+                pageSize,
+                currentPage,
+            }
+        });
+        return items;
     }
 
     private async makeUnsafeRequest<T>(method: string, uri: string, content: any): Promise<T> {
@@ -149,6 +164,7 @@ function flattenParam(name: string, value: QueryParam): string[][] {
 
 type FilterCondition = 'eq' | 'gt' | 'in';
 type Filter = [string, FilterCondition, string|number|string[]|number[]];
+type SortOrder = [string, 'asc'|'desc'];
 
 export type SortKey = {
     query: string,

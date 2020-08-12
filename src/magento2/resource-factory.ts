@@ -1,8 +1,5 @@
-import { ConfigStore } from "../config-store";
-import { ConfigSchema, createClient } from "./config";
 import Magento2, { SortKey } from "./client";
 import { ResourceConfig, DocumentKeyDefinition, EndpointScope, Cardinality } from "../resource";
-import { Field } from "../action";
 import { compose, map } from "@space48/json-pipe";
 
 type Options = {
@@ -19,14 +16,7 @@ type ListOptions = {
 };
 
 export class Magento2ResourceFactory {
-    static readonly context = {
-        insecure: Field.boolean(),
-    };
-
-    constructor(
-        private baseUrl: string,
-        private config: ConfigStore<ConfigSchema>
-    ) {}
+    constructor(private client: Magento2) {}
 
     create(uriTemplate: string, options: Options): ResourceConfig {
         const keySuffix = options.docKey ? '/{key}' : '';
@@ -48,7 +38,7 @@ export class Magento2ResourceFactory {
             docKey: options.docKey,
             endpoints,
             listDocKeys: options?.list && options.docKey && compose(
-                docKeys => this.getClient().search(UriTemplate.uri(uriTemplate, docKeys), {sortKey: options!.list!.sortKey}),
+                docKeys => this.client.search(UriTemplate.uri(uriTemplate, docKeys), {sortKey: options!.list!.sortKey}),
                 map(doc => doc[options.docKey!.name]),
             ),
         };
@@ -59,7 +49,7 @@ export class Magento2ResourceFactory {
             create: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.One,
-                fn: ({docKeys, data}) => this.getClient().post(UriTemplate.uri(uriTemplate, docKeys), data),
+                fn: ({docKeys, data}) => this.client.post(UriTemplate.uri(uriTemplate, docKeys), data),
             }
         };
     }
@@ -69,7 +59,7 @@ export class Magento2ResourceFactory {
             get: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: ({docKeys}) => this.getClient().get(UriTemplate.uri(uriTemplate, docKeys)),
+                fn: ({docKeys}) => this.client.get(UriTemplate.uri(uriTemplate, docKeys)),
             },
         };
     }
@@ -79,7 +69,7 @@ export class Magento2ResourceFactory {
             list: {
                 scope: EndpointScope.Resource,
                 cardinality: Cardinality.Many,
-                fn: ({docKeys}) => this.getClient().search(UriTemplate.uri(uriTemplate, docKeys), {sortKey}),
+                fn: ({docKeys}) => this.client.search(UriTemplate.uri(uriTemplate, docKeys), {sortKey}),
             },
         };
     }
@@ -89,7 +79,7 @@ export class Magento2ResourceFactory {
             update: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: ({docKeys, data}) => this.getClient().put(UriTemplate.uri(uriTemplate, docKeys), data),
+                fn: ({docKeys, data}) => this.client.put(UriTemplate.uri(uriTemplate, docKeys), data),
             },
         };
     }
@@ -99,18 +89,9 @@ export class Magento2ResourceFactory {
             delete: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: ({docKeys}) => this.getClient().delete(UriTemplate.uri(uriTemplate, docKeys)),
+                fn: ({docKeys}) => this.client.delete(UriTemplate.uri(uriTemplate, docKeys)),
             },
         };
-    }
-
-    private client: Magento2|undefined;
-
-    private getClient(): Magento2 {
-        if (!this.client) {
-            this.client = createClient(this.config, this.baseUrl);
-        }
-        return this.client;
     }
 }
 
