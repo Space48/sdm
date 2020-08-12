@@ -247,14 +247,14 @@ async function warnUserIfNecessary(connectorId: string, scope: ConnectorScope, c
         return;
     }
     const commandString = `${connectorId}:${scope.name} ${command.name} ${command.path}`;
-    process.stderr.write(chalk.redBright.bold(`\nWARNING: ${warning}\n\n`));
+    process.stderr.write(chalk.redBright.bold(`\nWARNING: ${warning} [${commandString}]\n\n`));
 
     const delaySecs = 15;
     const interactiveMode = process.stdin.isTTY;
     process.stderr.write(chalk.yellow(
         interactiveMode
-            ? `Press enter or wait ${delaySecs}s to proceed anyway. Press ctrl+c to abort.\n\n`
-            : `sdm will proceed with command in ${delaySecs}s. Press ctrl+c to abort.\n\n`
+            ? `Press enter or wait ${delaySecs}s to proceed with \`${command.name} ${command.path}\`. Press ctrl+c to abort.\n\n`
+            : `sdm will proceed with \`${command.name} ${command.path}\` in ${delaySecs}s. Press ctrl+c to abort.\n\n`
     ));
     const timeout = new Promise(resolve => setTimeout(resolve, delaySecs * 1000));
     await Promise.race([
