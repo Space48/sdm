@@ -4,6 +4,7 @@ import { Connector, ConnectorScope } from '../connector';
 import { BigCommerceResourceFactory } from './resource-factory';
 import { Cardinality, ResourceCollection, EndpointScope } from '../resource';
 import BigCommerce from './client';
+import { Field } from '../action';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -77,6 +78,29 @@ function getResources(client: BigCommerce): ResourceCollection {
 
         blogTags: resource.documentCollection('v2/blog/tag'),
         
+        carts: {
+            ...resource.documentCollection('v3/carts', {
+                create: true,
+                get: true,
+                update: true,
+                delete: true,
+            }),
+
+            docKey: {name: 'id', type: Field.string()},
+
+            children: {
+                items: {
+                    ...resource.documentCollection('v3/carts/{id}/items', {
+                        create: true,
+                        update: true,
+                        delete: true,
+                    }),
+
+                    docKey: {name: 'id', type: Field.string()},
+                },
+            },
+        },
+
         categories: {
             ...resource.documentCollection('v3/catalog/categories'),
 
@@ -198,6 +222,7 @@ function getResources(client: BigCommerce): ResourceCollection {
                         values: resource.documentCollection('v3/catalog/products/{id}/options/{id}/values'),
                     },
                 },
+                videos: resource.documentCollection('v3/catalog/products/{id}/videos'),
             },
         },
 
