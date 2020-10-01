@@ -42,7 +42,7 @@ class ShopifyScope implements ConnectorScope {
     async getWarningMessage() {
         try {
             const shop = await this.client.shop.get();
-            if (shop.password_enabled) {
+            if (!shop.password_enabled) {
                 return `Shop is LIVE at ${shop.domain}`;
             }
             if (shop.domain !== shop.myshopify_domain) {
