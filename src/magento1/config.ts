@@ -43,12 +43,8 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
             },
             fn: () => async ({params: {baseUrl, key, secret, insecure}}) => {
                 const credentials = {key, secret};
-                try {
-                    const accessToken = await getAccessToken(baseUrl, credentials)
-                    config.set(computeUrlForComparison(baseUrl), {baseUrl, credentials, accessToken, insecure});
-                } catch (e) {
-                    console.error(e);
-                }
+                const accessToken = await getAccessToken(baseUrl, credentials)
+                config.set(computeUrlForComparison(baseUrl), {baseUrl, credentials, accessToken, insecure});
             },
         }),
 
