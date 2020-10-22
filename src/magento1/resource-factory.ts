@@ -27,9 +27,9 @@ export class Magento1ResourceFactory {
                 {
                     docKey: {name: 'entity_id', type: Field.integer()},
                     endpoints: {
-                        list: {
-                            scope: EndpointScope.Document,
-                            cardinality: Cardinality.Many,
+                        get: {
+                            scope: EndpointScope.Resource,
+                            cardinality: Cardinality.One,
                             fn: ({docKeys: [entityId]}) => this.client.get(`${uri}/${entityId}/${name}`),
                         },
                     },
