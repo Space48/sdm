@@ -37,8 +37,9 @@ Adding a shop to sdm
 **IMPORTANT**
 -------------
 
-If you are migrating order data to a shopify shop then you need to ensure that when generating api credentials in the admin and setting read/write privileges 
+If you are migrating order data to a shopify shop then you need to ensure the following:
+- That when generating api credentials in the admin and setting read/write privileges 
 ***DO NOT*** check the Storefront API checkbox. Doing so will trigger order confirmation emails to be sent to **ALL** customers who have previously made an order on the original store. See [Shopify API Create Order docs](https://shopify.dev/docs/admin-api/rest/reference/orders/order?api[version]=2020-07#create-2020-07) for more information. 
-
+- In the store admin notification settings page `https://{store-name}.myshopify.com/admin/settings/notifications` ensure that the Staff Order Notifications are ***disabled***. If not the email address listed will recieve a notification for every order imported that include PII.
 
 [create-shopify-api-creds]: https://shopify.dev/tutorials/generate-api-credentials
