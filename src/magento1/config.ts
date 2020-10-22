@@ -1,23 +1,34 @@
 import { ConfigStore } from "../config-store";
 import Magento1, { Magento1ClientOptions } from "./client";
+import { Field, Action } from "../action";
 import { OAuth } from "oauth";
 import open from "open";
 import * as rl from "readline";
-import { Field, Action } from "../action";
+import { parse as parseUrl } from "url";
+import { Agent as HttpAgent } from "http";
+import { Agent as HttpsAgent } from "https";
+import { parse } from "url";
+
+export function getBaseUrls(config: ConfigStore<ConfigSchema>): string[] {
+    return Object.keys(config.getAll() || {}).map(computeUrlForComparison);
+}
 
 export type ConfigSchema = {[baseUrl: string]: Instance};
 
-export const createClient = (config: ConfigStore<ConfigSchema>, baseUrl: string, options: Omit<Magento1ClientOptions, 'auth'> = {}): Magento1 => {
-    const instanceConfig = config.get(baseUrl);
+export const createMagento1Client = (config: ConfigStore<ConfigSchema>, baseUrl: string): Magento1 => {
+    const urlExcludingScheme = computeUrlForComparison(baseUrl);
+    const instanceConfig = config.get(baseUrl)
+        || Object.values(config.getAll() || {}).find(candidate => urlExcludingScheme === computeUrlForComparison(candidate.baseUrl));
     if (!(instanceConfig?.credentials && instanceConfig?.accessToken)) {
         throw new Error(`Magento1: No access token available for instance ${baseUrl}.`);
     }
     const accessToken = instanceConfig.accessToken;
-    const oauth = getOauthClient(baseUrl, instanceConfig.credentials);
-    return new Magento1(baseUrl, {
-        ...options,
-        auth: (method, url) => oauth.authHeader(url, accessToken.token, accessToken.tokenSecret, method),
-    });
+    const oauth = getOauthClient(instanceConfig.baseUrl, instanceConfig.credentials);
+    return new Magento1(
+        instanceConfig.baseUrl,
+        getHttpAgent(instanceConfig.baseUrl, instanceConfig.insecure ?? false),
+        (method, url) => oauth.authHeader(url, accessToken.token, accessToken.tokenSecret, method),
+    );
 }
 
 export function getActions(config: ConfigStore<ConfigSchema>) {
@@ -28,11 +39,16 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
                 baseUrl: Field.string().required(),
                 key: Field.string().required(),
                 secret: Field.string().required(),
+                insecure: Field.boolean().optional(),
             },
-            fn: () => async ({params: {baseUrl, key, secret}}) => {
+            fn: () => async ({params: {baseUrl, key, secret, insecure}}) => {
                 const credentials = {key, secret};
-                const accessToken = await getAccessToken(baseUrl, credentials)
-                config.set(baseUrl, {baseUrl, credentials, accessToken});
+                try {
+                    const accessToken = await getAccessToken(baseUrl, credentials)
+                    config.set(computeUrlForComparison(baseUrl), {baseUrl, credentials, accessToken, insecure});
+                } catch (e) {
+                    console.error(e);
+                }
             },
         }),
 
@@ -41,7 +57,7 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({params: {baseUrl}}) => config.get(baseUrl) ?? null,
+            fn: () => async ({params: {baseUrl}}) => config.get(computeUrlForComparison(baseUrl)) ?? null,
         }),
 
         Action.source({
@@ -59,7 +75,10 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
             params: {
                 baseUrl: Field.string().required(),
             },
-            fn: () => async ({params: {baseUrl}}) => config.delete(baseUrl),
+            fn: () => async ({params: {baseUrl}}) => (
+                config.delete(baseUrl),
+                config.delete(computeUrlForComparison(baseUrl))
+            ),
         }),
     ];
 }
@@ -68,6 +87,7 @@ type Instance = {
     baseUrl: string,
     credentials?: Credentials,
     accessToken?: TokenPair,
+    insecure?: boolean,
 };
 
 type Credentials = {
@@ -93,6 +113,7 @@ function getOauthClient(baseUrl: string, credentials: Credentials): OAuth {
 }
 
 async function getAccessToken(baseUrl: string, credentials: Credentials): Promise<TokenPair> {
+    console.log({baseUrl})
     const oauth = getOauthClient(baseUrl, credentials);
     const {token, tokenSecret} = await new Promise<TokenPair>((resolve, reject) => {
         oauth.getOAuthRequestToken({oauth_callback: 'oob'}, (error, token, tokenSecret) => {
@@ -103,7 +124,8 @@ async function getAccessToken(baseUrl: string, credentials: Credentials): Promis
             }
         });
     });
-    await open(`${baseUrl}/admin/oAuth_authorize?oauth_token=${token}`);
+    console.log({token, tokenSecret});
+    await open(`${baseUrl}/admin/oauth_authorize?oauth_token=${token}`);
     const readLine = rl.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -119,4 +141,15 @@ async function getAccessToken(baseUrl: string, credentials: Credentials): Promis
             }
         });
     });
+}
+
+const computeUrlForComparison = (urlish: string) => {
+    const {host, path} = parseUrl(urlish);
+    return `${host || ''}${path}`.replace(/\/$/, '');
+}
+
+function getHttpAgent(baseUrl: string, insecure: boolean): HttpAgent {
+    return parse(baseUrl).protocol === 'https:'
+        ? new HttpsAgent({rejectUnauthorized: !insecure})
+        : new HttpAgent();
 }

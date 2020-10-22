@@ -1,5 +1,5 @@
 import fetch, { RequestInit } from "node-fetch";
-import { Agent } from "https";
+import { Agent } from "http";
 import { parse } from "url";
 import { stringify } from 'query-string'
 import { objectFromEntries, flatten } from "../util";
@@ -12,14 +12,11 @@ export type Magento1ClientOptions = {
 };
 
 export default class Magento1 {
-    private agent?: Agent;
-
     constructor(
         private baseUrl: string,
-        private options?: Magento1ClientOptions,
-    ) {
-        this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: !options?.insecure}) : undefined;
-    }
+        private agent: Agent,
+        private auth: AuthResolver,
+    ) {}
 
     async get<T>(uri: string, params?: QueryParams): Promise<T> {
         const paramsFlattened = params && flattenParams(params);
@@ -82,7 +79,7 @@ export default class Magento1 {
 
     private async fetch<T>(relativeUri: string, init?: RequestInit): Promise<T> {
         const url = `${this.baseUrl}/api/rest/${relativeUri}`;
-        const auth = this.options?.auth?.(init?.method || 'GET', url);
+        const auth = this.auth(init?.method || 'GET', url);
         const response = await fetch(url, this.init({auth, init}));
         if (!response.ok) {
             throw new Error(`${response.status} ${response.statusText}\n\n${await response.text()}`);
@@ -90,10 +87,10 @@ export default class Magento1 {
         return await response.json();
     }
 
-    private init({auth, init}: {auth?: string, init?: RequestInit}): RequestInit {
+    private init({auth, init}: {auth: string, init?: RequestInit}): RequestInit {
         const headers = {
             ...(init?.headers || {}),
-            ...(auth ? {Authorization: auth} : {}),
+            Authorization: auth,
             Accept: 'application/json',
         }
         return {

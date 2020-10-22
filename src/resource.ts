@@ -6,6 +6,33 @@ export type ResourceCollection = Record<string, ResourceConfig | Falsy>;
 
 export type ResourceConfig = SingletonResourceConfig | DocumentCollectionConfig<any>;
 
+export namespace ResourceConfig {
+    export function merge<T extends ResourceConfig>(config: T, update: Partial<T>): T {
+        const children = {...config.children} as ResourceCollection;
+        Object.entries(update.children ?? {}).forEach(([childName, childUpdate]) => {
+            if (!childUpdate) {
+                delete children[childName];
+            } else if (children[childName]) {
+                children[childName] = merge(
+                    children[childName] as ResourceConfig,
+                    childUpdate as ResourceConfig
+                );
+            } else {
+                children[childName] = childUpdate as ResourceConfig;
+            }
+        });
+        return {
+            ...config,
+            ...update,
+            endpoints: {
+                ...config.endpoints,
+                ...update.endpoints,
+            },
+            children,
+        };
+    }
+}
+
 export type SingletonResourceConfig = {
     docKey?: Falsy;
     listDocKeys?: Falsy;

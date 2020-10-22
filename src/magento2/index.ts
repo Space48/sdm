@@ -3,9 +3,7 @@ import { ConfigStore } from '../config-store';
 import { Field } from '../action';
 import { Magento2ResourceFactory } from './resource-factory';
 import { Connector, ConnectorScope } from '../connector';
-import { ResourceCollection, EndpointScope, Cardinality } from '../resource';
-import { compose, flatMap, map, mapAsync, batch, collectArray } from "@space48/json-pipe";
-import { flatten } from '../util';
+import { ResourceCollection } from '../resource';
 import Magento2, { SortKey } from './client';
 
 export type ConfigSchema = {
