@@ -39,11 +39,13 @@ export function getActions(config: ConfigStore<ConfigSchema>) {
                 baseUrl: Field.string().required(),
                 key: Field.string().required(),
                 secret: Field.string().required(),
-                insecure: Field.boolean().optional(),
+                insecure: Field.boolean().default(false),
+                token: Field.string().optional(),
+                tokenSecret: Field.string().optional(),
             },
-            fn: () => async ({params: {baseUrl, key, secret, insecure}}) => {
+            fn: () => async ({params: {baseUrl, key, secret, insecure, token, tokenSecret}}) => {
                 const credentials = {key, secret};
-                const accessToken = await getAccessToken(baseUrl, credentials)
+                const accessToken = token && tokenSecret ? {token, tokenSecret} : await getAccessToken(baseUrl, credentials);
                 config.set(computeUrlForComparison(baseUrl), {baseUrl, credentials, accessToken, insecure});
             },
         }),
