@@ -19,7 +19,7 @@ export class Magento1ResourceFactory {
                 map(doc => doc['entity_id']),
             ),
             endpoints: {
-                ...this.get(uri),
+                ...this.get(`${uri}/{entity_id}`),
                 ...this.list(uri),
             },
             children: objectFromEntries(children.map(name => [
@@ -43,8 +43,8 @@ export class Magento1ResourceFactory {
             docKey: {name: 'entity_id', type: Field.integer()},
             endpoints: {
                 ...this.create(uri),
-                ...this.update(uri),
-                ...this.delete(uri),
+                ...this.update(`${uri}/{entity_id}`),
+                ...this.delete(`${uri}/{entity_id}`),
             },
         };
     }
