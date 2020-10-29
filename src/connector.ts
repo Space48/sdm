@@ -11,7 +11,7 @@ export interface Connector {
 export interface ConnectorScope {
     name: string
     getWarningMessage(): Promise<string|undefined>
-    getResources(): ResourceCollection
+    getResources(): Promise<ResourceCollection>
 }
 
 export type ActionCollection = Action[] | {[namespace: string]: ActionCollection};

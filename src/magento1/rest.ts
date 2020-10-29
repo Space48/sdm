@@ -1,17 +1,31 @@
 import fetch, { RequestInit } from "node-fetch";
 import { Agent } from "http";
-import { parse } from "url";
 import { stringify } from 'query-string'
 import { objectFromEntries, flatten } from "../util";
+import open from "open";
+import { OAuth } from "oauth";
+import * as rl from "readline";
+import { InstanceConfig } from "./config";
+import { Agent as HttpAgent } from "http";
+import { Agent as HttpsAgent } from "https";
+import { parse } from "url";
+
+export function createMagento1RestClient(instanceConfig: InstanceConfig): Magento1RestClient|undefined {
+    if (!instanceConfig?.rest) {
+        return undefined;
+    }
+    const accessToken = instanceConfig.rest.accessToken;
+    const oauth = getOauthClient(instanceConfig.baseUrl, instanceConfig.rest.credentials);
+    return new Magento1RestClient(
+        instanceConfig.baseUrl,
+        getHttpAgent(instanceConfig.baseUrl, instanceConfig.insecure ?? false),
+        (method, url) => oauth.authHeader(url, accessToken.token, accessToken.tokenSecret, method),
+    );
+}
 
 type AuthResolver = (method: string, url: string) => string;
 
-export type Magento1ClientOptions = {
-    auth?: AuthResolver,
-    insecure?: boolean,
-};
-
-export default class Magento1 {
+export class Magento1RestClient {
     constructor(
         private baseUrl: string,
         private agent: Agent,
@@ -78,7 +92,7 @@ export default class Magento1 {
     }
 
     private async fetch<T>(relativeUri: string, init?: RequestInit): Promise<T> {
-        const url = `${this.baseUrl}/api/rest/${relativeUri}`;
+        const url = `${this.baseUrl.replace(/\/+$/, '')}/api/rest/${relativeUri}`;
         const auth = this.auth(init?.method || 'GET', url);
         const response = await fetch(url, this.init({auth, init}));
         if (!response.ok) {
@@ -135,3 +149,65 @@ function flattenParam(name: string, value: QueryParam): string[][] {
 
 type FilterCondition = 'eq' | 'gt' | 'in';
 type Filter = [string, FilterCondition, string|number|string[]|number[]];
+
+export interface RestConfig {
+    readonly credentials: RestCredentials
+    readonly accessToken: RestTokenPair
+}
+
+export interface RestCredentials {
+    readonly key: string
+    readonly secret: string
+}
+
+export interface RestTokenPair {
+    readonly token: string
+    readonly tokenSecret: string
+}
+
+export async function getAccessToken(baseUrl: string, credentials: RestCredentials): Promise<RestTokenPair> {
+    const oauth = getOauthClient(baseUrl, credentials);
+    const {token, tokenSecret} = await new Promise<RestTokenPair>((resolve, reject) => {
+        oauth.getOAuthRequestToken({oauth_callback: 'oob'}, (error, token, tokenSecret) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({token, tokenSecret});
+            }
+        });
+    });
+    await open(`${baseUrl}/admin/oauth_authorize?oauth_token=${token}`);
+    const readLine = rl.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+    const verifierCode = await new Promise<string>(resolve => readLine.question('Verifier code: ', resolve));
+    readLine.close();
+    return await new Promise<RestTokenPair>((resolve, reject) => {
+        oauth.getOAuthAccessToken(token, tokenSecret, verifierCode, (error, token, tokenSecret) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({token, tokenSecret});
+            }
+        });
+    });
+}
+
+function getHttpAgent(baseUrl: string, insecure: boolean): HttpAgent {
+    return parse(baseUrl).protocol === 'https:'
+        ? new HttpsAgent({rejectUnauthorized: !insecure})
+        : new HttpAgent();
+}
+
+function getOauthClient(baseUrl: string, credentials: RestCredentials): OAuth {
+    return new OAuth(
+        `${baseUrl}/oauth/initiate`,
+        `${baseUrl}/oauth/token`,
+        credentials.key,
+        credentials.secret,
+        '1.0', // not 1.0a as per Magento docs
+        null,
+        'HMAC-SHA1'
+    );
+}

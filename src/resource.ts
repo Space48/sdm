@@ -7,7 +7,11 @@ export type ResourceCollection = Record<string, ResourceConfig | Falsy>;
 export type ResourceConfig = SingletonResourceConfig | DocumentCollectionConfig<any>;
 
 export namespace ResourceConfig {
-    export function merge<T extends ResourceConfig>(config: T, update: Partial<T>): T {
+    export function merge(config: ResourceConfig, ...updates: (Partial<ResourceConfig>|Falsy)[]): ResourceConfig {
+        return updates.reduce((result: ResourceConfig, update) => update ? merge2(result, update) : result, config);
+    }
+
+    function merge2<T extends ResourceConfig>(config: T, update: Partial<T>): T {
         const children = {...config.children} as ResourceCollection;
         Object.entries(update.children ?? {}).forEach(([childName, childUpdate]) => {
             if (!childUpdate) {

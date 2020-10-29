@@ -2,8 +2,11 @@ import * as config from './config';
 import { ConfigStore } from '../config-store';
 import { Magento1ResourceFactory } from './resource-factory';
 import { Connector, ConnectorScope } from '../connector';
-import { ResourceCollection } from '../resource';
-import Magento1 from './client';
+import { Cardinality, EndpointScope, ResourceCollection, ResourceConfig } from '../resource';
+import { Field } from '../action';
+import { compose, flatMapAsync, map, batch, flatMap, distinct } from '@space48/json-pipe';
+import { createMagento1RestClient } from './rest';
+import { createMagento1SoapClient } from './soap';
 
 export type ConfigSchema = {
     credentials: config.ConfigSchema,
@@ -45,21 +48,175 @@ class Magento1Scope implements ConnectorScope {
         return undefined;
     }
 
-    getResources() {
-        const client = config.createMagento1Client(this.configStore, this.baseUrl);
-        return getResources(client);
+    async getResources(): Promise<ResourceCollection> {
+        const instanceConfig = config.getInstanceConfig(this.configStore, this.baseUrl);
+        const restClient = instanceConfig && createMagento1RestClient(instanceConfig);
+        const restResource = restClient && new Magento1ResourceFactory(restClient);
+        const soapClient = instanceConfig && createMagento1SoapClient(instanceConfig);
+    
+        return {
+            categories: soapClient && {
+                docKey: {name: 'entity_id', type: Field.integer()},
+                listDocKeys: async function* () {
+                    function* getCategoryIds(category: any): Iterable<any> {
+                        const {category_id, children} = category;
+                        yield category_id;
+                        for (const child of children) {
+                            yield* getCategoryIds(child);
+                        }
+                    }
+                    const root = await soapClient('catalogCategoryTree').then(result => result.tree);
+                    yield* getCategoryIds(root);
+                },
+                endpoints: {
+                    get: {
+                        scope: EndpointScope.Document,
+                        cardinality: Cardinality.One,
+                        fn: ({docKeys: [categoryId]}) => (
+                            soapClient('catalogCategoryInfo', {categoryId, storeView: 'default'})
+                                .then(result => result.info)
+                        ),
+                    },
+                    list: {
+                        scope: EndpointScope.Resource,
+                        cardinality: Cardinality.Many,
+                        fn: async function* () {
+                            function* getCategories(category: any): Iterable<any> {
+                                const {children, ...rest} = category;
+                                yield rest;
+                                for (const child of children) {
+                                    yield* getCategories(child);
+                                }
+                            }
+                            const root = await soapClient('catalogCategoryTree').then(result => result.tree);
+                            yield* getCategories(root);
+                        },
+                    },
+                },
+            },
+
+            categoryTree: soapClient && {
+                docKey: {name: 'entity_id', type: Field.integer()},
+                endpoints: {
+                    get: {
+                        scope: EndpointScope.Resource,
+                        cardinality: Cardinality.One,
+                        fn: () => (
+                            soapClient('catalogCategoryTree').then(result => result.tree)
+                        ),
+                    },
+                },
+            },
+
+            customers: ResourceConfig.merge(
+                {
+                    docKey: {name: 'entity_id', type: Field.integer()},
+                },
+                restResource?.crud('customers', ['addresses']),
+            ),
+    
+            orders: restResource?.read('orders', ['addresses', 'comments', 'items']),
+    
+            products: ResourceConfig.merge(
+                {
+                    docKey: {name: 'entity_id', type: Field.integer()},
+                },
+                restResource?.crud('products', ['categories', 'images', 'websites']),
+                soapClient && {
+                    children: {
+                        links: {
+                            docKey: {name: 'type', type: Field.string()},
+                            endpoints: {
+                                get: {
+                                    scope: EndpointScope.Document,
+                                    cardinality: Cardinality.One,
+                                    fn: ({docKeys: [product, type]}) => soapClient('catalogProductLinkList', {product, type}).then(result => result.result),
+                                },
+                            },
+                        },
+                    },
+                },
+            ),
+
+            productAttributes: soapClient && {
+                docKey: {name: 'attribute_id', type: Field.integer()},
+                listDocKeys: compose(
+                    async function* () {
+                        const result = await soapClient('catalogProductAttributeSetList');
+                        yield* result?.result ?? [];
+                    },
+                    map(attributeSet => attributeSet.set_id as number),
+                    flatMapAsync(async function* (setId) {
+                        const result = await soapClient('catalogProductAttributeList', {setId});
+                        yield* result?.result ?? [];
+                    }),
+                    map(attribute => attribute.attribute_id),
+                    batch(Number.MAX_SAFE_INTEGER),
+                    flatMap(attributes => attributes.sort()),
+                    distinct(),
+                ),
+                endpoints: {
+                    get: {
+                        scope: EndpointScope.Resource,
+                        cardinality: Cardinality.One,
+                        fn: ({docKeys: [attributeId]}) => (
+                            soapClient('catalogProductAttributeInfo', {attribute: attributeId}).then(result => result.result)
+                        ),
+                    },
+                    list: {
+                        scope: EndpointScope.Resource,
+                        cardinality: Cardinality.Many,
+                        fn: compose(
+                            async function* () {
+                                const result = await soapClient('catalogProductAttributeSetList');
+                                yield* result?.result ?? [];
+                            },
+                            map(attributeSet => attributeSet.set_id as number),
+                            flatMapAsync(async function* (setId) {
+                                const result = await soapClient('catalogProductAttributeList', {setId});
+                                yield* result?.result ?? [];
+                            }),
+                            batch(Number.MAX_SAFE_INTEGER),
+                            flatMap(attributes => attributes.sort((attr1, attr2) => attr1.attribute_id - attr2.attribute_id)),
+                            distinct((attr1, attr2) => attr1.attribute_id === attr2.attribute_id),
+                        ),
+                    },
+                },
+            },
+
+            productAttributeSets: soapClient && {
+                docKey: {name: 'set_id', type: Field.integer()},
+                listDocKeys: async function* () {
+                    const result = await soapClient('catalogProductAttributeSetList');
+                    const attributeSets: any[] = result?.result ?? [];
+                    yield* attributeSets.map(set => set.set_id);
+                },
+                endpoints: {
+                    list: {
+                        scope: EndpointScope.Resource,
+                        cardinality: Cardinality.Many,
+                        fn: async function* () {
+                            const result = await soapClient('catalogProductAttributeSetList');
+                            yield* result?.result ?? [];
+                        }
+                    },
+                },
+                children: {
+                    attributes: {
+                        docKey: {name: 'attribute_id', type: Field.integer()},
+                        endpoints: {
+                            list: {
+                                scope: EndpointScope.Resource,
+                                cardinality: Cardinality.Many,
+                                fn: async function* ({docKeys: [setId]}) {
+                                    const result = await soapClient('catalogProductAttributeList', {setId});
+                                    yield* result?.result ?? [];
+                                }
+                            },
+                        },
+                    },
+                },
+            },
+        };
     }
-}
-
-function getResources(client: Magento1): ResourceCollection {
-    const resource = new Magento1ResourceFactory(client);
-
-    return {
-        customers: resource.crud('customers', ['addresses']),
-
-        // order endpoints are untested
-        orders: resource.read('orders', ['addresses', 'comments', 'items']),
-
-        products: resource.crud('products', ['categories', 'images', 'websites']),
-    };
 }

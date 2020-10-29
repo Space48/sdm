@@ -56,7 +56,7 @@ class BigCommerceScope implements ConnectorScope {
         }
     }
 
-    getResources() {
+    async getResources() {
         return getResources(this.client);
     }
 

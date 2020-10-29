@@ -1,11 +1,11 @@
-import Magento1 from "./client";
+import { Magento1RestClient } from "./rest";
 import { ResourceConfig, EndpointScope, Cardinality } from "../resource";
 import { Field } from '../action';
 import { objectFromEntries } from "../util";
 import { compose, map } from "@space48/json-pipe";
 
 export class Magento1ResourceFactory {
-    constructor(private client: Magento1) {}
+    constructor(private client: Magento1RestClient) {}
 
     crud(uri: string, children: string[] = []): ResourceConfig {
         return ResourceConfig.merge(this.read(uri, children), this.write(uri));

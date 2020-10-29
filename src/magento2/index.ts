@@ -46,7 +46,7 @@ class Magento2Scope implements ConnectorScope {
         return undefined;
     }
 
-    getResources() {
+    async getResources() {
         const client = config.createMagentoClient(this.configStore, this.baseUrl);
         return getResources(client);
     }

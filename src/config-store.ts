@@ -17,9 +17,10 @@ export class ConfigStore<T extends Record<string, any>> {
         return this.config.get(absoluteKey);
     }
 
-    set<K extends keyof T>(key: K, value: T[K]) {
+    set<K extends keyof T>(key: K, value: T[K]): this {
         const absoluteKey = computeAbsoluteKey(this.context.concat(key as string));
-        return this.config.set(absoluteKey, value);
+        this.config.set(absoluteKey, value);
+        return this;
     }
 
     has<K extends keyof T>(key: K): boolean {
@@ -27,18 +28,20 @@ export class ConfigStore<T extends Record<string, any>> {
         return this.config.has(absoluteKey);
     }
 
-    delete<K extends keyof T>(key: K): void {
+    delete<K extends keyof T>(key: K): this {
         const absoluteKey = computeAbsoluteKey(this.context.concat(key as string));
         this.config.delete(absoluteKey);
+        return this;
     }
 
-    clear(): void {
+    clear(): this {
         if (this.context.length) {
             const absoluteKey = computeAbsoluteKey(this.context);
             this.config.delete(absoluteKey);
         } else {
             this.config.clear();
         }
+        return this;
     }
 
     select<K extends keyof SubConfigs<T>>(key: K): ConfigStore<T[K]> {

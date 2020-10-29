@@ -35,7 +35,7 @@ function main() {
 async function runHelpMode() {
     const scope = await resolveScope(argsExcludingFlags[1], true);
     const [connectorId, connectorScope] = scope.split(':', 2);
-    const resources = connectors[connectorId].getScope(connectorScope)!.getResources();
+    const resources = await connectors[connectorId].getScope(connectorScope)!.getResources();
     const availableCommands = getAvailableCommands(resources);
     process.stderr.write(explainCommands(availableCommands, `sdm ${scope}`));
     process.exit(0);
@@ -45,7 +45,7 @@ async function runNonInteractiveMode() {
     const scope = await resolveScope(argsExcludingFlags[0], false);
     const [connectorId, connectorScopeName] = scope.split(':', 2);
     const connectorScope = connectors[connectorId].getScope(connectorScopeName)!;
-    const resources = connectorScope.getResources();
+    const resources = await connectorScope.getResources();
     const command = {name: argsExcludingFlags[1], path: argsExcludingFlags[2]};
     await warnUserIfNecessary(connectorId, connectorScope, command);
     try {
@@ -65,7 +65,7 @@ async function runInteractiveMode() {
     const scope = await resolveScope(argsExcludingFlags[0], true);
     const [connectorId, connectorScopeName] = scope.split(':', 2);
     const connectorScope = connectors[connectorId].getScope(connectorScopeName)!;
-    const resources = connectorScope.getResources();
+    const resources = await connectorScope.getResources();
     const availableCommands = getAvailableCommands(resources);
     while (true) {
         const command = await askForCommand(scope, availableCommands);
