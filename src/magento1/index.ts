@@ -61,11 +61,11 @@ class Magento1Scope implements ConnectorScope {
                     function* getCategoryIds(category: any): Iterable<any> {
                         const {category_id, children} = category;
                         yield category_id;
-                        for (const child of children) {
+                        for (const child of children ?? []) {
                             yield* getCategoryIds(child);
                         }
                     }
-                    const root = await soapClient('catalogCategoryTree').then(result => result.tree);
+                    const root = await soapClient('catalogCategoryTree');
                     yield* getCategoryIds(root);
                 },
                 endpoints: {
@@ -74,7 +74,6 @@ class Magento1Scope implements ConnectorScope {
                         cardinality: Cardinality.One,
                         fn: ({docKeys: [categoryId]}) => (
                             soapClient('catalogCategoryInfo', {categoryId, storeView: 'default'})
-                                .then(result => result.info)
                         ),
                     },
                     list: {
@@ -84,11 +83,11 @@ class Magento1Scope implements ConnectorScope {
                             function* getCategories(category: any): Iterable<any> {
                                 const {children, ...rest} = category;
                                 yield rest;
-                                for (const child of children) {
+                                for (const child of children ?? []) {
                                     yield* getCategories(child);
                                 }
                             }
-                            const root = await soapClient('catalogCategoryTree').then(result => result.tree);
+                            const root = await soapClient('catalogCategoryTree');
                             yield* getCategories(root);
                         },
                     },
@@ -102,7 +101,7 @@ class Magento1Scope implements ConnectorScope {
                         scope: EndpointScope.Resource,
                         cardinality: Cardinality.One,
                         fn: () => (
-                            soapClient('catalogCategoryTree').then(result => result.tree)
+                            soapClient('catalogCategoryTree')
                         ),
                     },
                 },
@@ -130,7 +129,7 @@ class Magento1Scope implements ConnectorScope {
                                 get: {
                                     scope: EndpointScope.Document,
                                     cardinality: Cardinality.One,
-                                    fn: ({docKeys: [product, type]}) => soapClient('catalogProductLinkList', {product, type}).then(result => result.result),
+                                    fn: ({docKeys: [product, type]}) => soapClient('catalogProductLinkList', {product, type}),
                                 },
                             },
                         },
@@ -160,7 +159,7 @@ class Magento1Scope implements ConnectorScope {
                         scope: EndpointScope.Resource,
                         cardinality: Cardinality.One,
                         fn: ({docKeys: [attributeId]}) => (
-                            soapClient('catalogProductAttributeInfo', {attribute: attributeId}).then(result => result.result)
+                            soapClient('catalogProductAttributeInfo', {attribute: attributeId})
                         ),
                     },
                     list: {

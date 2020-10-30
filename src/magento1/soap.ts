@@ -2,6 +2,12 @@ import { createClientAsync } from "soap";
 import request from "request";
 import { mapProperties } from "../util";
 import { InstanceConfig } from "./config";
+import { exit } from "process";
+
+interface LoginResult {
+    sessionId: string
+    wsiCompliance: boolean
+}
 
 export function createMagento1SoapClient(instanceConfig: InstanceConfig): Magento1SoapClient|undefined {
     if (!instanceConfig?.soap) {
@@ -18,30 +24,46 @@ export function createMagento1SoapClient(instanceConfig: InstanceConfig): Magent
             wsdl_options: requestOptions,
         },
     );
-    const sessionIdPromise = clientPromise
+    const loginResult = clientPromise
         .then(client => client.loginAsync(instanceConfig.soap!.credentials, requestOptions))
-        .then(([result]: any) => extractValueFromSoapResult(result.loginReturn));
+        .then(([result]: any): LoginResult => (
+            result.result
+                ? {wsiCompliance: true, sessionId: result.result}
+                : {wsiCompliance: false, sessionId: extractNonWsiValue(result.loginReturn)}
+        ));
     return async (method, args={}) => {
         const client = await clientPromise;
-        const sessionId = await sessionIdPromise;
+        const {sessionId, wsiCompliance} = await loginResult;
         const [result] = await client[`${method}Async`]({sessionId, ...args}, requestOptions);
-        return extractValueFromSoapResult(result);
+        return wsiCompliance
+            ? extractWsiValue(result.result)
+            : extractNonWsiValue(Object.values(result)[0]);
     };
 }
 
-function extractValueFromSoapResult(result: any): any {
+function extractWsiValue(result: any): any {
+    if (result === null || typeof result !== 'object') {
+        return result;
+    }
+    if (result.complexObjectArray) {
+        return result.complexObjectArray.map(extractWsiValue);
+    }
+    return mapProperties(result, extractWsiValue);
+}
+
+function extractNonWsiValue(result: any): any {
     if (result.$value !== undefined) {
-        return extractValueFromSoapResult(result.$value)
+        return extractNonWsiValue(result.$value)
     }
     if (result.attributes?.['SOAP-ENC:arrayType']) {
         const items = !result.item ? [] : Array.isArray(result.item) ? result.item : [result.item];
-        return items.map(extractValueFromSoapResult);
+        return items.map(extractNonWsiValue);
     }
     if (typeof result === 'object') {
         if (result === null) {
             return null;
         }
-        const mapped = mapProperties(result, extractValueFromSoapResult);
+        const mapped = mapProperties(result, extractNonWsiValue);
         delete mapped.attributes;
         return mapped;
     }
