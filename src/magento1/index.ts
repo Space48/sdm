@@ -142,12 +142,12 @@ class Magento1Scope implements ConnectorScope {
                 listDocKeys: compose(
                     async function* () {
                         const result = await soapClient('catalogProductAttributeSetList');
-                        yield* result?.result ?? [];
+                        yield* result ?? [];
                     },
                     map(attributeSet => attributeSet.set_id as number),
                     flatMapAsync(async function* (setId) {
                         const result = await soapClient('catalogProductAttributeList', {setId});
-                        yield* result?.result ?? [];
+                        yield* result ?? [];
                     }),
                     map(attribute => attribute.attribute_id),
                     batch(Number.MAX_SAFE_INTEGER),
@@ -156,7 +156,7 @@ class Magento1Scope implements ConnectorScope {
                 ),
                 endpoints: {
                     get: {
-                        scope: EndpointScope.Resource,
+                        scope: EndpointScope.Document,
                         cardinality: Cardinality.One,
                         fn: ({docKeys: [attributeId]}) => (
                             soapClient('catalogProductAttributeInfo', {attribute: attributeId})
@@ -168,12 +168,12 @@ class Magento1Scope implements ConnectorScope {
                         fn: compose(
                             async function* () {
                                 const result = await soapClient('catalogProductAttributeSetList');
-                                yield* result?.result ?? [];
+                                yield* result ?? [];
                             },
                             map(attributeSet => attributeSet.set_id as number),
                             flatMapAsync(async function* (setId) {
                                 const result = await soapClient('catalogProductAttributeList', {setId});
-                                yield* result?.result ?? [];
+                                yield* result ?? [];
                             }),
                             batch(Number.MAX_SAFE_INTEGER),
                             flatMap(attributes => attributes.sort((attr1, attr2) => attr1.attribute_id - attr2.attribute_id)),
@@ -187,7 +187,7 @@ class Magento1Scope implements ConnectorScope {
                 docKey: {name: 'set_id', type: Field.integer()},
                 listDocKeys: async function* () {
                     const result = await soapClient('catalogProductAttributeSetList');
-                    const attributeSets: any[] = result?.result ?? [];
+                    const attributeSets: any[] = result ?? [];
                     yield* attributeSets.map(set => set.set_id);
                 },
                 endpoints: {
@@ -196,7 +196,7 @@ class Magento1Scope implements ConnectorScope {
                         cardinality: Cardinality.Many,
                         fn: async function* () {
                             const result = await soapClient('catalogProductAttributeSetList');
-                            yield* result?.result ?? [];
+                            yield* result ?? [];
                         }
                     },
                 },
@@ -209,7 +209,7 @@ class Magento1Scope implements ConnectorScope {
                                 cardinality: Cardinality.Many,
                                 fn: async function* ({docKeys: [setId]}) {
                                     const result = await soapClient('catalogProductAttributeList', {setId});
-                                    yield* result?.result ?? [];
+                                    yield* result ?? [];
                                 }
                             },
                         },
