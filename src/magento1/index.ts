@@ -48,7 +48,7 @@ class Magento1Scope implements ConnectorScope {
         return undefined;
     }
 
-    async getResources(): Promise<ResourceCollection> {
+    getResources(): ResourceCollection {
         const instanceConfig = config.getInstanceConfig(this.configStore, this.baseUrl);
         const restClient = instanceConfig && createMagento1RestClient(instanceConfig);
         const restResource = restClient && new Magento1ResourceFactory(restClient);
@@ -107,12 +107,7 @@ class Magento1Scope implements ConnectorScope {
                 },
             },
 
-            customers: ResourceConfig.merge(
-                {
-                    docKey: {name: 'entity_id', type: Field.integer()},
-                },
-                restResource?.crud('customers', ['addresses']),
-            ),
+            customers: restResource?.crud('customers', ['addresses']),
     
             orders: restResource?.read('orders', ['addresses', 'comments', 'items']),
     

@@ -53,7 +53,7 @@ class ShopifyScope implements ConnectorScope {
         }
     }
 
-    async getResources() {
+    getResources() {
         return getResources(buildConfig(), this.client);
     }
 
