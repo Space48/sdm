@@ -48,7 +48,10 @@ class Shop {
                 docKey: {name: 'id', type: Field.integer()},
                 listDocKeys: resource.clientKey && resource.endpoints?.list && compose(
                     keys => ({docKeys: keys}),
-                    this.flatMap((client, {docKeys}) => (client[resource.clientKey!] as any).list(...docKeys)),
+                    this.flatMap(
+                        resource.endpoints.list.params,
+                        (client, {docKeys, data}) => (client[resource.clientKey!] as any).list(...docKeys, data)
+                    ),
                     map(doc => doc.id)
                 ),
                 children: this.children(resource),
@@ -67,17 +70,19 @@ class Shop {
                         return {
                             ...config,
                             cardinality: Cardinality.One,
-                            fn: this.map((client, {docKeys, data}) => (
-                                (client[resource.clientKey!] as any)[name](...docKeys, {...config.params, ...data})
-                            ))
+                            fn: this.map(
+                                config.params,
+                                (client, {docKeys, data}) => (client[resource.clientKey!] as any)[name](...docKeys, data)
+                            ),
                         };
                     case Cardinality.Many:
                         return {
                             ...config,
                             cardinality: Cardinality.Many,
-                            fn: this.flatMap((client, {docKeys, data}) => (
-                                (client[resource.clientKey!] as any)[name](...docKeys, {...config.params, ...data})
-                            ))
+                            fn: this.flatMap(
+                                config.params,
+                                (client, {docKeys, data}) => (client[resource.clientKey!] as any)[name](...docKeys, data)
+                            ),
                         };
                 }
             }),
@@ -95,20 +100,20 @@ class Shop {
         return mapProperties(resource.children || {}, child => this.resource(child));
     }
 
-    private map(fn: (client: Shopify, input: EndpointPayload) => Promise<any>): MapEndpointFn {
+    private map(params: any, fn: (client: Shopify, input: EndpointPayload) => Promise<any>): MapEndpointFn {
         const that = this;
-        return input => fn(that.client, input);
+        return input => fn(that.client, {...params, ...input});
     }
 
-    private flatMap(fn: (client: Shopify, input: EndpointPayload) => Promise<any>): FlatMapEndpointFn {
+    private flatMap(params: any, fn: (client: Shopify, input: EndpointPayload) => Promise<any>): FlatMapEndpointFn {
         const that = this;
         return async function* ({docKeys, data, ...rest}) {
-            let params = { ...data, limit: 250 };
+            let _params = { ...params, ...data, limit: 250 };
             do {
-                const result = await fn(that.client, {docKeys, data: params, ...rest});
+                const result = await fn(that.client, {docKeys, data: _params, ...rest});
                 yield* result;
-                params = (result as any).nextPageParameters;
-            } while (params);
+                _params = (result as any).nextPageParameters;
+            } while (_params);
         };
     }
 }
