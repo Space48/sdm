@@ -18,11 +18,13 @@ export type ShopifyCustomEndpoint = MapEndpoint | FlatMapEndpoint;
 type MapEndpoint = {
     scope: EndpointScope,
     cardinality: Cardinality.One,
+    params?: Record<string, string>,
     fn: (shopify: Shopify, input: EndpointPayload) => Promise<any>,
 };
 type FlatMapEndpoint = {
     scope: EndpointScope,
     cardinality: Cardinality.Many,
+    params?: Record<string, string>,
     fn: (shopify: Shopify, input: EndpointPayload) => AsyncIterable<any>,
 };
 
@@ -65,13 +67,17 @@ class Shop {
                         return {
                             ...config,
                             cardinality: Cardinality.One,
-                            fn: this.map((client, {docKeys, data}) => (client[resource.clientKey!] as any)[name](...docKeys, data))
+                            fn: this.map((client, {docKeys, data}) => (
+                                (client[resource.clientKey!] as any)[name](...docKeys, {...config.params, ...data})
+                            ))
                         };
                     case Cardinality.Many:
                         return {
                             ...config,
                             cardinality: Cardinality.Many,
-                            fn: this.flatMap((client, {docKeys, data}) => (client[resource.clientKey!] as any)[name](...docKeys, data))
+                            fn: this.flatMap((client, {docKeys, data}) => (
+                                (client[resource.clientKey!] as any)[name](...docKeys, {...config.params, ...data})
+                            ))
                         };
                 }
             }),
@@ -96,13 +102,13 @@ class Shop {
 
     private flatMap(fn: (client: Shopify, input: EndpointPayload) => Promise<any>): FlatMapEndpointFn {
         const that = this;
-        return async function* ({docKeys, data: _, ...rest}) {
-            let _params = { limit: 250 };
+        return async function* ({docKeys, data, ...rest}) {
+            let params = { ...data, limit: 250 };
             do {
-                const result = await fn(that.client, {docKeys, data: _params, ...rest});
+                const result = await fn(that.client, {docKeys, data: params, ...rest});
                 yield* result;
-                _params = (result as any).nextPageParameters;
-            } while (_params);
+                params = (result as any).nextPageParameters;
+            } while (params);
         };
     }
 }

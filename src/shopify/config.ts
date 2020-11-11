@@ -16,7 +16,7 @@ export function createShopifyClient(config: ConfigStore<ConfigSchema>, shopName:
     if (!credentials) {
         throw new Error(`Shopify: No credentials available for shop ${shopName}.`);
     }
-    const client = new Shopify({...credentials, apiVersion: '2019-10'});
+    const client = new Shopify({...credentials, apiVersion: '2020-10'});
     const requestFn = (client as any).request.bind(client);
     (client as any).request = backoff(requestFn);
     return client;

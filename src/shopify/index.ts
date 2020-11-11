@@ -201,11 +201,16 @@ const resourceConfigs: ResourceConfigs = {
                 scope: EndpointScope.Document,
                 cardinality: Cardinality.One,
             },
+            list: {
+                scope: EndpointScope.Resource,
+                cardinality: Cardinality.Many,
+                params: {status: "any"},
+            },
             open: {
                 scope: EndpointScope.Document,
                 cardinality: Cardinality.One,
             },
-        }
+        },
     },
     product: {
         endpoints: {},
