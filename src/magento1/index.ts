@@ -118,6 +118,15 @@ class Magento1Scope implements ConnectorScope {
                 restResource?.crud('products', ['categories', 'images', 'websites']),
                 soapClient && {
                     children: {
+                        info: {
+                            endpoints: {
+                                get: {
+                                    scope: EndpointScope.Resource,
+                                    cardinality: Cardinality.One,
+                                    fn: ({docKeys: [productId]}) => soapClient('catalogProductInfo', {productId}),
+                                },
+                            },
+                        },
                         links: {
                             docKey: {name: 'type', type: Field.string()},
                             endpoints: {
@@ -125,6 +134,15 @@ class Magento1Scope implements ConnectorScope {
                                     scope: EndpointScope.Document,
                                     cardinality: Cardinality.One,
                                     fn: ({docKeys: [product, type]}) => soapClient('catalogProductLinkList', {product, type}),
+                                },
+                            },
+                        },
+                        media: {
+                            endpoints: {
+                                get: {
+                                    scope: EndpointScope.Resource,
+                                    cardinality: Cardinality.One,
+                                    fn: ({docKeys: [productId]}) => soapClient('catalogProductAttributeMediaList', {productId}),
                                 },
                             },
                         },
