@@ -107,7 +107,34 @@ class Magento1Scope implements ConnectorScope {
                 },
             },
 
-            customers: restResource?.crud('customers', ['addresses']),
+            customers: ResourceConfig.merge(
+                {
+                    docKey: {name: 'entity_id', type: Field.integer()},
+                },
+                restResource?.crud('customers', ['addresses']),
+                soapClient && {
+                    children: {
+                        addresses: {
+                            endpoints: {
+                                get: {
+                                    scope: EndpointScope.Resource,
+                                    cardinality: Cardinality.One,
+                                    fn: ({docKeys: [customerId]}) => soapClient('customerAddressList', {customerId}),
+                                },
+                            },
+                        },
+                        info: {
+                            endpoints: {
+                                get: {
+                                    scope: EndpointScope.Resource,
+                                    cardinality: Cardinality.One,
+                                    fn: ({docKeys: [customerId]}) => soapClient('customerCustomerInfo', {customerId}),
+                                },
+                            },
+                        },
+                    },
+                },
+            ),
     
             orders: restResource?.read('orders', ['addresses', 'comments', 'items']),
     
