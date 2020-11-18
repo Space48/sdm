@@ -196,8 +196,13 @@ export async function getAccessToken(baseUrl: string, credentials: RestCredentia
 
 function getHttpAgent(baseUrl: string, insecure: boolean): HttpAgent {
     return parse(baseUrl).protocol === 'https:'
-        ? new HttpsAgent({rejectUnauthorized: !insecure})
-        : new HttpAgent();
+        ? new HttpsAgent({
+            keepAlive: true,
+            rejectUnauthorized: !insecure,
+        })
+        : new HttpAgent({
+            keepAlive: true,
+        });
 }
 
 function getOauthClient(baseUrl: string, credentials: RestCredentials): OAuth {

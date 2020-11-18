@@ -14,8 +14,13 @@ export function createMagento1SoapClient(instanceConfig: InstanceConfig): Magent
         return undefined;
     }
     const requestOptions: request.CoreOptions = {
-        rejectUnauthorized: instanceConfig.insecure ? false : true,
-        strictSSL: instanceConfig.insecure ? false : true,
+        agentOptions: {
+            keepAlive: true,
+            rejectUnauthorized: instanceConfig.insecure ? false : true,
+            maxSockets: 3,
+        },
+        //rejectUnauthorized: instanceConfig.insecure ? false : true,
+        //strictSSL: instanceConfig.insecure ? false : true,
     };
     const clientPromise = createClientAsync(
         `${instanceConfig.baseUrl}/api/v2_soap?wsdl=1`,
