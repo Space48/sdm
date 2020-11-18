@@ -114,7 +114,7 @@ class Magento1Scope implements ConnectorScope {
                 restResource?.crud('customers', ['addresses']),
                 soapClient && {
                     children: {
-                        addresses: {
+                        addressesSoap: {
                             endpoints: {
                                 get: {
                                     scope: EndpointScope.Resource,
