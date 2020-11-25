@@ -88,7 +88,7 @@ export default class BigCommerce {
                 message: `${response.status} ${response.statusText}`,
                 detail: await response.text()
                     .then(JSON.parse)
-                    .then(data => data?.errors ?? data)
+                    .then(data => (data.errors && JSON.stringify(data.errors) !== '{}' ? data.errors : data.title) || data)
                     .catch(),
             });
         }

@@ -123,31 +123,11 @@ function getResources(client: BigCommerce): ResourceCollection {
 
         channels: resource.documentCollection('v3/channel', {create: true, update: true, list: true, listDocKeys: true, get: true}),
 
-        customers: resource.documentCollection('v3/customers'),
+        customers: resource.documentCollectionWithBatchEndpoints('v3/customers'),
 
-        customerAddresses: resource.documentCollection('v3/customers/addresses'),
+        customerAddresses: resource.documentCollectionWithBatchEndpoints('v3/customers/addresses'),
 
-        customerAttributes: resource.documentCollection('v3/customers/attributes', {
-            list: true,
-
-            customEndpoints: {
-                create: {
-                    scope: EndpointScope.Resource,
-                    cardinality: Cardinality.One,
-                    fn: ({data}) => client.post('v3/customers/attributes', [data]).then(results => results[0]),
-                },
-                delete: {
-                    scope: EndpointScope.Document,
-                    cardinality: Cardinality.One,
-                    fn: ({docKeys: [id]}) => client.delete('v3/customers/attributes', {'id:in': id}),
-                },
-                update: {
-                    scope: EndpointScope.Document,
-                    cardinality: Cardinality.One,
-                    fn: ({docKeys: [id], data}) => client.put('v3/customers/attributes', [{...data, id}]).then(result => result[0]),
-                },
-            },
-
+        customerAttributes: resource.documentCollectionWithBatchEndpoints('v3/customers/attributes', {
             children: {
                 values: {
                     endpoints: {

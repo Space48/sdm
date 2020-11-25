@@ -1,7 +1,8 @@
 import BigCommerce from "./client";
 import { map, compose } from "@space48/json-pipe";
-import { ResourceConfig, DocumentCollectionConfig, SingletonResourceConfig, EndpointScope, Cardinality, EndpointConfig, ResourceCollection } from "../resource";
+import { ResourceConfig, DocumentCollectionConfig, SingletonResourceConfig, EndpointScope, Cardinality, EndpointConfig, ResourceCollection, MapEndpointFn } from "../resource";
 import { Field, FieldType } from "../action";
+import { mapProperties } from "../util";
 
 type ReadOptions<Key extends FieldType = any> = {
     get?: boolean,
@@ -61,14 +62,69 @@ export class BigCommerceResourceFactory {
         };
     }
 
-    private read(scope: EndpointScope, uriTemplate: string, options: ReadOptions): ResourceConfig['endpoints'] {
+    documentCollectionWithBatchEndpoints(uriTemplate: string, options: ReadOptions & WriteOptions = defaultOptions): DocumentCollectionConfig<any> {
+        const readConfig = this.documentCollection(uriTemplate, {list: options.list, listDocKeys: options.listDocKeys});
+
+        const {
+            create,
+            // `delete` is reserved in JS
+            delete: _delete,
+            update,
+        } = this.write(EndpointScope.Resource, uriTemplate, options)!;
+
+        return {
+            ...readConfig,
+
+            endpoints: {
+                ...readConfig.endpoints,
+
+                get: options.list && {
+                    cardinality: Cardinality.One,
+                    fn: async ({docKeys}) => {
+                        const result = await this.client.get(UriTemplate.uri(uriTemplate, docKeys), {'id:in': docKeys[docKeys.length - 1]});
+                        return result[0];
+                    },
+                    scope: EndpointScope.Document,
+                },
+
+                create: create && {
+                    cardinality: Cardinality.One,
+                    fn: async ({docKeys, data}) => {
+                        const result = await create.fn({docKeys, data: [data]});
+                        return result[0];
+                    },
+                    scope: EndpointScope.Document,
+                },
+
+                delete: _delete && {
+                    cardinality: Cardinality.One,
+                    fn: async ({docKeys}) => {
+                        await _delete.fn({docKeys, data: {'id:in': docKeys[docKeys.length - 1]}});
+                        return null;
+                    },
+                    scope: EndpointScope.Document,
+                },
+
+                update: update && {
+                    cardinality: Cardinality.One,
+                    fn: async ({docKeys, data}) => {
+                        const result = await update.fn({docKeys, data: [data]});
+                        return result[0];
+                    },
+                    scope: EndpointScope.Document,
+                },
+            },
+        };
+    }
+
+    private read(scope: EndpointScope, uriTemplate: string, options: ReadOptions): NonNullable<ResourceConfig['endpoints']> {
         return {
             ...(options?.get ? this.get(scope, scope === EndpointScope.Resource ? uriTemplate : `${uriTemplate}/{id}`) : {}),
             ...(options?.list ? this.list(uriTemplate) : {}),
         };
     }
 
-    private write(scope: EndpointScope, uriTemplate: string, options?: WriteOptions): ResourceConfig['endpoints'] {
+    private write(scope: EndpointScope, uriTemplate: string, options?: WriteOptions): NonNullable<ResourceConfig['endpoints']> {
         return {
             ...(options?.create ? this._create(uriTemplate) : {}),
             ...(options?.update ? this.update(scope, scope === EndpointScope.Resource ? uriTemplate : `${uriTemplate}/{id}`) : {}),
@@ -121,7 +177,7 @@ export class BigCommerceResourceFactory {
             delete: {
                 scope,
                 cardinality: Cardinality.One,
-                fn: ({docKeys}) => this.client.delete(UriTemplate.uri(uriTemplate, docKeys)),
+                fn: ({docKeys, data}) => this.client.delete(UriTemplate.uri(uriTemplate, docKeys), data),
             }
         };
     }
