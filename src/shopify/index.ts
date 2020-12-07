@@ -237,7 +237,10 @@ const resourceConfigs: ResourceConfigs = {
     recurringApplicationCharge: false,
     refund: {
         endpoints: {
-            calculate: false,
+            calculate: {
+                scope: EndpointScope.Resource,
+                cardinality: Cardinality.One,
+            },
         }
     },
     shop: {
