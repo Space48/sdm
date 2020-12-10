@@ -9,15 +9,15 @@ import { Connector } from './connector';
 const config = new ConfigStore<ConfigSchema>(new Conf());
 
 export const connectors: Record<string, Connector> = {
-    bc: new BigCommerceConnector(config.select('bigCommerce')),
-    m1: new Magento1Connector(config.select('magento1')),
-    m2: new Magento2Connector(config.select('magento2')),
-    shopify: new ShopifyConnector(config.select('shopify')),
+  bc: new BigCommerceConnector(config.select('bigCommerce')),
+  m1: new Magento1Connector(config.select('magento1')),
+  m2: new Magento2Connector(config.select('magento2')),
+  shopify: new ShopifyConnector(config.select('shopify')),
 };
 
 type ConfigSchema = {
-    bigCommerce: bigCommerce.ConfigSchema,
-    magento1: magento1.ConfigSchema,
-    magento2: magento2.ConfigSchema,
-    shopify: shopify.ConfigSchema,
+  bigCommerce: bigCommerce.ConfigSchema,
+  magento1: magento1.ConfigSchema,
+  magento2: magento2.ConfigSchema,
+  shopify: shopify.ConfigSchema,
 };
