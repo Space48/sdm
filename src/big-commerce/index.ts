@@ -161,7 +161,7 @@ function getResources(client: BigCommerce): ResourceCollection {
       },
     }),
 
-    giftCertificates: resource.documentCollection('v3/gift_certificates'),
+    giftCertificates: resource.documentCollection('v2/gift_certificates'),
     
     orders: {
       ...resource.documentCollection('v2/orders'),
