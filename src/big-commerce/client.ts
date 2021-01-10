@@ -1,13 +1,31 @@
 import fetch, { RequestInit } from "node-fetch";
 import { stringify } from 'query-string'
-import { Credentials } from "./config";
 import pRetry from "p-retry";
 import { flatten } from "../util";
 import { ActionError } from "../action";
+import * as t from 'io-ts'
 
 const listConcurrency = 50;
 
+const clients: WeakMap<Credentials, BigCommerce> = new WeakMap();
+
+export type Credentials = t.TypeOf<typeof credentialsSchema>;
+
+export const credentialsSchema = t.type({
+  storeAlias: t.string,
+  storeHash: t.string,
+  clientId: t.string,
+  accessToken: t.string,
+});
+
 export default class BigCommerce {
+  static client(credentials: Credentials): BigCommerce {
+    if (!clients.has(credentials)) {
+      clients.set(credentials, new BigCommerce(credentials));
+    }
+    return clients.get(credentials)!;
+  }
+
   constructor(private credentials: Credentials) {}
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
