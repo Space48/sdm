@@ -53,7 +53,7 @@ export interface ResourceMap<Config = any> {
   readonly [key: string]: Resource<Config>
 }
 
-type ResourceMapRef<
+export type ResourceMapRef<
   T extends ResourceMap = ResourceMap,
   MultiPath extends boolean = boolean,
 > = {

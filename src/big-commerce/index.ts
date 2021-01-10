@@ -247,7 +247,7 @@ const bigCommerceConnector = connector(configSchema, {
 
 export default bigCommerceConnector;
 
-interface Query {
+export interface Query {
   [key: string]: any
 }
 

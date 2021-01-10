@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf lib",
-    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json && chmod +x lib/bin/sdm.js"
+    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json"
   },
   "engines": {
     "node": ">= 10.3.0"
@@ -30,13 +30,14 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
-    "@space48/json-pipe": "^0.4.4",
+    "@space48/json-pipe": "^0.4.6",
     "bluebird": "^3.7.2",
     "chalk": "^4.1.0",
     "cli-table3": "^0.6.0",
     "commander": "^5.0.0",
     "conf": "^6.2.4",
     "duration": "^0.2.2",
+    "fp-ts": "^2.9.3",
     "io-ts": "^2.2.13",
     "node-fetch": "^2.6.0",
     "node-ipc": "^9.1.1",
