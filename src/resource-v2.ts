@@ -42,12 +42,16 @@ export type Connector<
 type ConnectorRef<
   Config = any,
   Resources extends ResourceMap<Config> = {},
-> = {
-  readonly configSchema: Config
-  readonly resources: Resources
-  getWarningMessage(config: Config): Promise<string|undefined|void>
-  (config: Config): ResourceMapRef<Resources, false>
-};
+> = ResourceMapRef<Resources, false> & {
+  configure(config: Config): ConfiguredConnector
+}
+
+export interface ConfiguredConnector {
+  getWarningMessage(): Promise<string|undefined|void>
+  execute<OutT>(command: Command<any, OutT, false>): AsyncIterable<OutT>
+  execute<OutT>(command: Command<any, OutT, true>): AsyncIterable<OutputWithPath<OutT>>
+  execute<T extends Command>(commands: Iterable<T> | AsyncIterable<T>): AsyncIterable<OutputElement<T>>
+}
 
 export interface ResourceMap<Config = any> {
   readonly [key: string]: Resource<Config>
@@ -91,9 +95,6 @@ interface DocumentRefSelectors<
 > {
   $all: DocumentRef<T, true>
   $doc(id: DocId): DocumentRef<T, MultiPath>
-  $docs(ids: Iterable<DocId>): DocumentRef<T, true>
-  $extractId(extractId: (input: any) => DocId): DocumentRef<T, MultiPath>
-  //(id: unknown): DocumentRef<T, MultiPath extends true ? true : boolean>
 }
 
 export interface Document<Config = any> {
@@ -120,12 +121,12 @@ type EndpointMapRef<
   [K in keyof T]: EndpointRef<T[K], MultiPath>
 };
 
-export interface Endpoint<Config = any, I = any, O = any> {
-  (config: Config): EndpointFn<I, O>
+export interface Endpoint<Config = any, InT = any, OutT = any> {
+  (config: Config): EndpointFn<InT, OutT>
 }
 
-export interface EndpointFn<I = any, O = any> {
-  (input: EndpointPayload<I>): Promise<O> | AsyncIterable<O>
+export interface EndpointFn<InT = any, OutT = any> {
+  (input: EndpointPayload<InT>): Promise<OutT> | AsyncIterable<OutT>
 }
 
 export interface EndpointPayload<T = undefined> {
@@ -137,55 +138,47 @@ type EndpointRef<
   T extends Endpoint = Endpoint,
   MultiPath extends boolean = boolean,
 > =
-  T extends Endpoint<any, undefined, infer O> & Endpoint<any, infer I, infer O> ? OptionalInputEndpointFns<I, O, MultiPath>
-  : T extends Endpoint<any, infer I, infer O> ? MandatoryInputEndpointFns<I, O, MultiPath>
+  T extends Endpoint<any, undefined, infer OutT> & Endpoint<any, infer InT, infer OutT> ? OptionalInputEndpointFns<InT, OutT, MultiPath>
+  : T extends Endpoint<any, infer InT, infer OutT> ? MandatoryInputEndpointFns<InT, OutT, MultiPath>
   : never;
 
 interface OptionalInputEndpointFns<
-  I = any,
-  O = any,
+  InT = any,
+  OutT = any,
   MultiPath extends boolean = boolean,
 > {
-  <T extends any>(extractEndpointInput: (input: T) => I): (inputs: AsyncIterable<T>) => AsyncIterable<Result<T, O, MultiPath>>
-  (inputs: AsyncIterable<I>): AsyncIterable<Result<I, O, MultiPath>>
-  <T extends Data & I>(input?: T): AsyncIterable<Output<O, MultiPath>>
+  (input?: InT): Command<InT, OutT, MultiPath>
 }
 
 interface MandatoryInputEndpointFns<
-  I = any,
-  O = any,
+  InT = any,
+  OutT = any,
   MultiPath extends boolean = boolean,
 > {
-  (inputs: AsyncIterable<I>): AsyncIterable<Result<I, O, MultiPath>>
-  <T extends Data & I>(input: T): AsyncIterable<Output<O, MultiPath>>
+  (input: InT): Command<InT, OutT, MultiPath>
 }
 
-type Output<T = any, MultiPath extends boolean = boolean> =
-  MultiPath extends true ? {output: T, path: string}
-  : MultiPath extends false ? T
-  : never;
-
-type Result<
-  I = any,
-  O = any,
+interface Command<
+  InT = any,
+  OutT = any,
   MultiPath extends boolean = boolean,
-> = {
-  input: I
-  output?: O
+> {
+  path: string
+  input: InT
+  __dummyProps?: {
+    outT: OutT
+    multiPath: MultiPath
+  }
+}
+
+interface OutputWithPath<T = any> {
+  path: string
+  output: T
+}
+
+interface OutputElement<T extends Command = Command> {
+  command: Command
+  output?: T extends Command<any, infer OutT> ? OutT : never
   success: boolean
   error?: any
-} & PathProp<MultiPath>;
-
-type PathProp<MultiPath extends boolean = boolean> = 
-  MultiPath extends true ? {path: string}
-  : MultiPath extends false ? {}
-  : never;
-
-type Data = ReadonlyArray<Data> | boolean | DataObject | null | number | string | undefined;
-
-interface DataObject {
-  [key: string]: Data
-  
-  // prevent AsyncIterators from being inferred as DataObjects
-  [Symbol.asyncIterator]?: never
 }
