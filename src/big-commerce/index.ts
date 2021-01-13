@@ -202,6 +202,7 @@ function getResources(client: BigCommerce): ResourceCollection {
             values: resource.documentCollection('v3/catalog/products/{id}/options/{id}/values'),
           },
         },
+        variants: resource.documentCollection('v3/catalog/products/{id}/variants'),
         videos: resource.documentCollection('v3/catalog/products/{id}/videos'),
       },
     },
