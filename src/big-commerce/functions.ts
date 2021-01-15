@@ -1,8 +1,6 @@
-import BigCommerce, {credentialsSchema, Credentials} from './client';
-import { resource, DocId, Endpoint, Path } from '../resource-v2';
+import BigCommerce, {configSchema, Config} from './client';
+import { resource, DocId, Endpoint, Path, ScopeConfig } from '../resource-v2';
 import { map, pipe } from '@space48/json-pipe';
-
-const configSchema = credentialsSchema;
 
 export interface Query {
   [key: string]: any
@@ -35,7 +33,7 @@ export namespace endpoint {
   export function fn<I = any, O = any>(
     uriPattern: string,
     _fn: (client: BigCommerce, uri: string, data: I, path: ReadonlyArray<DocId>) => Promise<O> | AsyncIterable<O>
-  ): Endpoint<Credentials, I, O> {
+  ): Endpoint<Config, I, O> {
     return config => {
       const client = BigCommerce.client(config);
       return ({path, input}) => {
@@ -129,7 +127,7 @@ export class UriTemplate {
 }
 
 export function listIds(uriPattern: string, idField: string = 'id') {
-  return (config: Credentials) => {
+  return (config: ScopeConfig<Config>) => {
     const client = BigCommerce.client(config);
     return (path: Path) => {
       const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));

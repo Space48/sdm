@@ -4,29 +4,34 @@ import pRetry from "p-retry";
 import { flatten } from "../util";
 import { ActionError } from "../action";
 import * as t from 'io-ts'
+import { ScopeConfig } from "../resource-v2";
 
 const listConcurrency = 50;
 
-const clients: WeakMap<Credentials, BigCommerce> = new WeakMap();
+const clients: WeakMap<ScopeConfig<Config>, BigCommerce> = new WeakMap();
 
-export type Credentials = t.TypeOf<typeof credentialsSchema>;
+export type Config = t.TypeOf<typeof configSchema>;
 
-export const credentialsSchema = t.type({
+export const configSchema = t.type({
   storeAlias: t.string,
   storeHash: t.string,
-  clientId: t.string,
-  accessToken: t.string,
+  credentials: t.type({
+    clientId: t.string,
+    accessToken: t.string,
+  }),
 });
 
 export default class BigCommerce {
-  static client(credentials: Credentials): BigCommerce {
-    if (!clients.has(credentials)) {
-      clients.set(credentials, new BigCommerce(credentials));
+  static client(config: ScopeConfig<Config>): BigCommerce {
+    if (!clients.has(config)) {
+      clients.set(config, new BigCommerce(config));
     }
-    return clients.get(credentials)!;
+    return clients.get(config)!;
   }
 
-  constructor(private credentials: Credentials) {}
+  constructor(
+    private readonly config: ScopeConfig<Config>,
+  ) {}
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
     return unwrap(await this.doGet(uri, params));
@@ -90,8 +95,9 @@ export default class BigCommerce {
 
   private async fetch(relativeUri: string, init?: RequestInit): Promise<any> {
     console.error(relativeUri);
-    const absoluteUri = `https://api.bigcommerce.com/stores/${this.credentials.storeHash}/${relativeUri}`;
-    const initResolved = this.init(init);
+    const config = this.config.get();
+    const absoluteUri = `https://api.bigcommerce.com/stores/${config.storeHash}/${relativeUri}`;
+    const initResolved = this.init(config, init);
     const response = await pRetry(
       async () => {
         const response = await fetch(absoluteUri, initResolved);
@@ -117,12 +123,12 @@ export default class BigCommerce {
     return await response.json();
   }
 
-  private init(init?: RequestInit): RequestInit {
+  private init(config: Config, init?: RequestInit): RequestInit {
     const headers = {
       ...(init?.headers || {}),
       Accept: 'application/json',
-      'X-Auth-Token': this.credentials.accessToken,
-      'X-Auth-Client': this.credentials.clientId,
+      'X-Auth-Token': config.credentials.accessToken,
+      'X-Auth-Client': config.credentials.clientId,
     }
     return {
       ...(init || {}),

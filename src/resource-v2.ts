@@ -1,5 +1,6 @@
 import { flatMapAsync, pipe, compose, map, tap } from '@space48/json-pipe';
 import * as t from 'io-ts'
+import { EventEmitter } from 'keyv';
 import R from "ramda";
 
 export function connector<Config, Resources extends ResourceMap<Config>>(
@@ -7,13 +8,11 @@ export function connector<Config, Resources extends ResourceMap<Config>>(
   connector: Connector<Config, Resources>,
 ): ConnectorRef<Config, Resources> {
   try {
-    const validateConfig = configValidator(configSchema);
-
     const resources = resourceMapRef(connector.resources, []);
     
-    function scope(config: Config): ConnectorScope {
-      validateConfig(config);
-
+    function scope(configArg: Config | ScopeConfig<Config>): ConnectorScope {
+      const config = ScopeConfig.resolve(configSchema, configArg);
+      
       const executeCommands = commandExecutor(connector.resources, config);
 
       return {
@@ -92,15 +91,15 @@ export type Connector<
   Resources extends ResourceMap<Config> = ResourceMap<Config>,
 > = {
   readonly resources: Resources
-  getScopeName(config: Config): string
-  getWarningMessage?(config: Config): Promise<string|undefined|void>
+  getScopeName(config: ScopeConfig<Config>): string
+  getWarningMessage?(config: ScopeConfig<Config>): Promise<string|undefined|void>
 }
 
 type ConnectorRef<
   Config = any,
   Resources extends ResourceMap<Config> = {},
 > = ResourceMapRef<Resources, false> & {
-  scope(config: Config): ConnectorScope
+  scope(config: Config | ScopeConfig<Config>): ConnectorScope
 }
 
 export interface ConnectorScope {
@@ -175,7 +174,7 @@ interface DocumentRefSelectors<
 
 export interface Document<Config = any> {
   idField?: string
-  listIds?(config: Config): (path: Path) => AsyncIterable<DocId>
+  listIds?(config: ScopeConfig<Config>): (path: Path) => AsyncIterable<DocId>
   readonly endpoints?: EndpointMap<Config>
   readonly resources?: ResourceMap<Config>
 }
@@ -212,7 +211,7 @@ function endpointMapRef(endpoints: EndpointMap, path: Path): EndpointMapRef {
 }
 
 export interface Endpoint<Config = unknown, InT = any, OutT = any> {
-  (config: Config): EndpointFn<InT, OutT>
+  (config: ScopeConfig<Config>): EndpointFn<InT, OutT>
 }
 
 export interface EndpointFn<InT = unknown, OutT = unknown> {
@@ -370,7 +369,7 @@ export namespace Path {
     }
   }
 
-  export function endpointFnSelector<C>(resources: ResourceMap<C>, config: C) {
+  export function endpointFnSelector<C>(resources: ResourceMap<C>, config: ScopeConfig<C>) {
     const hostSelector = selector(resources);
 
     return <InT, OutT>(path: Path, endpointName: string) => {
@@ -389,7 +388,7 @@ export namespace Path {
   /**
    * Expand a path so that a path containing document ID wildcards is mapped to n paths containing document IDs only
    */
-  export function expander<C>(resources: ResourceMap<C>, config: C): (path: Path) => AsyncIterable<Path> {
+  export function expander<C>(resources: ResourceMap<C>, config: ScopeConfig<C>): (path: Path) => AsyncIterable<Path> {
     return async function* (path) {
       let _resources = resources;
 
@@ -433,7 +432,7 @@ type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 
 export function commandExecutor<Config>(
   resources: ResourceMap<Config>,
-  config: Config,
+  config: ScopeConfig<Config>,
 ): CommandExecutor {
   const selectEndpointFn = Path.endpointFnSelector(resources, config);
   const expandPaths = Path.expander(resources, config);
@@ -483,6 +482,39 @@ export function commandExecutor<Config>(
       }
     )
   );
+}
+
+export class ScopeConfig<T> {
+  static resolve<T>(configSchema: t.Type<T>, config: T | ScopeConfig<T>): ScopeConfig<T> {
+    return config instanceof ScopeConfig
+      ? config
+      : new ScopeConfig(configSchema, config);
+  }
+
+  constructor(
+    schema: t.Type<T>,
+    private value: T,
+  ) {
+    this.validate = configValidator(schema);
+  }
+
+  private readonly validate: (config: T) => void;
+  private readonly emitter = new EventEmitter();
+
+  get(): T {
+    return this.value;
+  }
+
+  set(value: T) {
+    this.validate(value);
+    this.value = value;
+    this.emitter.emit('change', value);
+  }
+
+  onChange(listener: (state: T) => void): () => any {
+    this.emitter.on('change', listener);
+    return () => this.emitter.removeListener('change', listener);
+  }
 }
 
 export class InvalidConnectorDefinition extends Error {

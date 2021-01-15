@@ -1,13 +1,11 @@
-import BigCommerce, {credentialsSchema, Credentials} from './client';
+import BigCommerce, { Config, configSchema } from './client';
 import { connector, mergeResources } from '../resource-v2';
 import { batch, endpoint, listIds, Query } from './functions';
 
-const configSchema = credentialsSchema;
-
-export type BigCommerceConfig = Credentials;
+export type BigCommerceConfig = Config;
 
 const bigCommerceConnector = connector(configSchema, {
-  getScopeName: config => config.storeHash,
+  getScopeName: config => config.get().storeHash,
   
   getWarningMessage: async config => {
     try {
