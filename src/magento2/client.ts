@@ -1,25 +1,32 @@
 import fetch, { RequestInit } from "node-fetch";
-import { Agent } from "https";
-import { parse } from "url";
 import { stringify } from 'query-string'
-import { objectFromEntries, flatten } from "../util";
+import { flatten, objectFromEntries } from "../util";
+import { ScopeConfig } from "../resource-v2";
+import * as t from 'io-ts'
 
-type AuthResolver = ({refresh}: {refresh: boolean}) => Promise<string>;
+export type Config = t.TypeOf<typeof configSchema>;
 
-export type Magento2ClientOptions = {
-  auth?: AuthResolver,
-  insecure?: boolean,
-};
+export const configSchema = t.intersection([
+  t.type({
+    baseUrl: t.string,
+  }),
+  t.partial({
+    credentials: t.type({
+      username: t.string,
+      password: t.string,
+    }),
+    insecure: t.boolean,
+    token: t.type({
+      value: t.string,
+      expiration: t.string,
+    }),
+  }),
+]);
 
 export default class Magento2 {
-  private agent?: Agent;
-
   constructor(
-    private baseUrl: string,
-    private options?: Magento2ClientOptions,
-  ) {
-    this.agent = parse(baseUrl).protocol === 'https:' ? new Agent({rejectUnauthorized: !options?.insecure}) : undefined;
-  }
+    private readonly config: ScopeConfig<Config>,
+  ) {}
 
   async get<T>(uri: string, params?: QueryParams): Promise<T> {
     const paramsFlattened = params && flattenParams(params);
@@ -118,7 +125,7 @@ export default class Magento2 {
 
   private init({auth, init}: {auth?: string, init?: RequestInit}): RequestInit {
     const headers = {
-      ...(init?.headers || {}),
+      ...init?.headers,
       ...(auth ? {Authorization: `Bearer ${auth}`} : {}),
       Accept: 'application/json',
     }
@@ -127,6 +134,15 @@ export default class Magento2 {
       headers,
       agent: this.agent,
     };
+  }
+
+  private async getToken(credentials: NonNullable<Config['credentials']>): Promise<NonNullable<Config['token']>> {
+    const fourHoursFromNow = new Date(Date.now() + 4 * 3_600_000);
+    const tokenValue = await this.post<string>('integration/admin/token', credentials);
+    return {
+      value: tokenValue,
+      expiration: fourHoursFromNow.toISOString(),
+    }
   }
 }
 
@@ -162,8 +178,9 @@ function flattenParam(name: string, value: QueryParam): string[][] {
   }
 }
 
+export type Filter = [string, FilterCondition, string|number|string[]|number[]];
+
 type FilterCondition = 'eq' | 'gt' | 'in';
-type Filter = [string, FilterCondition, string|number|string[]|number[]];
 type SortOrder = [string, 'asc'|'desc'];
 
 export type SortKey = {

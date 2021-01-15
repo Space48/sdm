@@ -1,144 +1,124 @@
-import * as config from './config';
-import { ConfigStore } from '../config-store';
-import { Field } from '../action';
-import { Magento2ResourceFactory } from './resource-factory';
-import { Connector, ConnectorScope } from '../connector';
-import { ResourceCollection } from '../resource';
-import Magento2, { SortKey } from './client';
+import Magento2, { Config, configSchema } from './client';
+import { connector, mergeResources } from '../resource-v2';
+import { endpoint } from './functions';
+import { parse as parseUrl } from "url";
+import { omit } from 'ramda';
 
-export type ConfigSchema = {
-  credentials: config.ConfigSchema,
-};
+export type Magento2Config = Config;
 
-export default class Magento2Connector implements Connector {
-  constructor(private configStore: ConfigStore<ConfigSchema>) {}
+const magento2Connector = connector({
+  configSchema,
+  
+  getScopeName: config => {
+    const {host, path} = parseUrl(config.baseUrl);
+    return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase();
+  },
 
-  getConfigActions() {
-    return config.getActions(this.configStore.select('credentials'));
-  }
-
-  getScopes() {
-    const credentialsConfig = this.configStore.select('credentials');
-    return config.getBaseUrls(credentialsConfig);
-  }
-
-  getScope(baseUrl: string) {
-    const credentialsConfig = this.configStore.select('credentials');
-    return new Magento2Scope(baseUrl, credentialsConfig);
-  }
-
-  getTypicalResources() {
-    return {};
-  }
-}
-
-class Magento2Scope implements ConnectorScope {
-  constructor(
-    private baseUrl: string,
-    private configStore: ConfigStore<ConfigSchema['credentials']>,
-  ) {}
-
-  get name() {
-    return this.baseUrl;
-  }
-
-  async getWarningMessage() {
-    return undefined;
-  }
-
-  getResources() {
-    const client = config.createMagentoClient(this.configStore, this.baseUrl);
-    return getResources(client);
-  }
-}
-
-function getResources(client: Magento2): ResourceCollection {
-  const resource = new Magento2ResourceFactory(client);
-
-  return {
-    categories: resource.create('categories', {
-      docKey: { name: 'id', type: Field.integer() },
-      create: true,
-      get: true,
-      list: {
-        uri: 'categories/list',
-        sortKey: { query: 'entity_id', response: 'id' },
-      },
-      update: true,
-      delete: true,
-    }),
-
-    categoryTree: resource.create('categories?rootCategoryId=1', {
-      get: true,
-    }),
-
-    configurableProducts: {
-      ...resource.create('configurable-products', {
-        docKey: { name: 'sku', type: Field.string() },
+  getScope: config => new Magento2(config),
+  
+  resources: {
+    categories: mergeResources(
+      endpoint.crud('categories', {
+        idField: 'id',
+        list: {
+          uri: 'categories/list',
+          sortKey: { query: 'entity_id', response: 'id' },
+        }
       }),
-
-      children: {
-        children: resource.create('configurable-products/{sku}/children', {
-          get: true,
-        }),
-
-        options: resource.create('configurable-products/{sku}/options/all', {
-          get: true,
-        }),
+      {
+        resources: {
+          tree: {
+            endpoints: {
+              get: endpoint.get('categories?rootCategoryId=1'),
+            },
+          },
+        }
       },
-    },
+    ),
 
-    customers: resource.create('customers', {
-      docKey: { name: 'id', type: Field.integer() },
-      create: true,
-      get: true,
+    customers: endpoint.crud('customers', {
+      idField: 'id',
       list: {
         uri: 'customers/search',
         sortKey: { query: 'entity_id', response: 'id' },
       },
-      update: true,
-      delete: true,
     }),
 
-    orders: resource.create('orders', {
-      docKey: { name: 'entity_id', type: Field.integer() },
-      get: true,
-      list: { sortKey: { query: 'entity_id', response: 'entity_id' } },
-      update: true,
-      delete: true,
-    }),
-
-    products: {
-      ...resource.create('products', {
-        docKey: { name: 'sku', type: Field.string() },
-        create: true,
-        get: true,
-        list: { sortKey: productSortKey },
-        update: true,
-        delete: true,
-      }),
-
-      children: {
-        links: resource.create('products/{sku}/links', {
-          docKey: { name: 'type', type: Field.string() },
-          get: true,
-        }),
+    orders: {
+      endpoints: {
+        list: endpoint.list('orders', { query: 'entity_id', response: 'entity_id' }),
       },
+
+      documents: omit(['create'], endpoint.crud('orders', {
+        idField: 'id',
+        list: {
+          idField: 'entity_id',
+          sortKey: { query: 'entity_id', response: 'entity_id' },
+        },
+      }).documents!),
     },
 
-    productAttributes: {
-      ...resource.create('products/attributes', {
-        docKey: { name: 'attribute_code', type: Field.string() },
-        list: { sortKey: { query: 'attribute_id', response: 'attribute_id' } },
+    products: mergeResources(
+      endpoint.crud('products', {
+        idField: 'sku',
+        list: {
+          sortKey: { query: 'entity_id', response: 'id' },
+        },
       }),
+      {
+        documents: {
+          resources: {
+            links: {
+              documents: {
+                idField: 'type',
+                endpoints: {
+                  get: endpoint.get('products/{sku}/links/{type}'),
+                },
+              },
+            },
+          },  
+        },
 
-      children: {
-        options: resource.create('products/attributes/{attributeCode}/options', {
-          get: true,
-        }),
+        resources: {
+          attributes: {
+            endpoints: {
+              list: endpoint.list('products/attributes', { query: 'attribute_id', response: 'attribute_id' }),
+            },
+
+            documents: {
+              idField: 'attribute_code',
+
+              resources: {
+                options: {
+                  endpoints: {
+                    get: endpoint.get('products/attributes/{attributeCode}/options'),
+                  },
+                },
+              },
+            },
+          },
+
+          configurables: {
+            documents: {
+              idField: 'sku',
+              resources: {
+                children: {
+                  endpoints: {
+                    get: endpoint.get('configurable-products/{sku}/children'),
+                  },
+                },
+                options: {
+                  endpoints: {
+                    get: endpoint.get('configurable-products/{sku}/options/all'),
+                  },
+                },
+              }
+            },
+          }
+        },
       },
-    },
-  };
-}
+    ),
+  },
+});
 
-const productSortKey: SortKey = { query: 'entity_id', response: 'id' };
+export default magento2Connector;

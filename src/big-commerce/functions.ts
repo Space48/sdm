@@ -1,5 +1,5 @@
-import BigCommerce, {configSchema, Config} from './client';
-import { resource, DocId, Endpoint, Path, ScopeConfig } from '../resource-v2';
+import BigCommerce from './client';
+import { resource, DocId, Endpoint, Path } from '../resource-v2';
 import { map, pipe } from '@space48/json-pipe';
 
 export interface Query {
@@ -10,10 +10,10 @@ export namespace endpoint {
   export function crud(uriPattern: string, idField: string = 'id') {
     const docUriPattern = `${uriPattern}/{id}`;
 
-    return resource(configSchema, {
+    return resource({
       endpoints: {
-        create: endpoint.create(uriPattern),
-        list: endpoint.list(uriPattern),
+        create: create(uriPattern),
+        list: list(uriPattern),
       },
 
       documents: {
@@ -22,9 +22,9 @@ export namespace endpoint {
         listIds: listIds(uriPattern, idField),
 
         endpoints: {
-          delete: endpoint.del(docUriPattern),
-          get: endpoint.get(docUriPattern),
-          update: endpoint.update(docUriPattern),
+          delete: del(docUriPattern),
+          get: get(docUriPattern),
+          update: update(docUriPattern),
         },
       },
     });
@@ -33,13 +33,10 @@ export namespace endpoint {
   export function fn<I = any, O = any>(
     uriPattern: string,
     _fn: (client: BigCommerce, uri: string, data: I, path: ReadonlyArray<DocId>) => Promise<O> | AsyncIterable<O>
-  ): Endpoint<Config, I, O> {
-    return config => {
-      const client = BigCommerce.client(config);
-      return ({path, input}) => {
-        const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
-        return _fn(client, uri, input, Path.getDocIds(path));
-      };
+  ): Endpoint<BigCommerce, I, O> {
+    return client => ({path, input}) => {
+      const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
+      return _fn(client, uri, input, Path.getDocIds(path));
     };
   }
 
@@ -62,9 +59,9 @@ export namespace endpoint {
 // Following functions are for compatibility with batch endpoints
 export namespace batch {
   export function crud(uriPattern: string, idField: string = 'id') {
-    return resource(configSchema, {
+    return resource({
       endpoints: {
-        create: batch.createOne(uriPattern),
+        create: createOne(uriPattern),
         list: endpoint.list(uriPattern),
       },
 
@@ -74,9 +71,9 @@ export namespace batch {
         listIds: listIds(uriPattern, idField),
 
         endpoints: {
-          delete: batch.deleteOne(uriPattern),
-          get: batch.getOne(uriPattern),
-          update: batch.updateOne(uriPattern),
+          delete: deleteOne(uriPattern),
+          get: getOne(uriPattern),
+          update: updateOne(uriPattern),
         },
       },
     });
@@ -127,12 +124,9 @@ export class UriTemplate {
 }
 
 export function listIds(uriPattern: string, idField: string = 'id') {
-  return (config: ScopeConfig<Config>) => {
-    const client = BigCommerce.client(config);
-    return (path: Path) => {
-      const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
-      const docs = client.list<Record<string, DocId>>(uri, {include_fields: []});
-      return pipe(docs, map(doc => doc[idField]));
-    };
+  return (client: BigCommerce) => (path: Path) => {
+    const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
+    const docs = client.list<Record<string, DocId>>(uri, {include_fields: []});
+    return pipe(docs, map(doc => doc[idField]));
   };
 }

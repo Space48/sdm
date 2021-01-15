@@ -5,10 +5,9 @@ import { flatten } from "../util";
 import { ActionError } from "../action";
 import * as t from 'io-ts'
 import { ScopeConfig } from "../resource-v2";
+import { Agent } from "https";
 
 const listConcurrency = 50;
-
-const clients: WeakMap<ScopeConfig<Config>, BigCommerce> = new WeakMap();
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -22,16 +21,11 @@ export const configSchema = t.type({
 });
 
 export default class BigCommerce {
-  static client(config: ScopeConfig<Config>): BigCommerce {
-    if (!clients.has(config)) {
-      clients.set(config, new BigCommerce(config));
-    }
-    return clients.get(config)!;
-  }
-
   constructor(
     private readonly config: ScopeConfig<Config>,
   ) {}
+
+	private readonly agent = new Agent({ keepAlive: true });
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
     return unwrap(await this.doGet(uri, params));
@@ -125,14 +119,15 @@ export default class BigCommerce {
 
   private init(config: Config, init?: RequestInit): RequestInit {
     const headers = {
-      ...(init?.headers || {}),
+      ...init?.headers,
       Accept: 'application/json',
       'X-Auth-Token': config.credentials.accessToken,
       'X-Auth-Client': config.credentials.clientId,
     }
     return {
-      ...(init || {}),
+      ...init,
       headers,
+      agent: this.agent,
     };
   }
 }

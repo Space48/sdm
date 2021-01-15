@@ -4,12 +4,16 @@ import { batch, endpoint, listIds, Query } from './functions';
 
 export type BigCommerceConfig = Config;
 
-const bigCommerceConnector = connector(configSchema, {
-  getScopeName: config => config.get().storeHash,
+const bigCommerceConnector = connector({
+  configSchema,
   
-  getWarningMessage: async config => {
+  getScopeName: config => config.storeHash,
+
+  getScope: config => new BigCommerce(config),
+  
+  getWarningMessage: async client => {
     try {
-      const store = await BigCommerce.client(config).get('v2/store');
+      const store = await client.get('v2/store');
       if (store.status === 'live') {
         return `Store is LIVE at ${store.domain}`;
       }

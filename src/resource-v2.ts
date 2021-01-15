@@ -1,25 +1,29 @@
 import { flatMapAsync, pipe, compose, map, tap } from '@space48/json-pipe';
 import * as t from 'io-ts'
-import { EventEmitter } from 'keyv';
 import R from "ramda";
 
-export function connector<Config, Resources extends ResourceMap<Config>>(
-  configSchema: t.Type<Config>,
-  connector: Connector<Config, Resources>,
-): ConnectorRef<Config, Resources> {
+export function connector<
+  Config,
+  Scope,
+  Resources extends ResourceMap<Scope>
+>(
+  definition: Connector<Config, Scope, Resources>,
+): ConnectorRef<Config, Scope, Resources> {
   try {
-    const resources = resourceMapRef(connector.resources, []);
+    const resources = resourceMapRef(definition.resources, []);
     
     function scope(configArg: Config | ScopeConfig<Config>): ConnectorScope {
-      const config = ScopeConfig.resolve(configSchema, configArg);
+      const config = ScopeConfig.resolve(definition.configSchema, configArg);
+
+      const _scope = definition.getScope(config);
       
-      const executeCommands = commandExecutor(connector.resources, config);
+      const executeCommands = commandExecutor(definition.resources, _scope);
 
       return {
-        name: connector.getScopeName(config),
+        name: definition.getScopeName(config.get()),
         
         async getWarningMessage(): Promise<string|undefined|void> {
-          return await connector.getWarningMessage?.(config);
+          return await definition.getWarningMessage?.(_scope);
         },
 
         async *execute(commandOrCommands: Command | AnyIterable<Command>): any {
@@ -57,21 +61,20 @@ export function connector<Config, Resources extends ResourceMap<Config>>(
       }
     }
     
-    return deepMerge(resources, { scope }) as ConnectorRef<Config, Resources>;
+    return addPropertiesToFunction(scope, resources) as ConnectorRef<Config, Scope, Resources>;
   } catch (e) {
     throw new InvalidConnectorDefinition(e);
   }
 }
 
 export function resource<
-  Config,
-  Endpoints extends EndpointMap<Config>,
-  Resources extends ResourceMap<Config>,
-  Documents extends Document<Config>,
+  Scope,
+  Endpoints extends EndpointMap<Scope>,
+  Resources extends ResourceMap<Scope>,
+  Documents extends Document<Scope>,
 >(
-  configSchema: t.Type<Config>,
-  resource: Resource<Config, Endpoints, Resources, Documents>,
-): Resource<Config, Endpoints, Resources, Documents> {
+  resource: Resource<Scope, Endpoints, Resources, Documents>,
+): Resource<Scope, Endpoints, Resources, Documents> {
   return resource;
 }
 
@@ -88,18 +91,22 @@ export function mergeResources<
 
 export type Connector<
   Config = any,
-  Resources extends ResourceMap<Config> = ResourceMap<Config>,
+  Scope = any,
+  Resources extends ResourceMap<Scope> = ResourceMap<Scope>,
 > = {
-  readonly resources: Resources
-  getScopeName(config: ScopeConfig<Config>): string
-  getWarningMessage?(config: ScopeConfig<Config>): Promise<string|undefined|void>
+  readonly configSchema: t.Type<Config>
+  readonly resources: Resources & ResourceMap<Scope> // & ResourceMap<Scope> improves inference, it doesn't actually narrow the types
+  getScope(config: ScopeConfig<Config>): Scope
+  getScopeName(config: Config): string
+  getWarningMessage?(scope: Scope): Promise<string|undefined|void>
 }
 
-type ConnectorRef<
+export type ConnectorRef<
   Config = any,
-  Resources extends ResourceMap<Config> = {},
+  Scope = any,
+  Resources extends ResourceMap<Scope> = {},
 > = ResourceMapRef<Resources, false> & {
-  scope(config: Config | ScopeConfig<Config>): ConnectorScope
+  (config: Config | ScopeConfig<Config>): ConnectorScope
 }
 
 export interface ConnectorScope {
@@ -110,8 +117,8 @@ export interface ConnectorScope {
   execute<InT, OutT>(commands: Iterable<Command<InT, OutT>> | AsyncIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>
 }
 
-export interface ResourceMap<Config = any> {
-  readonly [key: string]: Resource<Config>
+export interface ResourceMap<Scope = any> {
+  readonly [key: string]: Resource<Scope>
 }
 
 export type ResourceMapRef<
@@ -128,18 +135,18 @@ function resourceMapRef<T extends ResourceMap>(resources: T, path: Path): Resour
   return R.mapObjIndexed(
     (resource, name) => resourceRef(resource, path, name),
     resources
-  ) as any;
+  ) as ResourceMapRef<T>;
 }
 
 export interface Resource<
-  Config = any,
-  Endpoints extends EndpointMap<Config> = EndpointMap<Config>,
-  Resources extends ResourceMap<Config> = ResourceMap<Config>,
-  Documents extends Document<Config> = Document<Config>,
+  Scope = any,
+  Endpoints extends EndpointMap<Scope> = EndpointMap<Scope>,
+  Resources extends ResourceMap<Scope> = ResourceMap<Scope>,
+  Documents extends Document<Scope> = Document<Scope>,
 > {
-  readonly endpoints?: Endpoints
-  readonly resources?: Resources
-  readonly documents?: Documents
+  readonly endpoints?: Endpoints & EndpointMap<Scope> // & EndpointMap<Scope> improves inference, it doesn't actually narrow the types
+  readonly resources?: Resources & ResourceMap<Scope> // & ResourceMap<Scope> improves inference, it doesn't actually narrow the types
+  readonly documents?: Documents & Document<Scope>    // & Document<Scope> improves inference, it doesn't actually narrow the types
 }
 
 type ResourceRef<
@@ -168,15 +175,15 @@ interface DocumentRefSelectors<
   T extends Document = Document,
   MultiPath extends boolean = boolean,
 > {
-  $all: DocumentRef<T, true>
+  $all: DocumentRef<T, true> // todo -- only include $all if listIds() is defined on the resource
   $doc(id: DocId): DocumentRef<T, MultiPath>
 }
 
-export interface Document<Config = any> {
+export interface Document<Scope = any> {
   idField?: string
-  listIds?(config: ScopeConfig<Config>): (path: Path) => AsyncIterable<DocId>
-  readonly endpoints?: EndpointMap<Config>
-  readonly resources?: ResourceMap<Config>
+  listIds?(scope: Scope): (path: Path) => AsyncIterable<DocId>
+  readonly endpoints?: EndpointMap<Scope>
+  readonly resources?: ResourceMap<Scope>
 }
 
 type DocumentRef<
@@ -192,26 +199,23 @@ function documentRef(document: Document, path: Path): DocumentRef {
   );
 }
 
-export interface EndpointMap<Config = any> {
-  readonly [key: string]: Endpoint<Config>
+export interface EndpointMap<Scope = any> {
+  readonly [key: string]: Endpoint<Scope>
 }
 
 type EndpointMapRef<
   T extends EndpointMap = EndpointMap,
   MultiPath extends boolean = boolean,
 > = {
-  [K in keyof T]: EndpointRef<T[K], MultiPath>
+  [K in keyof T]: T[K] extends object ? EndpointRef<T[K], MultiPath> : never
 };
 
 function endpointMapRef(endpoints: EndpointMap, path: Path): EndpointMapRef {
-  return R.mapObjIndexed(
-    (endpoint, name) => endpointRef(path, name),
-    endpoints
-  );
+  return R.mapObjIndexed((_, name) => endpointRef(path, name), endpoints);
 }
 
-export interface Endpoint<Config = unknown, InT = any, OutT = any> {
-  (config: ScopeConfig<Config>): EndpointFn<InT, OutT>
+export interface Endpoint<Scope = unknown, InT = any, OutT = any> {
+  (scope: Scope): EndpointFn<InT, OutT>
 }
 
 export interface EndpointFn<InT = unknown, OutT = unknown> {
@@ -369,13 +373,13 @@ export namespace Path {
     }
   }
 
-  export function endpointFnSelector<C>(resources: ResourceMap<C>, config: ScopeConfig<C>) {
+  export function endpointFnSelector<Scope>(resources: ResourceMap<Scope>, scope: Scope) {
     const hostSelector = selector(resources);
 
     return <InT, OutT>(path: Path, endpointName: string) => {
       const endpointHost = hostSelector(path);
-      const endpoint = endpointHost.endpoints![endpointName] as Endpoint<C, InT, OutT>;
-      return endpoint(config);
+      const endpoint = endpointHost.endpoints![endpointName] as Endpoint<Scope, InT, OutT>;
+      return endpoint(scope);
     };
   }
 
@@ -388,7 +392,7 @@ export namespace Path {
   /**
    * Expand a path so that a path containing document ID wildcards is mapped to n paths containing document IDs only
    */
-  export function expander<C>(resources: ResourceMap<C>, config: ScopeConfig<C>): (path: Path) => AsyncIterable<Path> {
+  export function expander<Scope>(resources: ResourceMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path> {
     return async function* (path) {
       let _resources = resources;
 
@@ -396,21 +400,21 @@ export namespace Path {
         const pathElement = path[i];
 
         if (typeof pathElement === 'string') {
-          _resources = _resources[pathElement].resources ?? {};
+          _resources = _resources[pathElement]!.resources ?? {};
           continue;
         }
 
         const [resourceName, docId] = pathElement;
-        const documents = _resources[resourceName].documents ?? {};
+        const documents = _resources[resourceName]!.documents ?? {};
 
         if (docId === WILDCARD) {
           if (!documents.listIds) {
             throw new InvalidPathError('Wildcard is not permitted.');
           }
           const listIdsPath = [...path.slice(0, i), resourceName];
-          const expandPath = expander(resources, config);
+          const expandPath = expander(resources, scope);
           yield* pipe(
-            documents.listIds(config)(listIdsPath),
+            documents.listIds(scope)(listIdsPath),
             map(docId => R.update(i, [resourceName, docId], path)),
             flatMapAsync({concurrency: 10}, expandPath),
           );
@@ -430,12 +434,12 @@ export type CommandExecutor =
 
 type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 
-export function commandExecutor<Config>(
-  resources: ResourceMap<Config>,
-  config: ScopeConfig<Config>,
+export function commandExecutor<Scope>(
+  resources: ResourceMap<Scope>,
+  scope: Scope,
 ): CommandExecutor {
-  const selectEndpointFn = Path.endpointFnSelector(resources, config);
-  const expandPaths = Path.expander(resources, config);
+  const selectEndpointFn = Path.endpointFnSelector(resources, scope);
+  const expandPaths = Path.expander(resources, scope);
 
   return compose(
     ensureIterableIsAsync,
@@ -485,7 +489,10 @@ export function commandExecutor<Config>(
 }
 
 export class ScopeConfig<T> {
-  static resolve<T>(configSchema: t.Type<T>, config: T | ScopeConfig<T>): ScopeConfig<T> {
+  static resolve<T>(
+    configSchema: t.Type<T>,
+    config: T | ScopeConfig<T>,
+  ): ScopeConfig<T> {
     return config instanceof ScopeConfig
       ? config
       : new ScopeConfig(configSchema, config);
@@ -494,12 +501,12 @@ export class ScopeConfig<T> {
   constructor(
     schema: t.Type<T>,
     private value: T,
+    private onChange?: (state: T) => void
   ) {
     this.validate = configValidator(schema);
   }
 
   private readonly validate: (config: T) => void;
-  private readonly emitter = new EventEmitter();
 
   get(): T {
     return this.value;
@@ -508,12 +515,7 @@ export class ScopeConfig<T> {
   set(value: T) {
     this.validate(value);
     this.value = value;
-    this.emitter.emit('change', value);
-  }
-
-  onChange(listener: (state: T) => void): () => any {
-    this.emitter.on('change', listener);
-    return () => this.emitter.removeListener('change', listener);
+    this.onChange?.(value);
   }
 }
 
