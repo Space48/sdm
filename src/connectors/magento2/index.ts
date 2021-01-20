@@ -1,12 +1,12 @@
 import Magento2, { Config, configSchema } from './client';
-import { connector, mergeResources } from '../resource-v2';
+import { connector, mergeResources } from '../../framework';
 import { endpoint } from './functions';
 import { parse as parseUrl } from "url";
 import { omit } from 'ramda';
 
 export type Magento2Config = Config;
 
-const magento2Connector = connector({
+export const magento2 = connector({
   configSchema,
   
   getScopeName: config => {
@@ -120,5 +120,3 @@ const magento2Connector = connector({
     ),
   },
 });
-
-export default magento2Connector;

@@ -1,5 +1,5 @@
 import Magento2, { Filter, SortKey } from './client';
-import { resource, DocId, Endpoint, Path } from '../resource-v2';
+import { resource, DocId, Endpoint, Path } from '../../framework';
 import { map, pipe } from '@space48/json-pipe';
 
 export namespace endpoint {

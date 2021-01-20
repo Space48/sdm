@@ -1,10 +1,10 @@
 import fetch, { RequestInit } from "node-fetch";
 import { stringify } from 'query-string'
 import pRetry from "p-retry";
-import { flatten } from "../util";
-import { ActionError } from "../action";
+import { flatten } from "../../util";
+import { ActionError } from "../../action";
 import * as t from 'io-ts'
-import { ScopeConfig } from "../resource-v2";
+import { ScopeConfig } from "../../framework";
 import { Agent } from "https";
 
 const listConcurrency = 50;

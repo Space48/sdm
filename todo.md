@@ -1,4 +1,11 @@
-- Update Magento 2 connector
+# Needed for Ash
+
+- Build not failing
+
+# Backlog
+
+- Finish new Magento 2 client
+- Improve `index.ts` interface
 - `sdm-config`
 - `sdm`
 - Support batching of inputs where appropriate to improve performance

@@ -1,8 +1,11 @@
-import fetch, { RequestInit } from "node-fetch";
+import fetch from "node-fetch";
 import { stringify } from 'query-string'
-import { flatten, objectFromEntries } from "../util";
-import { ScopeConfig } from "../resource-v2";
+import { flatten, objectFromEntries } from "../../util";
+import { ScopeConfig } from "../../framework";
 import * as t from 'io-ts'
+import { Agent as HttpAgent } from "http";
+import { Agent as HttpsAgent } from "https";
+import { parse as parseUrl } from "url";
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -28,10 +31,13 @@ export default class Magento2 {
     private readonly config: ScopeConfig<Config>,
   ) {}
 
+  private configUsedForAgent?: Config = undefined;
+  private agent?: HttpAgent | HttpsAgent = undefined;
+
   async get<T>(uri: string, params?: QueryParams): Promise<T> {
     const paramsFlattened = params && flattenParams(params);
     const paramsString = paramsFlattened ? `?${stringify(paramsFlattened)}` : '';
-    return await this.fetch(uri + paramsString);
+    return await this.fetch({method: 'GET', uri: uri + paramsString, auth: true});
   }
 
   async* search<T extends Record<string, any> = any>(
@@ -60,19 +66,19 @@ export default class Magento2 {
   }
 
   async post<T>(uri: string, content: any): Promise<T> {
-    return this.makeUnsafeRequest('POST', uri, content);
+    return this.fetch({method: 'POST', uri, content, auth: true});
   }
 
   async put<T>(uri: string, content: any): Promise<T> {
-    return this.makeUnsafeRequest('PUT', uri, content);
+    return this.fetch({method: 'PUT', uri, content, auth: true});
   }
 
   async patch<T>(uri: string, content: any): Promise<T> {
-    return this.makeUnsafeRequest('PATCH', uri, content);
+    return this.fetch({method: 'PATCH', uri, content, auth: true});
   }
 
   async delete<T>(uri: string, content?: any): Promise<T> {
-    return this.makeUnsafeRequest('DELETE', uri, content);
+    return this.fetch({method: 'DELETE', uri, content, auth: true});
   }
 
   private async fetchSearchResultsPage<T extends Record<string, any> = any>(
@@ -91,23 +97,28 @@ export default class Magento2 {
     return items;
   }
 
-  private async makeUnsafeRequest<T>(method: string, uri: string, content: any): Promise<T> {
-    return await this.fetch(uri, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(content),
-    });
-  }
-
-  private async fetch<T>(relativeUri: string, init?: RequestInit): Promise<T> {
-    let auth = await this.options?.auth?.({refresh: false});
-    let response = await fetch(`${this.baseUrl}/rest/V1/${relativeUri}`, this.init({auth, init}));
-    if (response.status === 401) {
-      auth = await this.options?.auth?.({refresh: true});
-      response = await fetch(`${this.baseUrl}/rest/V1/${relativeUri}`, this.init({auth, init}));
+  private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean}): Promise<T> {
+    const doFetch = (config: Config) => {
+      return fetch(`${config.baseUrl}/rest/V1/${options.uri}`, {
+        headers: {
+          Accept: 'application/json',
+          ...(options.content ? { 'Content-Type': 'application/json' } : {}),
+          ...(options.auth ? {Authorization: `Bearer ${config.token!.value}`} : {}),
+        },
+        method: options.method,
+        body: options.content && JSON.stringify(options.content),
+        agent: this.getAgent(config),
+      });
     }
+
+    const currentConfig = this.config.get();
+    const config = options.auth && !currentConfig.token ? await this.refreshToken() : currentConfig;
+    let response = await doFetch(config);
+    if (response.status === 401) {
+      const updatedConfig = await this.refreshToken();
+      response = await doFetch(updatedConfig);
+    }
+
     if (!response.ok) {
       const error = new Error(`${response.status} ${response.statusText}`);
       let responseBody: any = await response.text();
@@ -120,25 +131,44 @@ export default class Magento2 {
       }
       throw error;
     }
+
     return await response.json();
   }
 
-  private init({auth, init}: {auth?: string, init?: RequestInit}): RequestInit {
-    const headers = {
-      ...init?.headers,
-      ...(auth ? {Authorization: `Bearer ${auth}`} : {}),
-      Accept: 'application/json',
+  private getAgent(config: Config): HttpAgent | HttpsAgent {
+    if (config !== this.configUsedForAgent) {
+      this.agent = parseUrl(config.baseUrl).protocol === 'https:'
+        ? new HttpsAgent({
+          rejectUnauthorized: !config?.insecure,
+          keepAlive: true,
+        })
+        : new HttpAgent({
+          keepAlive: true,
+        });
+      this.configUsedForAgent = config;
     }
-    return {
-      ...(init || {}),
-      headers,
-      agent: this.agent,
-    };
+    return this.agent!;
+  }
+
+  private async refreshToken(): Promise<Config> {
+    const config = this.config.get();
+    if (!config.credentials) {
+      throw new Error(`No Magento 2 credentials available for ${config.baseUrl}`);
+    }
+    const token = await this.getToken(config.credentials);
+    const updatedConfig = {...config, token};
+    this.config.set(updatedConfig);
+    return updatedConfig;
   }
 
   private async getToken(credentials: NonNullable<Config['credentials']>): Promise<NonNullable<Config['token']>> {
     const fourHoursFromNow = new Date(Date.now() + 4 * 3_600_000);
-    const tokenValue = await this.post<string>('integration/admin/token', credentials);
+    const tokenValue = await this.fetch<string>({
+      method: 'POST',
+      uri: 'integration/admin/token',
+      content: credentials,
+      auth: false,
+    });
     return {
       value: tokenValue,
       expiration: fourHoursFromNow.toISOString(),

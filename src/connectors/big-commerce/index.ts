@@ -1,10 +1,10 @@
 import BigCommerce, { Config, configSchema } from './client';
-import { connector, mergeResources } from '../resource-v2';
+import { connector, mergeResources } from '../../framework';
 import { batch, endpoint, listIds, Query } from './functions';
 
 export type BigCommerceConfig = Config;
 
-const bigCommerceConnector = connector({
+export const bigCommerce = connector({
   configSchema,
   
   getScopeName: config => config.storeHash,
@@ -249,5 +249,3 @@ const bigCommerceConnector = connector({
     },
   },
 });
-
-export default bigCommerceConnector;

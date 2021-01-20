@@ -61,7 +61,10 @@ export function connector<
       }
     }
     
-    return addPropertiesToFunction(scope, resources) as ConnectorRef<Config, Scope, Resources>;
+    return addPropertiesToFunction(
+      scope,
+      {...resources, $configSchema: definition.configSchema},
+    ) as ConnectorRef<Config, Scope, Resources>;
   } catch (e) {
     throw new InvalidConnectorDefinition(e);
   }
@@ -106,6 +109,7 @@ export type ConnectorRef<
   Scope = any,
   Resources extends ResourceMap<Scope> = {},
 > = ResourceMapRef<Resources, false> & {
+  $configSchema: t.Type<Config>
   (config: Config | ScopeConfig<Config>): ConnectorScope
 }
 
