@@ -1,18 +1,19 @@
 import { flatMapAsync, pipe, compose, map, tap } from '@space48/json-pipe';
 import * as t from 'io-ts'
+import { PathReporter } from 'io-ts/lib/PathReporter'
 import R from "ramda";
 
 export function connector<
   Config,
   Scope,
-  Resources extends ResourceMap<Scope>
+  Resources extends ResourceDefinitionMap<Scope>
 >(
-  definition: Connector<Config, Scope, Resources>,
-): ConnectorRef<Config, Scope, Resources> {
+  definition: ConnectorDefinition<Config, Scope, Resources>,
+): Connector<Config, Scope, Resources> {
   try {
-    const resources = resourceMapRef(definition.resources, []);
+    const resources = resourceMap(definition.resources, []);
     
-    function scope(configArg: Config | ScopeConfig<Config>): ConnectorScope {
+    function scopeFactory(configArg: Config | ScopeConfig<Config>): ConnectorScope {
       const config = ScopeConfig.resolve(definition.configSchema, configArg);
 
       const _scope = definition.getScope(config);
@@ -20,7 +21,9 @@ export function connector<
       const executeCommands = commandExecutor(definition.resources, _scope);
 
       return {
-        name: definition.getScopeName(config.get()),
+        scopeName: definition.getScopeName(config.get()),
+
+        connector,
         
         async getWarningMessage(): Promise<string|undefined|void> {
           return await definition.getWarningMessage?.(_scope);
@@ -61,164 +64,167 @@ export function connector<
       }
     }
     
-    return addPropertiesToFunction(
-      scope,
-      {...resources, $configSchema: definition.configSchema},
-    ) as ConnectorRef<Config, Scope, Resources>;
+    const connector = addPropertiesToFunction(
+      scopeFactory,
+      {...resources, $definition: definition},
+    ) as Connector<Config, Scope, Resources>;
+
+    return connector;
   } catch (e) {
     throw new InvalidConnectorDefinition(e);
   }
 }
 
-export function resource<
-  Scope,
-  Endpoints extends EndpointMap<Scope>,
-  Resources extends ResourceMap<Scope>,
-  Documents extends Document<Scope>,
->(
-  resource: Resource<Scope, Endpoints, Resources, Documents>,
-): Resource<Scope, Endpoints, Resources, Documents> {
+export type ScopeRef = {
+  connector: string
+  scope: string
+};
+
+/**
+ * this function can help with type inference in connectors -- don't use unless necessary for type inference
+ */
+export function resource<T extends ResourceDefinition>(resource: T): T {
   return resource;
 }
 
-export function mergeResources<
-  C,
-  E1 extends EndpointMap<C>, R1 extends ResourceMap<C>, D1 extends Document<C>,
-  E2 extends EndpointMap<C>, R2 extends ResourceMap<C>, D2 extends Document<C>,
->(
-  r1: Resource<C, E1, R1, D1>,
-  r2: Resource<C, E2, R2, D2>,
-): Resource<C, E1&E2, R1&R2, D1&D2> {
-  return R.mergeDeepRight(r1, r2) as Resource<C, E1&E2, R1&R2, D1&D2>;
+export function resourceMerger<Scope>() {
+  return <
+    E1 extends EndpointDefinitionMap<Scope>, R1 extends ResourceDefinitionMap<Scope>, D1 extends DocumentDefinition<Scope>,
+    E2 extends EndpointDefinitionMap<Scope>, R2 extends ResourceDefinitionMap<Scope>, D2 extends DocumentDefinition<Scope>,
+  >(r1: ResourceDefinition<Scope, E1, R1, D1>, r2: ResourceDefinition<Scope, E2, R2, D2>) => {
+    return R.mergeDeepRight(r1, r2) as ResourceDefinition<Scope, E1&E2, R1&R2, D1&D2>;
+  }
+}
+
+export interface ConnectorDefinition<
+  Config = any,
+  Scope = any,
+  Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>,
+> {
+  readonly configSchema: t.Type<Config>
+  readonly resources: Resources
+  getScope(config: ScopeConfig<Config>): Scope
+  getScopeName(config: Config): string
+  getWarningMessage(scope: Scope): Promise<string|undefined|void>
 }
 
 export type Connector<
   Config = any,
   Scope = any,
-  Resources extends ResourceMap<Scope> = ResourceMap<Scope>,
-> = {
-  readonly configSchema: t.Type<Config>
-  readonly resources: Resources & ResourceMap<Scope> // & ResourceMap<Scope> improves inference, it doesn't actually narrow the types
-  getScope(config: ScopeConfig<Config>): Scope
-  getScopeName(config: Config): string
-  getWarningMessage?(scope: Scope): Promise<string|undefined|void>
-}
-
-export type ConnectorRef<
-  Config = any,
-  Scope = any,
-  Resources extends ResourceMap<Scope> = {},
-> = ResourceMapRef<Resources, false> & {
-  $configSchema: t.Type<Config>
+  Resources extends ResourceDefinitionMap<Scope> = {},
+> = ResourceMap<Resources, false> & {
+  $definition: ConnectorDefinition<Config, Scope, Resources>
   (config: Config | ScopeConfig<Config>): ConnectorScope
 }
 
 export interface ConnectorScope {
-  name: string
+  scopeName: string
+  connector: Connector
   getWarningMessage(): Promise<string|undefined|void>
   execute<OutT>(command: Command<any, OutT, false>): AsyncIterable<OutT>
   execute<OutT>(command: Command<any, OutT, true>): AsyncIterable<OutputWithPath<OutT>>
+  execute<OutT>(command: Command<any, OutT, boolean>): AsyncIterable<OutT | OutputWithPath<OutT>>
   execute<InT, OutT>(commands: Iterable<Command<InT, OutT>> | AsyncIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>
 }
 
-export interface ResourceMap<Scope = any> {
-  readonly [key: string]: Resource<Scope>
+export interface ResourceDefinitionMap<Scope = any> {
+  readonly [key: string]: ResourceDefinition<Scope>
 }
 
-export type ResourceMapRef<
-  T extends ResourceMap = ResourceMap,
+export type ResourceMap<
+  T extends ResourceDefinitionMap = ResourceDefinitionMap,
   MultiPath extends boolean = boolean,
 > = {
   [K in keyof T]:
-    T[K] extends Resource<any, infer E, infer R, infer D>
-      ? ResourceRef<E, R, D, MultiPath>
+    T[K] extends ResourceDefinition<any, infer E, infer R, infer D>
+      ? Resource<E, R, D, MultiPath>
       : never
 };
 
-function resourceMapRef<T extends ResourceMap>(resources: T, path: Path): ResourceMapRef<T> {
+function resourceMap<T extends ResourceDefinitionMap>(resources: T, path: Path): ResourceMap<T> {
   return R.mapObjIndexed(
-    (resource, name) => resourceRef(resource, path, name),
+    (resource, name) => _resource(resource, path, name),
     resources
-  ) as ResourceMapRef<T>;
+  ) as ResourceMap<T>;
 }
 
-export interface Resource<
+export interface ResourceDefinition<
   Scope = any,
-  Endpoints extends EndpointMap<Scope> = EndpointMap<Scope>,
-  Resources extends ResourceMap<Scope> = ResourceMap<Scope>,
-  Documents extends Document<Scope> = Document<Scope>,
+  Endpoints extends EndpointDefinitionMap<Scope> = EndpointDefinitionMap<Scope>,
+  Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>,
+  Documents extends DocumentDefinition<Scope> = DocumentDefinition<Scope>,
 > {
-  readonly endpoints?: Endpoints & EndpointMap<Scope> // & EndpointMap<Scope> improves inference, it doesn't actually narrow the types
-  readonly resources?: Resources & ResourceMap<Scope> // & ResourceMap<Scope> improves inference, it doesn't actually narrow the types
-  readonly documents?: Documents & Document<Scope>    // & Document<Scope> improves inference, it doesn't actually narrow the types
+  readonly endpoints?: Endpoints
+  readonly resources?: Resources
+  readonly documents?: Documents
 }
 
-type ResourceRef<
-  Endpoints extends EndpointMap = EndpointMap,
-  Resources extends ResourceMap = ResourceMap,
-  Documents extends Document = Document,
+type Resource<
+  Endpoints extends EndpointDefinitionMap = EndpointDefinitionMap,
+  Resources extends ResourceDefinitionMap = ResourceDefinitionMap,
+  Documents extends DocumentDefinition = DocumentDefinition,
   MultiPath extends boolean = boolean,
-> = ResourceMapRef<Resources, MultiPath>
-  & EndpointMapRef<Endpoints, MultiPath>
-  & DocumentRefSelectors<Documents, MultiPath>;
+> = ResourceMap<Resources, MultiPath>
+  & EndpointMap<Endpoints, MultiPath>
+  & DocumentSelectors<Documents, MultiPath>;
 
-function resourceRef(resource: Resource, path: Path, name: string): ResourceRef {
+function _resource(resource: ResourceDefinition, path: Path, name: string): Resource {
   return deepMerge(
     deepMerge(
-      resourceMapRef(resource.resources ?? {}, [...path, name]),
-      endpointMapRef(resource.endpoints ?? {}, [...path, name]),
+      resourceMap(resource.resources ?? {}, [...path, name]),
+      endpointMap(resource.endpoints ?? {}, [...path, name]),
     ),
     {
-      $all: documentRef(resource.documents ?? {}, [...path, [name, Path.WILDCARD]]),
-      $doc: (id: DocId) => documentRef(resource.documents ?? {}, [...path, [name, id]]),
+      $all: document(resource.documents ?? {}, [...path, [name, Path.WILDCARD]]),
+      $doc: (id: DocId) => document(resource.documents ?? {}, [...path, [name, id]]),
     }
   );
 }
 
-interface DocumentRefSelectors<
-  T extends Document = Document,
+interface DocumentSelectors<
+  T extends DocumentDefinition = DocumentDefinition,
   MultiPath extends boolean = boolean,
 > {
-  $all: DocumentRef<T, true> // todo -- only include $all if listIds() is defined on the resource
-  $doc(id: DocId): DocumentRef<T, MultiPath>
+  $all: Document<T, true> // todo -- only include $all if listIds() is defined on the resource
+  $doc(id: DocId): Document<T, MultiPath>
 }
 
-export interface Document<Scope = any> {
+export interface DocumentDefinition<Scope = any> {
   idField?: string
   listIds?(scope: Scope): (path: Path) => AsyncIterable<DocId>
-  readonly endpoints?: EndpointMap<Scope>
-  readonly resources?: ResourceMap<Scope>
+  readonly endpoints?: EndpointDefinitionMap<Scope>
+  readonly resources?: ResourceDefinitionMap<Scope>
 }
 
-type DocumentRef<
-  T extends Document = Document,
+type Document<
+  T extends DocumentDefinition = DocumentDefinition,
   MultiPath extends boolean = boolean,
-> = (T['resources'] extends ResourceMap ? ResourceMapRef<T['resources'], MultiPath> : {})
-  & (T['endpoints'] extends EndpointMap ? EndpointMapRef<T['endpoints'], MultiPath> : {});
+> = (T['resources'] extends ResourceDefinitionMap ? ResourceMap<T['resources'], MultiPath> : {})
+  & (T['endpoints'] extends EndpointDefinitionMap ? EndpointMap<T['endpoints'], MultiPath> : {});
 
-function documentRef(document: Document, path: Path): DocumentRef {
+function document(document: DocumentDefinition, path: Path): Document {
   return deepMerge(
-    resourceMapRef(document.resources ?? {}, path),
-    endpointMapRef(document.endpoints ?? {}, path),
+    resourceMap(document.resources ?? {}, path),
+    endpointMap(document.endpoints ?? {}, path),
   );
 }
 
-export interface EndpointMap<Scope = any> {
-  readonly [key: string]: Endpoint<Scope>
+export interface EndpointDefinitionMap<Scope = any> {
+  readonly [key: string]: EndpointDefinition<Scope>
 }
 
-type EndpointMapRef<
-  T extends EndpointMap = EndpointMap,
+type EndpointMap<
+  T extends EndpointDefinitionMap = EndpointDefinitionMap,
   MultiPath extends boolean = boolean,
 > = {
-  [K in keyof T]: T[K] extends object ? EndpointRef<T[K], MultiPath> : never
+  [K in keyof T]: T[K] extends object ? Endpoint<T[K], MultiPath> : never
 };
 
-function endpointMapRef(endpoints: EndpointMap, path: Path): EndpointMapRef {
-  return R.mapObjIndexed((_, name) => endpointRef(path, name), endpoints);
+function endpointMap(endpoints: EndpointDefinitionMap, path: Path): EndpointMap {
+  return R.mapObjIndexed((_, name) => endpoint(path, name), endpoints);
 }
 
-export interface Endpoint<Scope = unknown, InT = any, OutT = any> {
+export interface EndpointDefinition<Scope = unknown, InT = any, OutT = any> {
   (scope: Scope): EndpointFn<InT, OutT>
 }
 
@@ -233,16 +239,16 @@ export interface EndpointPayload<T = undefined> {
 
 export type DocId = number | string;
 
-type EndpointRef<
-  T extends Endpoint = Endpoint,
+type Endpoint<
+  T extends EndpointDefinition = EndpointDefinition,
   MultiPath extends boolean = boolean,
 > =
-  T extends Endpoint<any, undefined, infer OutT> & Endpoint<any, infer InT, infer OutT> ? OptionalInputEndpointFns<InT, OutT, MultiPath>
-  : T extends Endpoint<any, infer InT, infer OutT> ? MandatoryInputEndpointFns<InT, OutT, MultiPath>
+  T extends EndpointDefinition<any, undefined, infer OutT> & EndpointDefinition<any, infer InT, infer OutT> ? OptionalInputEndpointFns<InT, OutT, MultiPath>
+  : T extends EndpointDefinition<any, infer InT, infer OutT> ? MandatoryInputEndpointFns<InT, OutT, MultiPath>
   : never;
 
-function endpointRef(path: Path, endpoint: string): EndpointRef {
-  return input => ({ path, endpoint, input });
+function endpoint(path: Path, endpoint: string): Endpoint {
+  return input => ({ path: [...path, endpoint], input });
 }
 
 interface OptionalInputEndpointFns<
@@ -261,13 +267,12 @@ interface MandatoryInputEndpointFns<
   (input: InT): Command<InT, OutT, MultiPath>
 }
 
-interface Command<
+export interface Command<
   InT = unknown,
   OutT = unknown,
   MultiPath extends boolean = boolean,
 > {
   path: Path
-  endpoint: string
   input: InT
   __dummyProps?: {
     outT: OutT
@@ -291,7 +296,7 @@ function configValidator<Config>(configSchema: t.Type<Config>): (config: Config)
   return config => {
     const result = configSchema.decode(config);
     if ('left' in result) {
-      throw new Error(JSON.stringify(result.left));
+      throw new Error(PathReporter.report(result).join('\n'));
     }
   };
 }
@@ -348,27 +353,51 @@ export namespace Path {
 
   export type Element = string | [resource: string, documentId: DocId | DocIdWildcard];
 
+  export function pop(path: Path): [head: Path, tail: Path.Element | undefined] {
+    const head = path.slice(0, -1);
+    const tail = path.slice(-1)[0];
+    return [head, tail];
+  }
+
+  export function popResourceName(path: Path): [head: Path, tail: string] {
+    const [head, tail] = pop(path);
+    if (typeof tail !== 'string') {
+      throw new InvalidPathError(path);
+    }
+    return [head, tail];
+  }
+
+  export function popEndpointName(path: Path): [resourcePath: Path, endpointName: string] {
+    const [head, tail] = pop(path);
+    if (head.length === 0 || typeof tail !== 'string') {
+      throw new InvalidPathError(path);
+    }
+    return [head, tail];
+  }
+
   export function containsWildcard(path: Path): boolean {
     return path.some(element => Array.isArray(element) && element[1] === WILDCARD);
   }
 
   export class InvalidPathError extends Error {
-
+    constructor(path: Path, message: string = '') {
+      super(`Invalid path ${JSON.stringify(path)}. ${message}`);
+    }
   }
 
-  export function selector(resources: ResourceMap): (path: Path) => Resource | Document {
+  export function selector(resources: ResourceDefinitionMap): (path: Path) => ResourceDefinition | DocumentDefinition {
     return path => {
       if (path.length === 0) {
-        throw new InvalidPathError();
+        throw new InvalidPathError(path);
       }
 
       return path.reduce(
-        (host: {resources?: ResourceMap}, element: Element) => {
+        (host: {resources?: ResourceDefinitionMap}, element: Element) => {
           const resourceName = typeof element === 'string' ? element : element[0];
           const resource = host.resources?.[resourceName];
           const _host = typeof element === 'string' ? resource : resource?.documents;
           if (!_host) {
-            throw new InvalidPathError();
+            throw new InvalidPathError(path);
           }
           return _host;
         },
@@ -377,12 +406,16 @@ export namespace Path {
     }
   }
 
-  export function endpointFnSelector<Scope>(resources: ResourceMap<Scope>, scope: Scope) {
+  export function endpointFnSelector<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope) {
     const hostSelector = selector(resources);
 
-    return <InT, OutT>(path: Path, endpointName: string) => {
-      const endpointHost = hostSelector(path);
-      const endpoint = endpointHost.endpoints![endpointName] as Endpoint<Scope, InT, OutT>;
+    return <InT, OutT>(path: Path) => {
+      const [resourcePath, endpointName] = Path.popEndpointName(path);
+      const endpointHost = hostSelector(resourcePath);
+      if (!endpointHost.endpoints?.[endpointName]) {
+        throw new InvalidPathError(path, `Endpoint '${endpointName}' does not exist on this resource.`);
+      }
+      const endpoint = endpointHost.endpoints[endpointName] as EndpointDefinition<Scope, InT, OutT>;
       return endpoint(scope);
     };
   }
@@ -396,24 +429,32 @@ export namespace Path {
   /**
    * Expand a path so that a path containing document ID wildcards is mapped to n paths containing document IDs only
    */
-  export function expander<Scope>(resources: ResourceMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path> {
+  export function expander<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path> {
     return async function* (path) {
       let _resources = resources;
 
-      for (let i = 0; i < path.length; i++) {
+      for (let i = 0; i < path.length - 1; i++) {
         const pathElement = path[i];
 
         if (typeof pathElement === 'string') {
-          _resources = _resources[pathElement]!.resources ?? {};
+          if (!_resources[pathElement]) {
+            throw new InvalidPathError(path.slice(0, i + 1), `Resource '${pathElement}' does not exist.`);
+          }
+          _resources = _resources[pathElement].resources ?? {};
           continue;
         }
 
         const [resourceName, docId] = pathElement;
-        const documents = _resources[resourceName]!.documents ?? {};
+
+        if (!_resources[resourceName]) {
+          throw new InvalidPathError(path.slice(0, i + 1), `Resource '${resourceName}' does not exist.`);
+        }
+
+        const documents = _resources[resourceName].documents ?? {};
 
         if (docId === WILDCARD) {
           if (!documents.listIds) {
-            throw new InvalidPathError('Wildcard is not permitted.');
+            throw new InvalidPathError(path.slice(0, i + 1), 'Wildcards are not supported for this resource.');
           }
           const listIdsPath = [...path.slice(0, i), resourceName];
           const expandPath = expander(resources, scope);
@@ -439,7 +480,7 @@ export type CommandExecutor =
 type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 
 export function commandExecutor<Scope>(
-  resources: ResourceMap<Scope>,
+  resources: ResourceDefinitionMap<Scope>,
   scope: Scope,
 ): CommandExecutor {
   const selectEndpointFn = Path.endpointFnSelector(resources, scope);
@@ -457,7 +498,7 @@ export function commandExecutor<Scope>(
     flatMapAsync(
       {concurrency: 100},
       async function* <InT, OutT>(command: Command<InT, OutT>) {
-        const endpointFn = selectEndpointFn<InT, OutT>(command.path, command.endpoint);
+        const endpointFn = selectEndpointFn<InT, OutT>(command.path);
 
         try {
           const endpointReturnValue = endpointFn({
@@ -508,6 +549,7 @@ export class ScopeConfig<T> {
     private onChange?: (state: T) => void
   ) {
     this.validate = configValidator(schema);
+    this.validate(value);
   }
 
   private readonly validate: (config: T) => void;

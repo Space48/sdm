@@ -1,17 +1,19 @@
 import BigCommerce, { Config, configSchema } from './client';
-import { connector, mergeResources } from '../../framework';
+import { connector, resourceMerger } from '../../framework';
 import { batch, endpoint, listIds, Query } from './functions';
 
 export type BigCommerceConfig = Config;
 
+const mergeResources = resourceMerger<BigCommerce>();
+
 export const bigCommerce = connector({
   configSchema,
   
-  getScopeName: config => config.storeHash,
+  getScopeName: config => config.storeAlias,
 
   getScope: config => new BigCommerce(config),
   
-  getWarningMessage: async client => {
+  getWarningMessage: async (client: BigCommerce) => {
     try {
       const store = await client.get('v2/store');
       if (store.status === 'live') {

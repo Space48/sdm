@@ -1,10 +1,12 @@
 import Magento2, { Config, configSchema } from './client';
-import { connector, mergeResources } from '../../framework';
+import { connector, resourceMerger } from '../../framework';
 import { endpoint } from './functions';
 import { parse as parseUrl } from "url";
 import { omit } from 'ramda';
 
 export type Magento2Config = Config;
+
+const mergeResources = resourceMerger<Magento2>();
 
 export const magento2 = connector({
   configSchema,
@@ -15,6 +17,8 @@ export const magento2 = connector({
   },
 
   getScope: config => new Magento2(config),
+
+  getWarningMessage: async (client: Magento2) => {},
   
   resources: {
     categories: mergeResources(

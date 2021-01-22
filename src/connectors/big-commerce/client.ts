@@ -88,7 +88,6 @@ export default class BigCommerce {
   }
 
   private async fetch(relativeUri: string, init?: RequestInit): Promise<any> {
-    console.error(relativeUri);
     const config = this.config.get();
     const absoluteUri = `https://api.bigcommerce.com/stores/${config.storeHash}/${relativeUri}`;
     const initResolved = this.init(config, init);

@@ -1,5 +1,5 @@
 import BigCommerce from './client';
-import { resource, DocId, Endpoint, Path } from '../../framework';
+import { resource, DocId, EndpointDefinition, Path } from '../../framework';
 import { map, pipe } from '@space48/json-pipe';
 
 export interface Query {
@@ -33,7 +33,7 @@ export namespace endpoint {
   export function fn<I = any, O = any>(
     uriPattern: string,
     _fn: (client: BigCommerce, uri: string, data: I, path: ReadonlyArray<DocId>) => Promise<O> | AsyncIterable<O>
-  ): Endpoint<BigCommerce, I, O> {
+  ): EndpointDefinition<BigCommerce, I, O> {
     return client => ({path, input}) => {
       const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
       return _fn(client, uri, input, Path.getDocIds(path));
@@ -59,7 +59,7 @@ export namespace endpoint {
 // Following functions are for compatibility with batch endpoints
 export namespace batch {
   export function crud(uriPattern: string, idField: string = 'id') {
-    return resource({
+    return {
       endpoints: {
         create: createOne(uriPattern),
         list: endpoint.list(uriPattern),
@@ -76,7 +76,7 @@ export namespace batch {
           update: updateOne(uriPattern),
         },
       },
-    });
+    };
   }
 
   export const createOne = (uriPattern: string) =>

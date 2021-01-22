@@ -1,21 +1,21 @@
 import Conf from "conf";
-import { ConnectorRef, ConnectorScope, ScopeConfig } from ".";
+import { Connector, ConnectorScope, ScopeConfig, ScopeRef } from "./connector";
 import R from "ramda";
 import { pipe } from "@space48/json-pipe";
 
-export function scopeLocator<Connectors extends Record<string, ConnectorRef>>(
-  connectors: Connectors,
-  repository: ConfigRepository<Connectors>,
-): <N extends keyof Connectors&string>(
-  scope: ScopeReference<N>
+export function scopeLocator(
+  connectors: Record<string, Connector>,
+  repository: ConfigRepository,
+): (
+  scope: ScopeRef
 ) => Promise<ConnectorScope|undefined> {
-  return async (scope: ScopeReference) => {
+  return async (scope: ScopeRef) => {
     const config = await repository.getConfig(scope);
     if (!config) {
       return undefined;
     }
     const connector = connectors[scope.connector];
-    const configSchema = connector.$configSchema;
+    const configSchema = connector.$definition.configSchema;
     const scopeConfig = new ScopeConfig(
       configSchema as any,
       config,
@@ -25,30 +25,31 @@ export function scopeLocator<Connectors extends Record<string, ConnectorRef>>(
   };
 }
 
-export interface ConfigRepository<
-  Connectors extends Record<string, ConnectorRef> = Record<string, ConnectorRef>
-> {
-  getScopes(): Promise<ScopeReference[]>
+export interface ConfigRepository {
+  getScopes(): Promise<ScopeRef[]>
 
-  getConfig<N extends keyof Connectors&string>(scope: ScopeReference<N>): Promise<InferConfigT<Connectors, N>|undefined>
+  getConfig<T = any>(scope: ScopeRef): Promise<T|undefined>
 
-  setConfig<N extends keyof Connectors&string>(scope: ScopeReference<N>, config: InferConfigT<Connectors, N>): Promise<void>
+  setConfig<T = any>(scope: ScopeRef, config: T): Promise<void>
 
-  export(): Promise<Config<Connectors>>
+  removeConfig(scope: ScopeRef): Promise<boolean>
 
-  import(config: Config<Connectors>): Promise<void>
+  export(): Promise<any>
+
+  import(config: Config): Promise<void>
 }
 
-export class ConfConfigRepository implements ConfigRepository {
+export class LocalConfigRepository implements ConfigRepository {
   constructor(
     private conf: Conf,
   ) {}
 
-  async getScopes(): Promise<ScopeReference[]> {
+  async getScopes(): Promise<ScopeRef[]> {
+    const key = this.computeKey(this.connectorsPath);
     return pipe(
-      await this.export(),
+      key.length ? this.conf.get(key) : this.conf.store,
       R.toPairs,
-      R.map(([connectorName, scopeConfigs]) => R.keys(scopeConfigs).map((scopeName): ScopeReference => ({
+      R.map(([connectorName, scopeConfigs]) => R.keys(scopeConfigs).map((scopeName): ScopeRef => ({
         connector: connectorName,
         scope: scopeName,
       }))),
@@ -56,39 +57,46 @@ export class ConfConfigRepository implements ConfigRepository {
     )
   }
 
-  async getConfig(scope: ScopeReference) {
-    const configKey = this.computeAbsoluteKey([scope.connector, scope.scope]);
-    return this.conf.get(configKey as any, undefined);
+  async getConfig(scope: ScopeRef) {
+    const key = this.scopeKey(scope);
+    return this.conf.get(key, undefined);
   }
 
-  async setConfig(scope: ScopeReference, config: any): Promise<void> {
-    const configKey = this.computeAbsoluteKey([scope.connector, scope.scope]);
-    return this.conf.set(configKey as any, config);
+  async setConfig(scope: ScopeRef, config: any) {
+    const key = this.scopeKey(scope);
+    this.conf.set(key, config);
   }
 
-  async export(): Promise<any> {
+  async removeConfig(scope: ScopeRef) {
+    const key = this.scopeKey(scope);
+    const exists = this.conf.has(key);
+    if (exists) {
+      this.conf.delete(key as any);
+    }
+    return exists;
+  }
+
+  async export() {
     return this.conf.store;
   }
 
-  async import(config: any): Promise<void> {
-    throw new Error('Not implemented');
+  async import(config: any) {
+    
   }
 
-  private computeAbsoluteKey(keys: string[]): string {
-    return keys.map(rawKey => rawKey.replace(/\./g, '\\.')).join('.')
+  private scopeKey(scopeRef: ScopeRef) {
+    return this.computeKey([...this.connectorsPath, scopeRef.connector, scopeRef.scope]);
+  }
+
+  private computeKey(path: string[]) {
+    return path.map(rawKey => rawKey.replace(/\./g, '\\.')).join('.')
+  }
+
+  private readonly connectorsPath = ['connectors'];
+}
+
+export type Config = {
+  [connector: string]: {
+    [scope: string]: any
   }
 }
-
-export type Config<Connectors extends Record<string, ConnectorRef>> = {
-  [N in keyof Connectors]?: { [scope: string]: InferConfigT<Connectors, N> }
-}
-
-type ScopeReference<N extends string = string> = {
-  connector: N   // e.g. magento2
-  scope: string  // e.g. www.bobstshirts.com
-};
-
-type InferConfigT<
-  Connectors extends Record<string, ConnectorRef>,
-  N extends keyof Connectors
-> = Connectors[N] extends ConnectorRef<infer ScopeConfig> ? ScopeConfig : never;

@@ -1,13 +1,14 @@
 import Conf from "conf";
 import { connectors } from "./connectors";
-import { ConfConfigRepository, scopeLocator } from "./framework";
+import { LocalConfigRepository, ConfigRepository, scopeLocator } from "./framework";
 
 export * from "./connectors";
+export * from "./framework";
 
 export function defaultScopeLocator() {
   return scopeLocator(connectors, defaultConfigRepository());
 }
 
-export function defaultConfigRepository() {
-  return new ConfConfigRepository(new Conf);
+export function defaultConfigRepository(): ConfigRepository {
+  return new LocalConfigRepository(new Conf);
 }

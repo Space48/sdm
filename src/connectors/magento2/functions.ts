@@ -1,5 +1,5 @@
 import Magento2, { Filter, SortKey } from './client';
-import { resource, DocId, Endpoint, Path } from '../../framework';
+import { DocId, EndpointDefinition, Path } from '../../framework';
 import { map, pipe } from '@space48/json-pipe';
 
 export namespace endpoint {
@@ -15,7 +15,7 @@ export namespace endpoint {
   export function crud<T extends CrudOptions>(uriPattern: string, options: T) {
     const docUriPattern = `${uriPattern}/{id}`;
 
-    return resource({
+    return {
       endpoints: {
         create: create(uriPattern),
         list: list(options.list.uri ?? uriPattern, options.list.sortKey),
@@ -36,13 +36,13 @@ export namespace endpoint {
           update: update(docUriPattern),
         },
       },
-    });
+    };
   }
 
   export function fn<I = any, O = any>(
     uriPattern: string,
     _fn: (client: Magento2, uri: string, data: I, path: ReadonlyArray<DocId>) => Promise<O> | AsyncIterable<O>
-  ): Endpoint<Magento2, I, O> {
+  ): EndpointDefinition<Magento2, I, O> {
     return client => ({path, input}) => {
       const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
       return _fn(client, uri, input, Path.getDocIds(path));
