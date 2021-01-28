@@ -1,20 +1,17 @@
 export default {
   "accessScope": {
-    "key": "accessScope",
     "endpoints": [
       "list"
     ],
     "children": {}
   },
   "apiPermission": {
-    "key": "apiPermission",
     "endpoints": [
       "delete"
     ],
     "children": {}
   },
   "applicationCharge": {
-    "key": "applicationCharge",
     "endpoints": [
       "create",
       "get",
@@ -24,7 +21,6 @@ export default {
     "children": {}
   },
   "applicationCredit": {
-    "key": "applicationCredit",
     "endpoints": [
       "create",
       "get",
@@ -33,7 +29,6 @@ export default {
     "children": {}
   },
   "balance": {
-    "key": "balance",
     "endpoints": [
       "list",
       "transactions"
@@ -41,7 +36,6 @@ export default {
     "children": {}
   },
   "blog": {
-    "key": "blog",
     "endpoints": [
       "count",
       "create",
@@ -52,7 +46,6 @@ export default {
     ],
     "children": {
       "article": {
-        "key": "article",
         "endpoints": [
           "count",
           "create",
@@ -68,7 +61,6 @@ export default {
     }
   },
   "carrierService": {
-    "key": "carrierService",
     "endpoints": [
       "create",
       "delete",
@@ -79,7 +71,6 @@ export default {
     "children": {}
   },
   "checkout": {
-    "key": "checkout",
     "endpoints": [
       "count",
       "create",
@@ -91,7 +82,6 @@ export default {
     ],
     "children": {
       "payment": {
-        "key": "payment",
         "endpoints": [
           "count",
           "create",
@@ -103,7 +93,6 @@ export default {
     }
   },
   "collect": {
-    "key": "collect",
     "endpoints": [
       "count",
       "create",
@@ -114,7 +103,6 @@ export default {
     "children": {}
   },
   "collectionListing": {
-    "key": "collectionListing",
     "endpoints": [
       "get",
       "list",
@@ -123,7 +111,6 @@ export default {
     "children": {}
   },
   "collection": {
-    "key": "collection",
     "endpoints": [
       "get",
       "products"
@@ -131,7 +118,6 @@ export default {
     "children": {}
   },
   "comment": {
-    "key": "comment",
     "endpoints": [
       "count",
       "create",
@@ -147,7 +133,6 @@ export default {
     "children": {}
   },
   "country": {
-    "key": "country",
     "endpoints": [
       "count",
       "create",
@@ -158,7 +143,6 @@ export default {
     ],
     "children": {
       "province": {
-        "key": "province",
         "endpoints": [
           "count",
           "get",
@@ -170,14 +154,12 @@ export default {
     }
   },
   "currency": {
-    "key": "currency",
     "endpoints": [
       "list"
     ],
     "children": {}
   },
   "customCollection": {
-    "key": "customCollection",
     "endpoints": [
       "count",
       "create",
@@ -189,7 +171,6 @@ export default {
     "children": {}
   },
   "customerSavedSearch": {
-    "key": "customerSavedSearch",
     "endpoints": [
       "count",
       "create",
@@ -202,7 +183,6 @@ export default {
     "children": {}
   },
   "customer": {
-    "key": "customer",
     "endpoints": [
       "count",
       "create",
@@ -217,7 +197,6 @@ export default {
     ],
     "children": {
       "customerAddress": {
-        "key": "customerAddress",
         "endpoints": [
           "delete",
           "get",
@@ -232,7 +211,6 @@ export default {
     }
   },
   "dispute": {
-    "key": "dispute",
     "endpoints": [
       "get",
       "list"
@@ -240,7 +218,6 @@ export default {
     "children": {}
   },
   "draftOrder": {
-    "key": "draftOrder",
     "endpoints": [
       "count",
       "create",
@@ -253,8 +230,7 @@ export default {
     ],
     "children": {}
   },
-  "fulfillmentEvent": {
-    "key": "fulfillmentEvent",
+  "event": {
     "endpoints": [
       "list",
       "get",
@@ -265,7 +241,6 @@ export default {
     "children": {}
   },
   "fulfillmentOrder": {
-    "key": "fulfillmentOrder",
     "endpoints": [
       "get",
       "list",
@@ -276,7 +251,6 @@ export default {
     ],
     "children": {
       "cancellationRequest": {
-        "key": "cancellationRequest",
         "endpoints": [
           "create",
           "accept",
@@ -285,7 +259,6 @@ export default {
         "children": {}
       },
       "fulfillmentRequest": {
-        "key": "fulfillmentRequest",
         "endpoints": [
           "create",
           "accept",
@@ -296,7 +269,6 @@ export default {
     }
   },
   "fulfillmentService": {
-    "key": "fulfillmentService",
     "endpoints": [
       "create",
       "delete",
@@ -307,7 +279,6 @@ export default {
     "children": {}
   },
   "giftCard": {
-    "key": "giftCard",
     "endpoints": [
       "count",
       "create",
@@ -319,7 +290,6 @@ export default {
     ],
     "children": {
       "giftCardAdjustment": {
-        "key": "giftCardAdjustment",
         "endpoints": [
           "create",
           "get",
@@ -330,7 +300,6 @@ export default {
     }
   },
   "inventoryItem": {
-    "key": "inventoryItem",
     "endpoints": [
       "get",
       "list",
@@ -339,7 +308,6 @@ export default {
     "children": {}
   },
   "inventoryLevel": {
-    "key": "inventoryLevel",
     "endpoints": [
       "list",
       "adjust",
@@ -350,7 +318,6 @@ export default {
     "children": {}
   },
   "location": {
-    "key": "location",
     "endpoints": [
       "count",
       "get",
@@ -360,7 +327,6 @@ export default {
     "children": {}
   },
   "marketingEvent": {
-    "key": "marketingEvent",
     "endpoints": [
       "count",
       "create",
@@ -373,7 +339,6 @@ export default {
     "children": {}
   },
   "metafield": {
-    "key": "metafield",
     "endpoints": [
       "count",
       "create",
@@ -385,7 +350,6 @@ export default {
     "children": {}
   },
   "order": {
-    "key": "order",
     "endpoints": [
       "count",
       "create",
@@ -400,7 +364,6 @@ export default {
     ],
     "children": {
       "fulfillment": {
-        "key": "fulfillment",
         "endpoints": [
           "count",
           "create",
@@ -413,7 +376,6 @@ export default {
         ],
         "children": {
           "fulfillmentEvent": {
-            "key": "fulfillmentEvent",
             "endpoints": [
               "list",
               "get",
@@ -426,7 +388,6 @@ export default {
         }
       },
       "orderRisk": {
-        "key": "orderRisk",
         "endpoints": [
           "create",
           "delete",
@@ -437,7 +398,6 @@ export default {
         "children": {}
       },
       "refund": {
-        "key": "refund",
         "endpoints": [
           "create",
           "get",
@@ -447,7 +407,6 @@ export default {
         "children": {}
       },
       "transaction": {
-        "key": "transaction",
         "endpoints": [
           "count",
           "create",
@@ -459,7 +418,6 @@ export default {
     }
   },
   "page": {
-    "key": "page",
     "endpoints": [
       "count",
       "create",
@@ -471,7 +429,6 @@ export default {
     "children": {}
   },
   "payout": {
-    "key": "payout",
     "endpoints": [
       "get",
       "list"
@@ -479,14 +436,12 @@ export default {
     "children": {}
   },
   "policy": {
-    "key": "policy",
     "endpoints": [
       "list"
     ],
     "children": {}
   },
   "priceRule": {
-    "key": "priceRule",
     "endpoints": [
       "create",
       "delete",
@@ -496,7 +451,6 @@ export default {
     ],
     "children": {
       "discountCodeCreationJob": {
-        "key": "discountCodeCreationJob",
         "endpoints": [
           "get",
           "create",
@@ -505,7 +459,6 @@ export default {
         "children": {}
       },
       "discountCode": {
-        "key": "discountCode",
         "endpoints": [
           "create",
           "delete",
@@ -519,7 +472,6 @@ export default {
     }
   },
   "productListing": {
-    "key": "productListing",
     "endpoints": [
       "count",
       "delete",
@@ -531,7 +483,6 @@ export default {
     "children": {}
   },
   "product": {
-    "key": "product",
     "endpoints": [
       "delete",
       "count",
@@ -542,7 +493,6 @@ export default {
     ],
     "children": {
       "productImage": {
-        "key": "productImage",
         "endpoints": [
           "count",
           "create",
@@ -554,7 +504,6 @@ export default {
         "children": {}
       },
       "productResourceFeedback": {
-        "key": "resourceFeedback",
         "endpoints": [
           "create",
           "list"
@@ -562,7 +511,6 @@ export default {
         "children": {}
       },
       "productVariant": {
-        "key": "productVariant",
         "endpoints": [
           "count",
           "delete",
@@ -576,7 +524,6 @@ export default {
     }
   },
   "recurringApplicationCharge": {
-    "key": "recurringApplicationCharge",
     "endpoints": [
       "create",
       "delete",
@@ -587,7 +534,6 @@ export default {
     ],
     "children": {
       "usageCharge": {
-        "key": "usageCharge",
         "endpoints": [
           "create",
           "get",
@@ -598,7 +544,6 @@ export default {
     }
   },
   "redirect": {
-    "key": "redirect",
     "endpoints": [
       "count",
       "create",
@@ -610,7 +555,6 @@ export default {
     "children": {}
   },
   "report": {
-    "key": "report",
     "endpoints": [
       "create",
       "delete",
@@ -621,7 +565,6 @@ export default {
     "children": {}
   },
   "resourceFeedback": {
-    "key": "resourceFeedback",
     "endpoints": [
       "create",
       "list"
@@ -629,7 +572,6 @@ export default {
     "children": {}
   },
   "scriptTag": {
-    "key": "scriptTag",
     "endpoints": [
       "count",
       "create",
@@ -641,21 +583,18 @@ export default {
     "children": {}
   },
   "shippingZone": {
-    "key": "shippingZone",
     "endpoints": [
       "list"
     ],
     "children": {}
   },
   "shop": {
-    "key": "shop",
     "endpoints": [
       "get"
     ],
     "children": {}
   },
   "smartCollection": {
-    "key": "smartCollection",
     "endpoints": [
       "count",
       "create",
@@ -669,7 +608,6 @@ export default {
     "children": {}
   },
   "storefrontAccessToken": {
-    "key": "storefrontAccessToken",
     "endpoints": [
       "create",
       "delete",
@@ -678,14 +616,12 @@ export default {
     "children": {}
   },
   "tenderTransaction": {
-    "key": "tenderTransaction",
     "endpoints": [
       "list"
     ],
     "children": {}
   },
   "theme": {
-    "key": "theme",
     "endpoints": [
       "create",
       "delete",
@@ -695,7 +631,6 @@ export default {
     ],
     "children": {
       "asset": {
-        "key": "asset",
         "endpoints": [
           "list",
           "get",
@@ -708,7 +643,6 @@ export default {
     }
   },
   "user": {
-    "key": "user",
     "endpoints": [
       "get",
       "list",
@@ -717,7 +651,6 @@ export default {
     "children": {}
   },
   "webhook": {
-    "key": "webhook",
     "endpoints": [
       "count",
       "create",

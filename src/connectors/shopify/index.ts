@@ -1,7 +1,9 @@
 import { connector } from "../../framework";
-
 import * as client from "./client";
 import { resourceDefinitions } from "./codegen";
+
+// do not remove the following imports -- they are intended to tidy up the generated declaration files
+import * as f from '../../framework';
 
 export { refreshInferredResources } from "./resource-inference";
 

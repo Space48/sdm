@@ -4,6 +4,9 @@ import { endpoint } from './functions';
 import { parse as parseUrl } from "url";
 import { omit } from 'ramda';
 
+// do not remove the following imports -- they are intended to tidy up the generated declaration files
+import * as f from '../../framework';
+
 export type Magento2Config = Config;
 
 const mergeResources = resourceMerger<Magento2>();

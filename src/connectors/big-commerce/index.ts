@@ -2,6 +2,9 @@ import BigCommerce, { Config, configSchema } from './client';
 import { connector, resourceMerger } from '../../framework';
 import { batch, endpoint, listIds, Query } from './functions';
 
+// do not remove the following imports -- they are intended to tidy up the generated declaration files
+import * as f from '../../framework';
+
 export type BigCommerceConfig = Config;
 
 const mergeResources = resourceMerger<BigCommerce>();

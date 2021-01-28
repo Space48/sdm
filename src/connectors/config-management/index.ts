@@ -2,6 +2,9 @@ import { ConfigRepository, Connector, connector, Path, ScopeRef } from "../../fr
 import * as t from 'io-ts'
 import R from "ramda";
 
+// do not remove the following imports -- they are intended to tidy up the generated declaration files
+import * as f from '../../framework';
+
 export const configManagement = (
   connectors: Readonly<Record<string, Connector>>,
   repository: ConfigRepository,
