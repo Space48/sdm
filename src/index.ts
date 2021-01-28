@@ -1,14 +1,27 @@
 import Conf from "conf";
-import { connectors } from "./connectors";
-import { LocalConfigRepository, ConfigRepository, scopeLocator } from "./framework";
+import { bigCommerce, configManagement, magento2, shopify } from "./connectors";
+import { LocalConfigRepository } from "./framework";
+import { Application } from "./framework/application";
 
 export * from "./connectors";
 export * from "./framework";
 
-export function defaultScopeLocator() {
-  return scopeLocator(connectors, defaultConfigRepository());
-}
+export function sdm() {
+  const configRepository = new LocalConfigRepository(new Conf);
 
-export function defaultConfigRepository(): ConfigRepository {
-  return new LocalConfigRepository(new Conf);
+  const regularConnectors = {
+    bigCommerce,
+    magento2,
+    shopify,
+  };
+
+  return new Application(
+    configRepository,
+    {
+      bigCommerce,
+      config: configManagement(regularConnectors, configRepository),
+      magento2,
+      shopify,
+    }
+  );
 }

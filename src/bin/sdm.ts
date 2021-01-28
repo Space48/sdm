@@ -1,18 +1,14 @@
 #!/usr/bin/env node
 
-import { connectors, localConfigConnector } from "../connectors";
-import { Command, ConnectorDefinition, Connector, ConnectorScope, Path, ScopeRef, ResourceDefinitionMap, ResourceDefinition, DocumentDefinition } from "../framework";
+import { Command, ConnectorDefinition, Connector, Path, ScopeRef } from "../framework";
 import * as readline from "readline";
 import { compose, map, pipe, streamJson, takeWhile, tap, transformJson } from "@space48/json-pipe";
-import json5 from "json5";
 import chalk from "chalk";
-import { defaultConfigRepository, defaultScopeLocator } from "..";
-import R from "ramda";
+import { BinaryApi } from "../framework";
+import { explainCliUsage } from "../framework/docgen";
+import { sdm } from "..";
 
-const connectorAliases: Record<string, string|undefined> = {
-  m2: 'magento2',
-  bc: 'bigCommerce',
-};
+const app = sdm();
 
 enum Flag {
   Force = 'force',
@@ -54,7 +50,7 @@ async function main() {
 
 async function runHelpMode() {
   const connector = await resolveConnectorInteractively(argsExcludingFlags[1]);
-  process.stderr.write(showConnectorHelp(connector.$definition));
+  process.stderr.write(explainCliUsage(connector.$definition));
 }
 
 async function runNonInteractiveMode() {
@@ -67,7 +63,7 @@ async function runNonInteractiveMode() {
     input: argsExcludingFlags.length > 1 ? BinaryApi.decodeCommandInput(argsExcludingFlags[1]) : undefined,
   };
   await warnUserIfNecessary(scopeRef, command);
-  const scope = await getScope(scopeRef);
+  const scope = await app.requireScope(scopeRef);
   if (process.stdin.isTTY || command.input !== undefined) {
     await streamJson(
       scope.execute(command)
@@ -93,7 +89,7 @@ async function runInteractiveMode() {
     readlineInterface().once('SIGINT', sigintListener);
     try {
       await warnUserIfNecessary(scopeRef, command);
-      const scope = await getScope(scopeRef);
+      const scope = await app.requireScope(scopeRef);
       let numOutputs = 0;
       if (!interrupted) {
         process.stderr.write('\n');
@@ -119,7 +115,7 @@ async function runInteractiveMode() {
 }
 
 async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
-  const scope = await getScope(scopeRef);
+  const scope = await app.requireScope(scopeRef);
   while (true) {
     process.stderr.write('Enter `help` to see a list of available commands.\n\n');
     const commandLine = await ask({
@@ -131,7 +127,7 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
       }
     });
     if (commandLine === 'help') {
-      process.stderr.write(showConnectorHelp(scope.connector.$definition));
+      process.stderr.write(explainCliUsage(scope.connector.$definition));
       continue;
     }
     return BinaryApi.decodeCommand(commandLine);
@@ -146,13 +142,13 @@ function suggestCommands(connector: ConnectorDefinition, line: string): string[]
     if (Array.isArray(lastElement)) {
       // [full resource name, doc ID]
       const host = selectHost(path);
-      return getAllPaths(host, path)
+      return Path.computeAll(host, path)
         .map(BinaryApi.encodePath);
     } else {
       // partial resource name
       const hostPath = path.slice(0, -1);
       const host = hostPath.length === 0 ? connector : selectHost(hostPath);
-      return getAllPaths(host, hostPath)
+      return Path.computeAll(host, hostPath)
         .map(BinaryApi.encodePath)
         .filter(encodedPath => encodedPath.startsWith(line));
     }
@@ -161,69 +157,14 @@ function suggestCommands(connector: ConnectorDefinition, line: string): string[]
   }
 }
 
-function showConnectorHelp(connector: ConnectorDefinition, commandPrefix: string = ''): string {
-  return `
-${title('Available commands')}
-
-${describeCommands(connector, commandPrefix).join('\n')}
-`;
-}
-
-function describeCommands(resources: ConnectorDefinition, commandPrefix: string): string[] {
-  return pipe(
-    getAllPaths(resources),
-    R.map(Path.popEndpointName),
-    R.map(([resourcePath, endpointName]) => R.pair(
-      BinaryApi.encodePath(resourcePath),
-      BinaryApi.encodePathElement(endpointName),
-    )),
-    R.groupBy(([encodedResourcePath]) => encodedResourcePath),
-    R.mapObjIndexed(R.map(([, encodedEndpointName]) => encodedEndpointName)),
-    R.toPairs,
-    R.map(([encodedResourcePath, encodedEndpointNames]) =>
-      `${commandPrefix}${encodedResourcePath}\n ↳ ${encodedEndpointNames.sort().join(', ')}\n`)
-  );
-}
-
-function getAllPaths(
-  host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {},
-  path: Path = []
-): Path[] {
-  const endpointNames = 'endpoints' in host ? Object.keys(host.endpoints ?? {}) : [];
-  
-  const resources = 'resources' in host ? Object.entries(host.resources ?? {}) : [];
-
-  let documentPaths: Path[];
-
-  if ('documents' in host) {
-    const supportsDocIdWildcard = host.documents?.listIds ? true : false;
-    const docIdField = host.documents?.idField ?? 'id';
-    const docIdPattern = `${docIdField}${supportsDocIdWildcard ? `|${Path.WILDCARD}` : ''}`;
-    const [prevPath, resourceName] = Path.popResourceName(path);
-    const documentsPath: Path = [...prevPath, [resourceName, docIdPattern]];
-
-    documentPaths = getAllPaths(host.documents ?? {}, documentsPath);
-  } else {
-    documentPaths = [];
-  }
-
-  return [
-    ...endpointNames.map(endpointName => [...path, endpointName]),
-
-    ...documentPaths,
-
-    ...R.chain(([resourceName, resource]) => getAllPaths(resource, [...path, resourceName]), resources),
-  ];
-}
-
 async function resolveConnectorInteractively(hint: string|undefined): Promise<Connector> {
-  const availableConnectors = Object.keys(connectors).map(BinaryApi.encodeConnectorName);
+  const availableConnectors = Object.keys(app.connectors).map(BinaryApi.encodeConnectorName);
   const availableConnectorsStr = `Available connectors: ${availableConnectors.map(connector => `\n\t${connector}`)}\n`;
 
   if (hint) {
     if (availableConnectors.includes(hint)) {
       const connectorName = BinaryApi.decodeConnectorName(hint);
-      return connectors[connectorName];
+      return app.connectors[connectorName];
     }
     process.stderr.write(`No such connector '${hint}'. ${availableConnectorsStr}`);
     process.exit(1);
@@ -233,7 +174,7 @@ async function resolveConnectorInteractively(hint: string|undefined): Promise<Co
     const choice = await askForConnector(availableConnectors);
     if (availableConnectors.includes(choice)) {
       const connectorName = BinaryApi.decodeConnectorName(choice);
-      return connectors[connectorName];
+      return app.connectors[connectorName];
     }
     process.stderr.write(`No such connector '${choice}'. ${availableConnectorsStr}`);
   }
@@ -294,22 +235,8 @@ Enter a scope: `,
   return selection;
 }
 
-const maybeGetScope = defaultScopeLocator();
-async function getScope(ref: ScopeRef): Promise<ConnectorScope> {
-  if (ref.connector === 'config') {
-    return localConfigConnector({});
-  }
-  const maybeScope = await maybeGetScope(ref);
-  if (!maybeScope) {
-    throw new Error(`Scope ${BinaryApi.encodeScope(ref)} not found.`);
-  }
-  return maybeScope;
-}
-
 async function getAvailableScopes(): Promise<string[]> {
-  return (await defaultConfigRepository().getScopes())
-    .concat([{connector: 'config', scope: ''}])
-    .map(BinaryApi.encodeScope);
+  return (await app.listScopes()).map(BinaryApi.encodeScope);
 }
 
 const safeEndpoints = ['get', 'list'];
@@ -319,7 +246,7 @@ async function warnUserIfNecessary(scopeRef: ScopeRef, command: Command): Promis
     return;
   }
 
-  const scope = await getScope(scopeRef); 
+  const scope = await app.requireScope(scopeRef); 
   const warning = await scope.getWarningMessage()
   if (!warning) {
     return;
@@ -367,139 +294,6 @@ async function ask(options: {question: string, completer?: readline.Completer}):
 
 function title(value: string) {
   return chalk.underline.bold(value);
-}
-
-namespace BinaryApi {
-  const PATH_SEPARATOR = '.';
-
-  export function decodePartialPath(encodedPath: string): Path {
-    const path = decodePath(encodedPath);
-    const [head, tail] = Path.pop(path);
-    if (!tail) {
-      return head;
-    }
-    if (Array.isArray(tail) && tail[1] === '') {
-      return [...head, tail[0]];
-    }
-    return [...head, tail];
-  }
-
-  export function decodeScopeAndPath(encodedScopeAndPath: string): [ScopeRef | undefined, Path] {
-    const [connectorAndScope, ...path] = decodePath(encodedScopeAndPath);
-    if (!connectorAndScope) {
-      return [undefined, []];
-    }
-    const scope = Array.isArray(connectorAndScope)
-      ? {
-        connector: getConnectorName(connectorAndScope[0]),
-        scope: connectorAndScope[1] as string,
-      }
-      : {
-        connector: getConnectorName(connectorAndScope),
-        scope: '',
-      };
-    return [ scope, path ];
-  }
-
-  export function decodePath(encodedPath: string): Path {
-    const encodedPathElements = encodedPath.split(PATH_SEPARATOR);
-    return encodedPathElements.map(decodePathElement);
-  }
-
-  export function encodePath(path: Path): string {
-    const encodedPathElements = path.map(encodePathElement);
-    return encodedPathElements.join(PATH_SEPARATOR);
-  }
-
-  export function decodePathElement(encodedPathElement: string): Path[number] {
-    const match = /(^.*)\[(.*)\]$/.exec(encodedPathElement);
-    if (match) {
-      return [decodeIdentifier(match[1]), match[2]];
-    }
-    return decodeIdentifier(encodedPathElement);
-  }
-
-  export function encodePathElement(pathElement: Path[number]): string {
-    if (typeof pathElement === 'string') {
-      return encodeIdentifier(pathElement);
-    }
-    return `${encodeIdentifier(pathElement[0])}[${pathElement[1]}]`;
-  }
-
-  export function decodeCommand(encodedCommandLine: string): Command {
-    const [encodedPath, ...encodedInputParts] = encodedCommandLine.split(' ');
-    const encodedInput = encodedInputParts.join(' ');
-    const path = decodePath(encodedPath);
-    return {
-      path,
-      input: encodedInput ? decodeCommandInput(encodedInput) : undefined,
-    };
-  }
-  
-  export function decodeCommandInput(encodedInput: string): any {
-    return json5.parse(encodedInput);
-  }
-
-  export function encodeCommandHeader(command: Command): string {
-    return encodePath(command.path);
-  }
-  
-  export function decodeScope(encodedScopeRef: string): ScopeRef {
-    const pathEl = decodePathElement(encodedScopeRef); 
-    return Array.isArray(pathEl)
-      ? {
-        connector: getConnectorName(pathEl[0]),
-        scope: pathEl[1] as string,
-      }
-      : {
-        connector: getConnectorName(pathEl),
-        scope: '',
-      };
-  }
-  
-  export function encodeScope(scopeRef: ScopeRef): string {
-    return scopeRef.scope
-      ? encodePathElement([getConnectorIdentifier(scopeRef.connector), scopeRef.scope])
-      : encodePathElement(getConnectorIdentifier(scopeRef.connector));
-  }
-
-  export function decodeConnectorName(encodedConnectorName: string): string {
-    const connectorIdentifier = decodeIdentifier(encodedConnectorName)
-    return getConnectorName(connectorIdentifier);
-  }
-
-  export function encodeConnectorName(connectorName: string): string {
-    return encodeIdentifier(getConnectorIdentifier(connectorName));
-  }
-
-  function getConnectorName(connectorIdentifier: string): string {
-    return connectorAliases[connectorIdentifier] ?? connectorIdentifier;
-  }
-
-  function getConnectorIdentifier(connectorName: string): string {
-    const alias = Object.entries(connectorAliases).find(([_, name]) => name === connectorName)?.[0];
-    return alias ?? connectorName;
-  }
-
-  function encodeIdentifier(identifier: string): string {
-    return hyphenate(identifier);
-  }
-
-  function decodeIdentifier(encodedIdentifier: string): string {
-    return camelCase(encodedIdentifier);
-  }
-
-  const hyphenate = (value: string): string => (
-    value
-      .replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
-      .replace(/_/g, '-')
-  );
-
-  const camelCase = (value: string): string => (
-    value
-      .replace(/^[A-Z]/, g => g.toLowerCase())
-      .replace(/[-_][a-z]/g, g => g[1].toUpperCase())
-  );
 }
 
 main();

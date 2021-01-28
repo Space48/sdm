@@ -83,7 +83,7 @@ export function connector<
 
 export type ScopeRef = {
   connector: string
-  scope: string
+  scope: string|null
 };
 
 /**
@@ -381,6 +381,37 @@ export namespace Path {
     return [head, tail];
   }
 
+  export function computeAll(
+    host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {},
+    path: Path = []
+  ): Path[] {
+    const endpointNames = 'endpoints' in host ? Object.keys(host.endpoints ?? {}) : [];
+    
+    const resources = 'resources' in host ? Object.entries(host.resources ?? {}) : [];
+  
+    let documentPaths: Path[];
+  
+    if ('documents' in host) {
+      const supportsDocIdWildcard = host.documents?.listIds ? true : false;
+      const docIdField = host.documents?.idField ?? 'id';
+      const docIdPattern = `${docIdField}${supportsDocIdWildcard ? `|${Path.WILDCARD}` : ''}`;
+      const [prevPath, resourceName] = Path.popResourceName(path);
+      const documentsPath: Path = [...prevPath, [resourceName, docIdPattern]];
+  
+      documentPaths = Path.computeAll(host.documents ?? {}, documentsPath);
+    } else {
+      documentPaths = [];
+    }
+  
+    return [
+      ...endpointNames.map(endpointName => [...path, endpointName]),
+  
+      ...documentPaths,
+  
+      ...R.chain(([resourceName, resource]) => Path.computeAll(resource, [...path, resourceName]), resources),
+    ];
+  }
+  
   export function containsWildcard(path: Path): boolean {
     return path.some(element => Array.isArray(element) && element[1] === WILDCARD);
   }

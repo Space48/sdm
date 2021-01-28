@@ -1,23 +1,24 @@
-import { ConfigRepository, connector, Path, ScopeRef } from "../../framework";
+import { ConfigRepository, Connector, connector, Path, ScopeRef } from "../../framework";
 import * as t from 'io-ts'
-import { connectors } from "..";
 import R from "ramda";
-import { defaultConfigRepository } from "../..";
 
-export const localConfigConnector = connector({
-  getScope: () => defaultConfigRepository(),
+export const configManagement = (
+  connectors: Readonly<Record<string, Connector>>,
+  repository: ConfigRepository,
+) => connector({
+  getScope: () => null,
 
   getScopeName: () => '',
 
-  getWarningMessage: async (repository: ConfigRepository) => {},
+  getWarningMessage: async () => {},
 
-  configSchema: t.type({}),
+  configSchema: t.null,
 
   resources: {
     blob: {
       endpoints: {
-        import: repository => ({input}) => repository.import(input),
-        export: repository => () => repository.export(),
+        import: () => ({input}) => repository.import(input),
+        export: () => () => repository.export(),
       },
     },
 
@@ -38,7 +39,7 @@ export const localConfigConnector = connector({
         resources: {
           scopes: {
             endpoints: {
-              add: repository => async ({path, input: scopeConfig}) => {
+              add: () => async ({path, input: scopeConfig}) => {
                 const [connectorName] = Path.getDocIds(path);
                 if (!(connectorName in connectors)) {
                   throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
@@ -55,7 +56,7 @@ export const localConfigConnector = connector({
                 await repository.setConfig(scopeRef, scopeConfig);
               },
 
-              save: repository => async ({path, input: scopeConfig}) => {
+              save: () => async ({path, input: scopeConfig}) => {
                 const [connectorName] = Path.getDocIds(path);
                 if (!(connectorName in connectors)) {
                   throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
@@ -72,7 +73,7 @@ export const localConfigConnector = connector({
                 await repository.setConfig(scopeRef, scopeConfig);
               },
 
-              list: repository => async function* ({path}) {
+              list: () => async function* ({path}) {
                 const [connectorName] = Path.getDocIds(path);
                 const allScopes = await repository.getScopes();
                 yield* allScopes
@@ -84,26 +85,26 @@ export const localConfigConnector = connector({
             documents: {
               idField: 'name',
 
-              listIds: repository => async function* (path) {
+              listIds: () => async function* (path) {
                 const [connectorName] = Path.getDocIds(path)
                 yield* (await repository.getScopes())
-                  .filter(scope => scope.connector === connectorName)
-                  .map(scope => scope.scope);
+                  .filter(scope => scope.connector === connectorName && scope.scope !== null)
+                  .map(scope => scope.scope as string);
               },
       
               endpoints: {
-                delete: repository => async ({path}) => {
-                  const scopeRef = getScopeRef(path);
+                delete: () => async ({path}) => {
+                  const scopeRef = getScopeRef(connectors, path);
                   return await repository.removeConfig(scopeRef);
                 },
 
-                get: repository => async ({path}) => {
-                  const scopeRef = getScopeRef(path);
+                get: () => async ({path}) => {
+                  const scopeRef = getScopeRef(connectors, path);
                   return (await repository.getConfig(scopeRef)) ?? null;
                 },
 
-                update: repository => async ({path, input: configUpdate}) => {
-                  const scopeRef = getScopeRef(path);
+                update: () => async ({path, input: configUpdate}) => {
+                  const scopeRef = getScopeRef(connectors, path);
                   const existingConfig = await repository.getConfig(scopeRef);
                   if (!existingConfig) {
                     throw new Error();
@@ -131,7 +132,7 @@ export const localConfigConnector = connector({
   },
 });
 
-function getScopeRef(path: Path): ScopeRef {
+function getScopeRef(connectors: Record<string, Connector>, path: Path): ScopeRef {
   const [connectorName, scopeName] = Path.getDocIds(path);
   if (!(connectorName in connectors)) {
     throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)

@@ -1,29 +1,7 @@
 import Conf from "conf";
-import { Connector, ConnectorScope, ScopeConfig, ScopeRef } from "./connector";
+import { ScopeRef } from "./connector";
 import R from "ramda";
 import { pipe } from "@space48/json-pipe";
-
-export function scopeLocator(
-  connectors: Record<string, Connector>,
-  repository: ConfigRepository,
-): (
-  scope: ScopeRef
-) => Promise<ConnectorScope|undefined> {
-  return async (scope: ScopeRef) => {
-    const config = await repository.getConfig(scope);
-    if (!config) {
-      return undefined;
-    }
-    const connector = connectors[scope.connector];
-    const configSchema = connector.$definition.configSchema;
-    const scopeConfig = new ScopeConfig(
-      configSchema as any,
-      config,
-      newConfig => repository.setConfig(scope, newConfig),
-    );
-    return connector(scopeConfig as any);
-  };
-}
 
 export interface ConfigRepository {
   getScopes(): Promise<ScopeRef[]>
@@ -85,7 +63,11 @@ export class LocalConfigRepository implements ConfigRepository {
   }
 
   private scopeKey(scopeRef: ScopeRef) {
-    return this.computeKey([...this.connectorsPath, scopeRef.connector, scopeRef.scope]);
+    return this.computeKey([
+      ...this.connectorsPath,
+      scopeRef.connector,
+      scopeRef.scope ?? '',
+    ]);
   }
 
   private computeKey(path: string[]) {
