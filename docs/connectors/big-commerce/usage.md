@@ -5,49 +5,51 @@
 
 # Resources
 
- * [blog.posts](#blog.posts)
- * [blog.tags](#blog.tags)
+ * [blog.posts](#blogposts)
+ * [blog.tags](#blogtags)
  * [brands](#brands)
- * [brands[].image](#brands[].image)
- * [brands[].metafields](#brands[].metafields)
+ * [brands[].image](#brandsimage)
+ * [brands[].metafields](#brandsmetafields)
  * [carts](#carts)
- * [carts[].items](#carts[].items)
+ * [carts[].items](#cartsitems)
  * [categories](#categories)
- * [categories[].image](#categories[].image)
- * [categories[].metafields](#categories[].metafields)
- * [categories.tree](#categories.tree)
+ * [categories[].image](#categoriesimage)
+ * [categories[].metafields](#categoriesmetafields)
+ * [categories.tree](#categoriestree)
  * [channels](#channels)
  * [customers](#customers)
- * [customers.addresses](#customers.addresses)
- * [customers.attributes](#customers.attributes)
- * [customers.attributes[].values](#customers.attributes[].values)
- * [customers.attributes.values](#customers.attributes.values)
- * [gift-certificates](#gift-certificates)
+ * [customers.addresses](#customersaddresses)
+ * [customers.attributes](#customersattributes)
+ * [customers.attributes[].values](#customersattributesvalues)
+ * [customers.attributes.values](#customersattributesvalues)
+ * [gift-certificates](#giftcertificates)
  * [orders](#orders)
- * [orders[].refunds](#orders[].refunds)
- * [payment-methods](#payment-methods)
+ * [orders[].refunds](#ordersrefunds)
+ * [payment-methods](#paymentmethods)
  * [products](#products)
- * [products[].bulk-pricing-rules](#products[].bulk-pricing-rules)
- * [products[].complex-rules](#products[].complex-rules)
- * [products[].custom-fields](#products[].custom-fields)
- * [products[].images](#products[].images)
- * [products[].metafields](#products[].metafields)
- * [products[].modifiers](#products[].modifiers)
- * [products[].modifiers[].values](#products[].modifiers[].values)
- * [products[].modifiers[].values.image](#products[].modifiers[].values.image)
- * [products[].options](#products[].options)
- * [products[].options[].values](#products[].options[].values)
- * [products[].variants](#products[].variants)
- * [products[].videos](#products[].videos)
+ * [products[].bulk-pricing-rules](#productsbulkpricingrules)
+ * [products[].complex-rules](#productscomplexrules)
+ * [products[].custom-fields](#productscustomfields)
+ * [products[].images](#productsimages)
+ * [products[].metafields](#productsmetafields)
+ * [products[].modifiers](#productsmodifiers)
+ * [products[].modifiers[].values](#productsmodifiersvalues)
+ * [products[].modifiers[].values.image](#productsmodifiersvaluesimage)
+ * [products[].options](#productsoptions)
+ * [products[].options[].values](#productsoptionsvalues)
+ * [products[].variants](#productsvariants)
+ * [products[].videos](#productsvideos)
  * [store](#store)
 
 ## blog.posts
 
- * [create](#blog.posts.create)
- * [delete](#blog.posts[].delete)
- * [get](#blog.posts[].get)
- * [list](#blog.posts.list)
- * [update](#blog.posts[].update)
+### Endpoints
+
+ * [create](#blogpostscreate)
+ * [delete](#blogpostsdelete)
+ * [get](#blogpostsget)
+ * [list](#blogpostslist)
+ * [update](#blogpostsupdate)
 
 ### blog.posts.create
 
@@ -119,11 +121,13 @@ const command = bigCommerce.blog.posts.$all.update(input?: unknown);
 
 ## blog.tags
 
- * [create](#blog.tags.create)
- * [delete](#blog.tags[].delete)
- * [get](#blog.tags[].get)
- * [list](#blog.tags.list)
- * [update](#blog.tags[].update)
+### Endpoints
+
+ * [create](#blogtagscreate)
+ * [delete](#blogtagsdelete)
+ * [get](#blogtagsget)
+ * [list](#blogtagslist)
+ * [update](#blogtagsupdate)
 
 ### blog.tags.create
 
@@ -195,11 +199,13 @@ const command = bigCommerce.blog.tags.$all.update(input?: unknown);
 
 ## brands
 
- * [create](#brands.create)
- * [delete](#brands[].delete)
- * [get](#brands[].get)
- * [list](#brands.list)
- * [update](#brands[].update)
+### Endpoints
+
+ * [create](#brandscreate)
+ * [delete](#brandsdelete)
+ * [get](#brandsget)
+ * [list](#brandslist)
+ * [update](#brandsupdate)
 
 ### brands.create
 
@@ -271,8 +277,10 @@ const command = bigCommerce.brands.$all.update(input?: unknown);
 
 ## brands[].image
 
- * [create](#brands[].image.create)
- * [delete](#brands[].image.delete)
+### Endpoints
+
+ * [create](#brandsimagecreate)
+ * [delete](#brandsimagedelete)
 
 ### brands[].image.create
 
@@ -304,11 +312,13 @@ const command = bigCommerce.brands.$all.image.delete(input?: unknown);
 
 ## brands[].metafields
 
- * [create](#brands[].metafields.create)
- * [delete](#brands[].metafields[].delete)
- * [get](#brands[].metafields[].get)
- * [list](#brands[].metafields.list)
- * [update](#brands[].metafields[].update)
+### Endpoints
+
+ * [create](#brandsmetafieldscreate)
+ * [delete](#brandsmetafieldsdelete)
+ * [get](#brandsmetafieldsget)
+ * [list](#brandsmetafieldslist)
+ * [update](#brandsmetafieldsupdate)
 
 ### brands[].metafields.create
 
@@ -382,10 +392,12 @@ const command = bigCommerce.brands.$all.metafields.$all.update(input?: unknown);
 
 ## carts
 
- * [create](#carts.create)
- * [delete](#carts[].delete)
- * [get](#carts[].get)
- * [update](#carts[].update)
+### Endpoints
+
+ * [create](#cartscreate)
+ * [delete](#cartsdelete)
+ * [get](#cartsget)
+ * [update](#cartsupdate)
 
 ### carts.create
 
@@ -441,9 +453,11 @@ const command = bigCommerce.carts.$doc(id).update(input?: unknown);
 
 ## carts[].items
 
- * [create](#carts[].items.create)
- * [delete](#carts[].items[].delete)
- * [update](#carts[].items[].update)
+### Endpoints
+
+ * [create](#cartsitemscreate)
+ * [delete](#cartsitemsdelete)
+ * [update](#cartsitemsupdate)
 
 ### carts[].items.create
 
@@ -486,11 +500,13 @@ const command = bigCommerce.carts.$doc(id).items.$doc(id).update(input?: unknown
 
 ## categories
 
- * [create](#categories.create)
- * [delete](#categories[].delete)
- * [get](#categories[].get)
- * [list](#categories.list)
- * [update](#categories[].update)
+### Endpoints
+
+ * [create](#categoriescreate)
+ * [delete](#categoriesdelete)
+ * [get](#categoriesget)
+ * [list](#categorieslist)
+ * [update](#categoriesupdate)
 
 ### categories.create
 
@@ -562,8 +578,10 @@ const command = bigCommerce.categories.$all.update(input?: unknown);
 
 ## categories[].image
 
- * [create](#categories[].image.create)
- * [delete](#categories[].image.delete)
+### Endpoints
+
+ * [create](#categoriesimagecreate)
+ * [delete](#categoriesimagedelete)
 
 ### categories[].image.create
 
@@ -595,11 +613,13 @@ const command = bigCommerce.categories.$all.image.delete(input?: unknown);
 
 ## categories[].metafields
 
- * [create](#categories[].metafields.create)
- * [delete](#categories[].metafields[].delete)
- * [get](#categories[].metafields[].get)
- * [list](#categories[].metafields.list)
- * [update](#categories[].metafields[].update)
+### Endpoints
+
+ * [create](#categoriesmetafieldscreate)
+ * [delete](#categoriesmetafieldsdelete)
+ * [get](#categoriesmetafieldsget)
+ * [list](#categoriesmetafieldslist)
+ * [update](#categoriesmetafieldsupdate)
 
 ### categories[].metafields.create
 
@@ -673,7 +693,9 @@ const command = bigCommerce.categories.$all.metafields.$all.update(input?: unkno
 
 ## categories.tree
 
- * [get](#categories.tree.get)
+### Endpoints
+
+ * [get](#categoriestreeget)
 
 ### categories.tree.get
 
@@ -690,10 +712,12 @@ const command = bigCommerce.categories.tree.get(input?: unknown);
 
 ## channels
 
- * [create](#channels.create)
- * [get](#channels[].get)
- * [list](#channels.list)
- * [update](#channels[].update)
+### Endpoints
+
+ * [create](#channelscreate)
+ * [get](#channelsget)
+ * [list](#channelslist)
+ * [update](#channelsupdate)
 
 ### channels.create
 
@@ -751,11 +775,13 @@ const command = bigCommerce.channels.$all.update(input?: unknown);
 
 ## customers
 
- * [create](#customers.create)
- * [delete](#customers[].delete)
- * [get](#customers[].get)
- * [list](#customers.list)
- * [update](#customers[].update)
+### Endpoints
+
+ * [create](#customerscreate)
+ * [delete](#customersdelete)
+ * [get](#customersget)
+ * [list](#customerslist)
+ * [update](#customersupdate)
 
 ### customers.create
 
@@ -827,11 +853,13 @@ const command = bigCommerce.customers.$all.update(input?: unknown);
 
 ## customers.addresses
 
- * [create](#customers.addresses.create)
- * [delete](#customers.addresses[].delete)
- * [get](#customers.addresses[].get)
- * [list](#customers.addresses.list)
- * [update](#customers.addresses[].update)
+### Endpoints
+
+ * [create](#customersaddressescreate)
+ * [delete](#customersaddressesdelete)
+ * [get](#customersaddressesget)
+ * [list](#customersaddresseslist)
+ * [update](#customersaddressesupdate)
 
 ### customers.addresses.create
 
@@ -903,11 +931,13 @@ const command = bigCommerce.customers.addresses.$all.update(input?: unknown);
 
 ## customers.attributes
 
- * [create](#customers.attributes.create)
- * [delete](#customers.attributes[].delete)
- * [get](#customers.attributes[].get)
- * [list](#customers.attributes.list)
- * [update](#customers.attributes[].update)
+### Endpoints
+
+ * [create](#customersattributescreate)
+ * [delete](#customersattributesdelete)
+ * [get](#customersattributesget)
+ * [list](#customersattributeslist)
+ * [update](#customersattributesupdate)
 
 ### customers.attributes.create
 
@@ -979,7 +1009,9 @@ const command = bigCommerce.customers.attributes.$all.update(input?: unknown);
 
 ## customers.attributes[].values
 
- * [list](#customers.attributes[].values.list)
+### Endpoints
+
+ * [list](#customersattributesvalueslist)
 
 ### customers.attributes[].values.list
 
@@ -997,9 +1029,11 @@ const command = bigCommerce.customers.attributes.$all.values.list(input?: unknow
 
 ## customers.attributes.values
 
- * [delete](#customers.attributes.values[].delete)
- * [list](#customers.attributes.values.list)
- * [set](#customers.attributes.values[].set)
+### Endpoints
+
+ * [delete](#customersattributesvaluesdelete)
+ * [list](#customersattributesvalueslist)
+ * [set](#customersattributesvaluesset)
 
 ### customers.attributes.values[].delete
 
@@ -1042,11 +1076,13 @@ const command = bigCommerce.customers.attributes.values.$doc(id).set(input?: unk
 
 ## gift-certificates
 
- * [create](#gift-certificates.create)
- * [delete](#gift-certificates[].delete)
- * [get](#gift-certificates[].get)
- * [list](#gift-certificates.list)
- * [update](#gift-certificates[].update)
+### Endpoints
+
+ * [create](#giftcertificatescreate)
+ * [delete](#giftcertificatesdelete)
+ * [get](#giftcertificatesget)
+ * [list](#giftcertificateslist)
+ * [update](#giftcertificatesupdate)
 
 ### gift-certificates.create
 
@@ -1118,11 +1154,13 @@ const command = bigCommerce.giftCertificates.$all.update(input?: unknown);
 
 ## orders
 
- * [create](#orders.create)
- * [delete](#orders[].delete)
- * [get](#orders[].get)
- * [list](#orders.list)
- * [update](#orders[].update)
+### Endpoints
+
+ * [create](#orderscreate)
+ * [delete](#ordersdelete)
+ * [get](#ordersget)
+ * [list](#orderslist)
+ * [update](#ordersupdate)
 
 ### orders.create
 
@@ -1194,7 +1232,9 @@ const command = bigCommerce.orders.$all.update(input?: unknown);
 
 ## orders[].refunds
 
- * [get](#orders[].refunds.get)
+### Endpoints
+
+ * [get](#ordersrefundsget)
 
 ### orders[].refunds.get
 
@@ -1212,7 +1252,9 @@ const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
 
 ## payment-methods
 
- * [list](#payment-methods.list)
+### Endpoints
+
+ * [list](#paymentmethodslist)
 
 ### payment-methods.list
 
@@ -1229,12 +1271,14 @@ const command = bigCommerce.paymentMethods.list(input?: unknown);
 
 ## products
 
- * [create](#products.create)
- * [delete](#products[].delete)
- * [get](#products[].get)
- * [list](#products.list)
- * [update](#products.update)
- * [update](#products[].update)
+### Endpoints
+
+ * [create](#productscreate)
+ * [delete](#productsdelete)
+ * [get](#productsget)
+ * [list](#productslist)
+ * [update](#productsupdate)
+ * [update](#productsupdate)
 
 ### products.create
 
@@ -1319,11 +1363,13 @@ const command = bigCommerce.products.$all.update(input?: unknown);
 
 ## products[].bulk-pricing-rules
 
- * [create](#products[].bulk-pricing-rules.create)
- * [delete](#products[].bulk-pricing-rules[].delete)
- * [get](#products[].bulk-pricing-rules[].get)
- * [list](#products[].bulk-pricing-rules.list)
- * [update](#products[].bulk-pricing-rules[].update)
+### Endpoints
+
+ * [create](#productsbulkpricingrulescreate)
+ * [delete](#productsbulkpricingrulesdelete)
+ * [get](#productsbulkpricingrulesget)
+ * [list](#productsbulkpricingruleslist)
+ * [update](#productsbulkpricingrulesupdate)
 
 ### products[].bulk-pricing-rules.create
 
@@ -1397,11 +1443,13 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.update(input?: u
 
 ## products[].complex-rules
 
- * [create](#products[].complex-rules.create)
- * [delete](#products[].complex-rules[].delete)
- * [get](#products[].complex-rules[].get)
- * [list](#products[].complex-rules.list)
- * [update](#products[].complex-rules[].update)
+### Endpoints
+
+ * [create](#productscomplexrulescreate)
+ * [delete](#productscomplexrulesdelete)
+ * [get](#productscomplexrulesget)
+ * [list](#productscomplexruleslist)
+ * [update](#productscomplexrulesupdate)
 
 ### products[].complex-rules.create
 
@@ -1475,11 +1523,13 @@ const command = bigCommerce.products.$all.complexRules.$all.update(input?: unkno
 
 ## products[].custom-fields
 
- * [create](#products[].custom-fields.create)
- * [delete](#products[].custom-fields[].delete)
- * [get](#products[].custom-fields[].get)
- * [list](#products[].custom-fields.list)
- * [update](#products[].custom-fields[].update)
+### Endpoints
+
+ * [create](#productscustomfieldscreate)
+ * [delete](#productscustomfieldsdelete)
+ * [get](#productscustomfieldsget)
+ * [list](#productscustomfieldslist)
+ * [update](#productscustomfieldsupdate)
 
 ### products[].custom-fields.create
 
@@ -1553,11 +1603,13 @@ const command = bigCommerce.products.$all.customFields.$all.update(input?: unkno
 
 ## products[].images
 
- * [create](#products[].images.create)
- * [delete](#products[].images[].delete)
- * [get](#products[].images[].get)
- * [list](#products[].images.list)
- * [update](#products[].images[].update)
+### Endpoints
+
+ * [create](#productsimagescreate)
+ * [delete](#productsimagesdelete)
+ * [get](#productsimagesget)
+ * [list](#productsimageslist)
+ * [update](#productsimagesupdate)
 
 ### products[].images.create
 
@@ -1631,11 +1683,13 @@ const command = bigCommerce.products.$all.images.$all.update(input?: unknown);
 
 ## products[].metafields
 
- * [create](#products[].metafields.create)
- * [delete](#products[].metafields[].delete)
- * [get](#products[].metafields[].get)
- * [list](#products[].metafields.list)
- * [update](#products[].metafields[].update)
+### Endpoints
+
+ * [create](#productsmetafieldscreate)
+ * [delete](#productsmetafieldsdelete)
+ * [get](#productsmetafieldsget)
+ * [list](#productsmetafieldslist)
+ * [update](#productsmetafieldsupdate)
 
 ### products[].metafields.create
 
@@ -1709,11 +1763,13 @@ const command = bigCommerce.products.$all.metafields.$all.update(input?: unknown
 
 ## products[].modifiers
 
- * [create](#products[].modifiers.create)
- * [delete](#products[].modifiers[].delete)
- * [get](#products[].modifiers[].get)
- * [list](#products[].modifiers.list)
- * [update](#products[].modifiers[].update)
+### Endpoints
+
+ * [create](#productsmodifierscreate)
+ * [delete](#productsmodifiersdelete)
+ * [get](#productsmodifiersget)
+ * [list](#productsmodifierslist)
+ * [update](#productsmodifiersupdate)
 
 ### products[].modifiers.create
 
@@ -1787,11 +1843,13 @@ const command = bigCommerce.products.$all.modifiers.$all.update(input?: unknown)
 
 ## products[].modifiers[].values
 
- * [create](#products[].modifiers[].values.create)
- * [delete](#products[].modifiers[].values[].delete)
- * [get](#products[].modifiers[].values[].get)
- * [list](#products[].modifiers[].values.list)
- * [update](#products[].modifiers[].values[].update)
+### Endpoints
+
+ * [create](#productsmodifiersvaluescreate)
+ * [delete](#productsmodifiersvaluesdelete)
+ * [get](#productsmodifiersvaluesget)
+ * [list](#productsmodifiersvalueslist)
+ * [update](#productsmodifiersvaluesupdate)
 
 ### products[].modifiers[].values.create
 
@@ -1865,8 +1923,10 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.update(inpu
 
 ## products[].modifiers[].values.image
 
- * [create](#products[].modifiers[].values.image.create)
- * [delete](#products[].modifiers[].values.image[].delete)
+### Endpoints
+
+ * [create](#productsmodifiersvaluesimagecreate)
+ * [delete](#productsmodifiersvaluesimagedelete)
 
 ### products[].modifiers[].values.image.create
 
@@ -1898,11 +1958,13 @@ const command = bigCommerce.products.$all.modifiers.$all.values.image.$doc(id).d
 
 ## products[].options
 
- * [create](#products[].options.create)
- * [delete](#products[].options[].delete)
- * [get](#products[].options[].get)
- * [list](#products[].options.list)
- * [update](#products[].options[].update)
+### Endpoints
+
+ * [create](#productsoptionscreate)
+ * [delete](#productsoptionsdelete)
+ * [get](#productsoptionsget)
+ * [list](#productsoptionslist)
+ * [update](#productsoptionsupdate)
 
 ### products[].options.create
 
@@ -1976,11 +2038,13 @@ const command = bigCommerce.products.$all.options.$all.update(input?: unknown);
 
 ## products[].options[].values
 
- * [create](#products[].options[].values.create)
- * [delete](#products[].options[].values[].delete)
- * [get](#products[].options[].values[].get)
- * [list](#products[].options[].values.list)
- * [update](#products[].options[].values[].update)
+### Endpoints
+
+ * [create](#productsoptionsvaluescreate)
+ * [delete](#productsoptionsvaluesdelete)
+ * [get](#productsoptionsvaluesget)
+ * [list](#productsoptionsvalueslist)
+ * [update](#productsoptionsvaluesupdate)
 
 ### products[].options[].values.create
 
@@ -2054,11 +2118,13 @@ const command = bigCommerce.products.$all.options.$all.values.$all.update(input?
 
 ## products[].variants
 
- * [create](#products[].variants.create)
- * [delete](#products[].variants[].delete)
- * [get](#products[].variants[].get)
- * [list](#products[].variants.list)
- * [update](#products[].variants[].update)
+### Endpoints
+
+ * [create](#productsvariantscreate)
+ * [delete](#productsvariantsdelete)
+ * [get](#productsvariantsget)
+ * [list](#productsvariantslist)
+ * [update](#productsvariantsupdate)
 
 ### products[].variants.create
 
@@ -2132,11 +2198,13 @@ const command = bigCommerce.products.$all.variants.$all.update(input?: unknown);
 
 ## products[].videos
 
- * [create](#products[].videos.create)
- * [delete](#products[].videos[].delete)
- * [get](#products[].videos[].get)
- * [list](#products[].videos.list)
- * [update](#products[].videos[].update)
+### Endpoints
+
+ * [create](#productsvideoscreate)
+ * [delete](#productsvideosdelete)
+ * [get](#productsvideosget)
+ * [list](#productsvideoslist)
+ * [update](#productsvideosupdate)
 
 ### products[].videos.create
 
@@ -2210,7 +2278,9 @@ const command = bigCommerce.products.$all.videos.$all.update(input?: unknown);
 
 ## store
 
- * [get](#store.get)
+### Endpoints
+
+ * [get](#storeget)
 
 ### store.get
 

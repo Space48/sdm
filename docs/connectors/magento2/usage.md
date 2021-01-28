@@ -6,23 +6,25 @@
 # Resources
 
  * [categories](#categories)
- * [categories.tree](#categories.tree)
+ * [categories.tree](#categoriestree)
  * [customers](#customers)
  * [orders](#orders)
  * [products](#products)
- * [products[].links](#products[].links)
- * [products.attributes](#products.attributes)
- * [products.attributes[].options](#products.attributes[].options)
- * [products.configurables[].children](#products.configurables[].children)
- * [products.configurables[].options](#products.configurables[].options)
+ * [products[].links](#productslinks)
+ * [products.attributes](#productsattributes)
+ * [products.attributes[].options](#productsattributesoptions)
+ * [products.configurables[].children](#productsconfigurableschildren)
+ * [products.configurables[].options](#productsconfigurablesoptions)
 
 ## categories
 
- * [create](#categories.create)
- * [delete](#categories[].delete)
- * [get](#categories[].get)
- * [list](#categories.list)
- * [update](#categories[].update)
+### Endpoints
+
+ * [create](#categoriescreate)
+ * [delete](#categoriesdelete)
+ * [get](#categoriesget)
+ * [list](#categorieslist)
+ * [update](#categoriesupdate)
 
 ### categories.create
 
@@ -94,7 +96,9 @@ const command = magento2.categories.$all.update(input?: unknown);
 
 ## categories.tree
 
- * [get](#categories.tree.get)
+### Endpoints
+
+ * [get](#categoriestreeget)
 
 ### categories.tree.get
 
@@ -111,11 +115,13 @@ const command = magento2.categories.tree.get(input?: unknown);
 
 ## customers
 
- * [create](#customers.create)
- * [delete](#customers[].delete)
- * [get](#customers[].get)
- * [list](#customers.list)
- * [update](#customers[].update)
+### Endpoints
+
+ * [create](#customerscreate)
+ * [delete](#customersdelete)
+ * [get](#customersget)
+ * [list](#customerslist)
+ * [update](#customersupdate)
 
 ### customers.create
 
@@ -187,10 +193,12 @@ const command = magento2.customers.$all.update(input?: unknown);
 
 ## orders
 
- * [delete](#orders[].delete)
- * [get](#orders[].get)
- * [list](#orders.list)
- * [update](#orders[].update)
+### Endpoints
+
+ * [delete](#ordersdelete)
+ * [get](#ordersget)
+ * [list](#orderslist)
+ * [update](#ordersupdate)
 
 ### orders[].delete
 
@@ -249,11 +257,13 @@ const command = magento2.orders.$all.update(input?: unknown);
 
 ## products
 
- * [create](#products.create)
- * [delete](#products[].delete)
- * [get](#products[].get)
- * [list](#products.list)
- * [update](#products[].update)
+### Endpoints
+
+ * [create](#productscreate)
+ * [delete](#productsdelete)
+ * [get](#productsget)
+ * [list](#productslist)
+ * [update](#productsupdate)
 
 ### products.create
 
@@ -325,7 +335,9 @@ const command = magento2.products.$all.update(input?: unknown);
 
 ## products[].links
 
- * [get](#products[].links[].get)
+### Endpoints
+
+ * [get](#productslinksget)
 
 ### products[].links[].get
 
@@ -343,7 +355,9 @@ const command = magento2.products.$all.links.$doc(type).get(input?: unknown);
 
 ## products.attributes
 
- * [list](#products.attributes.list)
+### Endpoints
+
+ * [list](#productsattributeslist)
 
 ### products.attributes.list
 
@@ -360,7 +374,9 @@ const command = magento2.products.attributes.list(input?: unknown);
 
 ## products.attributes[].options
 
- * [get](#products.attributes[].options.get)
+### Endpoints
+
+ * [get](#productsattributesoptionsget)
 
 ### products.attributes[].options.get
 
@@ -377,7 +393,9 @@ const command = magento2.products.attributes.$doc(attribute_code).options.get(in
 
 ## products.configurables[].children
 
- * [get](#products.configurables[].children.get)
+### Endpoints
+
+ * [get](#productsconfigurableschildrenget)
 
 ### products.configurables[].children.get
 
@@ -394,7 +412,9 @@ const command = magento2.products.configurables.$doc(sku).children.get(input?: u
 
 ## products.configurables[].options
 
- * [get](#products.configurables[].options.get)
+### Endpoints
+
+ * [get](#productsconfigurablesoptionsget)
 
 ### products.configurables[].options.get
 

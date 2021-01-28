@@ -76,6 +76,8 @@ ${commands}
     return (
 `${pathTitle(nestingLevel, resourcePath)}
 
+${title(nestingLevel + 1, 'Endpoints')}
+
 ${contents(nestingLevel, endpointUsage, title => title.split('.').slice(-1)[0])}
 
 ${endpointUsage}
@@ -158,6 +160,6 @@ ${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).jo
   }
 
   function linkToSection(linkTitle: string, sectionTitle: string): string {
-    return `[${linkTitle}](#${sectionTitle.replace(/-[]./g, '')})`;
+    return `[${linkTitle}](#${sectionTitle.replace(/[\-\[\]\.]/g, '')})`;
   }
 }
