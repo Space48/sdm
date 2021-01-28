@@ -3,7 +3,43 @@
 
 # Using the TypeScript interface
 
-# Commands
+# Resources
+
+ * [blog.posts](#blog.posts)
+ * [blog.tags](#blog.tags)
+ * [brands](#brands)
+ * [brands[].image](#brands[].image)
+ * [brands[].metafields](#brands[].metafields)
+ * [carts](#carts)
+ * [carts[].items](#carts[].items)
+ * [categories](#categories)
+ * [categories[].image](#categories[].image)
+ * [categories[].metafields](#categories[].metafields)
+ * [categories.tree](#categories.tree)
+ * [channels](#channels)
+ * [customers](#customers)
+ * [customers.addresses](#customers.addresses)
+ * [customers.attributes](#customers.attributes)
+ * [customers.attributes[].values](#customers.attributes[].values)
+ * [customers.attributes.values](#customers.attributes.values)
+ * [gift-certificates](#gift-certificates)
+ * [orders](#orders)
+ * [orders[].refunds](#orders[].refunds)
+ * [payment-methods](#payment-methods)
+ * [products](#products)
+ * [products[].bulk-pricing-rules](#products[].bulk-pricing-rules)
+ * [products[].complex-rules](#products[].complex-rules)
+ * [products[].custom-fields](#products[].custom-fields)
+ * [products[].images](#products[].images)
+ * [products[].metafields](#products[].metafields)
+ * [products[].modifiers](#products[].modifiers)
+ * [products[].modifiers[].values](#products[].modifiers[].values)
+ * [products[].modifiers[].values.image](#products[].modifiers[].values.image)
+ * [products[].options](#products[].options)
+ * [products[].options[].values](#products[].options[].values)
+ * [products[].variants](#products[].variants)
+ * [products[].videos](#products[].videos)
+ * [store](#store)
 
 ## blog.posts
 

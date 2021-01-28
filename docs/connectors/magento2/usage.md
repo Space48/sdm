@@ -3,7 +3,18 @@
 
 # Using the TypeScript interface
 
-# Commands
+# Resources
+
+ * [categories](#categories)
+ * [categories.tree](#categories.tree)
+ * [customers](#customers)
+ * [orders](#orders)
+ * [products](#products)
+ * [products[].links](#products[].links)
+ * [products.attributes](#products.attributes)
+ * [products.attributes[].options](#products.attributes[].options)
+ * [products.configurables[].children](#products.configurables[].children)
+ * [products.configurables[].options](#products.configurables[].options)
 
 ## categories
 

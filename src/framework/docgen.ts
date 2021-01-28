@@ -31,18 +31,22 @@ export namespace Shell {
 
 export namespace Markdown {
   export function explainUsage(connector: ConnectorDefinition, connectorName: string): string {
+    const commands = describeCommands(1, connector, {
+      connector: connectorName,
+      scope: connector.scopeNameExample,
+    });
+
     return (
 `
 ${title(0, 'Using the CLI interface')}
 
 ${title(0, 'Using the TypeScript interface')}
 
-${title(0, 'Commands')}
+${title(0, 'Resources')}
 
-${describeCommands(1, connector, {
-  connector: connectorName,
-  scope: connector.scopeNameExample,
-})}
+${contents(0, commands)}
+
+${commands}
 `
     );
   }
@@ -130,5 +134,20 @@ ${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).jo
 
   function title(nestingLevel: number, title: string): string {
     return `${'#'.repeat(nestingLevel + 1)} ${title}`;
+  }
+
+  function contents(nestingLevel: number, body: string): string {
+    const titles =
+      body
+        .split('\n')
+        .filter(line => line.startsWith(`${'#'.repeat(nestingLevel + 2)} `))
+        .map(line => line.slice(nestingLevel + 3))
+        .map(title => linkToTitle(title));
+
+    return titles.map(title => ` * ${title}`).join('\n');
+  }
+
+  function linkToTitle(title: string): string {
+    return `[${title}](#${title.replace(/-[]./g, '')})`;
   }
 }
