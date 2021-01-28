@@ -12,6 +12,8 @@ const mergeResources = resourceMerger<BigCommerce>();
 export const bigCommerce = connector({
   configSchema,
   
+  scopeNameExample: 'some-store-alias',
+  
   getScopeName: config => config.storeAlias,
 
   getScope: config => new BigCommerce(config),

@@ -5,11 +5,13 @@ import R from "ramda";
 // do not remove the following imports -- they are intended to tidy up the generated declaration files
 import * as f from '../../framework';
 
-export const configManagement = (
+export const configManagementConnector = (
   connectors: Readonly<Record<string, Connector>>,
   repository: ConfigRepository,
 ) => connector({
   getScope: () => null,
+
+  scopeNameExample: null,
 
   getScopeName: () => '',
 

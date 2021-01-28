@@ -2,11 +2,19 @@ import { ConnectorScope } from "./connector";
 import { ConfigRepository } from "./config-repository";
 import { Connector, ScopeConfig, ScopeRef } from "./connector";
 
+export type ApplicationConfig = {
+  readonly configRepository: ConfigRepository,
+  readonly connectors: Readonly<Record<string, Connector>>,
+};
+
 export class Application {
-  constructor(
-    readonly configRepository: ConfigRepository,
-    readonly connectors: Readonly<Record<string, Connector>>,
-  ) {}
+  constructor({configRepository, connectors}: ApplicationConfig) {
+    this.configRepository = configRepository;
+    this.connectors = connectors;
+  }
+
+  readonly configRepository: ConfigRepository;
+  readonly connectors: Readonly<Record<string, Connector>>;
 
   async listScopes(): Promise<ScopeRef[]> {
     const singletonScopes =

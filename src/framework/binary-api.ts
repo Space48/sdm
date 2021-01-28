@@ -1,4 +1,4 @@
-import { Command, Path, ScopeRef } from "../framework";
+import { Command, Path, ScopeRef } from ".";
 import json5 from "json5";
 
 const PATH_SEPARATOR = '.';
@@ -30,6 +30,12 @@ export function decodeScopeAndPath(encodedScopeAndPath: string): [ScopeRef | und
       scope: '',
     };
   return [ scope, path ];
+}
+
+export function encodeScopeAndPath(scope: ScopeRef, path: Path): string {
+  return scope.scope === null
+    ? encodePath([scope.connector, ...path])
+    : encodePath([[scope.connector, scope.scope], ...path]);
 }
 
 export function decodePath(encodedPath: string): Path {

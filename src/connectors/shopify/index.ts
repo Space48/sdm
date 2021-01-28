@@ -12,6 +12,8 @@ export const shopify = connector({
 
   getScope: config => new client.Scope(config),
 
+  scopeNameExample: 'my-shop-name',
+  
   getScopeName: config => config.shopName,
 
   getWarningMessage: async (scope: client.Scope) => {

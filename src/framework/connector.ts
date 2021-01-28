@@ -109,6 +109,7 @@ export interface ConnectorDefinition<
 > {
   readonly configSchema: t.Type<Config>
   readonly resources: Resources
+  readonly scopeNameExample: string|null
   getScope(config: ScopeConfig<Config>): Scope
   getScopeName(config: Config): string
   getWarningMessage(scope: Scope): Promise<string|undefined|void>

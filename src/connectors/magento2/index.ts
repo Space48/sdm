@@ -13,11 +13,10 @@ const mergeResources = resourceMerger<Magento2>();
 
 export const magento2 = connector({
   configSchema,
+
+  scopeNameExample: getScopeName('www.my-shop.com'),
   
-  getScopeName: config => {
-    const {host, path} = parseUrl(config.baseUrl);
-    return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase();
-  },
+  getScopeName: config => getScopeName(config.baseUrl),
 
   getScope: config => new Magento2(config),
 
@@ -127,3 +126,8 @@ export const magento2 = connector({
     ),
   },
 });
+
+function getScopeName(storeBaseUrl: string): string {
+  const {host, path} = parseUrl(storeBaseUrl);
+  return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase(); 
+}

@@ -5,7 +5,7 @@ import * as readline from "readline";
 import { compose, map, pipe, streamJson, takeWhile, tap, transformJson } from "@space48/json-pipe";
 import chalk from "chalk";
 import { BinaryApi } from "../framework";
-import { explainCliUsage } from "../framework/docgen";
+import { Shell } from "../framework/docgen";
 import { sdm } from "..";
 
 const app = sdm();
@@ -49,8 +49,14 @@ async function main() {
 }
 
 async function runHelpMode() {
-  const connector = await resolveConnectorInteractively(argsExcludingFlags[1]);
-  process.stderr.write(explainCliUsage(connector.$definition));
+  const connectorName = await resolveConnectorInteractively(argsExcludingFlags[1]);
+  const connector = app.connectors[connectorName];
+  process.stderr.write(
+    Shell.explainCliUsageOnCli(connector.$definition, {
+      connector: connectorName,
+      scope: connector.$definition.scopeNameExample,
+    })
+  );
 }
 
 async function runNonInteractiveMode() {
@@ -127,7 +133,7 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
       }
     });
     if (commandLine === 'help') {
-      process.stderr.write(explainCliUsage(scope.connector.$definition));
+      process.stderr.write(Shell.explainInteractiveCliUsage(scope.connector.$definition));
       continue;
     }
     return BinaryApi.decodeCommand(commandLine);
@@ -157,14 +163,13 @@ function suggestCommands(connector: ConnectorDefinition, line: string): string[]
   }
 }
 
-async function resolveConnectorInteractively(hint: string|undefined): Promise<Connector> {
+async function resolveConnectorInteractively(hint: string|undefined): Promise<string> {
   const availableConnectors = Object.keys(app.connectors).map(BinaryApi.encodeConnectorName);
   const availableConnectorsStr = `Available connectors: ${availableConnectors.map(connector => `\n\t${connector}`)}\n`;
 
   if (hint) {
     if (availableConnectors.includes(hint)) {
-      const connectorName = BinaryApi.decodeConnectorName(hint);
-      return app.connectors[connectorName];
+      return BinaryApi.decodeConnectorName(hint);
     }
     process.stderr.write(`No such connector '${hint}'. ${availableConnectorsStr}`);
     process.exit(1);
@@ -173,8 +178,7 @@ async function resolveConnectorInteractively(hint: string|undefined): Promise<Co
   while (true) {
     const choice = await askForConnector(availableConnectors);
     if (availableConnectors.includes(choice)) {
-      const connectorName = BinaryApi.decodeConnectorName(choice);
-      return app.connectors[connectorName];
+      return BinaryApi.decodeConnectorName(choice);
     }
     process.stderr.write(`No such connector '${choice}'. ${availableConnectorsStr}`);
   }
