@@ -111,7 +111,7 @@ async function runInteractiveMode() {
         process.stderr.write(`\n${numOutputs} results in ${runtimeSecs}s\n\n`);
       }
     } catch (e) {
-      process.stderr.write(`${e.message}\n`);
+      console.error(e);
     } finally {
       readlineInterface().removeListener('SIGINT', sigintListener);
     }
@@ -427,7 +427,8 @@ namespace BinaryApi {
   }
 
   export function decodeCommand(encodedCommandLine: string): Command {
-    const [encodedPath, encodedInput] = encodedCommandLine.split(' ', 2);
+    const [encodedPath, ...encodedInputParts] = encodedCommandLine.split(' ');
+    const encodedInput = encodedInputParts.join(' ');
     const path = decodePath(encodedPath);
     return {
       path,

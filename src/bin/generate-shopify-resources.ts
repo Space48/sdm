@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import cacheResources from '../shopify/resource-cache';
+import { refreshInferredResources } from "..";
 
-cacheResources();
+refreshInferredResources();

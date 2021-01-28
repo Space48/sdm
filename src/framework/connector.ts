@@ -40,6 +40,9 @@ export function connector<
                 outputElements,
                 tap(({success, error}) => {
                   if (!success) {
+                    if (error instanceof Error) {
+                      throw error;
+                    }
                     throw Error(error);
                   }
                 }),
@@ -53,6 +56,9 @@ export function connector<
                 outputElements,
                 tap(({success, error}) => {
                   if (!success) {
+                    if (error instanceof Error) {
+                      throw error;
+                    }
                     throw Error(error);
                   }
                 }),
@@ -474,12 +480,12 @@ export namespace Path {
   };
 }
 
-export type CommandExecutor =
+type CommandExecutor =
   <InT, OutT>(commands: AnyIterable<Command<InT, OutT>>) => AsyncIterable<OutputElement<InT, OutT>>;
 
 type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 
-export function commandExecutor<Scope>(
+function commandExecutor<Scope>(
   resources: ResourceDefinitionMap<Scope>,
   scope: Scope,
 ): CommandExecutor {
@@ -592,4 +598,13 @@ function isSyncIterable(value: any): value is Iterable<any> {
 
 function isAsyncIterable(value: any): value is AsyncIterable<any> {
   return Symbol.asyncIterator in value;
+}
+
+export class CommandError extends Error {
+  readonly detail: any;
+
+  constructor({message, detail}: {message?: string, detail?: any}) {
+    super(message);
+    this.detail = detail;
+  }
 }

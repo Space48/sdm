@@ -1,81 +1,47 @@
-{
+export default {
   "accessScope": {
     "key": "accessScope",
-    "name": "access_scopes",
-    "parentName": null,
     "endpoints": [
       "list"
-    ]
+    ],
+    "children": {}
   },
   "apiPermission": {
     "key": "apiPermission",
-    "name": "api_permissions",
-    "parentName": null,
     "endpoints": [
       "delete"
-    ]
+    ],
+    "children": {}
   },
   "applicationCharge": {
     "key": "applicationCharge",
-    "name": "application_charges",
-    "parentName": null,
     "endpoints": [
       "create",
       "get",
       "list",
       "activate"
-    ]
+    ],
+    "children": {}
   },
   "applicationCredit": {
     "key": "applicationCredit",
-    "name": "application_credits",
-    "parentName": null,
     "endpoints": [
       "create",
       "get",
       "list"
-    ]
-  },
-  "article": {
-    "key": "article",
-    "name": "articles",
-    "parentName": "blogs",
-    "endpoints": [
-      "count",
-      "create",
-      "delete",
-      "get",
-      "list",
-      "update",
-      "authors",
-      "tags"
-    ]
-  },
-  "asset": {
-    "key": "asset",
-    "name": "assets",
-    "parentName": "themes",
-    "endpoints": [
-      "list",
-      "get",
-      "create",
-      "update",
-      "delete"
-    ]
+    ],
+    "children": {}
   },
   "balance": {
     "key": "balance",
-    "name": "balance",
-    "parentName": null,
     "endpoints": [
       "list",
       "transactions"
-    ]
+    ],
+    "children": {}
   },
   "blog": {
     "key": "blog",
-    "name": "blogs",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -83,34 +49,37 @@
       "get",
       "list",
       "update"
-    ]
-  },
-  "cancellationRequest": {
-    "key": "cancellationRequest",
-    "name": "cancellation_request",
-    "parentName": "fulfillment_orders",
-    "endpoints": [
-      "create",
-      "accept",
-      "reject"
-    ]
+    ],
+    "children": {
+      "article": {
+        "key": "article",
+        "endpoints": [
+          "count",
+          "create",
+          "delete",
+          "get",
+          "list",
+          "update",
+          "authors",
+          "tags"
+        ],
+        "children": {}
+      }
+    }
   },
   "carrierService": {
     "key": "carrierService",
-    "name": "carrier_services",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {}
   },
   "checkout": {
     "key": "checkout",
-    "name": "checkouts",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -119,43 +88,50 @@
       "update",
       "complete",
       "shippingRates"
-    ]
+    ],
+    "children": {
+      "payment": {
+        "key": "payment",
+        "endpoints": [
+          "count",
+          "create",
+          "get",
+          "list"
+        ],
+        "children": {}
+      }
+    }
   },
   "collect": {
     "key": "collect",
-    "name": "collects",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
       "delete",
       "get",
       "list"
-    ]
+    ],
+    "children": {}
   },
   "collectionListing": {
     "key": "collectionListing",
-    "name": "collection_listings",
-    "parentName": null,
     "endpoints": [
       "get",
       "list",
       "productIds"
-    ]
+    ],
+    "children": {}
   },
   "collection": {
     "key": "collection",
-    "name": "collections",
-    "parentName": null,
     "endpoints": [
       "get",
       "products"
-    ]
+    ],
+    "children": {}
   },
   "comment": {
     "key": "comment",
-    "name": "comments",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -167,12 +143,11 @@
       "approve",
       "remove",
       "restore"
-    ]
+    ],
+    "children": {}
   },
   "country": {
     "key": "country",
-    "name": "countries",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -180,20 +155,29 @@
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {
+      "province": {
+        "key": "province",
+        "endpoints": [
+          "count",
+          "get",
+          "list",
+          "update"
+        ],
+        "children": {}
+      }
+    }
   },
   "currency": {
     "key": "currency",
-    "name": "currencies",
-    "parentName": null,
     "endpoints": [
       "list"
-    ]
+    ],
+    "children": {}
   },
   "customCollection": {
     "key": "customCollection",
-    "name": "custom_collections",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -201,26 +185,11 @@
       "get",
       "list",
       "update"
-    ]
-  },
-  "customerAddress": {
-    "key": "customerAddress",
-    "name": "addresses",
-    "parentName": "customers",
-    "endpoints": [
-      "delete",
-      "get",
-      "list",
-      "create",
-      "update",
-      "set",
-      "default"
-    ]
+    ],
+    "children": {}
   },
   "customerSavedSearch": {
     "key": "customerSavedSearch",
-    "name": "customer_saved_searches",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -229,12 +198,11 @@
       "list",
       "update",
       "customers"
-    ]
+    ],
+    "children": {}
   },
   "customer": {
     "key": "customer",
-    "name": "customers",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -246,44 +214,33 @@
       "accountActivationUrl",
       "sendInvite",
       "orders"
-    ]
-  },
-  "discountCodeCreationJob": {
-    "key": "discountCodeCreationJob",
-    "name": "batch",
-    "parentName": "price_rules",
-    "endpoints": [
-      "get",
-      "create",
-      "discountCodes"
-    ]
-  },
-  "discountCode": {
-    "key": "discountCode",
-    "name": "discount_codes",
-    "parentName": "price_rules",
-    "endpoints": [
-      "create",
-      "delete",
-      "get",
-      "list",
-      "update",
-      "lookup"
-    ]
+    ],
+    "children": {
+      "customerAddress": {
+        "key": "customerAddress",
+        "endpoints": [
+          "delete",
+          "get",
+          "list",
+          "create",
+          "update",
+          "set",
+          "default"
+        ],
+        "children": {}
+      }
+    }
   },
   "dispute": {
     "key": "dispute",
-    "name": "disputes",
-    "parentName": null,
     "endpoints": [
       "get",
       "list"
-    ]
+    ],
+    "children": {}
   },
   "draftOrder": {
     "key": "draftOrder",
-    "name": "draft_orders",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -293,34 +250,22 @@
       "update",
       "complete",
       "sendInvoice"
-    ]
-  },
-  "event": {
-    "key": "event",
-    "name": "events",
-    "parentName": null,
-    "endpoints": [
-      "count",
-      "get",
-      "list"
-    ]
+    ],
+    "children": {}
   },
   "fulfillmentEvent": {
     "key": "fulfillmentEvent",
-    "name": "events",
-    "parentName": "fulfillments",
     "endpoints": [
       "list",
       "get",
       "create",
       "update",
       "delete"
-    ]
+    ],
+    "children": {}
   },
   "fulfillmentOrder": {
     "key": "fulfillmentOrder",
-    "name": "fulfillment_orders",
-    "parentName": null,
     "endpoints": [
       "get",
       "list",
@@ -328,59 +273,41 @@
       "close",
       "move",
       "locationsForMove"
-    ]
-  },
-  "fulfillmentRequest": {
-    "key": "fulfillmentRequest",
-    "name": "fulfillment_request",
-    "parentName": "fulfillment_orders",
-    "endpoints": [
-      "create",
-      "accept",
-      "reject"
-    ]
+    ],
+    "children": {
+      "cancellationRequest": {
+        "key": "cancellationRequest",
+        "endpoints": [
+          "create",
+          "accept",
+          "reject"
+        ],
+        "children": {}
+      },
+      "fulfillmentRequest": {
+        "key": "fulfillmentRequest",
+        "endpoints": [
+          "create",
+          "accept",
+          "reject"
+        ],
+        "children": {}
+      }
+    }
   },
   "fulfillmentService": {
     "key": "fulfillmentService",
-    "name": "fulfillment_services",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "get",
       "list",
       "update"
-    ]
-  },
-  "fulfillment": {
-    "key": "fulfillment",
-    "name": "fulfillments",
-    "parentName": "orders",
-    "endpoints": [
-      "count",
-      "create",
-      "get",
-      "list",
-      "update",
-      "complete",
-      "open",
-      "cancel"
-    ]
-  },
-  "giftCardAdjustment": {
-    "key": "giftCardAdjustment",
-    "name": "adjustments",
-    "parentName": "gift_cards",
-    "endpoints": [
-      "create",
-      "get",
-      "list"
-    ]
+    ],
+    "children": {}
   },
   "giftCard": {
     "key": "giftCard",
-    "name": "gift_cards",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -389,45 +316,51 @@
       "update",
       "disable",
       "search"
-    ]
+    ],
+    "children": {
+      "giftCardAdjustment": {
+        "key": "giftCardAdjustment",
+        "endpoints": [
+          "create",
+          "get",
+          "list"
+        ],
+        "children": {}
+      }
+    }
   },
   "inventoryItem": {
     "key": "inventoryItem",
-    "name": "inventory_items",
-    "parentName": null,
     "endpoints": [
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {}
   },
   "inventoryLevel": {
     "key": "inventoryLevel",
-    "name": "inventory_levels",
-    "parentName": null,
     "endpoints": [
       "list",
       "adjust",
       "connect",
       "delete",
       "set"
-    ]
+    ],
+    "children": {}
   },
   "location": {
     "key": "location",
-    "name": "locations",
-    "parentName": null,
     "endpoints": [
       "count",
       "get",
       "list",
       "inventoryLevels"
-    ]
+    ],
+    "children": {}
   },
   "marketingEvent": {
     "key": "marketingEvent",
-    "name": "marketing_events",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -436,12 +369,11 @@
       "list",
       "update",
       "engagements"
-    ]
+    ],
+    "children": {}
   },
   "metafield": {
     "key": "metafield",
-    "name": "metafields",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -449,24 +381,11 @@
       "get",
       "list",
       "update"
-    ]
-  },
-  "orderRisk": {
-    "key": "orderRisk",
-    "name": "risks",
-    "parentName": "orders",
-    "endpoints": [
-      "create",
-      "delete",
-      "get",
-      "list",
-      "update"
-    ]
+    ],
+    "children": {}
   },
   "order": {
     "key": "order",
-    "name": "orders",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -478,12 +397,69 @@
       "open",
       "cancel",
       "fulfillmentOrders"
-    ]
+    ],
+    "children": {
+      "fulfillment": {
+        "key": "fulfillment",
+        "endpoints": [
+          "count",
+          "create",
+          "get",
+          "list",
+          "update",
+          "complete",
+          "open",
+          "cancel"
+        ],
+        "children": {
+          "fulfillmentEvent": {
+            "key": "fulfillmentEvent",
+            "endpoints": [
+              "list",
+              "get",
+              "create",
+              "update",
+              "delete"
+            ],
+            "children": {}
+          }
+        }
+      },
+      "orderRisk": {
+        "key": "orderRisk",
+        "endpoints": [
+          "create",
+          "delete",
+          "get",
+          "list",
+          "update"
+        ],
+        "children": {}
+      },
+      "refund": {
+        "key": "refund",
+        "endpoints": [
+          "create",
+          "get",
+          "list",
+          "calculate"
+        ],
+        "children": {}
+      },
+      "transaction": {
+        "key": "transaction",
+        "endpoints": [
+          "count",
+          "create",
+          "get",
+          "list"
+        ],
+        "children": {}
+      }
+    }
   },
   "page": {
     "key": "page",
-    "name": "pages",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -491,65 +467,59 @@
       "get",
       "list",
       "update"
-    ]
-  },
-  "payment": {
-    "key": "payment",
-    "name": "payments",
-    "parentName": "checkouts",
-    "endpoints": [
-      "count",
-      "create",
-      "get",
-      "list"
-    ]
+    ],
+    "children": {}
   },
   "payout": {
     "key": "payout",
-    "name": "payouts",
-    "parentName": null,
     "endpoints": [
       "get",
       "list"
-    ]
+    ],
+    "children": {}
   },
   "policy": {
     "key": "policy",
-    "name": "policies",
-    "parentName": null,
     "endpoints": [
       "list"
-    ]
+    ],
+    "children": {}
   },
   "priceRule": {
     "key": "priceRule",
-    "name": "price_rules",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "get",
       "list",
       "update"
-    ]
-  },
-  "productImage": {
-    "key": "productImage",
-    "name": "images",
-    "parentName": "products",
-    "endpoints": [
-      "count",
-      "create",
-      "delete",
-      "get",
-      "list",
-      "update"
-    ]
+    ],
+    "children": {
+      "discountCodeCreationJob": {
+        "key": "discountCodeCreationJob",
+        "endpoints": [
+          "get",
+          "create",
+          "discountCodes"
+        ],
+        "children": {}
+      },
+      "discountCode": {
+        "key": "discountCode",
+        "endpoints": [
+          "create",
+          "delete",
+          "get",
+          "list",
+          "update",
+          "lookup"
+        ],
+        "children": {}
+      }
+    }
   },
   "productListing": {
     "key": "productListing",
-    "name": "product_listings",
-    "parentName": null,
     "endpoints": [
       "count",
       "delete",
@@ -557,34 +527,11 @@
       "list",
       "create",
       "productIds"
-    ]
-  },
-  "productResourceFeedback": {
-    "key": "productResourceFeedback",
-    "name": "resource_feedback",
-    "parentName": "products",
-    "endpoints": [
-      "create",
-      "list"
-    ]
-  },
-  "productVariant": {
-    "key": "productVariant",
-    "name": "variants",
-    "parentName": "products",
-    "endpoints": [
-      "count",
-      "delete",
-      "get",
-      "create",
-      "list",
-      "update"
-    ]
+    ],
+    "children": {}
   },
   "product": {
     "key": "product",
-    "name": "products",
-    "parentName": null,
     "endpoints": [
       "delete",
       "count",
@@ -592,23 +539,44 @@
       "create",
       "list",
       "update"
-    ]
-  },
-  "province": {
-    "key": "province",
-    "name": "provinces",
-    "parentName": "countries",
-    "endpoints": [
-      "count",
-      "get",
-      "list",
-      "update"
-    ]
+    ],
+    "children": {
+      "productImage": {
+        "key": "productImage",
+        "endpoints": [
+          "count",
+          "create",
+          "delete",
+          "get",
+          "list",
+          "update"
+        ],
+        "children": {}
+      },
+      "productResourceFeedback": {
+        "key": "resourceFeedback",
+        "endpoints": [
+          "create",
+          "list"
+        ],
+        "children": {}
+      },
+      "productVariant": {
+        "key": "productVariant",
+        "endpoints": [
+          "count",
+          "delete",
+          "get",
+          "create",
+          "list",
+          "update"
+        ],
+        "children": {}
+      }
+    }
   },
   "recurringApplicationCharge": {
     "key": "recurringApplicationCharge",
-    "name": "recurring_application_charges",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
@@ -616,12 +584,21 @@
       "list",
       "activate",
       "customize"
-    ]
+    ],
+    "children": {
+      "usageCharge": {
+        "key": "usageCharge",
+        "endpoints": [
+          "create",
+          "get",
+          "list"
+        ],
+        "children": {}
+      }
+    }
   },
   "redirect": {
     "key": "redirect",
-    "name": "redirects",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -629,44 +606,30 @@
       "get",
       "list",
       "update"
-    ]
-  },
-  "refund": {
-    "key": "refund",
-    "name": "refunds",
-    "parentName": "orders",
-    "endpoints": [
-      "create",
-      "get",
-      "list",
-      "calculate"
-    ]
+    ],
+    "children": {}
   },
   "report": {
     "key": "report",
-    "name": "reports",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {}
   },
   "resourceFeedback": {
     "key": "resourceFeedback",
-    "name": "resource_feedback",
-    "parentName": null,
     "endpoints": [
       "create",
       "list"
-    ]
+    ],
+    "children": {}
   },
   "scriptTag": {
     "key": "scriptTag",
-    "name": "script_tags",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -674,28 +637,25 @@
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {}
   },
   "shippingZone": {
     "key": "shippingZone",
-    "name": "shipping_zones",
-    "parentName": null,
     "endpoints": [
       "list"
-    ]
+    ],
+    "children": {}
   },
   "shop": {
     "key": "shop",
-    "name": "shop",
-    "parentName": null,
     "endpoints": [
       "get"
-    ]
+    ],
+    "children": {}
   },
   "smartCollection": {
     "key": "smartCollection",
-    "name": "smart_collections",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -705,73 +665,59 @@
       "update",
       "order",
       "products"
-    ]
+    ],
+    "children": {}
   },
   "storefrontAccessToken": {
     "key": "storefrontAccessToken",
-    "name": "storefront_access_tokens",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "list"
-    ]
+    ],
+    "children": {}
   },
   "tenderTransaction": {
     "key": "tenderTransaction",
-    "name": "tender_transactions",
-    "parentName": null,
     "endpoints": [
       "list"
-    ]
+    ],
+    "children": {}
   },
   "theme": {
     "key": "theme",
-    "name": "themes",
-    "parentName": null,
     "endpoints": [
       "create",
       "delete",
       "get",
       "list",
       "update"
-    ]
-  },
-  "transaction": {
-    "key": "transaction",
-    "name": "transactions",
-    "parentName": "orders",
-    "endpoints": [
-      "count",
-      "create",
-      "get",
-      "list"
-    ]
-  },
-  "usageCharge": {
-    "key": "usageCharge",
-    "name": "usage_charges",
-    "parentName": "recurring_application_charges",
-    "endpoints": [
-      "create",
-      "get",
-      "list"
-    ]
+    ],
+    "children": {
+      "asset": {
+        "key": "asset",
+        "endpoints": [
+          "list",
+          "get",
+          "create",
+          "update",
+          "delete"
+        ],
+        "children": {}
+      }
+    }
   },
   "user": {
     "key": "user",
-    "name": "users",
-    "parentName": null,
     "endpoints": [
       "get",
       "list",
       "current"
-    ]
+    ],
+    "children": {}
   },
   "webhook": {
     "key": "webhook",
-    "name": "webhooks",
-    "parentName": null,
     "endpoints": [
       "count",
       "create",
@@ -779,6 +725,7 @@
       "get",
       "list",
       "update"
-    ]
+    ],
+    "children": {}
   }
-}
+} as const;
