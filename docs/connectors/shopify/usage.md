@@ -62,7 +62,9 @@
 
 ## access-scope
 
-### list
+ * [list](#access-scope.list)
+
+### access-scope.list
 
 *CLI*
 ```sh
@@ -77,7 +79,9 @@ const command = shopify.accessScope.list(input?: unknown);
 
 ## api-permission
 
-### delete
+ * [delete](#api-permission[].delete)
+
+### api-permission[].delete
 
 *CLI*
 ```sh
@@ -92,7 +96,11 @@ const command = shopify.apiPermission.$doc(id).delete(input?: unknown);
 
 ## application-credit
 
-### create
+ * [create](#application-credit.create)
+ * [get](#application-credit[].get)
+ * [list](#application-credit.list)
+
+### application-credit.create
 
 *CLI*
 ```sh
@@ -105,7 +113,7 @@ const command = shopify.applicationCredit.create(input?: unknown);
 ```
 
 
-### get
+### application-credit[].get
 
 *CLI*
 ```sh
@@ -119,7 +127,7 @@ const command = shopify.applicationCredit.$all.get(input?: unknown);
 ```
 
 
-### list
+### application-credit.list
 
 *CLI*
 ```sh
@@ -134,7 +142,14 @@ const command = shopify.applicationCredit.list(input?: unknown);
 
 ## blog
 
-### count
+ * [count](#blog.count)
+ * [create](#blog.create)
+ * [delete](#blog[].delete)
+ * [get](#blog[].get)
+ * [list](#blog.list)
+ * [update](#blog[].update)
+
+### blog.count
 
 *CLI*
 ```sh
@@ -147,7 +162,7 @@ const command = shopify.blog.count(input?: unknown);
 ```
 
 
-### create
+### blog.create
 
 *CLI*
 ```sh
@@ -160,7 +175,7 @@ const command = shopify.blog.create(input?: unknown);
 ```
 
 
-### delete
+### blog[].delete
 
 *CLI*
 ```sh
@@ -174,7 +189,7 @@ const command = shopify.blog.$all.delete(input?: unknown);
 ```
 
 
-### get
+### blog[].get
 
 *CLI*
 ```sh
@@ -188,7 +203,7 @@ const command = shopify.blog.$all.get(input?: unknown);
 ```
 
 
-### list
+### blog.list
 
 *CLI*
 ```sh
@@ -201,7 +216,7 @@ const command = shopify.blog.list(input?: unknown);
 ```
 
 
-### update
+### blog[].update
 
 *CLI*
 ```sh
@@ -217,7 +232,15 @@ const command = shopify.blog.$all.update(input?: unknown);
 
 ## blog[].article
 
-### count
+ * [count](#blog[].article.count)
+ * [create](#blog[].article.create)
+ * [delete](#blog[].article[].delete)
+ * [get](#blog[].article[].get)
+ * [list](#blog[].article.list)
+ * [tags](#blog[].article[].tags)
+ * [update](#blog[].article[].update)
+
+### blog[].article.count
 
 *CLI*
 ```sh
@@ -231,7 +254,7 @@ const command = shopify.blog.$all.article.count(input?: unknown);
 ```
 
 
-### create
+### blog[].article.create
 
 *CLI*
 ```sh
@@ -245,7 +268,7 @@ const command = shopify.blog.$all.article.create(input?: unknown);
 ```
 
 
-### delete
+### blog[].article[].delete
 
 *CLI*
 ```sh
@@ -259,7 +282,7 @@ const command = shopify.blog.$all.article.$all.delete(input?: unknown);
 ```
 
 
-### get
+### blog[].article[].get
 
 *CLI*
 ```sh
@@ -273,7 +296,7 @@ const command = shopify.blog.$all.article.$all.get(input?: unknown);
 ```
 
 
-### list
+### blog[].article.list
 
 *CLI*
 ```sh
@@ -287,7 +310,7 @@ const command = shopify.blog.$all.article.list(input?: unknown);
 ```
 
 
-### tags
+### blog[].article[].tags
 
 *CLI*
 ```sh
@@ -301,7 +324,7 @@ const command = shopify.blog.$all.article.$all.tags(input?: unknown);
 ```
 
 
-### update
+### blog[].article[].update
 
 *CLI*
 ```sh
@@ -317,7 +340,13 @@ const command = shopify.blog.$all.article.$all.update(input?: unknown);
 
 ## carrier-service
 
-### create
+ * [create](#carrier-service.create)
+ * [delete](#carrier-service[].delete)
+ * [get](#carrier-service[].get)
+ * [list](#carrier-service.list)
+ * [update](#carrier-service[].update)
+
+### carrier-service.create
 
 *CLI*
 ```sh
@@ -330,7 +359,7 @@ const command = shopify.carrierService.create(input?: unknown);
 ```
 
 
-### delete
+### carrier-service[].delete
 
 *CLI*
 ```sh
@@ -344,7 +373,7 @@ const command = shopify.carrierService.$all.delete(input?: unknown);
 ```
 
 
-### get
+### carrier-service[].get
 
 *CLI*
 ```sh
@@ -358,7 +387,7 @@ const command = shopify.carrierService.$all.get(input?: unknown);
 ```
 
 
-### list
+### carrier-service.list
 
 *CLI*
 ```sh
@@ -371,7 +400,7 @@ const command = shopify.carrierService.list(input?: unknown);
 ```
 
 
-### update
+### carrier-service[].update
 
 *CLI*
 ```sh
@@ -387,7 +416,13 @@ const command = shopify.carrierService.$all.update(input?: unknown);
 
 ## collect
 
-### count
+ * [count](#collect.count)
+ * [create](#collect.create)
+ * [delete](#collect[].delete)
+ * [get](#collect[].get)
+ * [list](#collect.list)
+
+### collect.count
 
 *CLI*
 ```sh
@@ -400,7 +435,7 @@ const command = shopify.collect.count(input?: unknown);
 ```
 
 
-### create
+### collect.create
 
 *CLI*
 ```sh
@@ -413,7 +448,7 @@ const command = shopify.collect.create(input?: unknown);
 ```
 
 
-### delete
+### collect[].delete
 
 *CLI*
 ```sh
@@ -427,7 +462,7 @@ const command = shopify.collect.$all.delete(input?: unknown);
 ```
 
 
-### get
+### collect[].get
 
 *CLI*
 ```sh
@@ -441,7 +476,7 @@ const command = shopify.collect.$all.get(input?: unknown);
 ```
 
 
-### list
+### collect.list
 
 *CLI*
 ```sh
@@ -456,7 +491,10 @@ const command = shopify.collect.list(input?: unknown);
 
 ## collection-listing
 
-### get
+ * [get](#collection-listing[].get)
+ * [list](#collection-listing.list)
+
+### collection-listing[].get
 
 *CLI*
 ```sh
@@ -470,7 +508,7 @@ const command = shopify.collectionListing.$all.get(input?: unknown);
 ```
 
 
-### list
+### collection-listing.list
 
 *CLI*
 ```sh
@@ -485,7 +523,10 @@ const command = shopify.collectionListing.list(input?: unknown);
 
 ## collection
 
-### get
+ * [get](#collection[].get)
+ * [products](#collection[].products)
+
+### collection[].get
 
 *CLI*
 ```sh
@@ -498,7 +539,7 @@ const command = shopify.collection.$doc(id).get(input?: unknown);
 ```
 
 
-### products
+### collection[].products
 
 *CLI*
 ```sh
@@ -513,7 +554,14 @@ const command = shopify.collection.$doc(id).products(input?: unknown);
 
 ## country
 
-### count
+ * [count](#country.count)
+ * [create](#country.create)
+ * [delete](#country[].delete)
+ * [get](#country[].get)
+ * [list](#country.list)
+ * [update](#country[].update)
+
+### country.count
 
 *CLI*
 ```sh
@@ -526,7 +574,7 @@ const command = shopify.country.count(input?: unknown);
 ```
 
 
-### create
+### country.create
 
 *CLI*
 ```sh
@@ -539,7 +587,7 @@ const command = shopify.country.create(input?: unknown);
 ```
 
 
-### delete
+### country[].delete
 
 *CLI*
 ```sh
@@ -553,7 +601,7 @@ const command = shopify.country.$all.delete(input?: unknown);
 ```
 
 
-### get
+### country[].get
 
 *CLI*
 ```sh
@@ -567,7 +615,7 @@ const command = shopify.country.$all.get(input?: unknown);
 ```
 
 
-### list
+### country.list
 
 *CLI*
 ```sh
@@ -580,7 +628,7 @@ const command = shopify.country.list(input?: unknown);
 ```
 
 
-### update
+### country[].update
 
 *CLI*
 ```sh
@@ -596,7 +644,12 @@ const command = shopify.country.$all.update(input?: unknown);
 
 ## country[].province
 
-### count
+ * [count](#country[].province.count)
+ * [get](#country[].province[].get)
+ * [list](#country[].province.list)
+ * [update](#country[].province[].update)
+
+### country[].province.count
 
 *CLI*
 ```sh
@@ -610,7 +663,7 @@ const command = shopify.country.$all.province.count(input?: unknown);
 ```
 
 
-### get
+### country[].province[].get
 
 *CLI*
 ```sh
@@ -624,7 +677,7 @@ const command = shopify.country.$all.province.$all.get(input?: unknown);
 ```
 
 
-### list
+### country[].province.list
 
 *CLI*
 ```sh
@@ -638,7 +691,7 @@ const command = shopify.country.$all.province.list(input?: unknown);
 ```
 
 
-### update
+### country[].province[].update
 
 *CLI*
 ```sh
@@ -654,7 +707,9 @@ const command = shopify.country.$all.province.$all.update(input?: unknown);
 
 ## currency
 
-### list
+ * [list](#currency.list)
+
+### currency.list
 
 *CLI*
 ```sh
@@ -669,7 +724,14 @@ const command = shopify.currency.list(input?: unknown);
 
 ## custom-collection
 
-### count
+ * [count](#custom-collection.count)
+ * [create](#custom-collection.create)
+ * [delete](#custom-collection[].delete)
+ * [get](#custom-collection[].get)
+ * [list](#custom-collection.list)
+ * [update](#custom-collection[].update)
+
+### custom-collection.count
 
 *CLI*
 ```sh
@@ -682,7 +744,7 @@ const command = shopify.customCollection.count(input?: unknown);
 ```
 
 
-### create
+### custom-collection.create
 
 *CLI*
 ```sh
@@ -695,7 +757,7 @@ const command = shopify.customCollection.create(input?: unknown);
 ```
 
 
-### delete
+### custom-collection[].delete
 
 *CLI*
 ```sh
@@ -709,7 +771,7 @@ const command = shopify.customCollection.$all.delete(input?: unknown);
 ```
 
 
-### get
+### custom-collection[].get
 
 *CLI*
 ```sh
@@ -723,7 +785,7 @@ const command = shopify.customCollection.$all.get(input?: unknown);
 ```
 
 
-### list
+### custom-collection.list
 
 *CLI*
 ```sh
@@ -736,7 +798,7 @@ const command = shopify.customCollection.list(input?: unknown);
 ```
 
 
-### update
+### custom-collection[].update
 
 *CLI*
 ```sh
@@ -752,7 +814,16 @@ const command = shopify.customCollection.$all.update(input?: unknown);
 
 ## customer
 
-### count
+ * [count](#customer.count)
+ * [create](#customer.create)
+ * [delete](#customer[].delete)
+ * [get](#customer[].get)
+ * [list](#customer.list)
+ * [orders](#customer[].orders)
+ * [send-invite](#customer[].send-invite)
+ * [update](#customer[].update)
+
+### customer.count
 
 *CLI*
 ```sh
@@ -765,7 +836,7 @@ const command = shopify.customer.count(input?: unknown);
 ```
 
 
-### create
+### customer.create
 
 *CLI*
 ```sh
@@ -778,7 +849,7 @@ const command = shopify.customer.create(input?: unknown);
 ```
 
 
-### delete
+### customer[].delete
 
 *CLI*
 ```sh
@@ -792,7 +863,7 @@ const command = shopify.customer.$all.delete(input?: unknown);
 ```
 
 
-### get
+### customer[].get
 
 *CLI*
 ```sh
@@ -806,7 +877,7 @@ const command = shopify.customer.$all.get(input?: unknown);
 ```
 
 
-### list
+### customer.list
 
 *CLI*
 ```sh
@@ -819,7 +890,7 @@ const command = shopify.customer.list(input?: unknown);
 ```
 
 
-### orders
+### customer[].orders
 
 *CLI*
 ```sh
@@ -833,7 +904,7 @@ const command = shopify.customer.$all.orders(input?: unknown);
 ```
 
 
-### sendInvite
+### customer[].send-invite
 
 *CLI*
 ```sh
@@ -847,7 +918,7 @@ const command = shopify.customer.$all.sendInvite(input?: unknown);
 ```
 
 
-### update
+### customer[].update
 
 *CLI*
 ```sh
@@ -863,7 +934,15 @@ const command = shopify.customer.$all.update(input?: unknown);
 
 ## customer[].customer-address
 
-### create
+ * [create](#customer[].customer-address.create)
+ * [default](#customer[].customer-address[].default)
+ * [delete](#customer[].customer-address[].delete)
+ * [get](#customer[].customer-address[].get)
+ * [list](#customer[].customer-address.list)
+ * [set](#customer[].customer-address.set)
+ * [update](#customer[].customer-address[].update)
+
+### customer[].customer-address.create
 
 *CLI*
 ```sh
@@ -877,7 +956,7 @@ const command = shopify.customer.$all.customerAddress.create(input?: unknown);
 ```
 
 
-### default
+### customer[].customer-address[].default
 
 *CLI*
 ```sh
@@ -891,7 +970,7 @@ const command = shopify.customer.$all.customerAddress.$all.default(input?: unkno
 ```
 
 
-### delete
+### customer[].customer-address[].delete
 
 *CLI*
 ```sh
@@ -905,7 +984,7 @@ const command = shopify.customer.$all.customerAddress.$all.delete(input?: unknow
 ```
 
 
-### get
+### customer[].customer-address[].get
 
 *CLI*
 ```sh
@@ -919,7 +998,7 @@ const command = shopify.customer.$all.customerAddress.$all.get(input?: unknown);
 ```
 
 
-### list
+### customer[].customer-address.list
 
 *CLI*
 ```sh
@@ -933,7 +1012,7 @@ const command = shopify.customer.$all.customerAddress.list(input?: unknown);
 ```
 
 
-### set
+### customer[].customer-address.set
 
 *CLI*
 ```sh
@@ -947,7 +1026,7 @@ const command = shopify.customer.$all.customerAddress.set(input?: unknown);
 ```
 
 
-### update
+### customer[].customer-address[].update
 
 *CLI*
 ```sh
@@ -963,7 +1042,10 @@ const command = shopify.customer.$all.customerAddress.$all.update(input?: unknow
 
 ## dispute
 
-### get
+ * [get](#dispute[].get)
+ * [list](#dispute.list)
+
+### dispute[].get
 
 *CLI*
 ```sh
@@ -977,7 +1059,7 @@ const command = shopify.dispute.$all.get(input?: unknown);
 ```
 
 
-### list
+### dispute.list
 
 *CLI*
 ```sh
@@ -992,7 +1074,16 @@ const command = shopify.dispute.list(input?: unknown);
 
 ## draft-order
 
-### complete
+ * [complete](#draft-order[].complete)
+ * [count](#draft-order.count)
+ * [create](#draft-order.create)
+ * [delete](#draft-order[].delete)
+ * [get](#draft-order[].get)
+ * [list](#draft-order.list)
+ * [send-invoice](#draft-order[].send-invoice)
+ * [update](#draft-order[].update)
+
+### draft-order[].complete
 
 *CLI*
 ```sh
@@ -1006,7 +1097,7 @@ const command = shopify.draftOrder.$all.complete(input?: unknown);
 ```
 
 
-### count
+### draft-order.count
 
 *CLI*
 ```sh
@@ -1019,7 +1110,7 @@ const command = shopify.draftOrder.count(input?: unknown);
 ```
 
 
-### create
+### draft-order.create
 
 *CLI*
 ```sh
@@ -1032,7 +1123,7 @@ const command = shopify.draftOrder.create(input?: unknown);
 ```
 
 
-### delete
+### draft-order[].delete
 
 *CLI*
 ```sh
@@ -1046,7 +1137,7 @@ const command = shopify.draftOrder.$all.delete(input?: unknown);
 ```
 
 
-### get
+### draft-order[].get
 
 *CLI*
 ```sh
@@ -1060,7 +1151,7 @@ const command = shopify.draftOrder.$all.get(input?: unknown);
 ```
 
 
-### list
+### draft-order.list
 
 *CLI*
 ```sh
@@ -1073,7 +1164,7 @@ const command = shopify.draftOrder.list(input?: unknown);
 ```
 
 
-### sendInvoice
+### draft-order[].send-invoice
 
 *CLI*
 ```sh
@@ -1087,7 +1178,7 @@ const command = shopify.draftOrder.$all.sendInvoice(input?: unknown);
 ```
 
 
-### update
+### draft-order[].update
 
 *CLI*
 ```sh
@@ -1103,7 +1194,13 @@ const command = shopify.draftOrder.$all.update(input?: unknown);
 
 ## event
 
-### create
+ * [create](#event.create)
+ * [delete](#event[].delete)
+ * [get](#event[].get)
+ * [list](#event.list)
+ * [update](#event[].update)
+
+### event.create
 
 *CLI*
 ```sh
@@ -1116,7 +1213,7 @@ const command = shopify.event.create(input?: unknown);
 ```
 
 
-### delete
+### event[].delete
 
 *CLI*
 ```sh
@@ -1130,7 +1227,7 @@ const command = shopify.event.$all.delete(input?: unknown);
 ```
 
 
-### get
+### event[].get
 
 *CLI*
 ```sh
@@ -1144,7 +1241,7 @@ const command = shopify.event.$all.get(input?: unknown);
 ```
 
 
-### list
+### event.list
 
 *CLI*
 ```sh
@@ -1157,7 +1254,7 @@ const command = shopify.event.list(input?: unknown);
 ```
 
 
-### update
+### event[].update
 
 *CLI*
 ```sh
@@ -1173,7 +1270,13 @@ const command = shopify.event.$all.update(input?: unknown);
 
 ## fulfillment-service
 
-### create
+ * [create](#fulfillment-service.create)
+ * [delete](#fulfillment-service[].delete)
+ * [get](#fulfillment-service[].get)
+ * [list](#fulfillment-service.list)
+ * [update](#fulfillment-service[].update)
+
+### fulfillment-service.create
 
 *CLI*
 ```sh
@@ -1186,7 +1289,7 @@ const command = shopify.fulfillmentService.create(input?: unknown);
 ```
 
 
-### delete
+### fulfillment-service[].delete
 
 *CLI*
 ```sh
@@ -1200,7 +1303,7 @@ const command = shopify.fulfillmentService.$all.delete(input?: unknown);
 ```
 
 
-### get
+### fulfillment-service[].get
 
 *CLI*
 ```sh
@@ -1214,7 +1317,7 @@ const command = shopify.fulfillmentService.$all.get(input?: unknown);
 ```
 
 
-### list
+### fulfillment-service.list
 
 *CLI*
 ```sh
@@ -1227,7 +1330,7 @@ const command = shopify.fulfillmentService.list(input?: unknown);
 ```
 
 
-### update
+### fulfillment-service[].update
 
 *CLI*
 ```sh
@@ -1243,7 +1346,14 @@ const command = shopify.fulfillmentService.$all.update(input?: unknown);
 
 ## gift-card
 
-### count
+ * [count](#gift-card.count)
+ * [create](#gift-card.create)
+ * [disable](#gift-card[].disable)
+ * [get](#gift-card[].get)
+ * [list](#gift-card.list)
+ * [update](#gift-card[].update)
+
+### gift-card.count
 
 *CLI*
 ```sh
@@ -1256,7 +1366,7 @@ const command = shopify.giftCard.count(input?: unknown);
 ```
 
 
-### create
+### gift-card.create
 
 *CLI*
 ```sh
@@ -1269,7 +1379,7 @@ const command = shopify.giftCard.create(input?: unknown);
 ```
 
 
-### disable
+### gift-card[].disable
 
 *CLI*
 ```sh
@@ -1283,7 +1393,7 @@ const command = shopify.giftCard.$all.disable(input?: unknown);
 ```
 
 
-### get
+### gift-card[].get
 
 *CLI*
 ```sh
@@ -1297,7 +1407,7 @@ const command = shopify.giftCard.$all.get(input?: unknown);
 ```
 
 
-### list
+### gift-card.list
 
 *CLI*
 ```sh
@@ -1310,7 +1420,7 @@ const command = shopify.giftCard.list(input?: unknown);
 ```
 
 
-### update
+### gift-card[].update
 
 *CLI*
 ```sh
@@ -1326,7 +1436,11 @@ const command = shopify.giftCard.$all.update(input?: unknown);
 
 ## gift-card[].gift-card-adjustment
 
-### create
+ * [create](#gift-card[].gift-card-adjustment.create)
+ * [get](#gift-card[].gift-card-adjustment[].get)
+ * [list](#gift-card[].gift-card-adjustment.list)
+
+### gift-card[].gift-card-adjustment.create
 
 *CLI*
 ```sh
@@ -1340,7 +1454,7 @@ const command = shopify.giftCard.$all.giftCardAdjustment.create(input?: unknown)
 ```
 
 
-### get
+### gift-card[].gift-card-adjustment[].get
 
 *CLI*
 ```sh
@@ -1354,7 +1468,7 @@ const command = shopify.giftCard.$all.giftCardAdjustment.$all.get(input?: unknow
 ```
 
 
-### list
+### gift-card[].gift-card-adjustment.list
 
 *CLI*
 ```sh
@@ -1370,7 +1484,11 @@ const command = shopify.giftCard.$all.giftCardAdjustment.list(input?: unknown);
 
 ## inventory-item
 
-### get
+ * [get](#inventory-item[].get)
+ * [list](#inventory-item.list)
+ * [update](#inventory-item[].update)
+
+### inventory-item[].get
 
 *CLI*
 ```sh
@@ -1384,7 +1502,7 @@ const command = shopify.inventoryItem.$all.get(input?: unknown);
 ```
 
 
-### list
+### inventory-item.list
 
 *CLI*
 ```sh
@@ -1397,7 +1515,7 @@ const command = shopify.inventoryItem.list(input?: unknown);
 ```
 
 
-### update
+### inventory-item[].update
 
 *CLI*
 ```sh
@@ -1413,7 +1531,10 @@ const command = shopify.inventoryItem.$all.update(input?: unknown);
 
 ## inventory-level
 
-### delete
+ * [delete](#inventory-level[].delete)
+ * [list](#inventory-level.list)
+
+### inventory-level[].delete
 
 *CLI*
 ```sh
@@ -1427,7 +1548,7 @@ const command = shopify.inventoryLevel.$all.delete(input?: unknown);
 ```
 
 
-### list
+### inventory-level.list
 
 *CLI*
 ```sh
@@ -1442,7 +1563,12 @@ const command = shopify.inventoryLevel.list(input?: unknown);
 
 ## location
 
-### count
+ * [count](#location.count)
+ * [get](#location[].get)
+ * [inventory-levels](#location[].inventory-levels)
+ * [list](#location.list)
+
+### location.count
 
 *CLI*
 ```sh
@@ -1455,7 +1581,7 @@ const command = shopify.location.count(input?: unknown);
 ```
 
 
-### get
+### location[].get
 
 *CLI*
 ```sh
@@ -1469,7 +1595,7 @@ const command = shopify.location.$all.get(input?: unknown);
 ```
 
 
-### inventoryLevels
+### location[].inventory-levels
 
 *CLI*
 ```sh
@@ -1483,7 +1609,7 @@ const command = shopify.location.$all.inventoryLevels(input?: unknown);
 ```
 
 
-### list
+### location.list
 
 *CLI*
 ```sh
@@ -1498,7 +1624,14 @@ const command = shopify.location.list(input?: unknown);
 
 ## metafield
 
-### count
+ * [count](#metafield.count)
+ * [create](#metafield.create)
+ * [delete](#metafield[].delete)
+ * [get](#metafield[].get)
+ * [list](#metafield.list)
+ * [update](#metafield[].update)
+
+### metafield.count
 
 *CLI*
 ```sh
@@ -1511,7 +1644,7 @@ const command = shopify.metafield.count(input?: unknown);
 ```
 
 
-### create
+### metafield.create
 
 *CLI*
 ```sh
@@ -1524,7 +1657,7 @@ const command = shopify.metafield.create(input?: unknown);
 ```
 
 
-### delete
+### metafield[].delete
 
 *CLI*
 ```sh
@@ -1538,7 +1671,7 @@ const command = shopify.metafield.$all.delete(input?: unknown);
 ```
 
 
-### get
+### metafield[].get
 
 *CLI*
 ```sh
@@ -1552,7 +1685,7 @@ const command = shopify.metafield.$all.get(input?: unknown);
 ```
 
 
-### list
+### metafield.list
 
 *CLI*
 ```sh
@@ -1565,7 +1698,7 @@ const command = shopify.metafield.list(input?: unknown);
 ```
 
 
-### update
+### metafield[].update
 
 *CLI*
 ```sh
@@ -1581,7 +1714,18 @@ const command = shopify.metafield.$all.update(input?: unknown);
 
 ## order
 
-### cancel
+ * [cancel](#order[].cancel)
+ * [close](#order[].close)
+ * [count](#order.count)
+ * [create](#order.create)
+ * [delete](#order[].delete)
+ * [fulfillment-orders](#order[].fulfillment-orders)
+ * [get](#order[].get)
+ * [list](#order.list)
+ * [open](#order[].open)
+ * [update](#order[].update)
+
+### order[].cancel
 
 *CLI*
 ```sh
@@ -1595,7 +1739,7 @@ const command = shopify.order.$all.cancel(input?: unknown);
 ```
 
 
-### close
+### order[].close
 
 *CLI*
 ```sh
@@ -1609,7 +1753,7 @@ const command = shopify.order.$all.close(input?: unknown);
 ```
 
 
-### count
+### order.count
 
 *CLI*
 ```sh
@@ -1622,7 +1766,7 @@ const command = shopify.order.count(input?: unknown);
 ```
 
 
-### create
+### order.create
 
 *CLI*
 ```sh
@@ -1635,7 +1779,7 @@ const command = shopify.order.create(input?: unknown);
 ```
 
 
-### delete
+### order[].delete
 
 *CLI*
 ```sh
@@ -1649,7 +1793,7 @@ const command = shopify.order.$all.delete(input?: unknown);
 ```
 
 
-### fulfillmentOrders
+### order[].fulfillment-orders
 
 *CLI*
 ```sh
@@ -1663,7 +1807,7 @@ const command = shopify.order.$all.fulfillmentOrders(input?: unknown);
 ```
 
 
-### get
+### order[].get
 
 *CLI*
 ```sh
@@ -1677,7 +1821,7 @@ const command = shopify.order.$all.get(input?: unknown);
 ```
 
 
-### list
+### order.list
 
 *CLI*
 ```sh
@@ -1690,7 +1834,7 @@ const command = shopify.order.list(input?: unknown);
 ```
 
 
-### open
+### order[].open
 
 *CLI*
 ```sh
@@ -1704,7 +1848,7 @@ const command = shopify.order.$all.open(input?: unknown);
 ```
 
 
-### update
+### order[].update
 
 *CLI*
 ```sh
@@ -1720,7 +1864,16 @@ const command = shopify.order.$all.update(input?: unknown);
 
 ## order[].fulfillment
 
-### cancel
+ * [cancel](#order[].fulfillment[].cancel)
+ * [complete](#order[].fulfillment[].complete)
+ * [count](#order[].fulfillment.count)
+ * [create](#order[].fulfillment.create)
+ * [get](#order[].fulfillment[].get)
+ * [list](#order[].fulfillment.list)
+ * [open](#order[].fulfillment[].open)
+ * [update](#order[].fulfillment[].update)
+
+### order[].fulfillment[].cancel
 
 *CLI*
 ```sh
@@ -1734,7 +1887,7 @@ const command = shopify.order.$all.fulfillment.$all.cancel(input?: unknown);
 ```
 
 
-### complete
+### order[].fulfillment[].complete
 
 *CLI*
 ```sh
@@ -1748,7 +1901,7 @@ const command = shopify.order.$all.fulfillment.$all.complete(input?: unknown);
 ```
 
 
-### count
+### order[].fulfillment.count
 
 *CLI*
 ```sh
@@ -1762,7 +1915,7 @@ const command = shopify.order.$all.fulfillment.count(input?: unknown);
 ```
 
 
-### create
+### order[].fulfillment.create
 
 *CLI*
 ```sh
@@ -1776,7 +1929,7 @@ const command = shopify.order.$all.fulfillment.create(input?: unknown);
 ```
 
 
-### get
+### order[].fulfillment[].get
 
 *CLI*
 ```sh
@@ -1790,7 +1943,7 @@ const command = shopify.order.$all.fulfillment.$all.get(input?: unknown);
 ```
 
 
-### list
+### order[].fulfillment.list
 
 *CLI*
 ```sh
@@ -1804,7 +1957,7 @@ const command = shopify.order.$all.fulfillment.list(input?: unknown);
 ```
 
 
-### open
+### order[].fulfillment[].open
 
 *CLI*
 ```sh
@@ -1818,7 +1971,7 @@ const command = shopify.order.$all.fulfillment.$all.open(input?: unknown);
 ```
 
 
-### update
+### order[].fulfillment[].update
 
 *CLI*
 ```sh
@@ -1834,7 +1987,13 @@ const command = shopify.order.$all.fulfillment.$all.update(input?: unknown);
 
 ## order[].fulfillment[].fulfillment-event
 
-### create
+ * [create](#order[].fulfillment[].fulfillment-event.create)
+ * [delete](#order[].fulfillment[].fulfillment-event[].delete)
+ * [get](#order[].fulfillment[].fulfillment-event[].get)
+ * [list](#order[].fulfillment[].fulfillment-event.list)
+ * [update](#order[].fulfillment[].fulfillment-event[].update)
+
+### order[].fulfillment[].fulfillment-event.create
 
 *CLI*
 ```sh
@@ -1848,7 +2007,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.create(inpu
 ```
 
 
-### delete
+### order[].fulfillment[].fulfillment-event[].delete
 
 *CLI*
 ```sh
@@ -1862,7 +2021,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.delete
 ```
 
 
-### get
+### order[].fulfillment[].fulfillment-event[].get
 
 *CLI*
 ```sh
@@ -1876,7 +2035,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.get(in
 ```
 
 
-### list
+### order[].fulfillment[].fulfillment-event.list
 
 *CLI*
 ```sh
@@ -1890,7 +2049,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.list(input?
 ```
 
 
-### update
+### order[].fulfillment[].fulfillment-event[].update
 
 *CLI*
 ```sh
@@ -1906,7 +2065,13 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.update
 
 ## order[].order-risk
 
-### create
+ * [create](#order[].order-risk.create)
+ * [delete](#order[].order-risk[].delete)
+ * [get](#order[].order-risk[].get)
+ * [list](#order[].order-risk.list)
+ * [update](#order[].order-risk[].update)
+
+### order[].order-risk.create
 
 *CLI*
 ```sh
@@ -1920,7 +2085,7 @@ const command = shopify.order.$all.orderRisk.create(input?: unknown);
 ```
 
 
-### delete
+### order[].order-risk[].delete
 
 *CLI*
 ```sh
@@ -1934,7 +2099,7 @@ const command = shopify.order.$all.orderRisk.$all.delete(input?: unknown);
 ```
 
 
-### get
+### order[].order-risk[].get
 
 *CLI*
 ```sh
@@ -1948,7 +2113,7 @@ const command = shopify.order.$all.orderRisk.$all.get(input?: unknown);
 ```
 
 
-### list
+### order[].order-risk.list
 
 *CLI*
 ```sh
@@ -1962,7 +2127,7 @@ const command = shopify.order.$all.orderRisk.list(input?: unknown);
 ```
 
 
-### update
+### order[].order-risk[].update
 
 *CLI*
 ```sh
@@ -1978,7 +2143,12 @@ const command = shopify.order.$all.orderRisk.$all.update(input?: unknown);
 
 ## order[].refund
 
-### calculate
+ * [calculate](#order[].refund.calculate)
+ * [create](#order[].refund.create)
+ * [get](#order[].refund[].get)
+ * [list](#order[].refund.list)
+
+### order[].refund.calculate
 
 *CLI*
 ```sh
@@ -1992,7 +2162,7 @@ const command = shopify.order.$all.refund.calculate(input?: unknown);
 ```
 
 
-### create
+### order[].refund.create
 
 *CLI*
 ```sh
@@ -2006,7 +2176,7 @@ const command = shopify.order.$all.refund.create(input?: unknown);
 ```
 
 
-### get
+### order[].refund[].get
 
 *CLI*
 ```sh
@@ -2020,7 +2190,7 @@ const command = shopify.order.$all.refund.$all.get(input?: unknown);
 ```
 
 
-### list
+### order[].refund.list
 
 *CLI*
 ```sh
@@ -2036,7 +2206,12 @@ const command = shopify.order.$all.refund.list(input?: unknown);
 
 ## order[].transaction
 
-### count
+ * [count](#order[].transaction.count)
+ * [create](#order[].transaction.create)
+ * [get](#order[].transaction[].get)
+ * [list](#order[].transaction.list)
+
+### order[].transaction.count
 
 *CLI*
 ```sh
@@ -2050,7 +2225,7 @@ const command = shopify.order.$all.transaction.count(input?: unknown);
 ```
 
 
-### create
+### order[].transaction.create
 
 *CLI*
 ```sh
@@ -2064,7 +2239,7 @@ const command = shopify.order.$all.transaction.create(input?: unknown);
 ```
 
 
-### get
+### order[].transaction[].get
 
 *CLI*
 ```sh
@@ -2078,7 +2253,7 @@ const command = shopify.order.$all.transaction.$all.get(input?: unknown);
 ```
 
 
-### list
+### order[].transaction.list
 
 *CLI*
 ```sh
@@ -2094,7 +2269,14 @@ const command = shopify.order.$all.transaction.list(input?: unknown);
 
 ## page
 
-### count
+ * [count](#page.count)
+ * [create](#page.create)
+ * [delete](#page[].delete)
+ * [get](#page[].get)
+ * [list](#page.list)
+ * [update](#page[].update)
+
+### page.count
 
 *CLI*
 ```sh
@@ -2107,7 +2289,7 @@ const command = shopify.page.count(input?: unknown);
 ```
 
 
-### create
+### page.create
 
 *CLI*
 ```sh
@@ -2120,7 +2302,7 @@ const command = shopify.page.create(input?: unknown);
 ```
 
 
-### delete
+### page[].delete
 
 *CLI*
 ```sh
@@ -2134,7 +2316,7 @@ const command = shopify.page.$all.delete(input?: unknown);
 ```
 
 
-### get
+### page[].get
 
 *CLI*
 ```sh
@@ -2148,7 +2330,7 @@ const command = shopify.page.$all.get(input?: unknown);
 ```
 
 
-### list
+### page.list
 
 *CLI*
 ```sh
@@ -2161,7 +2343,7 @@ const command = shopify.page.list(input?: unknown);
 ```
 
 
-### update
+### page[].update
 
 *CLI*
 ```sh
@@ -2177,7 +2359,10 @@ const command = shopify.page.$all.update(input?: unknown);
 
 ## payout
 
-### get
+ * [get](#payout[].get)
+ * [list](#payout.list)
+
+### payout[].get
 
 *CLI*
 ```sh
@@ -2191,7 +2376,7 @@ const command = shopify.payout.$all.get(input?: unknown);
 ```
 
 
-### list
+### payout.list
 
 *CLI*
 ```sh
@@ -2206,7 +2391,9 @@ const command = shopify.payout.list(input?: unknown);
 
 ## policy
 
-### list
+ * [list](#policy.list)
+
+### policy.list
 
 *CLI*
 ```sh
@@ -2221,7 +2408,13 @@ const command = shopify.policy.list(input?: unknown);
 
 ## price-rule
 
-### create
+ * [create](#price-rule.create)
+ * [delete](#price-rule[].delete)
+ * [get](#price-rule[].get)
+ * [list](#price-rule.list)
+ * [update](#price-rule[].update)
+
+### price-rule.create
 
 *CLI*
 ```sh
@@ -2234,7 +2427,7 @@ const command = shopify.priceRule.create(input?: unknown);
 ```
 
 
-### delete
+### price-rule[].delete
 
 *CLI*
 ```sh
@@ -2248,7 +2441,7 @@ const command = shopify.priceRule.$all.delete(input?: unknown);
 ```
 
 
-### get
+### price-rule[].get
 
 *CLI*
 ```sh
@@ -2262,7 +2455,7 @@ const command = shopify.priceRule.$all.get(input?: unknown);
 ```
 
 
-### list
+### price-rule.list
 
 *CLI*
 ```sh
@@ -2275,7 +2468,7 @@ const command = shopify.priceRule.list(input?: unknown);
 ```
 
 
-### update
+### price-rule[].update
 
 *CLI*
 ```sh
@@ -2291,7 +2484,14 @@ const command = shopify.priceRule.$all.update(input?: unknown);
 
 ## price-rule[].discount-code
 
-### create
+ * [create](#price-rule[].discount-code.create)
+ * [delete](#price-rule[].discount-code[].delete)
+ * [get](#price-rule[].discount-code[].get)
+ * [list](#price-rule[].discount-code.list)
+ * [lookup](#price-rule[].discount-code.lookup)
+ * [update](#price-rule[].discount-code[].update)
+
+### price-rule[].discount-code.create
 
 *CLI*
 ```sh
@@ -2305,7 +2505,7 @@ const command = shopify.priceRule.$all.discountCode.create(input?: unknown);
 ```
 
 
-### delete
+### price-rule[].discount-code[].delete
 
 *CLI*
 ```sh
@@ -2319,7 +2519,7 @@ const command = shopify.priceRule.$all.discountCode.$all.delete(input?: unknown)
 ```
 
 
-### get
+### price-rule[].discount-code[].get
 
 *CLI*
 ```sh
@@ -2333,7 +2533,7 @@ const command = shopify.priceRule.$all.discountCode.$all.get(input?: unknown);
 ```
 
 
-### list
+### price-rule[].discount-code.list
 
 *CLI*
 ```sh
@@ -2347,7 +2547,7 @@ const command = shopify.priceRule.$all.discountCode.list(input?: unknown);
 ```
 
 
-### lookup
+### price-rule[].discount-code.lookup
 
 *CLI*
 ```sh
@@ -2361,7 +2561,7 @@ const command = shopify.priceRule.$all.discountCode.lookup(input?: unknown);
 ```
 
 
-### update
+### price-rule[].discount-code[].update
 
 *CLI*
 ```sh
@@ -2377,7 +2577,13 @@ const command = shopify.priceRule.$all.discountCode.$all.update(input?: unknown)
 
 ## product-listing
 
-### count
+ * [count](#product-listing.count)
+ * [create](#product-listing.create)
+ * [delete](#product-listing[].delete)
+ * [get](#product-listing[].get)
+ * [list](#product-listing.list)
+
+### product-listing.count
 
 *CLI*
 ```sh
@@ -2390,7 +2596,7 @@ const command = shopify.productListing.count(input?: unknown);
 ```
 
 
-### create
+### product-listing.create
 
 *CLI*
 ```sh
@@ -2403,7 +2609,7 @@ const command = shopify.productListing.create(input?: unknown);
 ```
 
 
-### delete
+### product-listing[].delete
 
 *CLI*
 ```sh
@@ -2417,7 +2623,7 @@ const command = shopify.productListing.$all.delete(input?: unknown);
 ```
 
 
-### get
+### product-listing[].get
 
 *CLI*
 ```sh
@@ -2431,7 +2637,7 @@ const command = shopify.productListing.$all.get(input?: unknown);
 ```
 
 
-### list
+### product-listing.list
 
 *CLI*
 ```sh
@@ -2446,7 +2652,14 @@ const command = shopify.productListing.list(input?: unknown);
 
 ## product
 
-### count
+ * [count](#product.count)
+ * [create](#product.create)
+ * [delete](#product[].delete)
+ * [get](#product[].get)
+ * [list](#product.list)
+ * [update](#product[].update)
+
+### product.count
 
 *CLI*
 ```sh
@@ -2459,7 +2672,7 @@ const command = shopify.product.count(input?: unknown);
 ```
 
 
-### create
+### product.create
 
 *CLI*
 ```sh
@@ -2472,7 +2685,7 @@ const command = shopify.product.create(input?: unknown);
 ```
 
 
-### delete
+### product[].delete
 
 *CLI*
 ```sh
@@ -2486,7 +2699,7 @@ const command = shopify.product.$all.delete(input?: unknown);
 ```
 
 
-### get
+### product[].get
 
 *CLI*
 ```sh
@@ -2500,7 +2713,7 @@ const command = shopify.product.$all.get(input?: unknown);
 ```
 
 
-### list
+### product.list
 
 *CLI*
 ```sh
@@ -2513,7 +2726,7 @@ const command = shopify.product.list(input?: unknown);
 ```
 
 
-### update
+### product[].update
 
 *CLI*
 ```sh
@@ -2529,7 +2742,14 @@ const command = shopify.product.$all.update(input?: unknown);
 
 ## product[].product-image
 
-### count
+ * [count](#product[].product-image.count)
+ * [create](#product[].product-image.create)
+ * [delete](#product[].product-image[].delete)
+ * [get](#product[].product-image[].get)
+ * [list](#product[].product-image.list)
+ * [update](#product[].product-image[].update)
+
+### product[].product-image.count
 
 *CLI*
 ```sh
@@ -2543,7 +2763,7 @@ const command = shopify.product.$all.productImage.count(input?: unknown);
 ```
 
 
-### create
+### product[].product-image.create
 
 *CLI*
 ```sh
@@ -2557,7 +2777,7 @@ const command = shopify.product.$all.productImage.create(input?: unknown);
 ```
 
 
-### delete
+### product[].product-image[].delete
 
 *CLI*
 ```sh
@@ -2571,7 +2791,7 @@ const command = shopify.product.$all.productImage.$all.delete(input?: unknown);
 ```
 
 
-### get
+### product[].product-image[].get
 
 *CLI*
 ```sh
@@ -2585,7 +2805,7 @@ const command = shopify.product.$all.productImage.$all.get(input?: unknown);
 ```
 
 
-### list
+### product[].product-image.list
 
 *CLI*
 ```sh
@@ -2599,7 +2819,7 @@ const command = shopify.product.$all.productImage.list(input?: unknown);
 ```
 
 
-### update
+### product[].product-image[].update
 
 *CLI*
 ```sh
@@ -2615,7 +2835,10 @@ const command = shopify.product.$all.productImage.$all.update(input?: unknown);
 
 ## product[].product-resource-feedback
 
-### create
+ * [create](#product[].product-resource-feedback.create)
+ * [list](#product[].product-resource-feedback.list)
+
+### product[].product-resource-feedback.create
 
 *CLI*
 ```sh
@@ -2629,7 +2852,7 @@ const command = shopify.product.$all.productResourceFeedback.create(input?: unkn
 ```
 
 
-### list
+### product[].product-resource-feedback.list
 
 *CLI*
 ```sh
@@ -2645,7 +2868,14 @@ const command = shopify.product.$all.productResourceFeedback.list(input?: unknow
 
 ## product[].product-variant
 
-### count
+ * [count](#product[].product-variant.count)
+ * [create](#product[].product-variant.create)
+ * [delete](#product[].product-variant[].delete)
+ * [get](#product[].product-variant[].get)
+ * [list](#product[].product-variant.list)
+ * [update](#product[].product-variant[].update)
+
+### product[].product-variant.count
 
 *CLI*
 ```sh
@@ -2659,7 +2889,7 @@ const command = shopify.product.$all.productVariant.count(input?: unknown);
 ```
 
 
-### create
+### product[].product-variant.create
 
 *CLI*
 ```sh
@@ -2673,7 +2903,7 @@ const command = shopify.product.$all.productVariant.create(input?: unknown);
 ```
 
 
-### delete
+### product[].product-variant[].delete
 
 *CLI*
 ```sh
@@ -2687,7 +2917,7 @@ const command = shopify.product.$all.productVariant.$all.delete(input?: unknown)
 ```
 
 
-### get
+### product[].product-variant[].get
 
 *CLI*
 ```sh
@@ -2701,7 +2931,7 @@ const command = shopify.product.$all.productVariant.$all.get(input?: unknown);
 ```
 
 
-### list
+### product[].product-variant.list
 
 *CLI*
 ```sh
@@ -2715,7 +2945,7 @@ const command = shopify.product.$all.productVariant.list(input?: unknown);
 ```
 
 
-### update
+### product[].product-variant[].update
 
 *CLI*
 ```sh
@@ -2731,7 +2961,14 @@ const command = shopify.product.$all.productVariant.$all.update(input?: unknown)
 
 ## redirect
 
-### count
+ * [count](#redirect.count)
+ * [create](#redirect.create)
+ * [delete](#redirect[].delete)
+ * [get](#redirect[].get)
+ * [list](#redirect.list)
+ * [update](#redirect[].update)
+
+### redirect.count
 
 *CLI*
 ```sh
@@ -2744,7 +2981,7 @@ const command = shopify.redirect.count(input?: unknown);
 ```
 
 
-### create
+### redirect.create
 
 *CLI*
 ```sh
@@ -2757,7 +2994,7 @@ const command = shopify.redirect.create(input?: unknown);
 ```
 
 
-### delete
+### redirect[].delete
 
 *CLI*
 ```sh
@@ -2771,7 +3008,7 @@ const command = shopify.redirect.$all.delete(input?: unknown);
 ```
 
 
-### get
+### redirect[].get
 
 *CLI*
 ```sh
@@ -2785,7 +3022,7 @@ const command = shopify.redirect.$all.get(input?: unknown);
 ```
 
 
-### list
+### redirect.list
 
 *CLI*
 ```sh
@@ -2798,7 +3035,7 @@ const command = shopify.redirect.list(input?: unknown);
 ```
 
 
-### update
+### redirect[].update
 
 *CLI*
 ```sh
@@ -2814,7 +3051,13 @@ const command = shopify.redirect.$all.update(input?: unknown);
 
 ## report
 
-### create
+ * [create](#report.create)
+ * [delete](#report[].delete)
+ * [get](#report[].get)
+ * [list](#report.list)
+ * [update](#report[].update)
+
+### report.create
 
 *CLI*
 ```sh
@@ -2827,7 +3070,7 @@ const command = shopify.report.create(input?: unknown);
 ```
 
 
-### delete
+### report[].delete
 
 *CLI*
 ```sh
@@ -2841,7 +3084,7 @@ const command = shopify.report.$all.delete(input?: unknown);
 ```
 
 
-### get
+### report[].get
 
 *CLI*
 ```sh
@@ -2855,7 +3098,7 @@ const command = shopify.report.$all.get(input?: unknown);
 ```
 
 
-### list
+### report.list
 
 *CLI*
 ```sh
@@ -2868,7 +3111,7 @@ const command = shopify.report.list(input?: unknown);
 ```
 
 
-### update
+### report[].update
 
 *CLI*
 ```sh
@@ -2884,7 +3127,10 @@ const command = shopify.report.$all.update(input?: unknown);
 
 ## resource-feedback
 
-### create
+ * [create](#resource-feedback.create)
+ * [list](#resource-feedback.list)
+
+### resource-feedback.create
 
 *CLI*
 ```sh
@@ -2897,7 +3143,7 @@ const command = shopify.resourceFeedback.create(input?: unknown);
 ```
 
 
-### list
+### resource-feedback.list
 
 *CLI*
 ```sh
@@ -2912,7 +3158,14 @@ const command = shopify.resourceFeedback.list(input?: unknown);
 
 ## script-tag
 
-### count
+ * [count](#script-tag.count)
+ * [create](#script-tag.create)
+ * [delete](#script-tag[].delete)
+ * [get](#script-tag[].get)
+ * [list](#script-tag.list)
+ * [update](#script-tag[].update)
+
+### script-tag.count
 
 *CLI*
 ```sh
@@ -2925,7 +3178,7 @@ const command = shopify.scriptTag.count(input?: unknown);
 ```
 
 
-### create
+### script-tag.create
 
 *CLI*
 ```sh
@@ -2938,7 +3191,7 @@ const command = shopify.scriptTag.create(input?: unknown);
 ```
 
 
-### delete
+### script-tag[].delete
 
 *CLI*
 ```sh
@@ -2952,7 +3205,7 @@ const command = shopify.scriptTag.$all.delete(input?: unknown);
 ```
 
 
-### get
+### script-tag[].get
 
 *CLI*
 ```sh
@@ -2966,7 +3219,7 @@ const command = shopify.scriptTag.$all.get(input?: unknown);
 ```
 
 
-### list
+### script-tag.list
 
 *CLI*
 ```sh
@@ -2979,7 +3232,7 @@ const command = shopify.scriptTag.list(input?: unknown);
 ```
 
 
-### update
+### script-tag[].update
 
 *CLI*
 ```sh
@@ -2995,7 +3248,9 @@ const command = shopify.scriptTag.$all.update(input?: unknown);
 
 ## shipping-zone
 
-### list
+ * [list](#shipping-zone.list)
+
+### shipping-zone.list
 
 *CLI*
 ```sh
@@ -3010,7 +3265,9 @@ const command = shopify.shippingZone.list(input?: unknown);
 
 ## shop
 
-### get
+ * [get](#shop.get)
+
+### shop.get
 
 *CLI*
 ```sh
@@ -3025,7 +3282,14 @@ const command = shopify.shop.get(input?: unknown);
 
 ## smart-collection
 
-### count
+ * [count](#smart-collection.count)
+ * [create](#smart-collection.create)
+ * [delete](#smart-collection[].delete)
+ * [get](#smart-collection[].get)
+ * [list](#smart-collection.list)
+ * [update](#smart-collection[].update)
+
+### smart-collection.count
 
 *CLI*
 ```sh
@@ -3038,7 +3302,7 @@ const command = shopify.smartCollection.count(input?: unknown);
 ```
 
 
-### create
+### smart-collection.create
 
 *CLI*
 ```sh
@@ -3051,7 +3315,7 @@ const command = shopify.smartCollection.create(input?: unknown);
 ```
 
 
-### delete
+### smart-collection[].delete
 
 *CLI*
 ```sh
@@ -3065,7 +3329,7 @@ const command = shopify.smartCollection.$all.delete(input?: unknown);
 ```
 
 
-### get
+### smart-collection[].get
 
 *CLI*
 ```sh
@@ -3079,7 +3343,7 @@ const command = shopify.smartCollection.$all.get(input?: unknown);
 ```
 
 
-### list
+### smart-collection.list
 
 *CLI*
 ```sh
@@ -3092,7 +3356,7 @@ const command = shopify.smartCollection.list(input?: unknown);
 ```
 
 
-### update
+### smart-collection[].update
 
 *CLI*
 ```sh
@@ -3108,7 +3372,11 @@ const command = shopify.smartCollection.$all.update(input?: unknown);
 
 ## storefront-access-token
 
-### create
+ * [create](#storefront-access-token.create)
+ * [delete](#storefront-access-token[].delete)
+ * [list](#storefront-access-token.list)
+
+### storefront-access-token.create
 
 *CLI*
 ```sh
@@ -3121,7 +3389,7 @@ const command = shopify.storefrontAccessToken.create(input?: unknown);
 ```
 
 
-### delete
+### storefront-access-token[].delete
 
 *CLI*
 ```sh
@@ -3135,7 +3403,7 @@ const command = shopify.storefrontAccessToken.$all.delete(input?: unknown);
 ```
 
 
-### list
+### storefront-access-token.list
 
 *CLI*
 ```sh
@@ -3150,7 +3418,9 @@ const command = shopify.storefrontAccessToken.list(input?: unknown);
 
 ## tender-transaction
 
-### list
+ * [list](#tender-transaction.list)
+
+### tender-transaction.list
 
 *CLI*
 ```sh
@@ -3165,7 +3435,13 @@ const command = shopify.tenderTransaction.list(input?: unknown);
 
 ## theme
 
-### create
+ * [create](#theme.create)
+ * [delete](#theme[].delete)
+ * [get](#theme[].get)
+ * [list](#theme.list)
+ * [update](#theme[].update)
+
+### theme.create
 
 *CLI*
 ```sh
@@ -3178,7 +3454,7 @@ const command = shopify.theme.create(input?: unknown);
 ```
 
 
-### delete
+### theme[].delete
 
 *CLI*
 ```sh
@@ -3192,7 +3468,7 @@ const command = shopify.theme.$all.delete(input?: unknown);
 ```
 
 
-### get
+### theme[].get
 
 *CLI*
 ```sh
@@ -3206,7 +3482,7 @@ const command = shopify.theme.$all.get(input?: unknown);
 ```
 
 
-### list
+### theme.list
 
 *CLI*
 ```sh
@@ -3219,7 +3495,7 @@ const command = shopify.theme.list(input?: unknown);
 ```
 
 
-### update
+### theme[].update
 
 *CLI*
 ```sh
@@ -3235,7 +3511,13 @@ const command = shopify.theme.$all.update(input?: unknown);
 
 ## theme[].asset
 
-### create
+ * [create](#theme[].asset.create)
+ * [delete](#theme[].asset[].delete)
+ * [get](#theme[].asset[].get)
+ * [list](#theme[].asset.list)
+ * [update](#theme[].asset[].update)
+
+### theme[].asset.create
 
 *CLI*
 ```sh
@@ -3249,7 +3531,7 @@ const command = shopify.theme.$all.asset.create(input?: unknown);
 ```
 
 
-### delete
+### theme[].asset[].delete
 
 *CLI*
 ```sh
@@ -3263,7 +3545,7 @@ const command = shopify.theme.$all.asset.$all.delete(input?: unknown);
 ```
 
 
-### get
+### theme[].asset[].get
 
 *CLI*
 ```sh
@@ -3277,7 +3559,7 @@ const command = shopify.theme.$all.asset.$all.get(input?: unknown);
 ```
 
 
-### list
+### theme[].asset.list
 
 *CLI*
 ```sh
@@ -3291,7 +3573,7 @@ const command = shopify.theme.$all.asset.list(input?: unknown);
 ```
 
 
-### update
+### theme[].asset[].update
 
 *CLI*
 ```sh
@@ -3307,7 +3589,11 @@ const command = shopify.theme.$all.asset.$all.update(input?: unknown);
 
 ## user
 
-### current
+ * [current](#user.current)
+ * [get](#user[].get)
+ * [list](#user.list)
+
+### user.current
 
 *CLI*
 ```sh
@@ -3320,7 +3606,7 @@ const command = shopify.user.current(input?: unknown);
 ```
 
 
-### get
+### user[].get
 
 *CLI*
 ```sh
@@ -3334,7 +3620,7 @@ const command = shopify.user.$all.get(input?: unknown);
 ```
 
 
-### list
+### user.list
 
 *CLI*
 ```sh
@@ -3349,7 +3635,14 @@ const command = shopify.user.list(input?: unknown);
 
 ## webhook
 
-### count
+ * [count](#webhook.count)
+ * [create](#webhook.create)
+ * [delete](#webhook[].delete)
+ * [get](#webhook[].get)
+ * [list](#webhook.list)
+ * [update](#webhook[].update)
+
+### webhook.count
 
 *CLI*
 ```sh
@@ -3362,7 +3655,7 @@ const command = shopify.webhook.count(input?: unknown);
 ```
 
 
-### create
+### webhook.create
 
 *CLI*
 ```sh
@@ -3375,7 +3668,7 @@ const command = shopify.webhook.create(input?: unknown);
 ```
 
 
-### delete
+### webhook[].delete
 
 *CLI*
 ```sh
@@ -3389,7 +3682,7 @@ const command = shopify.webhook.$all.delete(input?: unknown);
 ```
 
 
-### get
+### webhook[].get
 
 *CLI*
 ```sh
@@ -3403,7 +3696,7 @@ const command = shopify.webhook.$all.get(input?: unknown);
 ```
 
 
-### list
+### webhook.list
 
 *CLI*
 ```sh
@@ -3416,7 +3709,7 @@ const command = shopify.webhook.list(input?: unknown);
 ```
 
 
-### update
+### webhook[].update
 
 *CLI*
 ```sh

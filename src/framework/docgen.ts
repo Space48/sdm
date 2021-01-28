@@ -66,24 +66,26 @@ ${commands}
 
   function describeResourceUsage(nestingLevel: number, scope: ScopeRef, endpointPaths: Path[]): string {
     const resourcePath = getResourcePathExcludingDocId(endpointPaths[0]);
-    const resourcePathWithoutIds = resourcePath.map(pathEl => Array.isArray(pathEl) ? [pathEl[0], ''] : pathEl) as Path;
     const endpointsSorted = R.sortBy(
       path => path[path.length - 1] as string,
       endpointPaths
     );
 
-    return (
-`${title(nestingLevel, BinaryApi.encodePath(resourcePathWithoutIds))}
+    const endpointUsage = endpointsSorted.map(path => describeEndpointUsage(nestingLevel + 1, scope, path)).join('\n\n');
 
-${endpointsSorted.map(path => describeEndpointUsage(nestingLevel + 1, scope, path)).join('\n\n')}
+    return (
+`${pathTitle(nestingLevel, resourcePath)}
+
+${contents(nestingLevel, endpointUsage, title => title.split('.').slice(-1)[0])}
+
+${endpointUsage}
 `
     );
   }
 
   function describeEndpointUsage(nestingLevel: number, scope: ScopeRef, path: Path): string {
-    const [, endpointName] = Path.popEndpointName(path);
     return (
-`${title(nestingLevel, endpointName)}
+`${pathTitle(nestingLevel, path)}
 
 *CLI*
 \`\`\`sh
@@ -132,22 +134,30 @@ ${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).jo
       : resourcePath;
   }
 
+  function pathTitle(nestingLevel: number, path: Path): string {
+    const pathWithoutIds = path.map(pathEl => Array.isArray(pathEl) ? [pathEl[0], ''] : pathEl) as Path;
+    const encodedPath = BinaryApi.encodePath(pathWithoutIds);
+    return title(nestingLevel, encodedPath);
+  }
+
   function title(nestingLevel: number, title: string): string {
     return `${'#'.repeat(nestingLevel + 1)} ${title}`;
   }
 
-  function contents(nestingLevel: number, body: string): string {
-    const titles =
-      body
-        .split('\n')
-        .filter(line => line.startsWith(`${'#'.repeat(nestingLevel + 2)} `))
-        .map(line => line.slice(nestingLevel + 3))
-        .map(title => linkToTitle(title));
-
-    return titles.map(title => ` * ${title}`).join('\n');
+  function contents(nestingLevel: number, body: string, titleMapper?: (title: string) => string): string {
+    return body
+      .split('\n')
+      .filter(line => line.startsWith(`${'#'.repeat(nestingLevel + 2)} `))
+      .map(line => line.slice(nestingLevel + 3))
+      .map(sectionTitle => {
+        const linkTitle = titleMapper ? titleMapper(sectionTitle) : sectionTitle;
+        return linkToSection(linkTitle, sectionTitle);
+      })
+      .map(contentsTitle => ` * ${contentsTitle}`)
+      .join('\n');
   }
 
-  function linkToTitle(title: string): string {
-    return `[${title}](#${title.replace(/-[]./g, '')})`;
+  function linkToSection(linkTitle: string, sectionTitle: string): string {
+    return `[${linkTitle}](#${sectionTitle.replace(/-[]./g, '')})`;
   }
 }

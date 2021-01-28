@@ -18,7 +18,13 @@
 
 ## categories
 
-### create
+ * [create](#categories.create)
+ * [delete](#categories[].delete)
+ * [get](#categories[].get)
+ * [list](#categories.list)
+ * [update](#categories[].update)
+
+### categories.create
 
 *CLI*
 ```sh
@@ -31,7 +37,7 @@ const command = magento2.categories.create(input?: unknown);
 ```
 
 
-### delete
+### categories[].delete
 
 *CLI*
 ```sh
@@ -45,7 +51,7 @@ const command = magento2.categories.$all.delete(input?: unknown);
 ```
 
 
-### get
+### categories[].get
 
 *CLI*
 ```sh
@@ -59,7 +65,7 @@ const command = magento2.categories.$all.get(input?: unknown);
 ```
 
 
-### list
+### categories.list
 
 *CLI*
 ```sh
@@ -72,7 +78,7 @@ const command = magento2.categories.list(input?: unknown);
 ```
 
 
-### update
+### categories[].update
 
 *CLI*
 ```sh
@@ -88,7 +94,9 @@ const command = magento2.categories.$all.update(input?: unknown);
 
 ## categories.tree
 
-### get
+ * [get](#categories.tree.get)
+
+### categories.tree.get
 
 *CLI*
 ```sh
@@ -103,7 +111,13 @@ const command = magento2.categories.tree.get(input?: unknown);
 
 ## customers
 
-### create
+ * [create](#customers.create)
+ * [delete](#customers[].delete)
+ * [get](#customers[].get)
+ * [list](#customers.list)
+ * [update](#customers[].update)
+
+### customers.create
 
 *CLI*
 ```sh
@@ -116,7 +130,7 @@ const command = magento2.customers.create(input?: unknown);
 ```
 
 
-### delete
+### customers[].delete
 
 *CLI*
 ```sh
@@ -130,7 +144,7 @@ const command = magento2.customers.$all.delete(input?: unknown);
 ```
 
 
-### get
+### customers[].get
 
 *CLI*
 ```sh
@@ -144,7 +158,7 @@ const command = magento2.customers.$all.get(input?: unknown);
 ```
 
 
-### list
+### customers.list
 
 *CLI*
 ```sh
@@ -157,7 +171,7 @@ const command = magento2.customers.list(input?: unknown);
 ```
 
 
-### update
+### customers[].update
 
 *CLI*
 ```sh
@@ -173,7 +187,12 @@ const command = magento2.customers.$all.update(input?: unknown);
 
 ## orders
 
-### delete
+ * [delete](#orders[].delete)
+ * [get](#orders[].get)
+ * [list](#orders.list)
+ * [update](#orders[].update)
+
+### orders[].delete
 
 *CLI*
 ```sh
@@ -187,7 +206,7 @@ const command = magento2.orders.$all.delete(input?: unknown);
 ```
 
 
-### get
+### orders[].get
 
 *CLI*
 ```sh
@@ -201,7 +220,7 @@ const command = magento2.orders.$all.get(input?: unknown);
 ```
 
 
-### list
+### orders.list
 
 *CLI*
 ```sh
@@ -214,7 +233,7 @@ const command = magento2.orders.list(input?: unknown);
 ```
 
 
-### update
+### orders[].update
 
 *CLI*
 ```sh
@@ -230,7 +249,13 @@ const command = magento2.orders.$all.update(input?: unknown);
 
 ## products
 
-### create
+ * [create](#products.create)
+ * [delete](#products[].delete)
+ * [get](#products[].get)
+ * [list](#products.list)
+ * [update](#products[].update)
+
+### products.create
 
 *CLI*
 ```sh
@@ -243,7 +268,7 @@ const command = magento2.products.create(input?: unknown);
 ```
 
 
-### delete
+### products[].delete
 
 *CLI*
 ```sh
@@ -257,7 +282,7 @@ const command = magento2.products.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].get
 
 *CLI*
 ```sh
@@ -271,7 +296,7 @@ const command = magento2.products.$all.get(input?: unknown);
 ```
 
 
-### list
+### products.list
 
 *CLI*
 ```sh
@@ -284,7 +309,7 @@ const command = magento2.products.list(input?: unknown);
 ```
 
 
-### update
+### products[].update
 
 *CLI*
 ```sh
@@ -300,7 +325,9 @@ const command = magento2.products.$all.update(input?: unknown);
 
 ## products[].links
 
-### get
+ * [get](#products[].links[].get)
+
+### products[].links[].get
 
 *CLI*
 ```sh
@@ -316,7 +343,9 @@ const command = magento2.products.$all.links.$doc(type).get(input?: unknown);
 
 ## products.attributes
 
-### list
+ * [list](#products.attributes.list)
+
+### products.attributes.list
 
 *CLI*
 ```sh
@@ -331,7 +360,9 @@ const command = magento2.products.attributes.list(input?: unknown);
 
 ## products.attributes[].options
 
-### get
+ * [get](#products.attributes[].options.get)
+
+### products.attributes[].options.get
 
 *CLI*
 ```sh
@@ -346,7 +377,9 @@ const command = magento2.products.attributes.$doc(attribute_code).options.get(in
 
 ## products.configurables[].children
 
-### get
+ * [get](#products.configurables[].children.get)
+
+### products.configurables[].children.get
 
 *CLI*
 ```sh
@@ -361,7 +394,9 @@ const command = magento2.products.configurables.$doc(sku).children.get(input?: u
 
 ## products.configurables[].options
 
-### get
+ * [get](#products.configurables[].options.get)
+
+### products.configurables[].options.get
 
 *CLI*
 ```sh

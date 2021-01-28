@@ -43,7 +43,13 @@
 
 ## blog.posts
 
-### create
+ * [create](#blog.posts.create)
+ * [delete](#blog.posts[].delete)
+ * [get](#blog.posts[].get)
+ * [list](#blog.posts.list)
+ * [update](#blog.posts[].update)
+
+### blog.posts.create
 
 *CLI*
 ```sh
@@ -56,7 +62,7 @@ const command = bigCommerce.blog.posts.create(input?: unknown);
 ```
 
 
-### delete
+### blog.posts[].delete
 
 *CLI*
 ```sh
@@ -70,7 +76,7 @@ const command = bigCommerce.blog.posts.$all.delete(input?: unknown);
 ```
 
 
-### get
+### blog.posts[].get
 
 *CLI*
 ```sh
@@ -84,7 +90,7 @@ const command = bigCommerce.blog.posts.$all.get(input?: unknown);
 ```
 
 
-### list
+### blog.posts.list
 
 *CLI*
 ```sh
@@ -97,7 +103,7 @@ const command = bigCommerce.blog.posts.list(input?: unknown);
 ```
 
 
-### update
+### blog.posts[].update
 
 *CLI*
 ```sh
@@ -113,7 +119,13 @@ const command = bigCommerce.blog.posts.$all.update(input?: unknown);
 
 ## blog.tags
 
-### create
+ * [create](#blog.tags.create)
+ * [delete](#blog.tags[].delete)
+ * [get](#blog.tags[].get)
+ * [list](#blog.tags.list)
+ * [update](#blog.tags[].update)
+
+### blog.tags.create
 
 *CLI*
 ```sh
@@ -126,7 +138,7 @@ const command = bigCommerce.blog.tags.create(input?: unknown);
 ```
 
 
-### delete
+### blog.tags[].delete
 
 *CLI*
 ```sh
@@ -140,7 +152,7 @@ const command = bigCommerce.blog.tags.$all.delete(input?: unknown);
 ```
 
 
-### get
+### blog.tags[].get
 
 *CLI*
 ```sh
@@ -154,7 +166,7 @@ const command = bigCommerce.blog.tags.$all.get(input?: unknown);
 ```
 
 
-### list
+### blog.tags.list
 
 *CLI*
 ```sh
@@ -167,7 +179,7 @@ const command = bigCommerce.blog.tags.list(input?: unknown);
 ```
 
 
-### update
+### blog.tags[].update
 
 *CLI*
 ```sh
@@ -183,7 +195,13 @@ const command = bigCommerce.blog.tags.$all.update(input?: unknown);
 
 ## brands
 
-### create
+ * [create](#brands.create)
+ * [delete](#brands[].delete)
+ * [get](#brands[].get)
+ * [list](#brands.list)
+ * [update](#brands[].update)
+
+### brands.create
 
 *CLI*
 ```sh
@@ -196,7 +214,7 @@ const command = bigCommerce.brands.create(input?: unknown);
 ```
 
 
-### delete
+### brands[].delete
 
 *CLI*
 ```sh
@@ -210,7 +228,7 @@ const command = bigCommerce.brands.$all.delete(input?: unknown);
 ```
 
 
-### get
+### brands[].get
 
 *CLI*
 ```sh
@@ -224,7 +242,7 @@ const command = bigCommerce.brands.$all.get(input?: unknown);
 ```
 
 
-### list
+### brands.list
 
 *CLI*
 ```sh
@@ -237,7 +255,7 @@ const command = bigCommerce.brands.list(input?: unknown);
 ```
 
 
-### update
+### brands[].update
 
 *CLI*
 ```sh
@@ -253,7 +271,10 @@ const command = bigCommerce.brands.$all.update(input?: unknown);
 
 ## brands[].image
 
-### create
+ * [create](#brands[].image.create)
+ * [delete](#brands[].image.delete)
+
+### brands[].image.create
 
 *CLI*
 ```sh
@@ -267,7 +288,7 @@ const command = bigCommerce.brands.$all.image.create(input?: unknown);
 ```
 
 
-### delete
+### brands[].image.delete
 
 *CLI*
 ```sh
@@ -283,7 +304,13 @@ const command = bigCommerce.brands.$all.image.delete(input?: unknown);
 
 ## brands[].metafields
 
-### create
+ * [create](#brands[].metafields.create)
+ * [delete](#brands[].metafields[].delete)
+ * [get](#brands[].metafields[].get)
+ * [list](#brands[].metafields.list)
+ * [update](#brands[].metafields[].update)
+
+### brands[].metafields.create
 
 *CLI*
 ```sh
@@ -297,7 +324,7 @@ const command = bigCommerce.brands.$all.metafields.create(input?: unknown);
 ```
 
 
-### delete
+### brands[].metafields[].delete
 
 *CLI*
 ```sh
@@ -311,7 +338,7 @@ const command = bigCommerce.brands.$all.metafields.$all.delete(input?: unknown);
 ```
 
 
-### get
+### brands[].metafields[].get
 
 *CLI*
 ```sh
@@ -325,7 +352,7 @@ const command = bigCommerce.brands.$all.metafields.$all.get(input?: unknown);
 ```
 
 
-### list
+### brands[].metafields.list
 
 *CLI*
 ```sh
@@ -339,7 +366,7 @@ const command = bigCommerce.brands.$all.metafields.list(input?: unknown);
 ```
 
 
-### update
+### brands[].metafields[].update
 
 *CLI*
 ```sh
@@ -355,7 +382,12 @@ const command = bigCommerce.brands.$all.metafields.$all.update(input?: unknown);
 
 ## carts
 
-### create
+ * [create](#carts.create)
+ * [delete](#carts[].delete)
+ * [get](#carts[].get)
+ * [update](#carts[].update)
+
+### carts.create
 
 *CLI*
 ```sh
@@ -368,7 +400,7 @@ const command = bigCommerce.carts.create(input?: unknown);
 ```
 
 
-### delete
+### carts[].delete
 
 *CLI*
 ```sh
@@ -381,7 +413,7 @@ const command = bigCommerce.carts.$doc(id).delete(input?: unknown);
 ```
 
 
-### get
+### carts[].get
 
 *CLI*
 ```sh
@@ -394,7 +426,7 @@ const command = bigCommerce.carts.$doc(id).get(input?: unknown);
 ```
 
 
-### update
+### carts[].update
 
 *CLI*
 ```sh
@@ -409,7 +441,11 @@ const command = bigCommerce.carts.$doc(id).update(input?: unknown);
 
 ## carts[].items
 
-### create
+ * [create](#carts[].items.create)
+ * [delete](#carts[].items[].delete)
+ * [update](#carts[].items[].update)
+
+### carts[].items.create
 
 *CLI*
 ```sh
@@ -422,7 +458,7 @@ const command = bigCommerce.carts.$doc(id).items.create(input?: unknown);
 ```
 
 
-### delete
+### carts[].items[].delete
 
 *CLI*
 ```sh
@@ -435,7 +471,7 @@ const command = bigCommerce.carts.$doc(id).items.$doc(id).delete(input?: unknown
 ```
 
 
-### update
+### carts[].items[].update
 
 *CLI*
 ```sh
@@ -450,7 +486,13 @@ const command = bigCommerce.carts.$doc(id).items.$doc(id).update(input?: unknown
 
 ## categories
 
-### create
+ * [create](#categories.create)
+ * [delete](#categories[].delete)
+ * [get](#categories[].get)
+ * [list](#categories.list)
+ * [update](#categories[].update)
+
+### categories.create
 
 *CLI*
 ```sh
@@ -463,7 +505,7 @@ const command = bigCommerce.categories.create(input?: unknown);
 ```
 
 
-### delete
+### categories[].delete
 
 *CLI*
 ```sh
@@ -477,7 +519,7 @@ const command = bigCommerce.categories.$all.delete(input?: unknown);
 ```
 
 
-### get
+### categories[].get
 
 *CLI*
 ```sh
@@ -491,7 +533,7 @@ const command = bigCommerce.categories.$all.get(input?: unknown);
 ```
 
 
-### list
+### categories.list
 
 *CLI*
 ```sh
@@ -504,7 +546,7 @@ const command = bigCommerce.categories.list(input?: unknown);
 ```
 
 
-### update
+### categories[].update
 
 *CLI*
 ```sh
@@ -520,7 +562,10 @@ const command = bigCommerce.categories.$all.update(input?: unknown);
 
 ## categories[].image
 
-### create
+ * [create](#categories[].image.create)
+ * [delete](#categories[].image.delete)
+
+### categories[].image.create
 
 *CLI*
 ```sh
@@ -534,7 +579,7 @@ const command = bigCommerce.categories.$all.image.create(input?: unknown);
 ```
 
 
-### delete
+### categories[].image.delete
 
 *CLI*
 ```sh
@@ -550,7 +595,13 @@ const command = bigCommerce.categories.$all.image.delete(input?: unknown);
 
 ## categories[].metafields
 
-### create
+ * [create](#categories[].metafields.create)
+ * [delete](#categories[].metafields[].delete)
+ * [get](#categories[].metafields[].get)
+ * [list](#categories[].metafields.list)
+ * [update](#categories[].metafields[].update)
+
+### categories[].metafields.create
 
 *CLI*
 ```sh
@@ -564,7 +615,7 @@ const command = bigCommerce.categories.$all.metafields.create(input?: unknown);
 ```
 
 
-### delete
+### categories[].metafields[].delete
 
 *CLI*
 ```sh
@@ -578,7 +629,7 @@ const command = bigCommerce.categories.$all.metafields.$all.delete(input?: unkno
 ```
 
 
-### get
+### categories[].metafields[].get
 
 *CLI*
 ```sh
@@ -592,7 +643,7 @@ const command = bigCommerce.categories.$all.metafields.$all.get(input?: unknown)
 ```
 
 
-### list
+### categories[].metafields.list
 
 *CLI*
 ```sh
@@ -606,7 +657,7 @@ const command = bigCommerce.categories.$all.metafields.list(input?: unknown);
 ```
 
 
-### update
+### categories[].metafields[].update
 
 *CLI*
 ```sh
@@ -622,7 +673,9 @@ const command = bigCommerce.categories.$all.metafields.$all.update(input?: unkno
 
 ## categories.tree
 
-### get
+ * [get](#categories.tree.get)
+
+### categories.tree.get
 
 *CLI*
 ```sh
@@ -637,7 +690,12 @@ const command = bigCommerce.categories.tree.get(input?: unknown);
 
 ## channels
 
-### create
+ * [create](#channels.create)
+ * [get](#channels[].get)
+ * [list](#channels.list)
+ * [update](#channels[].update)
+
+### channels.create
 
 *CLI*
 ```sh
@@ -650,7 +708,7 @@ const command = bigCommerce.channels.create(input?: unknown);
 ```
 
 
-### get
+### channels[].get
 
 *CLI*
 ```sh
@@ -664,7 +722,7 @@ const command = bigCommerce.channels.$all.get(input?: unknown);
 ```
 
 
-### list
+### channels.list
 
 *CLI*
 ```sh
@@ -677,7 +735,7 @@ const command = bigCommerce.channels.list(input?: unknown);
 ```
 
 
-### update
+### channels[].update
 
 *CLI*
 ```sh
@@ -693,7 +751,13 @@ const command = bigCommerce.channels.$all.update(input?: unknown);
 
 ## customers
 
-### create
+ * [create](#customers.create)
+ * [delete](#customers[].delete)
+ * [get](#customers[].get)
+ * [list](#customers.list)
+ * [update](#customers[].update)
+
+### customers.create
 
 *CLI*
 ```sh
@@ -706,7 +770,7 @@ const command = bigCommerce.customers.create(input?: unknown);
 ```
 
 
-### delete
+### customers[].delete
 
 *CLI*
 ```sh
@@ -720,7 +784,7 @@ const command = bigCommerce.customers.$all.delete(input?: unknown);
 ```
 
 
-### get
+### customers[].get
 
 *CLI*
 ```sh
@@ -734,7 +798,7 @@ const command = bigCommerce.customers.$all.get(input?: unknown);
 ```
 
 
-### list
+### customers.list
 
 *CLI*
 ```sh
@@ -747,7 +811,7 @@ const command = bigCommerce.customers.list(input?: unknown);
 ```
 
 
-### update
+### customers[].update
 
 *CLI*
 ```sh
@@ -763,7 +827,13 @@ const command = bigCommerce.customers.$all.update(input?: unknown);
 
 ## customers.addresses
 
-### create
+ * [create](#customers.addresses.create)
+ * [delete](#customers.addresses[].delete)
+ * [get](#customers.addresses[].get)
+ * [list](#customers.addresses.list)
+ * [update](#customers.addresses[].update)
+
+### customers.addresses.create
 
 *CLI*
 ```sh
@@ -776,7 +846,7 @@ const command = bigCommerce.customers.addresses.create(input?: unknown);
 ```
 
 
-### delete
+### customers.addresses[].delete
 
 *CLI*
 ```sh
@@ -790,7 +860,7 @@ const command = bigCommerce.customers.addresses.$all.delete(input?: unknown);
 ```
 
 
-### get
+### customers.addresses[].get
 
 *CLI*
 ```sh
@@ -804,7 +874,7 @@ const command = bigCommerce.customers.addresses.$all.get(input?: unknown);
 ```
 
 
-### list
+### customers.addresses.list
 
 *CLI*
 ```sh
@@ -817,7 +887,7 @@ const command = bigCommerce.customers.addresses.list(input?: unknown);
 ```
 
 
-### update
+### customers.addresses[].update
 
 *CLI*
 ```sh
@@ -833,7 +903,13 @@ const command = bigCommerce.customers.addresses.$all.update(input?: unknown);
 
 ## customers.attributes
 
-### create
+ * [create](#customers.attributes.create)
+ * [delete](#customers.attributes[].delete)
+ * [get](#customers.attributes[].get)
+ * [list](#customers.attributes.list)
+ * [update](#customers.attributes[].update)
+
+### customers.attributes.create
 
 *CLI*
 ```sh
@@ -846,7 +922,7 @@ const command = bigCommerce.customers.attributes.create(input?: unknown);
 ```
 
 
-### delete
+### customers.attributes[].delete
 
 *CLI*
 ```sh
@@ -860,7 +936,7 @@ const command = bigCommerce.customers.attributes.$all.delete(input?: unknown);
 ```
 
 
-### get
+### customers.attributes[].get
 
 *CLI*
 ```sh
@@ -874,7 +950,7 @@ const command = bigCommerce.customers.attributes.$all.get(input?: unknown);
 ```
 
 
-### list
+### customers.attributes.list
 
 *CLI*
 ```sh
@@ -887,7 +963,7 @@ const command = bigCommerce.customers.attributes.list(input?: unknown);
 ```
 
 
-### update
+### customers.attributes[].update
 
 *CLI*
 ```sh
@@ -903,7 +979,9 @@ const command = bigCommerce.customers.attributes.$all.update(input?: unknown);
 
 ## customers.attributes[].values
 
-### list
+ * [list](#customers.attributes[].values.list)
+
+### customers.attributes[].values.list
 
 *CLI*
 ```sh
@@ -919,7 +997,11 @@ const command = bigCommerce.customers.attributes.$all.values.list(input?: unknow
 
 ## customers.attributes.values
 
-### delete
+ * [delete](#customers.attributes.values[].delete)
+ * [list](#customers.attributes.values.list)
+ * [set](#customers.attributes.values[].set)
+
+### customers.attributes.values[].delete
 
 *CLI*
 ```sh
@@ -932,7 +1014,7 @@ const command = bigCommerce.customers.attributes.values.$doc(id).delete(input?: 
 ```
 
 
-### list
+### customers.attributes.values.list
 
 *CLI*
 ```sh
@@ -945,7 +1027,7 @@ const command = bigCommerce.customers.attributes.values.list(input?: unknown);
 ```
 
 
-### set
+### customers.attributes.values[].set
 
 *CLI*
 ```sh
@@ -960,7 +1042,13 @@ const command = bigCommerce.customers.attributes.values.$doc(id).set(input?: unk
 
 ## gift-certificates
 
-### create
+ * [create](#gift-certificates.create)
+ * [delete](#gift-certificates[].delete)
+ * [get](#gift-certificates[].get)
+ * [list](#gift-certificates.list)
+ * [update](#gift-certificates[].update)
+
+### gift-certificates.create
 
 *CLI*
 ```sh
@@ -973,7 +1061,7 @@ const command = bigCommerce.giftCertificates.create(input?: unknown);
 ```
 
 
-### delete
+### gift-certificates[].delete
 
 *CLI*
 ```sh
@@ -987,7 +1075,7 @@ const command = bigCommerce.giftCertificates.$all.delete(input?: unknown);
 ```
 
 
-### get
+### gift-certificates[].get
 
 *CLI*
 ```sh
@@ -1001,7 +1089,7 @@ const command = bigCommerce.giftCertificates.$all.get(input?: unknown);
 ```
 
 
-### list
+### gift-certificates.list
 
 *CLI*
 ```sh
@@ -1014,7 +1102,7 @@ const command = bigCommerce.giftCertificates.list(input?: unknown);
 ```
 
 
-### update
+### gift-certificates[].update
 
 *CLI*
 ```sh
@@ -1030,7 +1118,13 @@ const command = bigCommerce.giftCertificates.$all.update(input?: unknown);
 
 ## orders
 
-### create
+ * [create](#orders.create)
+ * [delete](#orders[].delete)
+ * [get](#orders[].get)
+ * [list](#orders.list)
+ * [update](#orders[].update)
+
+### orders.create
 
 *CLI*
 ```sh
@@ -1043,7 +1137,7 @@ const command = bigCommerce.orders.create(input?: unknown);
 ```
 
 
-### delete
+### orders[].delete
 
 *CLI*
 ```sh
@@ -1057,7 +1151,7 @@ const command = bigCommerce.orders.$all.delete(input?: unknown);
 ```
 
 
-### get
+### orders[].get
 
 *CLI*
 ```sh
@@ -1071,7 +1165,7 @@ const command = bigCommerce.orders.$all.get(input?: unknown);
 ```
 
 
-### list
+### orders.list
 
 *CLI*
 ```sh
@@ -1084,7 +1178,7 @@ const command = bigCommerce.orders.list(input?: unknown);
 ```
 
 
-### update
+### orders[].update
 
 *CLI*
 ```sh
@@ -1100,7 +1194,9 @@ const command = bigCommerce.orders.$all.update(input?: unknown);
 
 ## orders[].refunds
 
-### get
+ * [get](#orders[].refunds.get)
+
+### orders[].refunds.get
 
 *CLI*
 ```sh
@@ -1116,7 +1212,9 @@ const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
 
 ## payment-methods
 
-### list
+ * [list](#payment-methods.list)
+
+### payment-methods.list
 
 *CLI*
 ```sh
@@ -1131,7 +1229,14 @@ const command = bigCommerce.paymentMethods.list(input?: unknown);
 
 ## products
 
-### create
+ * [create](#products.create)
+ * [delete](#products[].delete)
+ * [get](#products[].get)
+ * [list](#products.list)
+ * [update](#products.update)
+ * [update](#products[].update)
+
+### products.create
 
 *CLI*
 ```sh
@@ -1144,7 +1249,7 @@ const command = bigCommerce.products.create(input?: unknown);
 ```
 
 
-### delete
+### products[].delete
 
 *CLI*
 ```sh
@@ -1158,7 +1263,7 @@ const command = bigCommerce.products.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].get
 
 *CLI*
 ```sh
@@ -1172,7 +1277,7 @@ const command = bigCommerce.products.$all.get(input?: unknown);
 ```
 
 
-### list
+### products.list
 
 *CLI*
 ```sh
@@ -1185,7 +1290,7 @@ const command = bigCommerce.products.list(input?: unknown);
 ```
 
 
-### update
+### products.update
 
 *CLI*
 ```sh
@@ -1198,7 +1303,7 @@ const command = bigCommerce.products.update(input?: unknown);
 ```
 
 
-### update
+### products[].update
 
 *CLI*
 ```sh
@@ -1214,7 +1319,13 @@ const command = bigCommerce.products.$all.update(input?: unknown);
 
 ## products[].bulk-pricing-rules
 
-### create
+ * [create](#products[].bulk-pricing-rules.create)
+ * [delete](#products[].bulk-pricing-rules[].delete)
+ * [get](#products[].bulk-pricing-rules[].get)
+ * [list](#products[].bulk-pricing-rules.list)
+ * [update](#products[].bulk-pricing-rules[].update)
+
+### products[].bulk-pricing-rules.create
 
 *CLI*
 ```sh
@@ -1228,7 +1339,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.create(input?: unknow
 ```
 
 
-### delete
+### products[].bulk-pricing-rules[].delete
 
 *CLI*
 ```sh
@@ -1242,7 +1353,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.delete(input?: u
 ```
 
 
-### get
+### products[].bulk-pricing-rules[].get
 
 *CLI*
 ```sh
@@ -1256,7 +1367,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.get(input?: unkn
 ```
 
 
-### list
+### products[].bulk-pricing-rules.list
 
 *CLI*
 ```sh
@@ -1270,7 +1381,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.list(input?: unknown)
 ```
 
 
-### update
+### products[].bulk-pricing-rules[].update
 
 *CLI*
 ```sh
@@ -1286,7 +1397,13 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.update(input?: u
 
 ## products[].complex-rules
 
-### create
+ * [create](#products[].complex-rules.create)
+ * [delete](#products[].complex-rules[].delete)
+ * [get](#products[].complex-rules[].get)
+ * [list](#products[].complex-rules.list)
+ * [update](#products[].complex-rules[].update)
+
+### products[].complex-rules.create
 
 *CLI*
 ```sh
@@ -1300,7 +1417,7 @@ const command = bigCommerce.products.$all.complexRules.create(input?: unknown);
 ```
 
 
-### delete
+### products[].complex-rules[].delete
 
 *CLI*
 ```sh
@@ -1314,7 +1431,7 @@ const command = bigCommerce.products.$all.complexRules.$all.delete(input?: unkno
 ```
 
 
-### get
+### products[].complex-rules[].get
 
 *CLI*
 ```sh
@@ -1328,7 +1445,7 @@ const command = bigCommerce.products.$all.complexRules.$all.get(input?: unknown)
 ```
 
 
-### list
+### products[].complex-rules.list
 
 *CLI*
 ```sh
@@ -1342,7 +1459,7 @@ const command = bigCommerce.products.$all.complexRules.list(input?: unknown);
 ```
 
 
-### update
+### products[].complex-rules[].update
 
 *CLI*
 ```sh
@@ -1358,7 +1475,13 @@ const command = bigCommerce.products.$all.complexRules.$all.update(input?: unkno
 
 ## products[].custom-fields
 
-### create
+ * [create](#products[].custom-fields.create)
+ * [delete](#products[].custom-fields[].delete)
+ * [get](#products[].custom-fields[].get)
+ * [list](#products[].custom-fields.list)
+ * [update](#products[].custom-fields[].update)
+
+### products[].custom-fields.create
 
 *CLI*
 ```sh
@@ -1372,7 +1495,7 @@ const command = bigCommerce.products.$all.customFields.create(input?: unknown);
 ```
 
 
-### delete
+### products[].custom-fields[].delete
 
 *CLI*
 ```sh
@@ -1386,7 +1509,7 @@ const command = bigCommerce.products.$all.customFields.$all.delete(input?: unkno
 ```
 
 
-### get
+### products[].custom-fields[].get
 
 *CLI*
 ```sh
@@ -1400,7 +1523,7 @@ const command = bigCommerce.products.$all.customFields.$all.get(input?: unknown)
 ```
 
 
-### list
+### products[].custom-fields.list
 
 *CLI*
 ```sh
@@ -1414,7 +1537,7 @@ const command = bigCommerce.products.$all.customFields.list(input?: unknown);
 ```
 
 
-### update
+### products[].custom-fields[].update
 
 *CLI*
 ```sh
@@ -1430,7 +1553,13 @@ const command = bigCommerce.products.$all.customFields.$all.update(input?: unkno
 
 ## products[].images
 
-### create
+ * [create](#products[].images.create)
+ * [delete](#products[].images[].delete)
+ * [get](#products[].images[].get)
+ * [list](#products[].images.list)
+ * [update](#products[].images[].update)
+
+### products[].images.create
 
 *CLI*
 ```sh
@@ -1444,7 +1573,7 @@ const command = bigCommerce.products.$all.images.create(input?: unknown);
 ```
 
 
-### delete
+### products[].images[].delete
 
 *CLI*
 ```sh
@@ -1458,7 +1587,7 @@ const command = bigCommerce.products.$all.images.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].images[].get
 
 *CLI*
 ```sh
@@ -1472,7 +1601,7 @@ const command = bigCommerce.products.$all.images.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].images.list
 
 *CLI*
 ```sh
@@ -1486,7 +1615,7 @@ const command = bigCommerce.products.$all.images.list(input?: unknown);
 ```
 
 
-### update
+### products[].images[].update
 
 *CLI*
 ```sh
@@ -1502,7 +1631,13 @@ const command = bigCommerce.products.$all.images.$all.update(input?: unknown);
 
 ## products[].metafields
 
-### create
+ * [create](#products[].metafields.create)
+ * [delete](#products[].metafields[].delete)
+ * [get](#products[].metafields[].get)
+ * [list](#products[].metafields.list)
+ * [update](#products[].metafields[].update)
+
+### products[].metafields.create
 
 *CLI*
 ```sh
@@ -1516,7 +1651,7 @@ const command = bigCommerce.products.$all.metafields.create(input?: unknown);
 ```
 
 
-### delete
+### products[].metafields[].delete
 
 *CLI*
 ```sh
@@ -1530,7 +1665,7 @@ const command = bigCommerce.products.$all.metafields.$all.delete(input?: unknown
 ```
 
 
-### get
+### products[].metafields[].get
 
 *CLI*
 ```sh
@@ -1544,7 +1679,7 @@ const command = bigCommerce.products.$all.metafields.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].metafields.list
 
 *CLI*
 ```sh
@@ -1558,7 +1693,7 @@ const command = bigCommerce.products.$all.metafields.list(input?: unknown);
 ```
 
 
-### update
+### products[].metafields[].update
 
 *CLI*
 ```sh
@@ -1574,7 +1709,13 @@ const command = bigCommerce.products.$all.metafields.$all.update(input?: unknown
 
 ## products[].modifiers
 
-### create
+ * [create](#products[].modifiers.create)
+ * [delete](#products[].modifiers[].delete)
+ * [get](#products[].modifiers[].get)
+ * [list](#products[].modifiers.list)
+ * [update](#products[].modifiers[].update)
+
+### products[].modifiers.create
 
 *CLI*
 ```sh
@@ -1588,7 +1729,7 @@ const command = bigCommerce.products.$all.modifiers.create(input?: unknown);
 ```
 
 
-### delete
+### products[].modifiers[].delete
 
 *CLI*
 ```sh
@@ -1602,7 +1743,7 @@ const command = bigCommerce.products.$all.modifiers.$all.delete(input?: unknown)
 ```
 
 
-### get
+### products[].modifiers[].get
 
 *CLI*
 ```sh
@@ -1616,7 +1757,7 @@ const command = bigCommerce.products.$all.modifiers.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].modifiers.list
 
 *CLI*
 ```sh
@@ -1630,7 +1771,7 @@ const command = bigCommerce.products.$all.modifiers.list(input?: unknown);
 ```
 
 
-### update
+### products[].modifiers[].update
 
 *CLI*
 ```sh
@@ -1646,7 +1787,13 @@ const command = bigCommerce.products.$all.modifiers.$all.update(input?: unknown)
 
 ## products[].modifiers[].values
 
-### create
+ * [create](#products[].modifiers[].values.create)
+ * [delete](#products[].modifiers[].values[].delete)
+ * [get](#products[].modifiers[].values[].get)
+ * [list](#products[].modifiers[].values.list)
+ * [update](#products[].modifiers[].values[].update)
+
+### products[].modifiers[].values.create
 
 *CLI*
 ```sh
@@ -1660,7 +1807,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.create(input?: u
 ```
 
 
-### delete
+### products[].modifiers[].values[].delete
 
 *CLI*
 ```sh
@@ -1674,7 +1821,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.delete(inpu
 ```
 
 
-### get
+### products[].modifiers[].values[].get
 
 *CLI*
 ```sh
@@ -1688,7 +1835,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.get(input?:
 ```
 
 
-### list
+### products[].modifiers[].values.list
 
 *CLI*
 ```sh
@@ -1702,7 +1849,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.list(input?: unk
 ```
 
 
-### update
+### products[].modifiers[].values[].update
 
 *CLI*
 ```sh
@@ -1718,7 +1865,10 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.update(inpu
 
 ## products[].modifiers[].values.image
 
-### create
+ * [create](#products[].modifiers[].values.image.create)
+ * [delete](#products[].modifiers[].values.image[].delete)
+
+### products[].modifiers[].values.image.create
 
 *CLI*
 ```sh
@@ -1732,7 +1882,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.image.create(inp
 ```
 
 
-### delete
+### products[].modifiers[].values.image[].delete
 
 *CLI*
 ```sh
@@ -1748,7 +1898,13 @@ const command = bigCommerce.products.$all.modifiers.$all.values.image.$doc(id).d
 
 ## products[].options
 
-### create
+ * [create](#products[].options.create)
+ * [delete](#products[].options[].delete)
+ * [get](#products[].options[].get)
+ * [list](#products[].options.list)
+ * [update](#products[].options[].update)
+
+### products[].options.create
 
 *CLI*
 ```sh
@@ -1762,7 +1918,7 @@ const command = bigCommerce.products.$all.options.create(input?: unknown);
 ```
 
 
-### delete
+### products[].options[].delete
 
 *CLI*
 ```sh
@@ -1776,7 +1932,7 @@ const command = bigCommerce.products.$all.options.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].options[].get
 
 *CLI*
 ```sh
@@ -1790,7 +1946,7 @@ const command = bigCommerce.products.$all.options.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].options.list
 
 *CLI*
 ```sh
@@ -1804,7 +1960,7 @@ const command = bigCommerce.products.$all.options.list(input?: unknown);
 ```
 
 
-### update
+### products[].options[].update
 
 *CLI*
 ```sh
@@ -1820,7 +1976,13 @@ const command = bigCommerce.products.$all.options.$all.update(input?: unknown);
 
 ## products[].options[].values
 
-### create
+ * [create](#products[].options[].values.create)
+ * [delete](#products[].options[].values[].delete)
+ * [get](#products[].options[].values[].get)
+ * [list](#products[].options[].values.list)
+ * [update](#products[].options[].values[].update)
+
+### products[].options[].values.create
 
 *CLI*
 ```sh
@@ -1834,7 +1996,7 @@ const command = bigCommerce.products.$all.options.$all.values.create(input?: unk
 ```
 
 
-### delete
+### products[].options[].values[].delete
 
 *CLI*
 ```sh
@@ -1848,7 +2010,7 @@ const command = bigCommerce.products.$all.options.$all.values.$all.delete(input?
 ```
 
 
-### get
+### products[].options[].values[].get
 
 *CLI*
 ```sh
@@ -1862,7 +2024,7 @@ const command = bigCommerce.products.$all.options.$all.values.$all.get(input?: u
 ```
 
 
-### list
+### products[].options[].values.list
 
 *CLI*
 ```sh
@@ -1876,7 +2038,7 @@ const command = bigCommerce.products.$all.options.$all.values.list(input?: unkno
 ```
 
 
-### update
+### products[].options[].values[].update
 
 *CLI*
 ```sh
@@ -1892,7 +2054,13 @@ const command = bigCommerce.products.$all.options.$all.values.$all.update(input?
 
 ## products[].variants
 
-### create
+ * [create](#products[].variants.create)
+ * [delete](#products[].variants[].delete)
+ * [get](#products[].variants[].get)
+ * [list](#products[].variants.list)
+ * [update](#products[].variants[].update)
+
+### products[].variants.create
 
 *CLI*
 ```sh
@@ -1906,7 +2074,7 @@ const command = bigCommerce.products.$all.variants.create(input?: unknown);
 ```
 
 
-### delete
+### products[].variants[].delete
 
 *CLI*
 ```sh
@@ -1920,7 +2088,7 @@ const command = bigCommerce.products.$all.variants.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].variants[].get
 
 *CLI*
 ```sh
@@ -1934,7 +2102,7 @@ const command = bigCommerce.products.$all.variants.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].variants.list
 
 *CLI*
 ```sh
@@ -1948,7 +2116,7 @@ const command = bigCommerce.products.$all.variants.list(input?: unknown);
 ```
 
 
-### update
+### products[].variants[].update
 
 *CLI*
 ```sh
@@ -1964,7 +2132,13 @@ const command = bigCommerce.products.$all.variants.$all.update(input?: unknown);
 
 ## products[].videos
 
-### create
+ * [create](#products[].videos.create)
+ * [delete](#products[].videos[].delete)
+ * [get](#products[].videos[].get)
+ * [list](#products[].videos.list)
+ * [update](#products[].videos[].update)
+
+### products[].videos.create
 
 *CLI*
 ```sh
@@ -1978,7 +2152,7 @@ const command = bigCommerce.products.$all.videos.create(input?: unknown);
 ```
 
 
-### delete
+### products[].videos[].delete
 
 *CLI*
 ```sh
@@ -1992,7 +2166,7 @@ const command = bigCommerce.products.$all.videos.$all.delete(input?: unknown);
 ```
 
 
-### get
+### products[].videos[].get
 
 *CLI*
 ```sh
@@ -2006,7 +2180,7 @@ const command = bigCommerce.products.$all.videos.$all.get(input?: unknown);
 ```
 
 
-### list
+### products[].videos.list
 
 *CLI*
 ```sh
@@ -2020,7 +2194,7 @@ const command = bigCommerce.products.$all.videos.list(input?: unknown);
 ```
 
 
-### update
+### products[].videos[].update
 
 *CLI*
 ```sh
@@ -2036,7 +2210,9 @@ const command = bigCommerce.products.$all.videos.$all.update(input?: unknown);
 
 ## store
 
-### get
+ * [get](#store.get)
+
+### store.get
 
 *CLI*
 ```sh
