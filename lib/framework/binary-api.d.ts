@@ -1,0 +1,15 @@
+import { Command, Path, ScopeRef } from ".";
+export declare function decodePartialPath(encodedPath: string): Path;
+export declare function decodeScopeAndPath(encodedScopeAndPath: string): [ScopeRef | undefined, Path];
+export declare function encodeScopeAndPath(scope: ScopeRef, path: Path): string;
+export declare function decodePath(encodedPath: string): Path;
+export declare function encodePath(path: Path): string;
+export declare function decodePathElement(encodedPathElement: string): Path[number];
+export declare function encodePathElement(pathElement: Path[number]): string;
+export declare function decodeCommand(encodedCommandLine: string): Command;
+export declare function decodeCommandInput(encodedInput: string): any;
+export declare function encodeCommandHeader(command: Command): string;
+export declare function decodeScope(encodedScopeRef: string): ScopeRef;
+export declare function encodeScope(scopeRef: ScopeRef): string;
+export declare function decodeConnectorName(encodedConnectorName: string): string;
+export declare function encodeConnectorName(connectorName: string): string;

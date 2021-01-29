@@ -1,0 +1,1 @@
+export { resourceDefinitions } from "./configuration";
