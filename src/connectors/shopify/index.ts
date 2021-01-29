@@ -6,8 +6,6 @@ import { resourceDefinitions } from "./codegen";
 import * as f from '../../framework';
 import Shopify from 'shopify-api-node';
 
-export { refreshInferredResources } from "./resource-inference";
-
 export const shopify = connector({
   configSchema: client.configSchema,
 
