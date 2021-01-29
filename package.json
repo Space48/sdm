@@ -4,11 +4,15 @@
   "description": "Command line tools for piping data in and out of APIs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": {
+    "sdm": "lib/bin/sdm.js"
+  },
   "files": [
     "lib"
   ],
   "scripts": {
     "build": "tsc",
+    "docs": "node lib/bin/generate-docs",
     "clean": "rimraf lib",
     "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json"
   },

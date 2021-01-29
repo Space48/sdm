@@ -4,6 +4,7 @@ import { resourceDefinitions } from "./codegen";
 
 // do not remove the following imports -- they are intended to tidy up the generated declaration files
 import * as f from '../../framework';
+import Shopify from 'shopify-api-node';
 
 export { refreshInferredResources } from "./resource-inference";
 

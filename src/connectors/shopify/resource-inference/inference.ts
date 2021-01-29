@@ -1,14 +1,16 @@
 import { readdirSync, writeFileSync } from "fs";
 import { dirname, basename } from "path";
 import R from "ramda";
+import Shopify from "shopify-api-node";
 
 export type InferredResource = {
+  key: keyof Shopify
   endpoints: readonly string[]
   children: Record<string, InferredResource>
 };
 
 type FlatResourceData = {
-  key: string
+  key: keyof Shopify
   name: string
   parentName: string | null
   endpoints: readonly string[]
@@ -29,7 +31,7 @@ function inferResourcesFromShopifyModule() {
       const resourceConstructor = require(`${pathToResources}/${filename}`);
       const resource = new resourceConstructor(null);
       return {
-        key: hyphenatedToCamelCase(basename(filename, '.js')),
+        key: hyphenatedToCamelCase(basename(filename, '.js')) as keyof Shopify,
         name: resource.name,
         parentName: resource.parentName ?? null,
         endpoints: Object.keys(resourceConstructor.prototype).filter(prop => prop !== 'buildUrl'),
@@ -42,6 +44,7 @@ function buildTree(flatData: FlatResourceData[]): Record<string, InferredResourc
   const resourcesByName =
     R.fromPairs(
       flatData.map((resource): [string, InferredResource] => [resource.name, {
+        key: resource.key,
         endpoints: resource.endpoints,
         children: {},
       }])
@@ -56,9 +59,9 @@ function buildTree(flatData: FlatResourceData[]): Record<string, InferredResourc
   const rootResources =
     flatData
       .filter(resource => !resource.parentName)
-      .map(resource => ({key: resource.key, ...resourcesByName[resource.name]}));
+      .map(resource => resourcesByName[resource.name]);
 
-  return R.fromPairs(rootResources.map(({key, ...resource}) => [key, resource]));
+  return R.fromPairs(rootResources.map(resource => [resource.key, resource]));
 }
 
 function hyphenatedToCamelCase(value: string): string {

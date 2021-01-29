@@ -250,9 +250,11 @@ type Endpoint<
   T extends EndpointDefinition = EndpointDefinition,
   MultiPath extends boolean = boolean,
 > =
-  T extends EndpointDefinition<any, undefined, infer OutT> & EndpointDefinition<any, infer InT, infer OutT> ? OptionalInputEndpointFns<InT, OutT, MultiPath>
-  : T extends EndpointDefinition<any, infer InT, infer OutT> ? MandatoryInputEndpointFns<InT, OutT, MultiPath>
-  : never;
+  T extends EndpointDefinition<any, infer InT, infer OutT>
+    ? undefined extends InT
+      ? OptionalInputEndpointFns<InT, OutT, MultiPath>
+      : MandatoryInputEndpointFns<InT, OutT, MultiPath>
+    : never;
 
 function endpoint(path: Path, endpoint: string): Endpoint {
   return input => ({ path: [...path, endpoint], input });

@@ -12,7 +12,9 @@
     "lib": ["ES2018"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "declaration": true
+    "declaration": true,
+    "strictNullChecks": true
   },
-  "include": ["src/**/*", "scratch/**/*"]
+  "include": ["src"],
+  "exclude": ["src/bin/sdm-watch.ts"]
 }

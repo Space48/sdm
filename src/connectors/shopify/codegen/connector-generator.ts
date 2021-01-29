@@ -3,6 +3,7 @@ import * as client from "../client";
 import t from "ts-toolbelt";
 import { DocumentDefinition, EndpointDefinition, EndpointDefinitionMap, Path, ResourceDefinition, ResourceDefinitionMap } from '../../../framework';
 import R from "ramda";
+import Shopify from 'shopify-api-node';
 
 /** Definition inference */
 
@@ -17,7 +18,7 @@ function resourceDefinitions(
   config: any
 ): ResourceDefinitionMap<client.Scope> {
   return R.filter(Boolean, R.mapObjIndexed(
-    (inferredResource, resourceKey) => resourceDefinition(resourceKey, inferredResource, config?.[resourceKey]),
+    (inferredResource) => resourceDefinition(inferredResource, config?.[inferredResource.key]),
     inferred
   ));
 }
@@ -25,17 +26,13 @@ function resourceDefinitions(
 type InferResourceDefnMap<T extends Record<string, InferredResource>, Config> =
   RemoveEmptyProps<{ [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>> }>;
 
-function resourceDefinition(
-  resourceKey: string,
-  inferred: InferredResource,
-  config: any,
-): ResourceDefinition<client.Scope> {
+function resourceDefinition(inferred: InferredResource, config: any): ResourceDefinition<client.Scope> {
   if (config === false) {
     return {};
   }
 
   const endpoints = endpointDefinitions(
-    resourceKey,
+    inferred.key,
     inferred.endpoints,
     config?.['endpoints'],
     'resource'
@@ -45,10 +42,10 @@ function resourceDefinition(
     endpoints,
 
     documents: {
-      ...documentDefinition(resourceKey, inferred, config),
+      ...documentDefinition(inferred, config),
 
       listIds: endpoints.list && (scope => path => scope.listIds(
-        resourceKey,
+        inferred.key,
         'list',
         Path.getDocIds(path),
         config?.['endpoints']?.list?.params,
@@ -60,13 +57,12 @@ function resourceDefinition(
 type InferResourceDefn<T extends InferredResource, Config> =
   ResourceDefinition<
     client.Scope,
-    InferEndpointDefnMap<T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'resource'>,
+    InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'resource'>,
     {},
     InferDocumentDefn<T, Config>
   >;
 
 function documentDefinition(
-  resourceKey: string,
   inferred: InferredResource,
   config: any,
 ): DocumentDefinition<client.Scope> {
@@ -76,7 +72,7 @@ function documentDefinition(
 
   return {
     endpoints: endpointDefinitions(
-      resourceKey,
+      inferred.key,
       inferred.endpoints,
       config?.['endpoints'],
       'document'
@@ -91,7 +87,7 @@ function documentDefinition(
 
 type InferDocumentDefn<T extends InferredResource, Config> =
   RemoveEmptyProps<{
-    endpoints: InferEndpointDefnMap<T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'document'>
+    endpoints: InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'document'>
     resources: InferResourceDefnMap<T['children'], Prop<Config, 'resources', {}>>
   }>;
 
@@ -116,8 +112,12 @@ function endpointDefinitions(
   }
 }
 
-type InferEndpointDefnMap<Key extends string, Config, Target extends EndpointTarget> =
-  RemoveEmptyProps<{ [K in Key]: InferEndpointDefn<K, Prop<Config, K, undefined>, Target> }>;
+type InferEndpointDefnMap<
+  ResourceK extends keyof Shopify,
+  EndpointK extends string,
+  Config,
+  Target extends EndpointTarget
+> = RemoveEmptyProps<{ [K in EndpointK]: InferEndpointDefn<ResourceK, K, Prop<Config, K, undefined>, Target> }>;
 
 function endpointDefinition(
   resourceKey: string,
@@ -154,10 +154,17 @@ function endpointDefinition(
   );
 }
 
-type InferEndpointDefn<K extends string, Config, Target extends EndpointTarget> = 
-  ResolveEndpointTarget<K, Config> extends Target
-  ? EndpointDefinition<client.Scope>
-  : never
+type InferEndpointDefn<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget> = 
+  ResolveEndpointTarget<EndpointK, Config> extends Target
+    ? EndpointK extends keyof Shopify[ResourceK]
+      ? Shopify[ResourceK][EndpointK] extends (...args: infer Args) => Promise<infer Ret>
+        // here we assume that ReturnType extends Array means it's a flatMap endpoint. Ideally we should the configured endpoint type
+        ? Ret extends (infer RetInner)[]
+          ? EndpointDefinition<client.Scope, t.Tuple.Last<Args>, RetInner>
+          : EndpointDefinition<client.Scope, t.Tuple.Last<Args>, Ret>
+        : never
+      : never
+    : never;
 
 type ResolveEndpointTarget<Key extends string, Config> =
   Config extends false ? never
