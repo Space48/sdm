@@ -30,7 +30,7 @@
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories.create
+$ sdm 'magento2[www.my-shop.com].categories.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -43,7 +43,7 @@ const command = magento2.categories.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories[id|*].delete
+$ sdm 'magento2[www.my-shop.com].categories[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -57,7 +57,7 @@ const command = magento2.categories.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories[id|*].get
+$ sdm 'magento2[www.my-shop.com].categories[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -71,7 +71,7 @@ const command = magento2.categories.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories.list
+$ sdm 'magento2[www.my-shop.com].categories.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -84,7 +84,7 @@ const command = magento2.categories.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories[id|*].update
+$ sdm 'magento2[www.my-shop.com].categories[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -104,7 +104,7 @@ const command = magento2.categories.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].categories.tree.get
+$ sdm 'magento2[www.my-shop.com].categories.tree.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -127,7 +127,7 @@ const command = magento2.categories.tree.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].customers.create
+$ sdm 'magento2[www.my-shop.com].customers.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -140,7 +140,7 @@ const command = magento2.customers.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].customers[id|*].delete
+$ sdm 'magento2[www.my-shop.com].customers[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -154,7 +154,7 @@ const command = magento2.customers.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].customers[id|*].get
+$ sdm 'magento2[www.my-shop.com].customers[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -168,7 +168,7 @@ const command = magento2.customers.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].customers.list
+$ sdm 'magento2[www.my-shop.com].customers.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -181,7 +181,7 @@ const command = magento2.customers.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].customers[id|*].update
+$ sdm 'magento2[www.my-shop.com].customers[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -204,7 +204,7 @@ const command = magento2.customers.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].orders[id|*].delete
+$ sdm 'magento2[www.my-shop.com].orders[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -218,7 +218,7 @@ const command = magento2.orders.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].orders[id|*].get
+$ sdm 'magento2[www.my-shop.com].orders[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -232,7 +232,7 @@ const command = magento2.orders.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].orders.list
+$ sdm 'magento2[www.my-shop.com].orders.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -245,7 +245,7 @@ const command = magento2.orders.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].orders[id|*].update
+$ sdm 'magento2[www.my-shop.com].orders[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -269,7 +269,7 @@ const command = magento2.orders.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.create
+$ sdm 'magento2[www.my-shop.com].products.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -282,7 +282,7 @@ const command = magento2.products.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products[sku|*].delete
+$ sdm 'magento2[www.my-shop.com].products[sku|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -296,7 +296,7 @@ const command = magento2.products.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products[sku|*].get
+$ sdm 'magento2[www.my-shop.com].products[sku|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -310,7 +310,7 @@ const command = magento2.products.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.list
+$ sdm 'magento2[www.my-shop.com].products.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -323,7 +323,7 @@ const command = magento2.products.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products[sku|*].update
+$ sdm 'magento2[www.my-shop.com].products[sku|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -343,7 +343,7 @@ const command = magento2.products.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products[sku|*].links[type].get
+$ sdm 'magento2[www.my-shop.com].products[sku|*].links[type].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -363,7 +363,7 @@ const command = magento2.products.$all.links.$doc(type).get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.attributes.list
+$ sdm 'magento2[www.my-shop.com].products.attributes.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -382,7 +382,7 @@ const command = magento2.products.attributes.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.attributes[attribute_code].options.get
+$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code].options.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -401,7 +401,7 @@ const command = magento2.products.attributes.$doc(attribute_code).options.get(in
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.configurables[sku].children.get
+$ sdm 'magento2[www.my-shop.com].products.configurables[sku].children.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -420,7 +420,7 @@ const command = magento2.products.configurables.$doc(sku).children.get(input?: u
 
 *CLI*
 ```sh
-$ sdm magento2[www.my-shop.com].products.configurables[sku].options.get
+$ sdm 'magento2[www.my-shop.com].products.configurables[sku].options.get' [input-as-json5]
 ```
 
 *TypeScript*

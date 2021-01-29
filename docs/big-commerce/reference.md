@@ -55,7 +55,7 @@
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.posts.create
+$ sdm 'big-commerce[some-store-alias].blog.posts.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -68,7 +68,7 @@ const command = bigCommerce.blog.posts.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.posts[id|*].delete
+$ sdm 'big-commerce[some-store-alias].blog.posts[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -82,7 +82,7 @@ const command = bigCommerce.blog.posts.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.posts[id|*].get
+$ sdm 'big-commerce[some-store-alias].blog.posts[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -96,7 +96,7 @@ const command = bigCommerce.blog.posts.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.posts.list
+$ sdm 'big-commerce[some-store-alias].blog.posts.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -109,7 +109,7 @@ const command = bigCommerce.blog.posts.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.posts[id|*].update
+$ sdm 'big-commerce[some-store-alias].blog.posts[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -133,7 +133,7 @@ const command = bigCommerce.blog.posts.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.tags.create
+$ sdm 'big-commerce[some-store-alias].blog.tags.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -146,7 +146,7 @@ const command = bigCommerce.blog.tags.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.tags[id|*].delete
+$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -160,7 +160,7 @@ const command = bigCommerce.blog.tags.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.tags[id|*].get
+$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -174,7 +174,7 @@ const command = bigCommerce.blog.tags.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.tags.list
+$ sdm 'big-commerce[some-store-alias].blog.tags.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -187,7 +187,7 @@ const command = bigCommerce.blog.tags.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].blog.tags[id|*].update
+$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -211,7 +211,7 @@ const command = bigCommerce.blog.tags.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands.create
+$ sdm 'big-commerce[some-store-alias].brands.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -224,7 +224,7 @@ const command = bigCommerce.brands.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].delete
+$ sdm 'big-commerce[some-store-alias].brands[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -238,7 +238,7 @@ const command = bigCommerce.brands.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].get
+$ sdm 'big-commerce[some-store-alias].brands[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -252,7 +252,7 @@ const command = bigCommerce.brands.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands.list
+$ sdm 'big-commerce[some-store-alias].brands.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -265,7 +265,7 @@ const command = bigCommerce.brands.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].update
+$ sdm 'big-commerce[some-store-alias].brands[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -286,7 +286,7 @@ const command = bigCommerce.brands.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].image.create
+$ sdm 'big-commerce[some-store-alias].brands[id|*].image.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -300,7 +300,7 @@ const command = bigCommerce.brands.$all.image.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].image.delete
+$ sdm 'big-commerce[some-store-alias].brands[id|*].image.delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -324,7 +324,7 @@ const command = bigCommerce.brands.$all.image.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].metafields.create
+$ sdm 'big-commerce[some-store-alias].brands[id|*].metafields.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -338,7 +338,7 @@ const command = bigCommerce.brands.$all.metafields.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].metafields[id|*].delete
+$ sdm 'big-commerce[some-store-alias].brands[id|*].metafields[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -352,7 +352,7 @@ const command = bigCommerce.brands.$all.metafields.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].metafields[id|*].get
+$ sdm 'big-commerce[some-store-alias].brands[id|*].metafields[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -366,7 +366,7 @@ const command = bigCommerce.brands.$all.metafields.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].metafields.list
+$ sdm 'big-commerce[some-store-alias].brands[id|*].metafields.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -380,7 +380,7 @@ const command = bigCommerce.brands.$all.metafields.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].brands[id|*].metafields[id|*].update
+$ sdm 'big-commerce[some-store-alias].brands[id|*].metafields[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -403,7 +403,7 @@ const command = bigCommerce.brands.$all.metafields.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts.create
+$ sdm 'big-commerce[some-store-alias].carts.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -416,7 +416,7 @@ const command = bigCommerce.carts.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].delete
+$ sdm 'big-commerce[some-store-alias].carts[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -429,7 +429,7 @@ const command = bigCommerce.carts.$doc(id).delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].get
+$ sdm 'big-commerce[some-store-alias].carts[id].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -442,7 +442,7 @@ const command = bigCommerce.carts.$doc(id).get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].update
+$ sdm 'big-commerce[some-store-alias].carts[id].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -463,7 +463,7 @@ const command = bigCommerce.carts.$doc(id).update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].items.create
+$ sdm 'big-commerce[some-store-alias].carts[id].items.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -476,7 +476,7 @@ const command = bigCommerce.carts.$doc(id).items.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].items[id].delete
+$ sdm 'big-commerce[some-store-alias].carts[id].items[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -489,7 +489,7 @@ const command = bigCommerce.carts.$doc(id).items.$doc(id).delete(input?: unknown
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].carts[id].items[id].update
+$ sdm 'big-commerce[some-store-alias].carts[id].items[id].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -512,7 +512,7 @@ const command = bigCommerce.carts.$doc(id).items.$doc(id).update(input?: unknown
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories.create
+$ sdm 'big-commerce[some-store-alias].categories.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -525,7 +525,7 @@ const command = bigCommerce.categories.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].delete
+$ sdm 'big-commerce[some-store-alias].categories[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -539,7 +539,7 @@ const command = bigCommerce.categories.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].get
+$ sdm 'big-commerce[some-store-alias].categories[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -553,7 +553,7 @@ const command = bigCommerce.categories.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories.list
+$ sdm 'big-commerce[some-store-alias].categories.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -566,7 +566,7 @@ const command = bigCommerce.categories.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].update
+$ sdm 'big-commerce[some-store-alias].categories[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -587,7 +587,7 @@ const command = bigCommerce.categories.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].image.create
+$ sdm 'big-commerce[some-store-alias].categories[id|*].image.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -601,7 +601,7 @@ const command = bigCommerce.categories.$all.image.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].image.delete
+$ sdm 'big-commerce[some-store-alias].categories[id|*].image.delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -625,7 +625,7 @@ const command = bigCommerce.categories.$all.image.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].metafields.create
+$ sdm 'big-commerce[some-store-alias].categories[id|*].metafields.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -639,7 +639,7 @@ const command = bigCommerce.categories.$all.metafields.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].metafields[id|*].delete
+$ sdm 'big-commerce[some-store-alias].categories[id|*].metafields[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -653,7 +653,7 @@ const command = bigCommerce.categories.$all.metafields.$all.delete(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].metafields[id|*].get
+$ sdm 'big-commerce[some-store-alias].categories[id|*].metafields[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -667,7 +667,7 @@ const command = bigCommerce.categories.$all.metafields.$all.get(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].metafields.list
+$ sdm 'big-commerce[some-store-alias].categories[id|*].metafields.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -681,7 +681,7 @@ const command = bigCommerce.categories.$all.metafields.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories[id|*].metafields[id|*].update
+$ sdm 'big-commerce[some-store-alias].categories[id|*].metafields[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -701,7 +701,7 @@ const command = bigCommerce.categories.$all.metafields.$all.update(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].categories.tree.get
+$ sdm 'big-commerce[some-store-alias].categories.tree.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -723,7 +723,7 @@ const command = bigCommerce.categories.tree.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].channels.create
+$ sdm 'big-commerce[some-store-alias].channels.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -736,7 +736,7 @@ const command = bigCommerce.channels.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].channels[id|*].get
+$ sdm 'big-commerce[some-store-alias].channels[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -750,7 +750,7 @@ const command = bigCommerce.channels.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].channels.list
+$ sdm 'big-commerce[some-store-alias].channels.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -763,7 +763,7 @@ const command = bigCommerce.channels.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].channels[id|*].update
+$ sdm 'big-commerce[some-store-alias].channels[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -787,7 +787,7 @@ const command = bigCommerce.channels.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.create
+$ sdm 'big-commerce[some-store-alias].customers.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -800,7 +800,7 @@ const command = bigCommerce.customers.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers[id|*].delete
+$ sdm 'big-commerce[some-store-alias].customers[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -814,7 +814,7 @@ const command = bigCommerce.customers.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers[id|*].get
+$ sdm 'big-commerce[some-store-alias].customers[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -828,7 +828,7 @@ const command = bigCommerce.customers.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.list
+$ sdm 'big-commerce[some-store-alias].customers.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -841,7 +841,7 @@ const command = bigCommerce.customers.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers[id|*].update
+$ sdm 'big-commerce[some-store-alias].customers[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -865,7 +865,7 @@ const command = bigCommerce.customers.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.addresses.create
+$ sdm 'big-commerce[some-store-alias].customers.addresses.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -878,7 +878,7 @@ const command = bigCommerce.customers.addresses.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.addresses[id|*].delete
+$ sdm 'big-commerce[some-store-alias].customers.addresses[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -892,7 +892,7 @@ const command = bigCommerce.customers.addresses.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.addresses[id|*].get
+$ sdm 'big-commerce[some-store-alias].customers.addresses[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -906,7 +906,7 @@ const command = bigCommerce.customers.addresses.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.addresses.list
+$ sdm 'big-commerce[some-store-alias].customers.addresses.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -919,7 +919,7 @@ const command = bigCommerce.customers.addresses.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.addresses[id|*].update
+$ sdm 'big-commerce[some-store-alias].customers.addresses[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -943,7 +943,7 @@ const command = bigCommerce.customers.addresses.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes.create
+$ sdm 'big-commerce[some-store-alias].customers.attributes.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -956,7 +956,7 @@ const command = bigCommerce.customers.attributes.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes[id|*].delete
+$ sdm 'big-commerce[some-store-alias].customers.attributes[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -970,7 +970,7 @@ const command = bigCommerce.customers.attributes.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes[id|*].get
+$ sdm 'big-commerce[some-store-alias].customers.attributes[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -984,7 +984,7 @@ const command = bigCommerce.customers.attributes.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes.list
+$ sdm 'big-commerce[some-store-alias].customers.attributes.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -997,7 +997,7 @@ const command = bigCommerce.customers.attributes.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes[id|*].update
+$ sdm 'big-commerce[some-store-alias].customers.attributes[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1017,7 +1017,7 @@ const command = bigCommerce.customers.attributes.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes[id|*].values.list
+$ sdm 'big-commerce[some-store-alias].customers.attributes[id|*].values.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1039,7 +1039,7 @@ const command = bigCommerce.customers.attributes.$all.values.list(input?: unknow
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes.values[id].delete
+$ sdm 'big-commerce[some-store-alias].customers.attributes.values[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1052,7 +1052,7 @@ const command = bigCommerce.customers.attributes.values.$doc(id).delete(input?: 
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes.values.list
+$ sdm 'big-commerce[some-store-alias].customers.attributes.values.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1065,7 +1065,7 @@ const command = bigCommerce.customers.attributes.values.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].customers.attributes.values[id].set
+$ sdm 'big-commerce[some-store-alias].customers.attributes.values[id].set' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1088,7 +1088,7 @@ const command = bigCommerce.customers.attributes.values.$doc(id).set(input?: unk
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].gift-certificates.create
+$ sdm 'big-commerce[some-store-alias].gift-certificates.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1101,7 +1101,7 @@ const command = bigCommerce.giftCertificates.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].gift-certificates[id|*].delete
+$ sdm 'big-commerce[some-store-alias].gift-certificates[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1115,7 +1115,7 @@ const command = bigCommerce.giftCertificates.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].gift-certificates[id|*].get
+$ sdm 'big-commerce[some-store-alias].gift-certificates[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1129,7 +1129,7 @@ const command = bigCommerce.giftCertificates.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].gift-certificates.list
+$ sdm 'big-commerce[some-store-alias].gift-certificates.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1142,7 +1142,7 @@ const command = bigCommerce.giftCertificates.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].gift-certificates[id|*].update
+$ sdm 'big-commerce[some-store-alias].gift-certificates[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1166,7 +1166,7 @@ const command = bigCommerce.giftCertificates.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders.create
+$ sdm 'big-commerce[some-store-alias].orders.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1179,7 +1179,7 @@ const command = bigCommerce.orders.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders[id|*].delete
+$ sdm 'big-commerce[some-store-alias].orders[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1193,7 +1193,7 @@ const command = bigCommerce.orders.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders[id|*].get
+$ sdm 'big-commerce[some-store-alias].orders[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1207,7 +1207,7 @@ const command = bigCommerce.orders.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders.list
+$ sdm 'big-commerce[some-store-alias].orders.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1220,7 +1220,7 @@ const command = bigCommerce.orders.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders[id|*].update
+$ sdm 'big-commerce[some-store-alias].orders[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1240,7 +1240,7 @@ const command = bigCommerce.orders.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].orders[id|*].refunds.get
+$ sdm 'big-commerce[some-store-alias].orders[id|*].refunds.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1260,7 +1260,7 @@ const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].payment-methods.list
+$ sdm 'big-commerce[some-store-alias].payment-methods.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1284,7 +1284,7 @@ const command = bigCommerce.paymentMethods.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products.create
+$ sdm 'big-commerce[some-store-alias].products.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1297,7 +1297,7 @@ const command = bigCommerce.products.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1311,7 +1311,7 @@ const command = bigCommerce.products.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1325,7 +1325,7 @@ const command = bigCommerce.products.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products.list
+$ sdm 'big-commerce[some-store-alias].products.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1338,7 +1338,7 @@ const command = bigCommerce.products.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products.update
+$ sdm 'big-commerce[some-store-alias].products.update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1351,7 +1351,7 @@ const command = bigCommerce.products.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1375,7 +1375,7 @@ const command = bigCommerce.products.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].bulk-pricing-rules.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].bulk-pricing-rules.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1389,7 +1389,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.create(input?: unknow
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1403,7 +1403,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.delete(input?: u
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1417,7 +1417,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.get(input?: unkn
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].bulk-pricing-rules.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].bulk-pricing-rules.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1431,7 +1431,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.list(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].bulk-pricing-rules[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1455,7 +1455,7 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.update(input?: u
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].complex-rules.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].complex-rules.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1469,7 +1469,7 @@ const command = bigCommerce.products.$all.complexRules.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].complex-rules[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].complex-rules[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1483,7 +1483,7 @@ const command = bigCommerce.products.$all.complexRules.$all.delete(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].complex-rules[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].complex-rules[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1497,7 +1497,7 @@ const command = bigCommerce.products.$all.complexRules.$all.get(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].complex-rules.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].complex-rules.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1511,7 +1511,7 @@ const command = bigCommerce.products.$all.complexRules.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].complex-rules[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].complex-rules[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1535,7 +1535,7 @@ const command = bigCommerce.products.$all.complexRules.$all.update(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].custom-fields.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].custom-fields.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1549,7 +1549,7 @@ const command = bigCommerce.products.$all.customFields.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].custom-fields[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].custom-fields[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1563,7 +1563,7 @@ const command = bigCommerce.products.$all.customFields.$all.delete(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].custom-fields[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].custom-fields[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1577,7 +1577,7 @@ const command = bigCommerce.products.$all.customFields.$all.get(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].custom-fields.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].custom-fields.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1591,7 +1591,7 @@ const command = bigCommerce.products.$all.customFields.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].custom-fields[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].custom-fields[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1615,7 +1615,7 @@ const command = bigCommerce.products.$all.customFields.$all.update(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].images.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].images.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1629,7 +1629,7 @@ const command = bigCommerce.products.$all.images.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].images[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].images[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1643,7 +1643,7 @@ const command = bigCommerce.products.$all.images.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].images[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].images[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1657,7 +1657,7 @@ const command = bigCommerce.products.$all.images.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].images.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].images.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1671,7 +1671,7 @@ const command = bigCommerce.products.$all.images.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].images[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].images[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1695,7 +1695,7 @@ const command = bigCommerce.products.$all.images.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].metafields.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].metafields.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1709,7 +1709,7 @@ const command = bigCommerce.products.$all.metafields.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].metafields[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].metafields[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1723,7 +1723,7 @@ const command = bigCommerce.products.$all.metafields.$all.delete(input?: unknown
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].metafields[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].metafields[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1737,7 +1737,7 @@ const command = bigCommerce.products.$all.metafields.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].metafields.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].metafields.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1751,7 +1751,7 @@ const command = bigCommerce.products.$all.metafields.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].metafields[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].metafields[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1775,7 +1775,7 @@ const command = bigCommerce.products.$all.metafields.$all.update(input?: unknown
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1789,7 +1789,7 @@ const command = bigCommerce.products.$all.modifiers.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1803,7 +1803,7 @@ const command = bigCommerce.products.$all.modifiers.$all.delete(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1817,7 +1817,7 @@ const command = bigCommerce.products.$all.modifiers.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1831,7 +1831,7 @@ const command = bigCommerce.products.$all.modifiers.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1855,7 +1855,7 @@ const command = bigCommerce.products.$all.modifiers.$all.update(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1869,7 +1869,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.create(input?: u
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1883,7 +1883,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.delete(inpu
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1897,7 +1897,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.get(input?:
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1911,7 +1911,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.list(input?: unk
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1932,7 +1932,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.update(inpu
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1946,7 +1946,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.image.create(inp
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image[id].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1970,7 +1970,7 @@ const command = bigCommerce.products.$all.modifiers.$all.values.image.$doc(id).d
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].options.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1984,7 +1984,7 @@ const command = bigCommerce.products.$all.options.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1998,7 +1998,7 @@ const command = bigCommerce.products.$all.options.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2012,7 +2012,7 @@ const command = bigCommerce.products.$all.options.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].options.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2026,7 +2026,7 @@ const command = bigCommerce.products.$all.options.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2050,7 +2050,7 @@ const command = bigCommerce.products.$all.options.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].values.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].values.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2064,7 +2064,7 @@ const command = bigCommerce.products.$all.options.$all.values.create(input?: unk
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2078,7 +2078,7 @@ const command = bigCommerce.products.$all.options.$all.values.$all.delete(input?
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2092,7 +2092,7 @@ const command = bigCommerce.products.$all.options.$all.values.$all.get(input?: u
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].values.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].values.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2106,7 +2106,7 @@ const command = bigCommerce.products.$all.options.$all.values.list(input?: unkno
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].options[id|*].values[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2130,7 +2130,7 @@ const command = bigCommerce.products.$all.options.$all.values.$all.update(input?
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].variants.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2144,7 +2144,7 @@ const command = bigCommerce.products.$all.variants.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].variants[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2158,7 +2158,7 @@ const command = bigCommerce.products.$all.variants.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].variants[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2172,7 +2172,7 @@ const command = bigCommerce.products.$all.variants.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].variants.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2186,7 +2186,7 @@ const command = bigCommerce.products.$all.variants.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].variants[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2210,7 +2210,7 @@ const command = bigCommerce.products.$all.variants.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].videos.create
+$ sdm 'big-commerce[some-store-alias].products[id|*].videos.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2224,7 +2224,7 @@ const command = bigCommerce.products.$all.videos.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].videos[id|*].delete
+$ sdm 'big-commerce[some-store-alias].products[id|*].videos[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2238,7 +2238,7 @@ const command = bigCommerce.products.$all.videos.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].videos[id|*].get
+$ sdm 'big-commerce[some-store-alias].products[id|*].videos[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2252,7 +2252,7 @@ const command = bigCommerce.products.$all.videos.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].videos.list
+$ sdm 'big-commerce[some-store-alias].products[id|*].videos.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2266,7 +2266,7 @@ const command = bigCommerce.products.$all.videos.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].products[id|*].videos[id|*].update
+$ sdm 'big-commerce[some-store-alias].products[id|*].videos[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2286,7 +2286,7 @@ const command = bigCommerce.products.$all.videos.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm big-commerce[some-store-alias].store.get
+$ sdm 'big-commerce[some-store-alias].store.get' [input-as-json5]
 ```
 
 *TypeScript*

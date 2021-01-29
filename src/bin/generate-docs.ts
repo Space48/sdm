@@ -8,13 +8,13 @@ import { Markdown } from "../framework/docgen";
 const docsDir = path.join(path.dirname(path.dirname(__dirname)), 'docs');
 
 function main() {
-  const connectorsDocsDir = path.join(docsDir, 'connectors');
+  const connectorsDocsDir = docsDir;
 
   Object.entries(regularConnectors).forEach(([name, connector]) => {
     const connectorDocsDir = path.join(connectorsDocsDir, hyphenate(name));
     ensureDirExists(connectorDocsDir);
 
-    const cliDocPath = path.join(connectorDocsDir, 'usage.md');
+    const cliDocPath = path.join(connectorDocsDir, 'reference.md');
     writeFileSync(cliDocPath, Markdown.explainUsage(connector.$definition, name));
   });
 }

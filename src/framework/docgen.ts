@@ -91,7 +91,7 @@ ${endpointUsage}
 
 *CLI*
 \`\`\`sh
-$ sdm ${BinaryApi.encodeScopeAndPath(scope, path)}
+$ sdm '${BinaryApi.encodeScopeAndPath(scope, path)}' [input-as-json5]
 \`\`\`
 
 *TypeScript*

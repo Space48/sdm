@@ -70,7 +70,7 @@
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].access-scope.list
+$ sdm 'shopify[my-shop-name].access-scope.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -89,7 +89,7 @@ const command = shopify.accessScope.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].api-permission[id].delete
+$ sdm 'shopify[my-shop-name].api-permission[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -110,7 +110,7 @@ const command = shopify.apiPermission.$doc(id).delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].application-credit.create
+$ sdm 'shopify[my-shop-name].application-credit.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -123,7 +123,7 @@ const command = shopify.applicationCredit.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].application-credit[id|*].get
+$ sdm 'shopify[my-shop-name].application-credit[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -137,7 +137,7 @@ const command = shopify.applicationCredit.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].application-credit.list
+$ sdm 'shopify[my-shop-name].application-credit.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -161,7 +161,7 @@ const command = shopify.applicationCredit.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog.count
+$ sdm 'shopify[my-shop-name].blog.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -174,7 +174,7 @@ const command = shopify.blog.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog.create
+$ sdm 'shopify[my-shop-name].blog.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -187,7 +187,7 @@ const command = shopify.blog.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].delete
+$ sdm 'shopify[my-shop-name].blog[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -201,7 +201,7 @@ const command = shopify.blog.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].get
+$ sdm 'shopify[my-shop-name].blog[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -215,7 +215,7 @@ const command = shopify.blog.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog.list
+$ sdm 'shopify[my-shop-name].blog.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -228,7 +228,7 @@ const command = shopify.blog.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].update
+$ sdm 'shopify[my-shop-name].blog[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -254,7 +254,7 @@ const command = shopify.blog.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article.count
+$ sdm 'shopify[my-shop-name].blog[id|*].article.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -268,7 +268,7 @@ const command = shopify.blog.$all.article.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article.create
+$ sdm 'shopify[my-shop-name].blog[id|*].article.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -282,7 +282,7 @@ const command = shopify.blog.$all.article.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article[id|*].delete
+$ sdm 'shopify[my-shop-name].blog[id|*].article[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -296,7 +296,7 @@ const command = shopify.blog.$all.article.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article[id|*].get
+$ sdm 'shopify[my-shop-name].blog[id|*].article[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -310,7 +310,7 @@ const command = shopify.blog.$all.article.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article.list
+$ sdm 'shopify[my-shop-name].blog[id|*].article.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -324,7 +324,7 @@ const command = shopify.blog.$all.article.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article[id|*].tags
+$ sdm 'shopify[my-shop-name].blog[id|*].article[id|*].tags' [input-as-json5]
 ```
 
 *TypeScript*
@@ -338,7 +338,7 @@ const command = shopify.blog.$all.article.$all.tags(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].blog[id|*].article[id|*].update
+$ sdm 'shopify[my-shop-name].blog[id|*].article[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -362,7 +362,7 @@ const command = shopify.blog.$all.article.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].carrier-service.create
+$ sdm 'shopify[my-shop-name].carrier-service.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -375,7 +375,7 @@ const command = shopify.carrierService.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].carrier-service[id|*].delete
+$ sdm 'shopify[my-shop-name].carrier-service[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -389,7 +389,7 @@ const command = shopify.carrierService.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].carrier-service[id|*].get
+$ sdm 'shopify[my-shop-name].carrier-service[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -403,7 +403,7 @@ const command = shopify.carrierService.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].carrier-service.list
+$ sdm 'shopify[my-shop-name].carrier-service.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -416,7 +416,7 @@ const command = shopify.carrierService.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].carrier-service[id|*].update
+$ sdm 'shopify[my-shop-name].carrier-service[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -440,7 +440,7 @@ const command = shopify.carrierService.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collect.count
+$ sdm 'shopify[my-shop-name].collect.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -453,7 +453,7 @@ const command = shopify.collect.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collect.create
+$ sdm 'shopify[my-shop-name].collect.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -466,7 +466,7 @@ const command = shopify.collect.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collect[id|*].delete
+$ sdm 'shopify[my-shop-name].collect[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -480,7 +480,7 @@ const command = shopify.collect.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collect[id|*].get
+$ sdm 'shopify[my-shop-name].collect[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -494,7 +494,7 @@ const command = shopify.collect.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collect.list
+$ sdm 'shopify[my-shop-name].collect.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -514,7 +514,7 @@ const command = shopify.collect.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collection-listing[id|*].get
+$ sdm 'shopify[my-shop-name].collection-listing[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -528,7 +528,7 @@ const command = shopify.collectionListing.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collection-listing.list
+$ sdm 'shopify[my-shop-name].collection-listing.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -548,7 +548,7 @@ const command = shopify.collectionListing.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collection[id].get
+$ sdm 'shopify[my-shop-name].collection[id].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -561,7 +561,7 @@ const command = shopify.collection.$doc(id).get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].collection[id].products
+$ sdm 'shopify[my-shop-name].collection[id].products' [input-as-json5]
 ```
 
 *TypeScript*
@@ -585,7 +585,7 @@ const command = shopify.collection.$doc(id).products(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country.count
+$ sdm 'shopify[my-shop-name].country.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -598,7 +598,7 @@ const command = shopify.country.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country.create
+$ sdm 'shopify[my-shop-name].country.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -611,7 +611,7 @@ const command = shopify.country.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].delete
+$ sdm 'shopify[my-shop-name].country[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -625,7 +625,7 @@ const command = shopify.country.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].get
+$ sdm 'shopify[my-shop-name].country[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -639,7 +639,7 @@ const command = shopify.country.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country.list
+$ sdm 'shopify[my-shop-name].country.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -652,7 +652,7 @@ const command = shopify.country.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].update
+$ sdm 'shopify[my-shop-name].country[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -675,7 +675,7 @@ const command = shopify.country.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].province.count
+$ sdm 'shopify[my-shop-name].country[id|*].province.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -689,7 +689,7 @@ const command = shopify.country.$all.province.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].province[id|*].get
+$ sdm 'shopify[my-shop-name].country[id|*].province[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -703,7 +703,7 @@ const command = shopify.country.$all.province.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].province.list
+$ sdm 'shopify[my-shop-name].country[id|*].province.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -717,7 +717,7 @@ const command = shopify.country.$all.province.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].country[id|*].province[id|*].update
+$ sdm 'shopify[my-shop-name].country[id|*].province[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -737,7 +737,7 @@ const command = shopify.country.$all.province.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].currency.list
+$ sdm 'shopify[my-shop-name].currency.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -761,7 +761,7 @@ const command = shopify.currency.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection.count
+$ sdm 'shopify[my-shop-name].custom-collection.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -774,7 +774,7 @@ const command = shopify.customCollection.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection.create
+$ sdm 'shopify[my-shop-name].custom-collection.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -787,7 +787,7 @@ const command = shopify.customCollection.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection[id|*].delete
+$ sdm 'shopify[my-shop-name].custom-collection[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -801,7 +801,7 @@ const command = shopify.customCollection.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection[id|*].get
+$ sdm 'shopify[my-shop-name].custom-collection[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -815,7 +815,7 @@ const command = shopify.customCollection.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection.list
+$ sdm 'shopify[my-shop-name].custom-collection.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -828,7 +828,7 @@ const command = shopify.customCollection.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].custom-collection[id|*].update
+$ sdm 'shopify[my-shop-name].custom-collection[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -855,7 +855,7 @@ const command = shopify.customCollection.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer.count
+$ sdm 'shopify[my-shop-name].customer.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -868,7 +868,7 @@ const command = shopify.customer.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer.create
+$ sdm 'shopify[my-shop-name].customer.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -881,7 +881,7 @@ const command = shopify.customer.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].delete
+$ sdm 'shopify[my-shop-name].customer[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -895,7 +895,7 @@ const command = shopify.customer.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].get
+$ sdm 'shopify[my-shop-name].customer[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -909,7 +909,7 @@ const command = shopify.customer.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer.list
+$ sdm 'shopify[my-shop-name].customer.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -922,7 +922,7 @@ const command = shopify.customer.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].orders
+$ sdm 'shopify[my-shop-name].customer[id|*].orders' [input-as-json5]
 ```
 
 *TypeScript*
@@ -936,7 +936,7 @@ const command = shopify.customer.$all.orders(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].send-invite
+$ sdm 'shopify[my-shop-name].customer[id|*].send-invite' [input-as-json5]
 ```
 
 *TypeScript*
@@ -950,7 +950,7 @@ const command = shopify.customer.$all.sendInvite(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].update
+$ sdm 'shopify[my-shop-name].customer[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -976,7 +976,7 @@ const command = shopify.customer.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address.create
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -990,7 +990,7 @@ const command = shopify.customer.$all.customerAddress.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address[id|*].default
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address[id|*].default' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1004,7 +1004,7 @@ const command = shopify.customer.$all.customerAddress.$all.default(input?: unkno
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address[id|*].delete
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1018,7 +1018,7 @@ const command = shopify.customer.$all.customerAddress.$all.delete(input?: unknow
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address[id|*].get
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1032,7 +1032,7 @@ const command = shopify.customer.$all.customerAddress.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address.list
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1046,7 +1046,7 @@ const command = shopify.customer.$all.customerAddress.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address.set
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address.set' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1060,7 +1060,7 @@ const command = shopify.customer.$all.customerAddress.set(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].customer[id|*].customer-address[id|*].update
+$ sdm 'shopify[my-shop-name].customer[id|*].customer-address[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1081,7 +1081,7 @@ const command = shopify.customer.$all.customerAddress.$all.update(input?: unknow
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].dispute[id|*].get
+$ sdm 'shopify[my-shop-name].dispute[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1095,7 +1095,7 @@ const command = shopify.dispute.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].dispute.list
+$ sdm 'shopify[my-shop-name].dispute.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1121,7 +1121,7 @@ const command = shopify.dispute.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order[id|*].complete
+$ sdm 'shopify[my-shop-name].draft-order[id|*].complete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1135,7 +1135,7 @@ const command = shopify.draftOrder.$all.complete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order.count
+$ sdm 'shopify[my-shop-name].draft-order.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1148,7 +1148,7 @@ const command = shopify.draftOrder.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order.create
+$ sdm 'shopify[my-shop-name].draft-order.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1161,7 +1161,7 @@ const command = shopify.draftOrder.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order[id|*].delete
+$ sdm 'shopify[my-shop-name].draft-order[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1175,7 +1175,7 @@ const command = shopify.draftOrder.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order[id|*].get
+$ sdm 'shopify[my-shop-name].draft-order[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1189,7 +1189,7 @@ const command = shopify.draftOrder.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order.list
+$ sdm 'shopify[my-shop-name].draft-order.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1202,7 +1202,7 @@ const command = shopify.draftOrder.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order[id|*].send-invoice
+$ sdm 'shopify[my-shop-name].draft-order[id|*].send-invoice' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1216,7 +1216,7 @@ const command = shopify.draftOrder.$all.sendInvoice(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].draft-order[id|*].update
+$ sdm 'shopify[my-shop-name].draft-order[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1240,7 +1240,7 @@ const command = shopify.draftOrder.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].event.create
+$ sdm 'shopify[my-shop-name].event.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1253,7 +1253,7 @@ const command = shopify.event.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].event[id|*].delete
+$ sdm 'shopify[my-shop-name].event[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1267,7 +1267,7 @@ const command = shopify.event.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].event[id|*].get
+$ sdm 'shopify[my-shop-name].event[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1281,7 +1281,7 @@ const command = shopify.event.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].event.list
+$ sdm 'shopify[my-shop-name].event.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1294,7 +1294,7 @@ const command = shopify.event.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].event[id|*].update
+$ sdm 'shopify[my-shop-name].event[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1318,7 +1318,7 @@ const command = shopify.event.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].fulfillment-service.create
+$ sdm 'shopify[my-shop-name].fulfillment-service.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1331,7 +1331,7 @@ const command = shopify.fulfillmentService.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].fulfillment-service[id|*].delete
+$ sdm 'shopify[my-shop-name].fulfillment-service[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1345,7 +1345,7 @@ const command = shopify.fulfillmentService.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].fulfillment-service[id|*].get
+$ sdm 'shopify[my-shop-name].fulfillment-service[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1359,7 +1359,7 @@ const command = shopify.fulfillmentService.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].fulfillment-service.list
+$ sdm 'shopify[my-shop-name].fulfillment-service.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1372,7 +1372,7 @@ const command = shopify.fulfillmentService.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].fulfillment-service[id|*].update
+$ sdm 'shopify[my-shop-name].fulfillment-service[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1397,7 +1397,7 @@ const command = shopify.fulfillmentService.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card.count
+$ sdm 'shopify[my-shop-name].gift-card.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1410,7 +1410,7 @@ const command = shopify.giftCard.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card.create
+$ sdm 'shopify[my-shop-name].gift-card.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1423,7 +1423,7 @@ const command = shopify.giftCard.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].disable
+$ sdm 'shopify[my-shop-name].gift-card[id|*].disable' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1437,7 +1437,7 @@ const command = shopify.giftCard.$all.disable(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].get
+$ sdm 'shopify[my-shop-name].gift-card[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1451,7 +1451,7 @@ const command = shopify.giftCard.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card.list
+$ sdm 'shopify[my-shop-name].gift-card.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1464,7 +1464,7 @@ const command = shopify.giftCard.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].update
+$ sdm 'shopify[my-shop-name].gift-card[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1486,7 +1486,7 @@ const command = shopify.giftCard.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].gift-card-adjustment.create
+$ sdm 'shopify[my-shop-name].gift-card[id|*].gift-card-adjustment.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1500,7 +1500,7 @@ const command = shopify.giftCard.$all.giftCardAdjustment.create(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].gift-card-adjustment[id|*].get
+$ sdm 'shopify[my-shop-name].gift-card[id|*].gift-card-adjustment[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1514,7 +1514,7 @@ const command = shopify.giftCard.$all.giftCardAdjustment.$all.get(input?: unknow
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].gift-card[id|*].gift-card-adjustment.list
+$ sdm 'shopify[my-shop-name].gift-card[id|*].gift-card-adjustment.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1536,7 +1536,7 @@ const command = shopify.giftCard.$all.giftCardAdjustment.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].inventory-item[id|*].get
+$ sdm 'shopify[my-shop-name].inventory-item[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1550,7 +1550,7 @@ const command = shopify.inventoryItem.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].inventory-item.list
+$ sdm 'shopify[my-shop-name].inventory-item.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1563,7 +1563,7 @@ const command = shopify.inventoryItem.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].inventory-item[id|*].update
+$ sdm 'shopify[my-shop-name].inventory-item[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1584,7 +1584,7 @@ const command = shopify.inventoryItem.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].inventory-level[id|*].delete
+$ sdm 'shopify[my-shop-name].inventory-level[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1598,7 +1598,7 @@ const command = shopify.inventoryLevel.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].inventory-level.list
+$ sdm 'shopify[my-shop-name].inventory-level.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1620,7 +1620,7 @@ const command = shopify.inventoryLevel.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].location.count
+$ sdm 'shopify[my-shop-name].location.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1633,7 +1633,7 @@ const command = shopify.location.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].location[id|*].get
+$ sdm 'shopify[my-shop-name].location[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1647,7 +1647,7 @@ const command = shopify.location.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].location[id|*].inventory-levels
+$ sdm 'shopify[my-shop-name].location[id|*].inventory-levels' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1661,7 +1661,7 @@ const command = shopify.location.$all.inventoryLevels(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].location.list
+$ sdm 'shopify[my-shop-name].location.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1685,7 +1685,7 @@ const command = shopify.location.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield.count
+$ sdm 'shopify[my-shop-name].metafield.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1698,7 +1698,7 @@ const command = shopify.metafield.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield.create
+$ sdm 'shopify[my-shop-name].metafield.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1711,7 +1711,7 @@ const command = shopify.metafield.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield[id|*].delete
+$ sdm 'shopify[my-shop-name].metafield[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1725,7 +1725,7 @@ const command = shopify.metafield.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield[id|*].get
+$ sdm 'shopify[my-shop-name].metafield[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1739,7 +1739,7 @@ const command = shopify.metafield.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield.list
+$ sdm 'shopify[my-shop-name].metafield.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1752,7 +1752,7 @@ const command = shopify.metafield.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].metafield[id|*].update
+$ sdm 'shopify[my-shop-name].metafield[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1781,7 +1781,7 @@ const command = shopify.metafield.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].cancel
+$ sdm 'shopify[my-shop-name].order[id|*].cancel' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1795,7 +1795,7 @@ const command = shopify.order.$all.cancel(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].close
+$ sdm 'shopify[my-shop-name].order[id|*].close' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1809,7 +1809,7 @@ const command = shopify.order.$all.close(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order.count
+$ sdm 'shopify[my-shop-name].order.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1822,7 +1822,7 @@ const command = shopify.order.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order.create
+$ sdm 'shopify[my-shop-name].order.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1835,7 +1835,7 @@ const command = shopify.order.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].delete
+$ sdm 'shopify[my-shop-name].order[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1849,7 +1849,7 @@ const command = shopify.order.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment-orders
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment-orders' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1863,7 +1863,7 @@ const command = shopify.order.$all.fulfillmentOrders(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1877,7 +1877,7 @@ const command = shopify.order.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order.list
+$ sdm 'shopify[my-shop-name].order.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1890,7 +1890,7 @@ const command = shopify.order.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].open
+$ sdm 'shopify[my-shop-name].order[id|*].open' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1904,7 +1904,7 @@ const command = shopify.order.$all.open(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].update
+$ sdm 'shopify[my-shop-name].order[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1931,7 +1931,7 @@ const command = shopify.order.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].cancel
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].cancel' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1945,7 +1945,7 @@ const command = shopify.order.$all.fulfillment.$all.cancel(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].complete
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].complete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1959,7 +1959,7 @@ const command = shopify.order.$all.fulfillment.$all.complete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment.count
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1973,7 +1973,7 @@ const command = shopify.order.$all.fulfillment.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment.create
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -1987,7 +1987,7 @@ const command = shopify.order.$all.fulfillment.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2001,7 +2001,7 @@ const command = shopify.order.$all.fulfillment.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment.list
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2015,7 +2015,7 @@ const command = shopify.order.$all.fulfillment.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].open
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].open' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2029,7 +2029,7 @@ const command = shopify.order.$all.fulfillment.$all.open(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].update
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2053,7 +2053,7 @@ const command = shopify.order.$all.fulfillment.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event.create
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2067,7 +2067,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.create(inpu
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].delete
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2081,7 +2081,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.delete
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2095,7 +2095,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.get(in
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event.list
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2109,7 +2109,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.list(input?
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].update
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].fulfillment-event[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2133,7 +2133,7 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.update
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].order-risk.create
+$ sdm 'shopify[my-shop-name].order[id|*].order-risk.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2147,7 +2147,7 @@ const command = shopify.order.$all.orderRisk.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].order-risk[id|*].delete
+$ sdm 'shopify[my-shop-name].order[id|*].order-risk[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2161,7 +2161,7 @@ const command = shopify.order.$all.orderRisk.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].order-risk[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].order-risk[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2175,7 +2175,7 @@ const command = shopify.order.$all.orderRisk.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].order-risk.list
+$ sdm 'shopify[my-shop-name].order[id|*].order-risk.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2189,7 +2189,7 @@ const command = shopify.order.$all.orderRisk.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].order-risk[id|*].update
+$ sdm 'shopify[my-shop-name].order[id|*].order-risk[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2212,7 +2212,7 @@ const command = shopify.order.$all.orderRisk.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].refund.calculate
+$ sdm 'shopify[my-shop-name].order[id|*].refund.calculate' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2226,7 +2226,7 @@ const command = shopify.order.$all.refund.calculate(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].refund.create
+$ sdm 'shopify[my-shop-name].order[id|*].refund.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2240,7 +2240,7 @@ const command = shopify.order.$all.refund.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].refund[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].refund[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2254,7 +2254,7 @@ const command = shopify.order.$all.refund.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].refund.list
+$ sdm 'shopify[my-shop-name].order[id|*].refund.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2277,7 +2277,7 @@ const command = shopify.order.$all.refund.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].transaction.count
+$ sdm 'shopify[my-shop-name].order[id|*].transaction.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2291,7 +2291,7 @@ const command = shopify.order.$all.transaction.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].transaction.create
+$ sdm 'shopify[my-shop-name].order[id|*].transaction.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2305,7 +2305,7 @@ const command = shopify.order.$all.transaction.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].transaction[id|*].get
+$ sdm 'shopify[my-shop-name].order[id|*].transaction[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2319,7 +2319,7 @@ const command = shopify.order.$all.transaction.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].order[id|*].transaction.list
+$ sdm 'shopify[my-shop-name].order[id|*].transaction.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2344,7 +2344,7 @@ const command = shopify.order.$all.transaction.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page.count
+$ sdm 'shopify[my-shop-name].page.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2357,7 +2357,7 @@ const command = shopify.page.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page.create
+$ sdm 'shopify[my-shop-name].page.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2370,7 +2370,7 @@ const command = shopify.page.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page[id|*].delete
+$ sdm 'shopify[my-shop-name].page[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2384,7 +2384,7 @@ const command = shopify.page.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page[id|*].get
+$ sdm 'shopify[my-shop-name].page[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2398,7 +2398,7 @@ const command = shopify.page.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page.list
+$ sdm 'shopify[my-shop-name].page.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2411,7 +2411,7 @@ const command = shopify.page.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].page[id|*].update
+$ sdm 'shopify[my-shop-name].page[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2432,7 +2432,7 @@ const command = shopify.page.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].payout[id|*].get
+$ sdm 'shopify[my-shop-name].payout[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2446,7 +2446,7 @@ const command = shopify.payout.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].payout.list
+$ sdm 'shopify[my-shop-name].payout.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2465,7 +2465,7 @@ const command = shopify.payout.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].policy.list
+$ sdm 'shopify[my-shop-name].policy.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2488,7 +2488,7 @@ const command = shopify.policy.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule.create
+$ sdm 'shopify[my-shop-name].price-rule.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2501,7 +2501,7 @@ const command = shopify.priceRule.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].delete
+$ sdm 'shopify[my-shop-name].price-rule[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2515,7 +2515,7 @@ const command = shopify.priceRule.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].get
+$ sdm 'shopify[my-shop-name].price-rule[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2529,7 +2529,7 @@ const command = shopify.priceRule.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule.list
+$ sdm 'shopify[my-shop-name].price-rule.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2542,7 +2542,7 @@ const command = shopify.priceRule.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].update
+$ sdm 'shopify[my-shop-name].price-rule[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2567,7 +2567,7 @@ const command = shopify.priceRule.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code.create
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2581,7 +2581,7 @@ const command = shopify.priceRule.$all.discountCode.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code[id|*].delete
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2595,7 +2595,7 @@ const command = shopify.priceRule.$all.discountCode.$all.delete(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code[id|*].get
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2609,7 +2609,7 @@ const command = shopify.priceRule.$all.discountCode.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code.list
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2623,7 +2623,7 @@ const command = shopify.priceRule.$all.discountCode.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code.lookup
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code.lookup' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2637,7 +2637,7 @@ const command = shopify.priceRule.$all.discountCode.lookup(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].price-rule[id|*].discount-code[id|*].update
+$ sdm 'shopify[my-shop-name].price-rule[id|*].discount-code[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2661,7 +2661,7 @@ const command = shopify.priceRule.$all.discountCode.$all.update(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product-listing.count
+$ sdm 'shopify[my-shop-name].product-listing.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2674,7 +2674,7 @@ const command = shopify.productListing.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product-listing.create
+$ sdm 'shopify[my-shop-name].product-listing.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2687,7 +2687,7 @@ const command = shopify.productListing.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product-listing[id|*].delete
+$ sdm 'shopify[my-shop-name].product-listing[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2701,7 +2701,7 @@ const command = shopify.productListing.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product-listing[id|*].get
+$ sdm 'shopify[my-shop-name].product-listing[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2715,7 +2715,7 @@ const command = shopify.productListing.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product-listing.list
+$ sdm 'shopify[my-shop-name].product-listing.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2739,7 +2739,7 @@ const command = shopify.productListing.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product.count
+$ sdm 'shopify[my-shop-name].product.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2752,7 +2752,7 @@ const command = shopify.product.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product.create
+$ sdm 'shopify[my-shop-name].product.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2765,7 +2765,7 @@ const command = shopify.product.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].delete
+$ sdm 'shopify[my-shop-name].product[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2779,7 +2779,7 @@ const command = shopify.product.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].get
+$ sdm 'shopify[my-shop-name].product[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2793,7 +2793,7 @@ const command = shopify.product.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product.list
+$ sdm 'shopify[my-shop-name].product.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2806,7 +2806,7 @@ const command = shopify.product.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].update
+$ sdm 'shopify[my-shop-name].product[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2831,7 +2831,7 @@ const command = shopify.product.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image.count
+$ sdm 'shopify[my-shop-name].product[id|*].product-image.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2845,7 +2845,7 @@ const command = shopify.product.$all.productImage.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image.create
+$ sdm 'shopify[my-shop-name].product[id|*].product-image.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2859,7 +2859,7 @@ const command = shopify.product.$all.productImage.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image[id|*].delete
+$ sdm 'shopify[my-shop-name].product[id|*].product-image[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2873,7 +2873,7 @@ const command = shopify.product.$all.productImage.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image[id|*].get
+$ sdm 'shopify[my-shop-name].product[id|*].product-image[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2887,7 +2887,7 @@ const command = shopify.product.$all.productImage.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image.list
+$ sdm 'shopify[my-shop-name].product[id|*].product-image.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2901,7 +2901,7 @@ const command = shopify.product.$all.productImage.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-image[id|*].update
+$ sdm 'shopify[my-shop-name].product[id|*].product-image[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2922,7 +2922,7 @@ const command = shopify.product.$all.productImage.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-resource-feedback.create
+$ sdm 'shopify[my-shop-name].product[id|*].product-resource-feedback.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2936,7 +2936,7 @@ const command = shopify.product.$all.productResourceFeedback.create(input?: unkn
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-resource-feedback.list
+$ sdm 'shopify[my-shop-name].product[id|*].product-resource-feedback.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2961,7 +2961,7 @@ const command = shopify.product.$all.productResourceFeedback.list(input?: unknow
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant.count
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2975,7 +2975,7 @@ const command = shopify.product.$all.productVariant.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant.create
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -2989,7 +2989,7 @@ const command = shopify.product.$all.productVariant.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant[id|*].delete
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3003,7 +3003,7 @@ const command = shopify.product.$all.productVariant.$all.delete(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant[id|*].get
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3017,7 +3017,7 @@ const command = shopify.product.$all.productVariant.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant.list
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3031,7 +3031,7 @@ const command = shopify.product.$all.productVariant.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].product[id|*].product-variant[id|*].update
+$ sdm 'shopify[my-shop-name].product[id|*].product-variant[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3056,7 +3056,7 @@ const command = shopify.product.$all.productVariant.$all.update(input?: unknown)
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect.count
+$ sdm 'shopify[my-shop-name].redirect.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3069,7 +3069,7 @@ const command = shopify.redirect.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect.create
+$ sdm 'shopify[my-shop-name].redirect.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3082,7 +3082,7 @@ const command = shopify.redirect.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect[id|*].delete
+$ sdm 'shopify[my-shop-name].redirect[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3096,7 +3096,7 @@ const command = shopify.redirect.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect[id|*].get
+$ sdm 'shopify[my-shop-name].redirect[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3110,7 +3110,7 @@ const command = shopify.redirect.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect.list
+$ sdm 'shopify[my-shop-name].redirect.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3123,7 +3123,7 @@ const command = shopify.redirect.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].redirect[id|*].update
+$ sdm 'shopify[my-shop-name].redirect[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3147,7 +3147,7 @@ const command = shopify.redirect.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].report.create
+$ sdm 'shopify[my-shop-name].report.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3160,7 +3160,7 @@ const command = shopify.report.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].report[id|*].delete
+$ sdm 'shopify[my-shop-name].report[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3174,7 +3174,7 @@ const command = shopify.report.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].report[id|*].get
+$ sdm 'shopify[my-shop-name].report[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3188,7 +3188,7 @@ const command = shopify.report.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].report.list
+$ sdm 'shopify[my-shop-name].report.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3201,7 +3201,7 @@ const command = shopify.report.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].report[id|*].update
+$ sdm 'shopify[my-shop-name].report[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3222,7 +3222,7 @@ const command = shopify.report.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].resource-feedback.create
+$ sdm 'shopify[my-shop-name].resource-feedback.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3235,7 +3235,7 @@ const command = shopify.resourceFeedback.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].resource-feedback.list
+$ sdm 'shopify[my-shop-name].resource-feedback.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3259,7 +3259,7 @@ const command = shopify.resourceFeedback.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag.count
+$ sdm 'shopify[my-shop-name].script-tag.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3272,7 +3272,7 @@ const command = shopify.scriptTag.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag.create
+$ sdm 'shopify[my-shop-name].script-tag.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3285,7 +3285,7 @@ const command = shopify.scriptTag.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag[id|*].delete
+$ sdm 'shopify[my-shop-name].script-tag[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3299,7 +3299,7 @@ const command = shopify.scriptTag.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag[id|*].get
+$ sdm 'shopify[my-shop-name].script-tag[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3313,7 +3313,7 @@ const command = shopify.scriptTag.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag.list
+$ sdm 'shopify[my-shop-name].script-tag.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3326,7 +3326,7 @@ const command = shopify.scriptTag.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].script-tag[id|*].update
+$ sdm 'shopify[my-shop-name].script-tag[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3346,7 +3346,7 @@ const command = shopify.scriptTag.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].shipping-zone.list
+$ sdm 'shopify[my-shop-name].shipping-zone.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3365,7 +3365,7 @@ const command = shopify.shippingZone.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].shop.get
+$ sdm 'shopify[my-shop-name].shop.get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3389,7 +3389,7 @@ const command = shopify.shop.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection.count
+$ sdm 'shopify[my-shop-name].smart-collection.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3402,7 +3402,7 @@ const command = shopify.smartCollection.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection.create
+$ sdm 'shopify[my-shop-name].smart-collection.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3415,7 +3415,7 @@ const command = shopify.smartCollection.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection[id|*].delete
+$ sdm 'shopify[my-shop-name].smart-collection[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3429,7 +3429,7 @@ const command = shopify.smartCollection.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection[id|*].get
+$ sdm 'shopify[my-shop-name].smart-collection[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3443,7 +3443,7 @@ const command = shopify.smartCollection.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection.list
+$ sdm 'shopify[my-shop-name].smart-collection.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3456,7 +3456,7 @@ const command = shopify.smartCollection.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].smart-collection[id|*].update
+$ sdm 'shopify[my-shop-name].smart-collection[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3478,7 +3478,7 @@ const command = shopify.smartCollection.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].storefront-access-token.create
+$ sdm 'shopify[my-shop-name].storefront-access-token.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3491,7 +3491,7 @@ const command = shopify.storefrontAccessToken.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].storefront-access-token[id|*].delete
+$ sdm 'shopify[my-shop-name].storefront-access-token[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3505,7 +3505,7 @@ const command = shopify.storefrontAccessToken.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].storefront-access-token.list
+$ sdm 'shopify[my-shop-name].storefront-access-token.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3524,7 +3524,7 @@ const command = shopify.storefrontAccessToken.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].tender-transaction.list
+$ sdm 'shopify[my-shop-name].tender-transaction.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3547,7 +3547,7 @@ const command = shopify.tenderTransaction.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme.create
+$ sdm 'shopify[my-shop-name].theme.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3560,7 +3560,7 @@ const command = shopify.theme.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].delete
+$ sdm 'shopify[my-shop-name].theme[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3574,7 +3574,7 @@ const command = shopify.theme.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].get
+$ sdm 'shopify[my-shop-name].theme[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3588,7 +3588,7 @@ const command = shopify.theme.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme.list
+$ sdm 'shopify[my-shop-name].theme.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3601,7 +3601,7 @@ const command = shopify.theme.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].update
+$ sdm 'shopify[my-shop-name].theme[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3625,7 +3625,7 @@ const command = shopify.theme.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].asset.create
+$ sdm 'shopify[my-shop-name].theme[id|*].asset.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3639,7 +3639,7 @@ const command = shopify.theme.$all.asset.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].asset[id|*].delete
+$ sdm 'shopify[my-shop-name].theme[id|*].asset[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3653,7 +3653,7 @@ const command = shopify.theme.$all.asset.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].asset[id|*].get
+$ sdm 'shopify[my-shop-name].theme[id|*].asset[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3667,7 +3667,7 @@ const command = shopify.theme.$all.asset.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].asset.list
+$ sdm 'shopify[my-shop-name].theme[id|*].asset.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3681,7 +3681,7 @@ const command = shopify.theme.$all.asset.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].theme[id|*].asset[id|*].update
+$ sdm 'shopify[my-shop-name].theme[id|*].asset[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3703,7 +3703,7 @@ const command = shopify.theme.$all.asset.$all.update(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].user.current
+$ sdm 'shopify[my-shop-name].user.current' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3716,7 +3716,7 @@ const command = shopify.user.current(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].user[id|*].get
+$ sdm 'shopify[my-shop-name].user[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3730,7 +3730,7 @@ const command = shopify.user.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].user.list
+$ sdm 'shopify[my-shop-name].user.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3754,7 +3754,7 @@ const command = shopify.user.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook.count
+$ sdm 'shopify[my-shop-name].webhook.count' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3767,7 +3767,7 @@ const command = shopify.webhook.count(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook.create
+$ sdm 'shopify[my-shop-name].webhook.create' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3780,7 +3780,7 @@ const command = shopify.webhook.create(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook[id|*].delete
+$ sdm 'shopify[my-shop-name].webhook[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3794,7 +3794,7 @@ const command = shopify.webhook.$all.delete(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook[id|*].get
+$ sdm 'shopify[my-shop-name].webhook[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3808,7 +3808,7 @@ const command = shopify.webhook.$all.get(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook.list
+$ sdm 'shopify[my-shop-name].webhook.list' [input-as-json5]
 ```
 
 *TypeScript*
@@ -3821,7 +3821,7 @@ const command = shopify.webhook.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm shopify[my-shop-name].webhook[id|*].update
+$ sdm 'shopify[my-shop-name].webhook[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
