@@ -36,7 +36,11 @@ export default class BigCommerce {
     const firstPage = await this.doGet(uri, {page: 1, ...(params || {})});
     yield* unwrap(firstPage);
 
-    const totalPages = uri.startsWith('v3') ? (firstPage.meta?.pagination?.total_pages || 1) : Number.MAX_SAFE_INTEGER;
+    const totalPages =
+      uri.startsWith('v3')
+        ? (firstPage.meta?.pagination ? computeNumPages(firstPage.meta.pagination) : 1)
+        : Number.MAX_SAFE_INTEGER;
+
     const concurrency = Math.min(totalPages, listConcurrency);
     const threads = [...new Array(concurrency).keys()];
     for (let page = 2; page <= totalPages; page += concurrency) {
@@ -133,4 +137,22 @@ export default class BigCommerce {
 
 function unwrap(content: any) {
   return content?.data === undefined ? content : content.data;
+}
+
+type V3Pagination = {
+  total: number
+  count: number
+  per_page: number
+  current_page: number
+  total_pages: number
+  links: {
+    next: string
+    current: string
+  },
+  too_many: false
+};
+
+function computeNumPages(pagination: V3Pagination): number {
+  // note -- total_pages does not respect the actual page size, so we cannot use it
+  return Math.ceil(pagination.total / pagination.count); 
 }
