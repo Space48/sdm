@@ -22,14 +22,14 @@
  * [customers.attributes](#customersattributes)
  * [customers.attributes[].values](#customersattributesvalues)
  * [customers.attributes.values](#customersattributesvalues)
- * [gift-certificates](#giftcertificates)
+ * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
- * [payment-methods](#paymentmethods)
+ * [payment-methods](#payment-methods)
  * [products](#products)
- * [products[].bulk-pricing-rules](#productsbulkpricingrules)
- * [products[].complex-rules](#productscomplexrules)
- * [products[].custom-fields](#productscustomfields)
+ * [products[].bulk-pricing-rules](#productsbulk-pricing-rules)
+ * [products[].complex-rules](#productscomplex-rules)
+ * [products[].custom-fields](#productscustom-fields)
  * [products[].images](#productsimages)
  * [products[].metafields](#productsmetafields)
  * [products[].modifiers](#productsmodifiers)
@@ -1078,11 +1078,11 @@ const command = bigCommerce.customers.attributes.values.$doc(id).set(input?: unk
 
 ### Endpoints
 
- * [create](#giftcertificatescreate)
- * [delete](#giftcertificatesdelete)
- * [get](#giftcertificatesget)
- * [list](#giftcertificateslist)
- * [update](#giftcertificatesupdate)
+ * [create](#gift-certificatescreate)
+ * [delete](#gift-certificatesdelete)
+ * [get](#gift-certificatesget)
+ * [list](#gift-certificateslist)
+ * [update](#gift-certificatesupdate)
 
 ### gift-certificates.create
 
@@ -1254,7 +1254,7 @@ const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
 
 ### Endpoints
 
- * [list](#paymentmethodslist)
+ * [list](#payment-methodslist)
 
 ### payment-methods.list
 
@@ -1365,11 +1365,11 @@ const command = bigCommerce.products.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#productsbulkpricingrulescreate)
- * [delete](#productsbulkpricingrulesdelete)
- * [get](#productsbulkpricingrulesget)
- * [list](#productsbulkpricingruleslist)
- * [update](#productsbulkpricingrulesupdate)
+ * [create](#productsbulk-pricing-rulescreate)
+ * [delete](#productsbulk-pricing-rulesdelete)
+ * [get](#productsbulk-pricing-rulesget)
+ * [list](#productsbulk-pricing-ruleslist)
+ * [update](#productsbulk-pricing-rulesupdate)
 
 ### products[].bulk-pricing-rules.create
 
@@ -1445,11 +1445,11 @@ const command = bigCommerce.products.$all.bulkPricingRules.$all.update(input?: u
 
 ### Endpoints
 
- * [create](#productscomplexrulescreate)
- * [delete](#productscomplexrulesdelete)
- * [get](#productscomplexrulesget)
- * [list](#productscomplexruleslist)
- * [update](#productscomplexrulesupdate)
+ * [create](#productscomplex-rulescreate)
+ * [delete](#productscomplex-rulesdelete)
+ * [get](#productscomplex-rulesget)
+ * [list](#productscomplex-ruleslist)
+ * [update](#productscomplex-rulesupdate)
 
 ### products[].complex-rules.create
 
@@ -1525,11 +1525,11 @@ const command = bigCommerce.products.$all.complexRules.$all.update(input?: unkno
 
 ### Endpoints
 
- * [create](#productscustomfieldscreate)
- * [delete](#productscustomfieldsdelete)
- * [get](#productscustomfieldsget)
- * [list](#productscustomfieldslist)
- * [update](#productscustomfieldsupdate)
+ * [create](#productscustom-fieldscreate)
+ * [delete](#productscustom-fieldsdelete)
+ * [get](#productscustom-fieldsget)
+ * [list](#productscustom-fieldslist)
+ * [update](#productscustom-fieldsupdate)
 
 ### products[].custom-fields.create
 

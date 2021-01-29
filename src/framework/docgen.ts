@@ -160,6 +160,6 @@ ${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).jo
   }
 
   function linkToSection(linkTitle: string, sectionTitle: string): string {
-    return `[${linkTitle}](#${sectionTitle.replace(/[\-\[\]\.]/g, '')})`;
+    return `[${linkTitle}](#${sectionTitle.replace(/[\[\]\.]/g, '')})`;
   }
 }

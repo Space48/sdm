@@ -5,56 +5,56 @@
 
 # Resources
 
- * [access-scope](#accessscope)
- * [api-permission](#apipermission)
- * [application-credit](#applicationcredit)
+ * [access-scope](#access-scope)
+ * [api-permission](#api-permission)
+ * [application-credit](#application-credit)
  * [blog](#blog)
  * [blog[].article](#blogarticle)
- * [carrier-service](#carrierservice)
+ * [carrier-service](#carrier-service)
  * [collect](#collect)
- * [collection-listing](#collectionlisting)
+ * [collection-listing](#collection-listing)
  * [collection](#collection)
  * [country](#country)
  * [country[].province](#countryprovince)
  * [currency](#currency)
- * [custom-collection](#customcollection)
+ * [custom-collection](#custom-collection)
  * [customer](#customer)
- * [customer[].customer-address](#customercustomeraddress)
+ * [customer[].customer-address](#customercustomer-address)
  * [dispute](#dispute)
- * [draft-order](#draftorder)
+ * [draft-order](#draft-order)
  * [event](#event)
- * [fulfillment-service](#fulfillmentservice)
- * [gift-card](#giftcard)
- * [gift-card[].gift-card-adjustment](#giftcardgiftcardadjustment)
- * [inventory-item](#inventoryitem)
- * [inventory-level](#inventorylevel)
+ * [fulfillment-service](#fulfillment-service)
+ * [gift-card](#gift-card)
+ * [gift-card[].gift-card-adjustment](#gift-cardgift-card-adjustment)
+ * [inventory-item](#inventory-item)
+ * [inventory-level](#inventory-level)
  * [location](#location)
  * [metafield](#metafield)
  * [order](#order)
  * [order[].fulfillment](#orderfulfillment)
- * [order[].fulfillment[].fulfillment-event](#orderfulfillmentfulfillmentevent)
- * [order[].order-risk](#orderorderrisk)
+ * [order[].fulfillment[].fulfillment-event](#orderfulfillmentfulfillment-event)
+ * [order[].order-risk](#orderorder-risk)
  * [order[].refund](#orderrefund)
  * [order[].transaction](#ordertransaction)
  * [page](#page)
  * [payout](#payout)
  * [policy](#policy)
- * [price-rule](#pricerule)
- * [price-rule[].discount-code](#pricerulediscountcode)
- * [product-listing](#productlisting)
+ * [price-rule](#price-rule)
+ * [price-rule[].discount-code](#price-rulediscount-code)
+ * [product-listing](#product-listing)
  * [product](#product)
- * [product[].product-image](#productproductimage)
- * [product[].product-resource-feedback](#productproductresourcefeedback)
- * [product[].product-variant](#productproductvariant)
+ * [product[].product-image](#productproduct-image)
+ * [product[].product-resource-feedback](#productproduct-resource-feedback)
+ * [product[].product-variant](#productproduct-variant)
  * [redirect](#redirect)
  * [report](#report)
- * [resource-feedback](#resourcefeedback)
- * [script-tag](#scripttag)
- * [shipping-zone](#shippingzone)
+ * [resource-feedback](#resource-feedback)
+ * [script-tag](#script-tag)
+ * [shipping-zone](#shipping-zone)
  * [shop](#shop)
- * [smart-collection](#smartcollection)
- * [storefront-access-token](#storefrontaccesstoken)
- * [tender-transaction](#tendertransaction)
+ * [smart-collection](#smart-collection)
+ * [storefront-access-token](#storefront-access-token)
+ * [tender-transaction](#tender-transaction)
  * [theme](#theme)
  * [theme[].asset](#themeasset)
  * [user](#user)
@@ -64,7 +64,7 @@
 
 ### Endpoints
 
- * [list](#accessscopelist)
+ * [list](#access-scopelist)
 
 ### access-scope.list
 
@@ -83,7 +83,7 @@ const command = shopify.accessScope.list(input?: unknown);
 
 ### Endpoints
 
- * [delete](#apipermissiondelete)
+ * [delete](#api-permissiondelete)
 
 ### api-permission[].delete
 
@@ -102,9 +102,9 @@ const command = shopify.apiPermission.$doc(id).delete(input?: unknown);
 
 ### Endpoints
 
- * [create](#applicationcreditcreate)
- * [get](#applicationcreditget)
- * [list](#applicationcreditlist)
+ * [create](#application-creditcreate)
+ * [get](#application-creditget)
+ * [list](#application-creditlist)
 
 ### application-credit.create
 
@@ -352,11 +352,11 @@ const command = shopify.blog.$all.article.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#carrierservicecreate)
- * [delete](#carrierservicedelete)
- * [get](#carrierserviceget)
- * [list](#carrierservicelist)
- * [update](#carrierserviceupdate)
+ * [create](#carrier-servicecreate)
+ * [delete](#carrier-servicedelete)
+ * [get](#carrier-serviceget)
+ * [list](#carrier-servicelist)
+ * [update](#carrier-serviceupdate)
 
 ### carrier-service.create
 
@@ -507,8 +507,8 @@ const command = shopify.collect.list(input?: unknown);
 
 ### Endpoints
 
- * [get](#collectionlistingget)
- * [list](#collectionlistinglist)
+ * [get](#collection-listingget)
+ * [list](#collection-listinglist)
 
 ### collection-listing[].get
 
@@ -750,12 +750,12 @@ const command = shopify.currency.list(input?: unknown);
 
 ### Endpoints
 
- * [count](#customcollectioncount)
- * [create](#customcollectioncreate)
- * [delete](#customcollectiondelete)
- * [get](#customcollectionget)
- * [list](#customcollectionlist)
- * [update](#customcollectionupdate)
+ * [count](#custom-collectioncount)
+ * [create](#custom-collectioncreate)
+ * [delete](#custom-collectiondelete)
+ * [get](#custom-collectionget)
+ * [list](#custom-collectionlist)
+ * [update](#custom-collectionupdate)
 
 ### custom-collection.count
 
@@ -848,7 +848,7 @@ const command = shopify.customCollection.$all.update(input?: unknown);
  * [get](#customerget)
  * [list](#customerlist)
  * [orders](#customerorders)
- * [send-invite](#customersendinvite)
+ * [send-invite](#customersend-invite)
  * [update](#customerupdate)
 
 ### customer.count
@@ -964,13 +964,13 @@ const command = shopify.customer.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#customercustomeraddresscreate)
- * [default](#customercustomeraddressdefault)
- * [delete](#customercustomeraddressdelete)
- * [get](#customercustomeraddressget)
- * [list](#customercustomeraddresslist)
- * [set](#customercustomeraddressset)
- * [update](#customercustomeraddressupdate)
+ * [create](#customercustomer-addresscreate)
+ * [default](#customercustomer-addressdefault)
+ * [delete](#customercustomer-addressdelete)
+ * [get](#customercustomer-addressget)
+ * [list](#customercustomer-addresslist)
+ * [set](#customercustomer-addressset)
+ * [update](#customercustomer-addressupdate)
 
 ### customer[].customer-address.create
 
@@ -1108,14 +1108,14 @@ const command = shopify.dispute.list(input?: unknown);
 
 ### Endpoints
 
- * [complete](#draftordercomplete)
- * [count](#draftordercount)
- * [create](#draftordercreate)
- * [delete](#draftorderdelete)
- * [get](#draftorderget)
- * [list](#draftorderlist)
- * [send-invoice](#draftordersendinvoice)
- * [update](#draftorderupdate)
+ * [complete](#draft-ordercomplete)
+ * [count](#draft-ordercount)
+ * [create](#draft-ordercreate)
+ * [delete](#draft-orderdelete)
+ * [get](#draft-orderget)
+ * [list](#draft-orderlist)
+ * [send-invoice](#draft-ordersend-invoice)
+ * [update](#draft-orderupdate)
 
 ### draft-order[].complete
 
@@ -1308,11 +1308,11 @@ const command = shopify.event.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#fulfillmentservicecreate)
- * [delete](#fulfillmentservicedelete)
- * [get](#fulfillmentserviceget)
- * [list](#fulfillmentservicelist)
- * [update](#fulfillmentserviceupdate)
+ * [create](#fulfillment-servicecreate)
+ * [delete](#fulfillment-servicedelete)
+ * [get](#fulfillment-serviceget)
+ * [list](#fulfillment-servicelist)
+ * [update](#fulfillment-serviceupdate)
 
 ### fulfillment-service.create
 
@@ -1386,12 +1386,12 @@ const command = shopify.fulfillmentService.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [count](#giftcardcount)
- * [create](#giftcardcreate)
- * [disable](#giftcarddisable)
- * [get](#giftcardget)
- * [list](#giftcardlist)
- * [update](#giftcardupdate)
+ * [count](#gift-cardcount)
+ * [create](#gift-cardcreate)
+ * [disable](#gift-carddisable)
+ * [get](#gift-cardget)
+ * [list](#gift-cardlist)
+ * [update](#gift-cardupdate)
 
 ### gift-card.count
 
@@ -1478,9 +1478,9 @@ const command = shopify.giftCard.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#giftcardgiftcardadjustmentcreate)
- * [get](#giftcardgiftcardadjustmentget)
- * [list](#giftcardgiftcardadjustmentlist)
+ * [create](#gift-cardgift-card-adjustmentcreate)
+ * [get](#gift-cardgift-card-adjustmentget)
+ * [list](#gift-cardgift-card-adjustmentlist)
 
 ### gift-card[].gift-card-adjustment.create
 
@@ -1528,9 +1528,9 @@ const command = shopify.giftCard.$all.giftCardAdjustment.list(input?: unknown);
 
 ### Endpoints
 
- * [get](#inventoryitemget)
- * [list](#inventoryitemlist)
- * [update](#inventoryitemupdate)
+ * [get](#inventory-itemget)
+ * [list](#inventory-itemlist)
+ * [update](#inventory-itemupdate)
 
 ### inventory-item[].get
 
@@ -1577,8 +1577,8 @@ const command = shopify.inventoryItem.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [delete](#inventoryleveldelete)
- * [list](#inventorylevellist)
+ * [delete](#inventory-leveldelete)
+ * [list](#inventory-levellist)
 
 ### inventory-level[].delete
 
@@ -1613,7 +1613,7 @@ const command = shopify.inventoryLevel.list(input?: unknown);
 
  * [count](#locationcount)
  * [get](#locationget)
- * [inventory-levels](#locationinventorylevels)
+ * [inventory-levels](#locationinventory-levels)
  * [list](#locationlist)
 
 ### location.count
@@ -1771,7 +1771,7 @@ const command = shopify.metafield.$all.update(input?: unknown);
  * [count](#ordercount)
  * [create](#ordercreate)
  * [delete](#orderdelete)
- * [fulfillment-orders](#orderfulfillmentorders)
+ * [fulfillment-orders](#orderfulfillment-orders)
  * [get](#orderget)
  * [list](#orderlist)
  * [open](#orderopen)
@@ -2043,11 +2043,11 @@ const command = shopify.order.$all.fulfillment.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#orderfulfillmentfulfillmenteventcreate)
- * [delete](#orderfulfillmentfulfillmenteventdelete)
- * [get](#orderfulfillmentfulfillmenteventget)
- * [list](#orderfulfillmentfulfillmenteventlist)
- * [update](#orderfulfillmentfulfillmenteventupdate)
+ * [create](#orderfulfillmentfulfillment-eventcreate)
+ * [delete](#orderfulfillmentfulfillment-eventdelete)
+ * [get](#orderfulfillmentfulfillment-eventget)
+ * [list](#orderfulfillmentfulfillment-eventlist)
+ * [update](#orderfulfillmentfulfillment-eventupdate)
 
 ### order[].fulfillment[].fulfillment-event.create
 
@@ -2123,11 +2123,11 @@ const command = shopify.order.$all.fulfillment.$all.fulfillmentEvent.$all.update
 
 ### Endpoints
 
- * [create](#orderorderriskcreate)
- * [delete](#orderorderriskdelete)
- * [get](#orderorderriskget)
- * [list](#orderorderrisklist)
- * [update](#orderorderriskupdate)
+ * [create](#orderorder-riskcreate)
+ * [delete](#orderorder-riskdelete)
+ * [get](#orderorder-riskget)
+ * [list](#orderorder-risklist)
+ * [update](#orderorder-riskupdate)
 
 ### order[].order-risk.create
 
@@ -2478,11 +2478,11 @@ const command = shopify.policy.list(input?: unknown);
 
 ### Endpoints
 
- * [create](#pricerulecreate)
- * [delete](#priceruledelete)
- * [get](#priceruleget)
- * [list](#pricerulelist)
- * [update](#priceruleupdate)
+ * [create](#price-rulecreate)
+ * [delete](#price-ruledelete)
+ * [get](#price-ruleget)
+ * [list](#price-rulelist)
+ * [update](#price-ruleupdate)
 
 ### price-rule.create
 
@@ -2556,12 +2556,12 @@ const command = shopify.priceRule.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#pricerulediscountcodecreate)
- * [delete](#pricerulediscountcodedelete)
- * [get](#pricerulediscountcodeget)
- * [list](#pricerulediscountcodelist)
- * [lookup](#pricerulediscountcodelookup)
- * [update](#pricerulediscountcodeupdate)
+ * [create](#price-rulediscount-codecreate)
+ * [delete](#price-rulediscount-codedelete)
+ * [get](#price-rulediscount-codeget)
+ * [list](#price-rulediscount-codelist)
+ * [lookup](#price-rulediscount-codelookup)
+ * [update](#price-rulediscount-codeupdate)
 
 ### price-rule[].discount-code.create
 
@@ -2651,11 +2651,11 @@ const command = shopify.priceRule.$all.discountCode.$all.update(input?: unknown)
 
 ### Endpoints
 
- * [count](#productlistingcount)
- * [create](#productlistingcreate)
- * [delete](#productlistingdelete)
- * [get](#productlistingget)
- * [list](#productlistinglist)
+ * [count](#product-listingcount)
+ * [create](#product-listingcreate)
+ * [delete](#product-listingdelete)
+ * [get](#product-listingget)
+ * [list](#product-listinglist)
 
 ### product-listing.count
 
@@ -2820,12 +2820,12 @@ const command = shopify.product.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [count](#productproductimagecount)
- * [create](#productproductimagecreate)
- * [delete](#productproductimagedelete)
- * [get](#productproductimageget)
- * [list](#productproductimagelist)
- * [update](#productproductimageupdate)
+ * [count](#productproduct-imagecount)
+ * [create](#productproduct-imagecreate)
+ * [delete](#productproduct-imagedelete)
+ * [get](#productproduct-imageget)
+ * [list](#productproduct-imagelist)
+ * [update](#productproduct-imageupdate)
 
 ### product[].product-image.count
 
@@ -2915,8 +2915,8 @@ const command = shopify.product.$all.productImage.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#productproductresourcefeedbackcreate)
- * [list](#productproductresourcefeedbacklist)
+ * [create](#productproduct-resource-feedbackcreate)
+ * [list](#productproduct-resource-feedbacklist)
 
 ### product[].product-resource-feedback.create
 
@@ -2950,12 +2950,12 @@ const command = shopify.product.$all.productResourceFeedback.list(input?: unknow
 
 ### Endpoints
 
- * [count](#productproductvariantcount)
- * [create](#productproductvariantcreate)
- * [delete](#productproductvariantdelete)
- * [get](#productproductvariantget)
- * [list](#productproductvariantlist)
- * [update](#productproductvariantupdate)
+ * [count](#productproduct-variantcount)
+ * [create](#productproduct-variantcreate)
+ * [delete](#productproduct-variantdelete)
+ * [get](#productproduct-variantget)
+ * [list](#productproduct-variantlist)
+ * [update](#productproduct-variantupdate)
 
 ### product[].product-variant.count
 
@@ -3215,8 +3215,8 @@ const command = shopify.report.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#resourcefeedbackcreate)
- * [list](#resourcefeedbacklist)
+ * [create](#resource-feedbackcreate)
+ * [list](#resource-feedbacklist)
 
 ### resource-feedback.create
 
@@ -3248,12 +3248,12 @@ const command = shopify.resourceFeedback.list(input?: unknown);
 
 ### Endpoints
 
- * [count](#scripttagcount)
- * [create](#scripttagcreate)
- * [delete](#scripttagdelete)
- * [get](#scripttagget)
- * [list](#scripttaglist)
- * [update](#scripttagupdate)
+ * [count](#script-tagcount)
+ * [create](#script-tagcreate)
+ * [delete](#script-tagdelete)
+ * [get](#script-tagget)
+ * [list](#script-taglist)
+ * [update](#script-tagupdate)
 
 ### script-tag.count
 
@@ -3340,7 +3340,7 @@ const command = shopify.scriptTag.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [list](#shippingzonelist)
+ * [list](#shipping-zonelist)
 
 ### shipping-zone.list
 
@@ -3378,12 +3378,12 @@ const command = shopify.shop.get(input?: unknown);
 
 ### Endpoints
 
- * [count](#smartcollectioncount)
- * [create](#smartcollectioncreate)
- * [delete](#smartcollectiondelete)
- * [get](#smartcollectionget)
- * [list](#smartcollectionlist)
- * [update](#smartcollectionupdate)
+ * [count](#smart-collectioncount)
+ * [create](#smart-collectioncreate)
+ * [delete](#smart-collectiondelete)
+ * [get](#smart-collectionget)
+ * [list](#smart-collectionlist)
+ * [update](#smart-collectionupdate)
 
 ### smart-collection.count
 
@@ -3470,9 +3470,9 @@ const command = shopify.smartCollection.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#storefrontaccesstokencreate)
- * [delete](#storefrontaccesstokendelete)
- * [list](#storefrontaccesstokenlist)
+ * [create](#storefront-access-tokencreate)
+ * [delete](#storefront-access-tokendelete)
+ * [list](#storefront-access-tokenlist)
 
 ### storefront-access-token.create
 
@@ -3518,7 +3518,7 @@ const command = shopify.storefrontAccessToken.list(input?: unknown);
 
 ### Endpoints
 
- * [list](#tendertransactionlist)
+ * [list](#tender-transactionlist)
 
 ### tender-transaction.list
 
