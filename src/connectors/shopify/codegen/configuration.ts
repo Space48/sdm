@@ -139,6 +139,10 @@ export const resourceDefinitions = computeResourceDefinitions({
             target: 'document',
             type: 'map',
           },
+          createV2: {
+            target: 'document',
+            type: 'map',
+          },
           complete: {
             target: 'document',
             type: 'map',
@@ -147,6 +151,7 @@ export const resourceDefinitions = computeResourceDefinitions({
             target: 'document',
             type: 'map',
           },
+          updateTracking: false,
         },
       },
       refund: {

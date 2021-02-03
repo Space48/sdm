@@ -409,7 +409,9 @@ export default {
           "update",
           "complete",
           "open",
-          "cancel"
+          "cancel",
+          "createV2",
+          "updateTracking"
         ],
         "children": {
           "fulfillmentEvent": {

@@ -9,7 +9,7 @@ import Shopify from 'shopify-api-node';
 
 export function computeResourceDefinitions<C extends ShopifyConnectorConfig>(
   config: C
-): InferResourceDefnMap<InferredResources, C> {
+): InferResourceDefnMap<InferredResources, C, '0'> {
   return resourceDefinitions(inferredResources, config) as any;
 }
 
@@ -23,8 +23,10 @@ function resourceDefinitions(
   ));
 }
 
-type InferResourceDefnMap<T extends Record<string, InferredResource>, Config> =
-  RemoveEmptyProps<{ [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>> }>;
+type InferResourceDefnMap<T extends Record<string, InferredResource>, Config, Depth extends string> =
+  RemoveEmptyProps<{
+    [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>, Depth>
+  }>;
 
 function resourceDefinition(inferred: InferredResource, config: any): ResourceDefinition<client.Scope> {
   if (config === false) {
@@ -54,12 +56,17 @@ function resourceDefinition(inferred: InferredResource, config: any): ResourceDe
   };
 }
 
-type InferResourceDefn<T extends InferredResource, Config> =
+type InferResourceDefn<Res extends InferredResource, Config, Depth extends string> =
   ResourceDefinition<
     client.Scope,
-    InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'resource'>,
+    InferEndpointDefnMap<
+      Res,
+      Prop<Config, 'endpoints', undefined>,
+      'resource',
+      Depth
+    >,
     {},
-    InferDocumentDefn<T, Config>
+    InferDocumentDefn<Res, Config, t.Number.Plus<'1', Depth>>
   >;
 
 function documentDefinition(
@@ -85,10 +92,19 @@ function documentDefinition(
   };
 }
 
-type InferDocumentDefn<T extends InferredResource, Config> =
+type InferDocumentDefn<Res extends InferredResource, Config, Depth extends string> =
   RemoveEmptyProps<{
-    endpoints: InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'document'>
-    resources: InferResourceDefnMap<T['children'], Prop<Config, 'resources', {}>>
+    endpoints: InferEndpointDefnMap<
+      Res,
+      Prop<Config, 'endpoints', undefined>,
+      'document',
+      Depth
+    >
+    resources: InferResourceDefnMap<
+      Res['children'],
+      Prop<Config, 'resources', {}>,
+      Depth
+    >
   }>;
 
 function endpointDefinitions(
@@ -113,11 +129,20 @@ function endpointDefinitions(
 }
 
 type InferEndpointDefnMap<
-  ResourceK extends keyof Shopify,
-  EndpointK extends string,
+  Res extends InferredResource,
   Config,
-  Target extends EndpointTarget
-> = RemoveEmptyProps<{ [K in EndpointK]: InferEndpointDefn<ResourceK, K, Prop<Config, K, undefined>, Target> }>;
+  Target extends EndpointTarget,
+  Depth extends string
+> = RemoveEmptyProps<{
+  [K in Res['endpoints'][number]]:
+    InferEndpointDefn<
+      Res['key'],
+      K,
+      Prop<Config, K, undefined>,
+      Target,
+      t.N.Format<Depth, 'n'>
+    >
+}>;
 
 function endpointDefinition(
   resourceKey: string,
@@ -143,25 +168,31 @@ function endpointDefinition(
       resourceKey,
       endpointKey,
       Path.getDocIds(path),
-      {...resolvedConfig.params, input},
+      {...resolvedConfig.params, ...input},
     );
   }
   return scope => ({path, input}) => scope.map(
     resourceKey,
     endpointKey,
     Path.getDocIds(path),
-    {...resolvedConfig.params, input},
+    {...resolvedConfig.params, ...input},
   );
 }
 
-type InferEndpointDefn<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget> = 
+type InferEndpointDefn<
+  ResourceK extends keyof Shopify,
+  EndpointK extends string,
+  Config,
+  Target extends EndpointTarget,
+  Depth extends number
+> = 
   ResolveEndpointTarget<EndpointK, Config> extends Target
     ? EndpointK extends keyof Shopify[ResourceK]
       ? Shopify[ResourceK][EndpointK] extends (...args: infer Args) => Promise<infer Ret>
         // here we assume that ReturnType extends Array means it's a flatMap endpoint. Ideally we should the configured endpoint type
         ? Ret extends (infer RetInner)[]
-          ? EndpointDefinition<client.Scope, t.Tuple.Last<Args>, RetInner>
-          : EndpointDefinition<client.Scope, t.Tuple.Last<Args>, Ret>
+          ? EndpointDefinition<client.Scope, Args[Depth], RetInner>
+          : EndpointDefinition<client.Scope, Args[Depth], Ret>
         : never
       : never
     : never;
