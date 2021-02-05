@@ -38,10 +38,6 @@ export namespace Markdown {
 
     return (
 `
-${title(0, 'Using the CLI interface')}
-
-${title(0, 'Using the TypeScript interface')}
-
 ${title(0, 'Resources')}
 
 ${contents(0, commands)}
