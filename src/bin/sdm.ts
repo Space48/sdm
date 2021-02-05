@@ -2,7 +2,7 @@
 
 import { Command, ConnectorDefinition, EndpointError, Path, ScopeRef } from "../framework";
 import * as readline from "readline";
-import { compose, map, pipe, streamJson, takeWhile, tap, transformJson } from "@space48/json-pipe";
+import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo } from "@space48/json-pipe";
 import chalk from "chalk";
 import { BinaryApi } from "../framework";
 import { Shell } from "../framework/docgen";
@@ -72,8 +72,9 @@ async function runNonInteractiveMode() {
   const scope = await app.requireScope(scopeRef);
   if (process.stdin.isTTY || command.input !== undefined) {
     try {
-      await streamJson(
-        scope.execute(command)
+      await pipe(
+        scope.execute(command),
+        writeJsonLinesTo(process.stdout),
       );
     } catch (e) {
       console.error(
@@ -84,11 +85,11 @@ async function runNonInteractiveMode() {
       process.exit(1);
     }
   } else {
-    await transformJson(
-      compose(
-        map((input): Command => ({ ...command, input })),
-        commands => scope.execute(commands),
-      )
+    await pipe(
+      readJsonLinesFrom(process.stdin),
+      map((input): Command => ({ ...command, input })),
+      commands => scope.execute(commands),
+      writeJsonLinesTo(process.stdout),
     );
   }
 }
@@ -116,7 +117,7 @@ async function runInteractiveMode() {
             return new Promise(setImmediate);
           }),
           takeWhile(() => !interrupted),
-          streamJson,
+          writeJsonLinesTo(process.stdout),
         );
         const runtimeSecs = (Date.now() - startTime) / 1000;
         process.stderr.write(`\n${numOutputs} results in ${runtimeSecs}s\n\n`);
