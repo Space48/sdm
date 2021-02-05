@@ -1,8 +1,4 @@
 
-# Using the CLI interface
-
-# Using the TypeScript interface
-
 # Resources
 
  * [access-scope](#access-scope)
