@@ -3,7 +3,7 @@ import { configManagementConnector, regularConnectors } from "./connectors";
 import { LocalConfigRepository } from "./framework";
 import { Application } from "./framework/application";
 
-export * from "./connectors";
+export * from "./connectors/index";
 export * from "./framework";
 
 export function sdm() {
