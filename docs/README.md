@@ -1,4 +1,4 @@
-# SDM documentation
+# SDM documentation
 
 ## Get started
 
