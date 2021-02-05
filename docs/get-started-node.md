@@ -61,11 +61,11 @@ Node will print all of the product data to the terminal.
 
 Save the following to `~/sdm-tutorial/products.csv`
 ```csv
-name,price
-The Crown - Season 03 [DVD] [2020],24.99
-The Greatest Showman [DVD] [2017],4.99
-Harry Potter: The Complete 8-film Collection,34.99
-The Crown - Season 1 & 2 [DVD] [2018],18.00
+sku,name,price
+DVD10898,The Crown - Season 03 [DVD] [2020],24.99
+DVD08150,The Greatest Showman [DVD] [2017],4.99
+DVD12183,Harry Potter: The Complete 8-film Collection,34.99
+DVD11719,The Crown - Season 1 & 2 [DVD] [2018],18.00
 ```
 
 Save the following to `~/sdm-tutorial/src/common.ts`
