@@ -47,8 +47,8 @@ export declare const shopify: f.Connector<{
                 create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
             }, {}, {
                 endpoints: {
-                    default: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
                     get: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
+                    default: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
                     delete: f.EndpointDefinition<client.Scope, undefined, void>;
                     update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
                 };

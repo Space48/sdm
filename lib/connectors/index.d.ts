@@ -620,8 +620,8 @@ export declare const regularConnectors: {
                     create: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                 }, {}, {
                     endpoints: {
-                        default: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                         get: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
+                        default: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                         delete: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, void>;
                         update: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                     };

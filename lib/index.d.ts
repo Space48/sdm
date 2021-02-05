@@ -1,4 +1,4 @@
 import { Application } from "./framework/application";
-export * from "./connectors";
+export * from "./connectors/index";
 export * from "./framework";
 export declare function sdm(): Application;

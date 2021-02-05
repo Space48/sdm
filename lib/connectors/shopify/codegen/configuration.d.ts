@@ -38,8 +38,8 @@ export declare const resourceDefinitions: {
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
             }, {}, {
                 endpoints: {
-                    default: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                     get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
+                    default: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                     delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                 };
