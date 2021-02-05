@@ -186,7 +186,7 @@ declare const _default: {
         readonly children: {
             readonly fulfillment: {
                 readonly key: "fulfillment";
-                readonly endpoints: readonly ["count", "create", "get", "list", "update", "complete", "open", "cancel"];
+                readonly endpoints: readonly ["count", "create", "get", "list", "update", "complete", "open", "cancel", "createV2", "updateTracking"];
                 readonly children: {
                     readonly fulfillmentEvent: {
                         readonly key: "fulfillmentEvent";

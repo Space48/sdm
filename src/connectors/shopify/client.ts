@@ -1,7 +1,7 @@
 import * as t from 'io-ts'
 import pRetry from 'p-retry';
 import Shopify from 'shopify-api-node';
-import { CommandError, ScopeConfig } from '../../framework';
+import { EndpointError, ScopeConfig } from '../../framework';
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -67,8 +67,7 @@ const backoff = <F extends Fn>(fn: F) => (...args: Parameters<F>) => {
     try {
       return await fn(...args);
     } catch (e) {
-      const actionError = new CommandError({
-        message: e.message,
+      const actionError = new EndpointError(e.message, {
         detail: typeof e.response?.body === 'object' ? (e.response.body.errors ?? e.response.body) : null,
       })
       throw e.response?.statusCode == 429 ? actionError : new pRetry.AbortError(actionError);

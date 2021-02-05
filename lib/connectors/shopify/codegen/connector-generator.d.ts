@@ -3,19 +3,19 @@ import * as client from "../client";
 import t from "ts-toolbelt";
 import { EndpointDefinition, ResourceDefinition } from '../../../framework';
 import Shopify from 'shopify-api-node';
-export declare function computeResourceDefinitions<C extends ShopifyConnectorConfig>(config: C): InferResourceDefnMap<InferredResources, C>;
-declare type InferResourceDefnMap<T extends Record<string, InferredResource>, Config> = RemoveEmptyProps<{
-    [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>>;
+export declare function computeResourceDefinitions<C extends ShopifyConnectorConfig>(config: C): InferResourceDefnMap<InferredResources, C, '0'>;
+declare type InferResourceDefnMap<T extends Record<string, InferredResource>, Config, Depth extends string> = RemoveEmptyProps<{
+    [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>, Depth>;
 }>;
-declare type InferResourceDefn<T extends InferredResource, Config> = ResourceDefinition<client.Scope, InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'resource'>, {}, InferDocumentDefn<T, Config>>;
-declare type InferDocumentDefn<T extends InferredResource, Config> = RemoveEmptyProps<{
-    endpoints: InferEndpointDefnMap<T['key'], T['endpoints'][number], Prop<Config, 'endpoints', undefined>, 'document'>;
-    resources: InferResourceDefnMap<T['children'], Prop<Config, 'resources', {}>>;
+declare type InferResourceDefn<Res extends InferredResource, Config, Depth extends string> = ResourceDefinition<client.Scope, InferEndpointDefnMap<Res, Prop<Config, 'endpoints', undefined>, 'resource', Depth>, {}, InferDocumentDefn<Res, Config, t.Number.Plus<'1', Depth>>>;
+declare type InferDocumentDefn<Res extends InferredResource, Config, Depth extends string> = RemoveEmptyProps<{
+    endpoints: InferEndpointDefnMap<Res, Prop<Config, 'endpoints', undefined>, 'document', Depth>;
+    resources: InferResourceDefnMap<Res['children'], Prop<Config, 'resources', {}>, Depth>;
 }>;
-declare type InferEndpointDefnMap<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget> = RemoveEmptyProps<{
-    [K in EndpointK]: InferEndpointDefn<ResourceK, K, Prop<Config, K, undefined>, Target>;
+declare type InferEndpointDefnMap<Res extends InferredResource, Config, Target extends EndpointTarget, Depth extends string> = RemoveEmptyProps<{
+    [K in Res['endpoints'][number]]: InferEndpointDefn<Res['key'], K, Prop<Config, K, undefined>, Target, t.N.Format<Depth, 'n'>>;
 }>;
-declare type InferEndpointDefn<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget> = ResolveEndpointTarget<EndpointK, Config> extends Target ? EndpointK extends keyof Shopify[ResourceK] ? Shopify[ResourceK][EndpointK] extends (...args: infer Args) => Promise<infer Ret> ? Ret extends (infer RetInner)[] ? EndpointDefinition<client.Scope, t.Tuple.Last<Args>, RetInner> : EndpointDefinition<client.Scope, t.Tuple.Last<Args>, Ret> : never : never : never;
+declare type InferEndpointDefn<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget, Depth extends number> = ResolveEndpointTarget<EndpointK, Config> extends Target ? EndpointK extends keyof Shopify[ResourceK] ? Shopify[ResourceK][EndpointK] extends (...args: infer Args) => Promise<infer Ret> ? Ret extends (infer RetInner)[] ? EndpointDefinition<client.Scope, Args[Depth], RetInner> : EndpointDefinition<client.Scope, Args[Depth], Ret> : never : never : never;
 declare type ResolveEndpointTarget<Key extends string, Config> = Config extends false ? never : Config extends FullEndpointConfig<infer Target> ? Target : StandardEndpointConfig<Key>['target'];
 export declare type ShopifyConnectorConfig = MakeValuesOptionalWhereAppropriate<ResourcesConfig<InferredResources>>;
 declare type ResourcesConfig<T extends Record<string, InferredResource>> = MakeValuesOptionalWhereAppropriate<{

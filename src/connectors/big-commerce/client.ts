@@ -4,7 +4,7 @@ import pRetry from "p-retry";
 import { flatten } from "../../util";
 import { ActionError } from "../../action";
 import * as t from 'io-ts'
-import { ScopeConfig } from "../../framework";
+import { EndpointError, ScopeConfig } from "../../framework";
 import { Agent } from "https";
 
 const listConcurrency = 50;
@@ -99,15 +99,14 @@ export default class BigCommerce {
       async () => {
         const response = await fetch(absoluteUri, initResolved);
         if (response.status === 429) {
-          throw new Error;
+          throw new Error; // this will trigger a retry
         }
         return response;
       },
       {retries: 50}
     );
     if (!response.ok) {
-      throw new ActionError({
-        message: `${response.status} ${response.statusText}`,
+      throw new EndpointError(`${response.status} ${response.statusText}`, {
         detail: await response.text()
           .then(JSON.parse)
           .then(data => (data.errors && JSON.stringify(data.errors) !== '{}' ? data.errors : data.title) || data)

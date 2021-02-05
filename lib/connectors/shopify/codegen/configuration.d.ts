@@ -4,7 +4,7 @@ export declare const resourceDefinitions: {
         current: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IUser>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IUser>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IUser>;
         };
     }>;
     location: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -12,34 +12,35 @@ export declare const resourceDefinitions: {
         count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ILocation>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
             inventoryLevels: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
         };
     }>;
     customer: import("../../..").ResourceDefinition<import("../client").Scope, {
-        search: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        search: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
         accountActivationUrl: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
     }, {}, {
         endpoints: {
-            search: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+            search: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            orders: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrder>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
-            accountActivationUrl: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
+            accountActivationUrl: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
         };
         resources: {
             customerAddress: import("../../..").ResourceDefinition<import("../client").Scope, {
-                set: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+                set: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
             }, {}, {
                 endpoints: {
-                    default: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ICustomerAddress>;
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ICustomerAddress>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                    default: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                 };
             }>;
@@ -49,14 +50,14 @@ export declare const resourceDefinitions: {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDispute>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IDispute>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IDispute>;
         };
     }>;
     payout: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IPayout>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IPayout>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IPayout>;
         };
     }>;
     product: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -66,7 +67,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProduct>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProduct>;
         };
         resources: {
@@ -77,24 +78,24 @@ export declare const resourceDefinitions: {
             }, {}, {
                 endpoints: {
                     get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductImage>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductImage>;
                 };
             }>;
             productVariant: import("../../..").ResourceDefinition<import("../client").Scope, {
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductVariant>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductVariant>;
-                count: import("../../..").EndpointDefinition<import("../client").Scope, number, number>;
+                count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductVariant>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
-                    update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductVariant>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IProductVariant>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
+                    update: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IProductVariant>;
                 };
             }>;
             productResourceFeedback: import("../../..").ResourceDefinition<import("../client").Scope, {
                 list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IResourceFeedback>;
-                create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IResourceFeedback>;
+                create: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IResourceFeedback>;
             }, {}, {}>;
         };
     }>;
@@ -111,13 +112,13 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IPage>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IPage>;
         };
     }>;
     shop: import("../../..").ResourceDefinition<import("../client").Scope, {}, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IShop>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IShop>;
         };
     }>;
     checkout: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -128,19 +129,19 @@ export declare const resourceDefinitions: {
         shippingRates: import("../../..").EndpointDefinition<import("../client").Scope, string, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, string, any>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, string, import("shopify-api-node").ICheckout>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICheckout>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICheckout>;
-            complete: import("../../..").EndpointDefinition<import("../client").Scope, string, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, string, any>;
-            shippingRates: import("../../..").EndpointDefinition<import("../client").Scope, string, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, string, any>;
+            complete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
+            shippingRates: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
         };
         resources: {
             payment: import("../../..").ResourceDefinition<import("../client").Scope, {
-                list: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, any>;
-                create: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
-                count: import("../../..").EndpointDefinition<import("../client").Scope, string, number>;
+                list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
+                create: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
+                count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
                 };
             }>;
         };
@@ -152,18 +153,18 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrder>;
-            close: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IOrder>;
-            open: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IOrder>;
+            close: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IOrder>;
+            open: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IOrder>;
             cancel: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrder>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrder>;
-            fulfillmentOrders: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
+            fulfillmentOrders: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
         };
         resources: {
             refund: import("../../..").ResourceDefinition<import("../client").Scope, {
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRefund>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRefund>;
-                calculate: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+                calculate: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
             }, {}, {
                 endpoints: {
                     get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRefund>;
@@ -173,13 +174,16 @@ export declare const resourceDefinitions: {
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillment>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillment>;
                 count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
+                updateTracking: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillment>;
             }, {}, {
                 endpoints: {
                     get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillment>;
-                    open: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillment>;
-                    cancel: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillment>;
+                    open: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillment>;
+                    cancel: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillment>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillment>;
-                    complete: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillment>;
+                    complete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillment>;
+                    createV2: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillment>;
+                    updateTracking: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillment>;
                 };
                 resources: {
                     fulfillmentEvent: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -187,27 +191,27 @@ export declare const resourceDefinitions: {
                         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentEvent>;
                     }, {}, {
                         endpoints: {
-                            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentEvent>;
-                            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentEvent>;
+                            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentEvent>;
                         };
                     }>;
                 };
             }>;
             orderRisk: import("../../..").ResourceDefinition<import("../client").Scope, {
-                list: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IOrderRisk>;
+                list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IOrderRisk>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrderRisk>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IOrderRisk>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IOrderRisk>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrderRisk>;
                 };
             }>;
             transaction: import("../../..").ResourceDefinition<import("../client").Scope, {
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ITransaction>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ITransaction>;
-                count: import("../../..").EndpointDefinition<import("../client").Scope, number, number>;
+                count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
             }, {}, {
                 endpoints: {
                     get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ITransaction>;
@@ -226,7 +230,7 @@ export declare const resourceDefinitions: {
     applicationCharge: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IApplicationCharge>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").ICreateApplicationCharge, import("shopify-api-node").IApplicationCharge>;
-        activate: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IApplicationCharge>;
+        activate: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IApplicationCharge>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IApplicationCharge>;
@@ -256,7 +260,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IBlog>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IBlog>;
         };
         resources: {
@@ -268,10 +272,10 @@ export declare const resourceDefinitions: {
             }, {}, {
                 endpoints: {
                     get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IArticle>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateArticle, import("shopify-api-node").IArticle>;
                     authors: import("../../..").EndpointDefinition<import("../client").Scope, undefined, string>;
-                    tags: import("../../..").EndpointDefinition<import("../client").Scope, any, string>;
+                    tags: import("../../..").EndpointDefinition<import("../client").Scope, undefined, string>;
                 };
             }>;
         };
@@ -281,8 +285,8 @@ export declare const resourceDefinitions: {
         create: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").ICreateCarrierService, import("shopify-api-node").ICarrierService>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ICarrierService>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICarrierService>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateCarrierService, import("shopify-api-node").ICarrierService>;
         };
     }>;
@@ -293,16 +297,16 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICollect>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
         };
     }>;
     collectionListing: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICollectionListing>;
-        productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        productIds: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICollectionListing>;
-            productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+            productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
         };
     }>;
     comment: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -317,12 +321,12 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IComment>;
-            spam: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IComment>;
+            spam: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IComment>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateComment, import("shopify-api-node").IComment>;
-            notSpam: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IComment>;
-            approve: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IComment>;
-            remove: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IComment>;
-            restore: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IComment>;
+            notSpam: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IComment>;
+            approve: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IComment>;
+            remove: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IComment>;
+            restore: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IComment>;
         };
     }>;
     country: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -332,7 +336,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICountry>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateCountry, import("shopify-api-node").ICountry>;
         };
         resources: {
@@ -357,20 +361,20 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomCollection>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomCollection>;
         };
     }>;
     customerSavedSearch: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerSavedSearch>;
-        customers: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        customers: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerSavedSearch>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerSavedSearch>;
-            customers: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            customers: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerSavedSearch>;
         };
     }>;
@@ -380,56 +384,56 @@ export declare const resourceDefinitions: {
         count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IDraftOrder>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IDraftOrder>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDraftOrder>;
             complete: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDraftOrder>;
-            sendInvoice: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+            sendInvoice: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
         };
     }>;
     fulfillmentEvent: import("../../..").ResourceDefinition<import("../client").Scope, {
-        list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentEvent>;
-        create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentEvent>;
+        list: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentEvent>;
+        create: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentEvent>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentEvent>;
             delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
-            update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentEvent>;
+            update: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentEvent>;
         };
     }>;
     fulfillmentOrder: import("../../..").ResourceDefinition<import("../client").Scope, {
-        close: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+        close: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentOrder>;
         move: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
-        cancel: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IFulfillmentOrder, import("shopify-api-node").IFulfillmentOrder>;
+        cancel: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
         locationsForMove: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ILocationForMove>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
-            close: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
+            close: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
             move: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentOrder>;
             cancel: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IFulfillmentOrder, import("shopify-api-node").IFulfillmentOrder>;
-            locationsForMove: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").ILocationForMove>;
+            locationsForMove: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocationForMove>;
         };
         resources: {
             cancellationRequest: import("../../..").ResourceDefinition<import("../client").Scope, {
-                reject: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
-                create: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
-                accept: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                reject: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                create: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                accept: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
             }, {}, {
                 endpoints: {
-                    reject: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
-                    accept: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                    reject: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
+                    accept: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
                 };
             }>;
             fulfillmentRequest: import("../../..").ResourceDefinition<import("../client").Scope, {
-                reject: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                reject: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").ICreateFulfillmentRequest, import("shopify-api-node").IFulfillmentOrder>;
-                accept: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                accept: import("../../..").EndpointDefinition<import("../client").Scope, string | undefined, import("shopify-api-node").IFulfillmentOrder>;
             }, {}, {
                 endpoints: {
-                    reject: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
-                    accept: import("../../..").EndpointDefinition<import("../client").Scope, string | number | undefined, import("shopify-api-node").IFulfillmentOrder>;
+                    reject: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
+                    accept: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentOrder>;
                 };
             }>;
         };
@@ -439,30 +443,30 @@ export declare const resourceDefinitions: {
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentService>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IFulfillmentService>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IFulfillmentService>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IFulfillmentService>;
         };
     }>;
     giftCard: import("../../..").ResourceDefinition<import("../client").Scope, {
-        search: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        search: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IGiftCard>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IGiftCard>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
     }, {}, {
         endpoints: {
-            search: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IGiftCard>;
+            search: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IGiftCard>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IGiftCard>;
-            disable: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
+            disable: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
         };
         resources: {
             giftCardAdjustment: import("../../..").ResourceDefinition<import("../client").Scope, {
-                list: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IGiftCardAdjustment>;
+                list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IGiftCardAdjustment>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IGiftCardAdjustment>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IGiftCardAdjustment>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IGiftCardAdjustment>;
                 };
             }>;
         };
@@ -471,7 +475,7 @@ export declare const resourceDefinitions: {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryItem>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IInventoryItem>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryItem>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryItem>;
         };
     }>;
@@ -482,23 +486,23 @@ export declare const resourceDefinitions: {
         adjust: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
     }, {}, {
         endpoints: {
-            set: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
-            connect: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, any, void>;
-            adjust: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
+            set: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
+            connect: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
+            adjust: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
         };
     }>;
     marketingEvent: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMarketingEvent>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMarketingEvent>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
-        engagements: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        engagements: import("../../..").EndpointDefinition<import("../client").Scope, number, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMarketingEvent>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMarketingEvent>;
-            engagements: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+            engagements: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
         };
     }>;
     metafield: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -508,7 +512,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMetafield>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IMetafield>;
         };
     }>;
@@ -521,7 +525,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IPriceRule>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IPriceRule>;
         };
         resources: {
@@ -530,18 +534,18 @@ export declare const resourceDefinitions: {
                 discountCodes: import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IDiscountCodeCreation>;
-                    discountCodes: import("../../..").EndpointDefinition<import("../client").Scope, number, any>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IDiscountCodeCreation>;
+                    discountCodes: import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
                 };
             }>;
             discountCode: import("../../..").ResourceDefinition<import("../client").Scope, {
-                lookup: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDiscountCode>;
+                lookup: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IDiscountCode>;
                 list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDiscountCode>;
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDiscountCode>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IDiscountCode>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IDiscountCode>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IDiscountCode>;
                 };
             }>;
@@ -549,14 +553,14 @@ export declare const resourceDefinitions: {
     }>;
     productListing: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductListing>;
-        create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProductListing>;
+        create: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IProductListing>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
-        productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+        productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, any> | import("../../..").EndpointDefinition<import("../client").Scope, any, unknown>;
     }, {}, {
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IProductListing>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
-            productIds: import("../../..").EndpointDefinition<import("../client").Scope, any, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, any, any>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IProductListing>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
+            productIds: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
         };
     }>;
     resourceFeedback: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -566,12 +570,12 @@ export declare const resourceDefinitions: {
     recurringApplicationCharge: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").ICreateRecurringApplicationCharge, import("shopify-api-node").IRecurringApplicationCharge>;
-        activate: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
-        customize: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
+        activate: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IRecurringApplicationCharge>;
+        customize: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IRecurringApplicationCharge>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             activate: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
             customize: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRecurringApplicationCharge>;
         };
@@ -593,7 +597,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IRedirect>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateRedirect, import("shopify-api-node").IRedirect>;
         };
     }>;
@@ -603,7 +607,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IReport>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IReport>;
         };
     }>;
@@ -614,7 +618,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IScriptTag>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateScriptTag, import("shopify-api-node").IScriptTag>;
         };
     }>;
@@ -623,16 +627,16 @@ export declare const resourceDefinitions: {
     }, {}, {}>;
     smartCollection: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ISmartCollection>;
-        products: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProduct>;
+        products: import("../../..").EndpointDefinition<import("../client").Scope, number, import("shopify-api-node").IProduct>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ISmartCollection>;
-        order: import("../../..").EndpointDefinition<import("../client").Scope, any, void>;
+        order: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, any, number>;
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ISmartCollection>;
             products: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IProduct>;
             order: import("../../..").EndpointDefinition<import("../client").Scope, any, void>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ISmartCollection>;
         };
     }>;
@@ -641,7 +645,7 @@ export declare const resourceDefinitions: {
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IStorefrontAccessToken>;
     }, {}, {
         endpoints: {
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
         };
     }>;
     tenderTransaction: import("../../..").ResourceDefinition<import("../client").Scope, {
@@ -653,7 +657,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ITheme>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ITheme>;
         };
         resources: {
@@ -662,9 +666,9 @@ export declare const resourceDefinitions: {
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IAsset>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IAsset>;
-                    delete: import("../../..").EndpointDefinition<import("../client").Scope, any, void>;
-                    update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateAsset, import("shopify-api-node").IAsset>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IAsset>;
+                    delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
+                    update: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IAsset>;
                 };
             }>;
         };
@@ -676,7 +680,7 @@ export declare const resourceDefinitions: {
     }, {}, {
         endpoints: {
             get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IWebhook>;
-            delete: import("../../..").EndpointDefinition<import("../client").Scope, number, void>;
+            delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateWebhook, import("shopify-api-node").IWebhook>;
         };
     }>;

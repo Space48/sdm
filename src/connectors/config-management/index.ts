@@ -1,4 +1,4 @@
-import { ConfigRepository, Connector, connector, Path, ScopeRef } from "../../framework";
+import { EndpointError, ConfigRepository, Connector, connector, Path, ScopeRef, DocId } from "../../framework";
 import * as t from 'io-ts'
 import R from "ramda";
 
@@ -46,35 +46,25 @@ export const configManagementConnector = (
             endpoints: {
               add: () => async ({path, input: scopeConfig}) => {
                 const [connectorName] = Path.getDocIds(path);
-                if (!(connectorName in connectors)) {
-                  throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
-                }
-                const connector = connectors[connectorName];
+                const connector = getConnector(connectors, connectorName);
                 const scopeRef = {
                   connector: connectorName as string,
                   scope: connector(scopeConfig).scopeName,
                 };
                 const existingConfig = await repository.getConfig(scopeRef);
                 if (existingConfig) {
-                  throw new Error();
+                  throw new EndpointError(`Connector ${connectorName} already has a scope named ${scopeRef.scope}.`);
                 }
                 await repository.setConfig(scopeRef, scopeConfig);
               },
 
               save: () => async ({path, input: scopeConfig}) => {
                 const [connectorName] = Path.getDocIds(path);
-                if (!(connectorName in connectors)) {
-                  throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
-                }
-                const connector = connectors[connectorName];
+                const connector = getConnector(connectors, connectorName);
                 const scopeRef: ScopeRef = {
                   connector: connectorName as string,
                   scope: connector(scopeConfig).scopeName,
                 };
-                const existingConfig = await repository.getConfig(scopeRef);
-                if (!existingConfig) {
-                  throw new Error();
-                }
                 await repository.setConfig(scopeRef, scopeConfig);
               },
 
@@ -112,7 +102,7 @@ export const configManagementConnector = (
                   const scopeRef = getScopeRef(connectors, path);
                   const existingConfig = await repository.getConfig(scopeRef);
                   if (!existingConfig) {
-                    throw new Error();
+                    throw new EndpointError(`Connector ${scopeRef.connector} does not have any scope named ${scopeRef.scope}.`);
                   }
                   const updatedConfig = {...existingConfig, ...configUpdate};
                   const connector = connectors[scopeRef.connector];
@@ -137,11 +127,16 @@ export const configManagementConnector = (
   },
 });
 
+function getConnector(connectors: Record<string, Connector>, connectorName: DocId): Connector {
+  if (!(connectorName in connectors)) {
+    throw new EndpointError(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
+  }
+  return connectors[connectorName];
+}
+
 function getScopeRef(connectors: Record<string, Connector>, path: Path): ScopeRef {
   const [connectorName, scopeName] = Path.getDocIds(path);
-  if (!(connectorName in connectors)) {
-    throw new Error(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
-  }
+  getConnector(connectors, connectorName);
   return {
     connector: connectorName as string,
     scope: scopeName as string,

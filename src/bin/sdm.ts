@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command, ConnectorDefinition, Connector, Path, ScopeRef } from "../framework";
+import { Command, ConnectorDefinition, EndpointError, Path, ScopeRef } from "../framework";
 import * as readline from "readline";
 import { compose, map, pipe, streamJson, takeWhile, tap, transformJson } from "@space48/json-pipe";
 import chalk from "chalk";
@@ -71,9 +71,18 @@ async function runNonInteractiveMode() {
   await warnUserIfNecessary(scopeRef, command);
   const scope = await app.requireScope(scopeRef);
   if (process.stdin.isTTY || command.input !== undefined) {
-    await streamJson(
-      scope.execute(command)
-    );
+    try {
+      await streamJson(
+        scope.execute(command)
+      );
+    } catch (e) {
+      console.error(
+        e instanceof EndpointError
+          ? JSON.stringify({error: e.normalize()}, null, 2)
+          : e
+      );
+      process.exit(1);
+    }
   } else {
     await transformJson(
       compose(
@@ -113,7 +122,11 @@ async function runInteractiveMode() {
         process.stderr.write(`\n${numOutputs} results in ${runtimeSecs}s\n\n`);
       }
     } catch (e) {
-      console.error(e);
+      console.error(
+        e instanceof EndpointError
+          ? JSON.stringify({error: e.normalize()}, null, 2)
+          : e
+      );
     } finally {
       readlineInterface().removeListener('SIGINT', sigintListener);
     }

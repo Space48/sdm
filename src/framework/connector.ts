@@ -31,7 +31,16 @@ export function connector<
 
         async *execute(commandOrCommands: Command | AnyIterable<Command>): any {
           if (isIterable(commandOrCommands)) {
-            yield* executeCommands(commandOrCommands);
+            yield* pipe(
+              executeCommands(commandOrCommands),
+              map(result => ({
+                ...result,
+                error: 
+                  result.error instanceof EndpointError ? result.error.normalize()
+                  : result.error instanceof Error ? result.error.message
+                  : result.error,
+              })),
+            );
           } else {
             const pathContainsWildcard = Path.containsWildcard(commandOrCommands.path);
             const outputElements = executeCommands([commandOrCommands]);
@@ -634,11 +643,18 @@ function isAsyncIterable(value: any): value is AsyncIterable<any> {
   return Symbol.asyncIterator in value;
 }
 
-export class CommandError extends Error {
+export class EndpointError extends Error {
   readonly detail: any;
 
-  constructor({message, detail}: {message?: string, detail?: any}) {
+  constructor(message: string, options?: {detail?: any}) {
     super(message);
-    this.detail = detail;
+    this.detail = options?.detail;
+  }
+
+  normalize() {
+    return {
+      message: this.message,
+      detail: this.detail || undefined,
+    };
   }
 }

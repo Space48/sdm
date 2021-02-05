@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { stringify } from 'query-string'
 import { flatten, objectFromEntries } from "../../util";
-import { ScopeConfig } from "../../framework";
+import { EndpointError, ScopeConfig } from "../../framework";
 import * as t from 'io-ts'
 import { Agent as HttpAgent } from "http";
 import { Agent as HttpsAgent } from "https";
@@ -120,16 +120,14 @@ export default class Magento2 {
     }
 
     if (!response.ok) {
-      const error = new Error(`${response.status} ${response.statusText}`);
-      let responseBody: any = await response.text();
+      let detail = undefined;
       try {
-        responseBody = JSON.parse(responseBody);
-      } catch (e) {}
-      (error as any).response = {
-        status: response.status,
-        body: responseBody,
-      }
-      throw error;
+        let detail: any = await response.text();
+        try {
+          detail = JSON.parse(detail);
+        } catch {}
+      } catch {}
+      throw new EndpointError(`${response.status} ${response.statusText}`, {detail});
     }
 
     return await response.json();

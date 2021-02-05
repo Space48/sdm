@@ -123,11 +123,14 @@ export declare class InvalidConnectorDefinition extends Error {
 }
 export declare class InvalidCommand extends Error {
 }
-export declare class CommandError extends Error {
+export declare class EndpointError extends Error {
     readonly detail: any;
-    constructor({ message, detail }: {
-        message?: string;
+    constructor(message: string, options?: {
         detail?: any;
     });
+    normalize(): {
+        message: string;
+        detail: any;
+    };
 }
 export {};

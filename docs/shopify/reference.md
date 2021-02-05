@@ -22,7 +22,7 @@
  * [customer[].customer-address](#customercustomer-address)
  * [dispute](#dispute)
  * [draft-order](#draft-order)
- * [event](#event)
+ * [fulfillment-event](#fulfillment-event)
  * [fulfillment-service](#fulfillment-service)
  * [gift-card](#gift-card)
  * [gift-card[].gift-card-adjustment](#gift-cardgift-card-adjustment)
@@ -1226,81 +1226,81 @@ const command = shopify.draftOrder.$all.update(input?: unknown);
 ```
 
 
-## event
+## fulfillment-event
 
 ### Endpoints
 
- * [create](#eventcreate)
- * [delete](#eventdelete)
- * [get](#eventget)
- * [list](#eventlist)
- * [update](#eventupdate)
+ * [create](#fulfillment-eventcreate)
+ * [delete](#fulfillment-eventdelete)
+ * [get](#fulfillment-eventget)
+ * [list](#fulfillment-eventlist)
+ * [update](#fulfillment-eventupdate)
 
-### event.create
+### fulfillment-event.create
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].event.create' [input-as-json5]
+$ sdm 'shopify[my-shop-name].fulfillment-event.create' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.event.create(input?: unknown);
+const command = shopify.fulfillmentEvent.create(input?: unknown);
 ```
 
 
-### event[].delete
+### fulfillment-event[].delete
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].event[id|*].delete' [input-as-json5]
+$ sdm 'shopify[my-shop-name].fulfillment-event[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.event.$doc(id).delete(input?: unknown);
-const command = shopify.event.$all.delete(input?: unknown);
+const command = shopify.fulfillmentEvent.$doc(id).delete(input?: unknown);
+const command = shopify.fulfillmentEvent.$all.delete(input?: unknown);
 ```
 
 
-### event[].get
+### fulfillment-event[].get
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].event[id|*].get' [input-as-json5]
+$ sdm 'shopify[my-shop-name].fulfillment-event[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.event.$doc(id).get(input?: unknown);
-const command = shopify.event.$all.get(input?: unknown);
+const command = shopify.fulfillmentEvent.$doc(id).get(input?: unknown);
+const command = shopify.fulfillmentEvent.$all.get(input?: unknown);
 ```
 
 
-### event.list
+### fulfillment-event.list
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].event.list' [input-as-json5]
+$ sdm 'shopify[my-shop-name].fulfillment-event.list' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.event.list(input?: unknown);
+const command = shopify.fulfillmentEvent.list(input?: unknown);
 ```
 
 
-### event[].update
+### fulfillment-event[].update
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].event[id|*].update' [input-as-json5]
+$ sdm 'shopify[my-shop-name].fulfillment-event[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.event.$doc(id).update(input?: unknown);
-const command = shopify.event.$all.update(input?: unknown);
+const command = shopify.fulfillmentEvent.$doc(id).update(input?: unknown);
+const command = shopify.fulfillmentEvent.$all.update(input?: unknown);
 ```
 
 
@@ -1922,6 +1922,7 @@ const command = shopify.order.$all.update(input?: unknown);
  * [complete](#orderfulfillmentcomplete)
  * [count](#orderfulfillmentcount)
  * [create](#orderfulfillmentcreate)
+ * [create-v2](#orderfulfillmentcreate-v2)
  * [get](#orderfulfillmentget)
  * [list](#orderfulfillmentlist)
  * [open](#orderfulfillmentopen)
@@ -1980,6 +1981,20 @@ $ sdm 'shopify[my-shop-name].order[id|*].fulfillment.create' [input-as-json5]
 ```javascript
 const command = shopify.order.$doc(id).fulfillment.create(input?: unknown);
 const command = shopify.order.$all.fulfillment.create(input?: unknown);
+```
+
+
+### order[].fulfillment[].create-v2
+
+*CLI*
+```sh
+$ sdm 'shopify[my-shop-name].order[id|*].fulfillment[id|*].create-v2' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = shopify.order.$doc(id).fulfillment.$doc(id).createV2(input?: unknown);
+const command = shopify.order.$all.fulfillment.$all.createV2(input?: unknown);
 ```
 
 
