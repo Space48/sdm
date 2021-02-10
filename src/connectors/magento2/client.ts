@@ -14,6 +14,7 @@ export const configSchema = t.intersection([
     baseUrl: t.string,
   }),
   t.partial({
+    concurrency: t.number,
     credentials: t.type({
       username: t.string,
       password: t.string,
@@ -25,6 +26,8 @@ export const configSchema = t.intersection([
     }),
   }),
 ]);
+
+const defaultConcurrency = 3;
 
 export default class Magento2 {
   constructor(
@@ -135,13 +138,16 @@ export default class Magento2 {
 
   private getAgent(config: Config): HttpAgent | HttpsAgent {
     if (config !== this.configUsedForAgent) {
+      const concurrency = config.concurrency ?? defaultConcurrency;
       this.agent = parseUrl(config.baseUrl).protocol === 'https:'
         ? new HttpsAgent({
           rejectUnauthorized: !config?.insecure,
           keepAlive: true,
+          maxSockets: concurrency,
         })
         : new HttpAgent({
           keepAlive: true,
+          maxSockets: concurrency,
         });
       this.configUsedForAgent = config;
     }
