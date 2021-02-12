@@ -188,9 +188,9 @@ sdm shopify[sdm-playground]> product[*].product-variant.count
 
 SDM will reply with something like
 ```
-{"path":[["product",6202634305722],"productVariant","count"],"output":3}
-{"path":[["product",6202634338490],"productVariant","count"],"output":1}
-{"path":[["product",6202634404026],"productVariant","count"],"output":1}
+{"path":[["product",6202634404026],"productVariant"],"output":1}
+{"path":[["product",6202634338490],"productVariant"],"output":1}
+{"path":[["product",6202634305722],"productVariant"],"output":3}
 
 3 results in 0.687s
 

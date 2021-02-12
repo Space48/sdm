@@ -1,7 +1,7 @@
 import * as t from 'io-ts'
 import pRetry from 'p-retry';
 import Shopify from 'shopify-api-node';
-import { EndpointError, ScopeConfig } from '../../framework';
+import { EndpointError, MutableReference } from '../../framework';
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -15,7 +15,7 @@ export const configSchema = t.type({
 
 export class Scope {
   constructor(
-    private readonly config: ScopeConfig<Config>
+    private readonly config: MutableReference<Config>
   ) {}
 
   private clientConfig?: Config = undefined;

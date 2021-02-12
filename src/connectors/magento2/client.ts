@@ -1,11 +1,11 @@
 import fetch from "node-fetch";
 import { stringify } from 'query-string'
-import { flatten, objectFromEntries } from "../../util";
-import { EndpointError, ScopeConfig } from "../../framework";
+import { EndpointError, MutableReference } from "../../framework";
 import * as t from 'io-ts'
 import { Agent as HttpAgent } from "http";
 import { Agent as HttpsAgent } from "https";
 import { parse as parseUrl } from "url";
+import R from "ramda";
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -31,11 +31,8 @@ const defaultConcurrency = 3;
 
 export default class Magento2 {
   constructor(
-    private readonly config: ScopeConfig<Config>,
+    private readonly config: MutableReference<Config>,
   ) {}
-
-  private configUsedForAgent?: Config = undefined;
-  private agent?: HttpAgent | HttpsAgent = undefined;
 
   async get<T>(uri: string, params?: QueryParams): Promise<T> {
     const paramsFlattened = params && flattenParams(params);
@@ -110,7 +107,7 @@ export default class Magento2 {
         },
         method: options.method,
         body: options.content && JSON.stringify(options.content),
-        agent: this.getAgent(config),
+        agent: this.agent.get(),
       });
     }
 
@@ -134,24 +131,6 @@ export default class Magento2 {
     }
 
     return await response.json();
-  }
-
-  private getAgent(config: Config): HttpAgent | HttpsAgent {
-    if (config !== this.configUsedForAgent) {
-      const concurrency = config.concurrency ?? defaultConcurrency;
-      this.agent = parseUrl(config.baseUrl).protocol === 'https:'
-        ? new HttpsAgent({
-          rejectUnauthorized: !config?.insecure,
-          keepAlive: true,
-          maxSockets: concurrency,
-        })
-        : new HttpAgent({
-          keepAlive: true,
-          maxSockets: concurrency,
-        });
-      this.configUsedForAgent = config;
-    }
-    return this.agent!;
   }
 
   private async refreshToken(): Promise<Config> {
@@ -178,19 +157,36 @@ export default class Magento2 {
       expiration: fourHoursFromNow.toISOString(),
     }
   }
+
+  private readonly agent =
+    this.config
+      .map(config => ({
+        protocol: parseUrl(config.baseUrl).protocol,
+        agentOptions: {
+          keepAlive: true,
+          maxSockets: config.concurrency ?? defaultConcurrency,
+        },
+        httpsOptions: {
+          rejectUnauthorized: !config.insecure,
+        },
+      }))
+      .map(({protocol, agentOptions, httpsOptions}) => 
+        protocol === 'https:'
+          ? new HttpsAgent({ ...agentOptions, ...httpsOptions })
+          : new HttpAgent(agentOptions)
+      );
 }
 
 export type QueryParams = {[param: string]: QueryParam};
 type QueryParam = QueryParams | string | number | QueryParam[];
 
-function flattenParams(params: QueryParams): Record<string, string> {
-  const entries = Object.entries(params)
-    .map(([name, value]) => flattenParam(name, value))
-    .reduce(flatten, []) as [string, string][];
-  return objectFromEntries(entries);
-}
+const flattenParams = R.pipe(
+  (params: QueryParams) => R.toPairs(params),
+  R.chain(([name, value]) => flattenParam(name, value)),
+  pairs => R.fromPairs(pairs),
+);
 
-function flattenParam(name: string, value: QueryParam): string[][] {
+function flattenParam(name: string, value: QueryParam): [string, string][] {
   switch (typeof value) {
     case 'string':
       return [[name, value]];
@@ -200,11 +196,9 @@ function flattenParam(name: string, value: QueryParam): string[][] {
 
     case 'object': {
       const entries = Array.isArray(value)
-        ? value.map((_value, index) => [index, _value])
+        ? value.map((_value, index) => [index + 1, _value])
         : Object.entries(value);
-      return entries
-        .map(([_name, _value]) => flattenParam(`${name}[${_name}]`, _value))
-        .reduce(flatten, []);
+      return R.chain(([_name, _value]) => flattenParam(`${name}[${_name}]`, _value), entries);
     };
 
     case 'undefined':

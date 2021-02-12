@@ -13,8 +13,11 @@ export function connector<
   try {
     const resources = resourceMap(definition.resources, []);
     
-    function scopeFactory(configArg: Config | ScopeConfig<Config>): ConnectorScope {
-      const config = ScopeConfig.resolve(definition.configSchema, configArg);
+    function scopeFactory(configArg: Config | MutableReference<Config>): ConnectorScope {
+      const config =
+        configArg instanceof MutableReference
+          ? configArg
+          : MutableReference.of(configArg, definition.configSchema);
 
       const _scope = definition.getScope(config);
       
@@ -56,7 +59,7 @@ export function connector<
                   }
                 }),
                 map((outputElement): OutputWithPath => ({
-                  path: outputElement.command.path,
+                  path: outputElement.path,
                   output: outputElement.output,
                 })),
               );
@@ -119,7 +122,7 @@ export interface ConnectorDefinition<
   readonly configSchema: t.Type<Config>
   readonly resources: Resources
   readonly scopeNameExample: string|null
-  getScope(config: ScopeConfig<Config>): Scope
+  getScope(config: MutableReference<Config>): Scope
   getScopeName(config: Config): string
   getWarningMessage(scope: Scope): Promise<string|undefined|void>
 }
@@ -130,7 +133,7 @@ export type Connector<
   Resources extends ResourceDefinitionMap<Scope> = {},
 > = ResourceMap<Resources, false> & {
   $definition: ConnectorDefinition<Config, Scope, Resources>
-  (config: Config | ScopeConfig<Config>): ConnectorScope
+  (config: Config | MutableReference<Config>): ConnectorScope
 }
 
 export interface ConnectorScope {
@@ -250,6 +253,7 @@ export interface EndpointFn<InT = unknown, OutT = unknown> {
 
 export interface EndpointPayload<T = undefined> {
   readonly path: Path
+  readonly docId: DocId[]
   readonly input: T
 }
 
@@ -266,7 +270,7 @@ type Endpoint<
     : never;
 
 function endpoint(path: Path, endpoint: string): Endpoint {
-  return input => ({ path: [...path, endpoint], input });
+  return input => ({ path, endpoint, input });
 }
 
 interface OptionalInputEndpointFns<
@@ -289,8 +293,7 @@ export interface Command<
   InT = unknown,
   OutT = unknown,
   MultiPath extends boolean = boolean,
-> {
-  path: Path
+> extends MessageHeader {
   input: InT
   __dummyProps?: {
     outT: OutT
@@ -298,21 +301,30 @@ export interface Command<
   }
 }
 
+export interface FullyQualifiedMessageHeader extends MessageHeader {
+  scope: ScopeRef
+}
+
+export interface MessageHeader {
+  path: Path
+  endpoint: string
+}
+
 interface OutputWithPath<T = any> {
   path: Path
   output: T
 }
 
-interface OutputElement<InT = unknown, OutT = unknown> {
-  command: Command<InT, OutT>
+interface OutputElement<InT = unknown, OutT = unknown> extends MessageHeader {
+  input: InT
   output?: OutT
   success: boolean
   error?: any
 }
 
-function configValidator<Config>(configSchema: t.Type<Config>): (config: Config) => void {
-  return config => {
-    const result = configSchema.decode(config);
+function createValidator<T>(schema: t.Type<T>): (value: T) => void {
+  return value => {
+    const result = schema.decode(value);
     if ('left' in result) {
       throw new Error(PathReporter.report(result).join('\n'));
     }
@@ -377,7 +389,7 @@ export namespace Path {
     return [head, tail];
   }
 
-  export function popResourceName(path: Path): [head: Path, tail: string] {
+  function popResourceName(path: Path): [head: Path, tail: string] {
     const [head, tail] = pop(path);
     if (typeof tail !== 'string') {
       throw new InvalidPathError(path);
@@ -385,45 +397,38 @@ export namespace Path {
     return [head, tail];
   }
 
-  export function popEndpointName(path: Path): [resourcePath: Path, endpointName: string] {
-    const [head, tail] = pop(path);
-    if (head.length === 0 || typeof tail !== 'string') {
-      throw new InvalidPathError(path);
-    }
-    return [head, tail];
-  }
-
-  export function computeAll(
+  export function computeAllHeaders(
     host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {},
     path: Path = []
-  ): Path[] {
+  ): MessageHeader[] {
     const endpointNames = 'endpoints' in host ? Object.keys(host.endpoints ?? {}) : [];
+    const headers: MessageHeader[] = endpointNames.map(endpoint => ({ path, endpoint }));
     
     const resources = 'resources' in host ? Object.entries(host.resources ?? {}) : [];
   
-    let documentPaths: Path[];
+    let documentPaths: MessageHeader[];
   
     if ('documents' in host) {
       const supportsDocIdWildcard = host.documents?.listIds ? true : false;
       const docIdField = host.documents?.idField ?? 'id';
       const docIdPattern = `${docIdField}${supportsDocIdWildcard ? `|${Path.WILDCARD}` : ''}`;
-      const [prevPath, resourceName] = Path.popResourceName(path);
+      const [prevPath, resourceName] = popResourceName(path);
       const documentsPath: Path = [...prevPath, [resourceName, docIdPattern]];
   
-      documentPaths = Path.computeAll(host.documents ?? {}, documentsPath);
+      documentPaths = Path.computeAllHeaders(host.documents ?? {}, documentsPath);
     } else {
       documentPaths = [];
     }
   
     return [
-      ...endpointNames.map(endpointName => [...path, endpointName]),
-  
+      ...headers,
+
       ...documentPaths,
   
-      ...R.chain(([resourceName, resource]) => Path.computeAll(resource, [...path, resourceName]), resources),
+      ...R.chain(([resourceName, resource]) => Path.computeAllHeaders(resource, [...path, resourceName]), resources),
     ];
   }
-  
+
   export function containsWildcard(path: Path): boolean {
     return path.some(element => Array.isArray(element) && element[1] === WILDCARD);
   }
@@ -458,15 +463,19 @@ export namespace Path {
   export function endpointFnSelector<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope) {
     const hostSelector = selector(resources);
 
-    return <InT, OutT>(path: Path) => {
-      const [resourcePath, endpointName] = Path.popEndpointName(path);
+    return <InT, OutT>(resourcePath: Path, endpointName: string) => {
       const endpointHost = hostSelector(resourcePath);
       if (!endpointHost.endpoints?.[endpointName]) {
-        throw new InvalidPathError(path, `Endpoint '${endpointName}' does not exist on this resource.`);
+        throw new InvalidPathError(resourcePath, `Endpoint '${endpointName}' does not exist on this resource.`);
       }
       const endpoint = endpointHost.endpoints[endpointName] as EndpointDefinition<Scope, InT, OutT>;
       return endpoint(scope);
     };
+  }
+
+  export function endpointNamesSelector(resources: ResourceDefinitionMap): (path: Path) => string[] {
+    const hostSelector = selector(resources);
+    return path => Object.keys(hostSelector(path).endpoints ?? {});
   }
 
   export function getDocIds(path: Path): DocId[] {
@@ -482,7 +491,7 @@ export namespace Path {
     return async function* (path) {
       let _resources = resources;
 
-      for (let i = 0; i < path.length - 1; i++) {
+      for (let i = 0; i < path.length; i++) {
         const pathElement = path[i];
 
         if (typeof pathElement === 'string') {
@@ -547,32 +556,39 @@ function commandExecutor<Scope>(
     flatMapAsync(
       {concurrency: 100},
       async function* <InT, OutT>(command: Command<InT, OutT>) {
-        const endpointFn = selectEndpointFn<InT, OutT>(command.path);
+        const endpointFn = selectEndpointFn<InT, OutT>(command.path, command.endpoint);
 
         try {
           const endpointReturnValue = endpointFn({
             input: command.input,
             path: command.path,
+            docId: Path.getDocIds(command.path),
           });
 
           if (isAsyncIterable(endpointReturnValue)) {
             for await (const output of endpointReturnValue) {
               yield {
-                command,
+                input: command.input,
+                path: command.path,
+                endpoint: command.endpoint,
                 output,
                 success: true,
               };
             }
           } else {
             yield {
-              command,
+              input: command.input,
+              path: command.path,
+              endpoint: command.endpoint,
               output: await endpointReturnValue,
               success: true,
             };
           }
         } catch (e) {
           yield {
-            command,
+            input: command.input,
+            path: command.path,
+            endpoint: command.endpoint,
             success: false,
             error: e,
           };
@@ -582,35 +598,65 @@ function commandExecutor<Scope>(
   );
 }
 
-export class ScopeConfig<T> {
-  static resolve<T>(
-    configSchema: t.Type<T>,
-    config: T | ScopeConfig<T>,
-  ): ScopeConfig<T> {
-    return config instanceof ScopeConfig
-      ? config
-      : new ScopeConfig(configSchema, config);
+type CompoundReference<T extends Record<string, Reference>> =
+  1 extends 1
+    ? Reference<{ readonly [K in keyof T]: T[K] extends Reference<infer U> ? U : never }>
+    : never;
+
+export class Reference<T = any> {
+  static combine<Refs extends Record<string, Reference>>(refs: Refs): CompoundReference<Refs> {
+    const unstablRef = new Reference(() => R.mapObjIndexed(ref => ref.get(), refs)) as CompoundReference<Refs>;
+    // map will do equality checking; i.e. if the new computed value is equal to the previous one, we return the previous one
+    const stableRef = unstablRef.map(v => v);
+    return stableRef;
   }
 
   constructor(
-    schema: t.Type<T>,
-    private value: T,
-    private onChange?: (state: T) => void
+    readonly get: () => T
+  ) {}
+  
+  map<U>(mapper: (config: T) => U): Reference<U> {
+    let previousInput = this.get();
+    let output = mapper(previousInput);
+    
+    return new Reference(() => {
+      const currentInput = this.get();
+      if (!R.equals(previousInput, currentInput)) {
+        output = mapper(currentInput); 
+        previousInput = currentInput;
+      }
+      return output;
+    });
+  }
+}
+
+export class MutableReference<T = any> extends Reference<T> {
+  static of<T>(initialValue: T, schema?: t.Type<T>): MutableReference<T> {
+    let current = initialValue;
+    const ref = new MutableReference(() => current, value => { current = value });
+    return schema ? ref.withSchema(schema) : ref;
+  }
+
+  constructor(
+    readonly get: () => T,
+    readonly set: (value: T) => void,
   ) {
-    this.validate = configValidator(schema);
-    this.validate(value);
+    super(get);
   }
 
-  private readonly validate: (config: T) => void;
-
-  get(): T {
-    return this.value;
-  }
-
-  set(value: T) {
-    this.validate(value);
-    this.value = value;
-    this.onChange?.(value);
+  withSchema(schema: t.Type<T>): MutableReference<T> {
+    const validate = createValidator(schema);
+    validate(this.get());
+    return new MutableReference(
+      () => this.get(),
+      value => {
+        if (R.equals(this.get(), value)) {
+          return;
+        }
+        validate(value);
+        this.set(value);
+      }
+    );
   }
 }
 

@@ -1,11 +1,10 @@
 import fetch, { RequestInit } from "node-fetch";
 import { stringify } from 'query-string'
 import pRetry from "p-retry";
-import { flatten } from "../../util";
-import { ActionError } from "../../action";
 import * as t from 'io-ts'
-import { EndpointError, ScopeConfig } from "../../framework";
+import { EndpointError, MutableReference } from "../../framework";
 import { Agent } from "https";
+import R from "ramda";
 
 const listConcurrency = 50;
 
@@ -22,10 +21,13 @@ export const configSchema = t.type({
 
 export default class BigCommerce {
   constructor(
-    private readonly config: ScopeConfig<Config>,
+    private readonly config: MutableReference<Config>,
   ) {}
 
-	private readonly agent = new Agent({ keepAlive: true });
+	private static readonly agent = new Agent({
+    keepAlive: true,
+    maxSockets: Number.POSITIVE_INFINITY, // we rely on 429 errors rather than concurrency to regulate throughput
+  });
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
     return unwrap(await this.doGet(uri, params));
@@ -48,7 +50,7 @@ export default class BigCommerce {
         threadId => this.get<T[]|null>(uri, {page: page + threadId, ...(params || {})})
       ));
       const nonNullPages = pages.filter(Boolean) as T[][];
-      yield* nonNullPages.reduce(flatten, []);
+      yield* R.flatten(nonNullPages);
       const lastPage = pages.slice(-1)[0];
       if (!lastPage?.length) {
         break;
@@ -129,7 +131,7 @@ export default class BigCommerce {
     return {
       ...init,
       headers,
-      agent: this.agent,
+      agent: BigCommerce.agent,
     };
   }
 }

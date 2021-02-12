@@ -1,4 +1,4 @@
-import { ConnectorDefinition, Path, ScopeRef } from "./connector";
+import { ConnectorDefinition, FullyQualifiedMessageHeader, MessageHeader, Path, ScopeRef } from "./connector";
 import * as BinaryApi from "./binary-api";
 import R from "ramda";
 import { pipe } from "@space48/json-pipe";
@@ -14,11 +14,10 @@ export namespace Shell {
 
   function describeCommandsOnCli(connector: ConnectorDefinition, commandPrefix: string, scopeRef?: ScopeRef): string[] {
     return pipe(
-      Path.computeAll(connector),
-      R.map(Path.popEndpointName),
-      R.map(([resourcePath, endpointName]) => R.pair(
-        scopeRef ? BinaryApi.encodeScopeAndPath(scopeRef, resourcePath) : BinaryApi.encodePath(resourcePath),
-        BinaryApi.encodePathElement(endpointName),
+      Path.computeAllHeaders(connector),
+      R.map(header => R.pair(
+        BinaryApi.encodeHeader({ scope: scopeRef, path: header.path }),
+        BinaryApi.encodeHeader({ endpoint: header.endpoint }),
       )),
       R.groupBy(([encodedResourcePath]) => encodedResourcePath),
       R.mapObjIndexed(R.map(([, encodedEndpointName]) => encodedEndpointName)),
@@ -49,28 +48,23 @@ ${commands}
 
   function describeCommands(nestingLevel: number, connector: ConnectorDefinition, scopeRef: ScopeRef): string {
     return pipe(
-      Path.computeAll(connector),
-      R.groupBy(path => {
-        const resourcePath = getResourcePathExcludingDocId(path);
-        return BinaryApi.encodePath(resourcePath);
+      Path.computeAllHeaders(connector),
+      R.groupBy(header => {
+        const path = getPathExcludingDocId(header.path);
+        return BinaryApi.encodeHeader({ path });
       }),
-      Object.values,
-      R.map(endpointPaths => describeResourceUsage(nestingLevel, scopeRef, endpointPaths)),
+      groups => Object.values(groups),
+      R.map(headers => describeResourceUsage(nestingLevel, headers.map(header => ({scope: scopeRef, ...header})))),
       lines => lines.join('\n'),
     );
   }
 
-  function describeResourceUsage(nestingLevel: number, scope: ScopeRef, endpointPaths: Path[]): string {
-    const resourcePath = getResourcePathExcludingDocId(endpointPaths[0]);
-    const endpointsSorted = R.sortBy(
-      path => path[path.length - 1] as string,
-      endpointPaths
-    );
-
-    const endpointUsage = endpointsSorted.map(path => describeEndpointUsage(nestingLevel + 1, scope, path)).join('\n\n');
+  function describeResourceUsage(nestingLevel: number, headers: FullyQualifiedMessageHeader[]): string {
+    const headersSorted = R.sortBy(header => header.endpoint, headers);
+    const endpointUsage = headersSorted.map(header => describeEndpointUsage(nestingLevel + 1, header)).join('\n\n');
 
     return (
-`${pathTitle(nestingLevel, resourcePath)}
+`${pathTitle(nestingLevel, { path: getPathExcludingDocId(headers[0].path) })}
 
 ${title(nestingLevel + 1, 'Endpoints')}
 
@@ -81,28 +75,27 @@ ${endpointUsage}
     );
   }
 
-  function describeEndpointUsage(nestingLevel: number, scope: ScopeRef, path: Path): string {
+  function describeEndpointUsage(nestingLevel: number, header: FullyQualifiedMessageHeader): string {
     return (
-`${pathTitle(nestingLevel, path)}
+`${pathTitle(nestingLevel, { path: header.path, endpoint: header.endpoint })}
 
 *CLI*
 \`\`\`sh
-$ sdm '${BinaryApi.encodeScopeAndPath(scope, path)}' [input-as-json5]
+$ sdm '${BinaryApi.encodeHeader(header)}' [input-as-json5]
 \`\`\`
 
 *TypeScript*
 \`\`\`javascript
-${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).join('\n')}
+${encodeJsCommands(header).map(js => `const command = ${js};`).join('\n')}
 \`\`\`
 `
     );
   }
 
-  function encodeJsCommands(connectorName: string, path: Path): string[] {
-    const [resourcePath, endpointName] = Path.popEndpointName(path);
-    const encodedResourcePaths = encodeResourcePathJs(resourcePath);
+  function encodeJsCommands(header: FullyQualifiedMessageHeader): string[] {
+    const encodedResourcePaths = encodeResourcePathJs(header.path);
     return encodedResourcePaths.map(
-      _resourcePath => `${connectorName}.${_resourcePath}.${endpointName}(input?: unknown)`
+      _resourcePath => `${header.scope.connector}.${_resourcePath}.${header.endpoint}(input?: unknown)`
     );
   }
 
@@ -124,18 +117,19 @@ ${encodeJsCommands(scope.connector, path).map(js => `const command = ${js};`).jo
     return pathWithAll === pathWithDoc ? [pathWithDoc] : [pathWithDoc, pathWithAll];
   }
 
-  function getResourcePathExcludingDocId(endpointPath: Path): Path {
-    const [resourcePath] = Path.popEndpointName(endpointPath);
-    const lastElementOfPath = resourcePath[resourcePath.length - 1];
+  function getPathExcludingDocId(path: Path): Path {
+    const lastElementOfPath = path[path.length - 1];
     return Array.isArray(lastElementOfPath)
-      ? [...resourcePath.slice(0, -1), lastElementOfPath[0]]
-      : resourcePath;
+      ? [...path.slice(0, -1), lastElementOfPath[0]]
+      : path;
   }
 
-  function pathTitle(nestingLevel: number, path: Path): string {
-    const pathWithoutIds = path.map(pathEl => Array.isArray(pathEl) ? [pathEl[0], ''] : pathEl) as Path;
-    const encodedPath = BinaryApi.encodePath(pathWithoutIds);
-    return title(nestingLevel, encodedPath);
+  function pathTitle(nestingLevel: number, header: Partial<MessageHeader>): string {
+    const encodedHeader = BinaryApi.encodeHeader({
+      ...header,
+      path: header.path?.map(pathEl => Array.isArray(pathEl) ? [pathEl[0], ''] : pathEl) as Path,
+    });
+    return title(nestingLevel, encodedHeader);
   }
 
   function title(nestingLevel: number, title: string): string {

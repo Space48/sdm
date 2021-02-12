@@ -1,6 +1,7 @@
-import { ConnectorScope } from "./connector";
+import { ConnectorScope, MutableReference } from "./connector";
 import { ConfigRepository } from "./config-repository";
-import { Connector, ScopeConfig, ScopeRef } from "./connector";
+import { Connector, ScopeRef } from "./connector";
+import R from "ramda";
 
 export type ApplicationConfig = {
   readonly configRepository: ConfigRepository,
@@ -43,24 +44,57 @@ export class Application {
     if (!connector) {
       throw new Error(`Connector '${scopeRef.connector}' was not found.`);
     }
-    const config = (await this.configRepository.getConfig(scopeRef)) ?? null;
+
+    let config = (await this.configRepository.getConfig(scopeRef)) ?? null;
+    const configIsRequired = connectorRequiresScopeConfig(connector);
     if (!config) {
-      if (connectorRequiresScopeConfig(connector)) {
+      if (configIsRequired) {
         // config is required, but none was found
         return undefined;
       }
       // config is not required for this connector
     }
-    const configSchema = connector.$definition.configSchema;
-    const scopeConfig = new ScopeConfig(
-      configSchema,
-      config,
-      newConfig => this.configRepository.setConfig(scopeRef, newConfig),
+
+    let configTimestamp = Date.now();
+    let refreshing = false;
+
+    const configRef = new MutableReference(
+      () => {
+        if (!refreshing) {
+          const configAge = Date.now() - configTimestamp;
+          if (configAge > configTtl) {
+            refreshing = true;
+            this.configRepository.getConfig(scopeRef)
+              .then(latestConfig => {
+                if (!R.equals(config, latestConfig)) {
+                  config = latestConfig;
+                }
+                configTimestamp = Date.now();
+              })
+              .finally(() => refreshing = false);
+          }
+        }
+        if (configIsRequired && !config) {
+          throw new Error(`Connector '${scopeRef.connector}' scope '${scopeRef.scope}' has been disabled.`);
+        }
+        return config;
+      },
+
+      newConfig => {
+        this.configRepository.setConfig(scopeRef, newConfig);
+        config = newConfig;
+        configTimestamp = Date.now();
+      },
     );
-    return connector(scopeConfig);
+
+    const configSchema = connector.$definition.configSchema;
+
+    return connector(configRef.withSchema(configSchema));
   }
 }
 
 function connectorRequiresScopeConfig(connector: Connector) {
   return !connector.$definition.configSchema.is(null);
 }
+
+const configTtl = 1000;

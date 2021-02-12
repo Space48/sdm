@@ -16,5 +16,5 @@
     "strictNullChecks": true
   },
   "include": ["src"],
-  "exclude": ["src/bin/sdm-watch.ts"]
+  "exclude": ["src/bin/sdm-watch.ts", "src/framework/watch.ts"]
 }

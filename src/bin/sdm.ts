@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command, ConnectorDefinition, EndpointError, Path, ScopeRef } from "../framework";
+import { Command, ConnectorDefinition, EndpointError, FullyQualifiedMessageHeader, Path, ScopeRef } from "../framework";
 import * as readline from "readline";
 import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo } from "@space48/json-pipe";
 import chalk from "chalk";
@@ -33,12 +33,9 @@ async function main() {
       await runHelpMode();
       process.exit(0);
     }
-    if (argsExcludingFlags[0]) {
-      const [scope, path] = BinaryApi.decodeScopeAndPath(argsExcludingFlags[0]);
-      if (scope && path.length > 1) {
-        await runNonInteractiveMode();
-        process.exit(0);
-      }
+    if (argsExcludingFlags[0] && tryDecodeFQMessageHeader(argsExcludingFlags[0])) {
+      await runNonInteractiveMode();
+      process.exit(0);
     }
     await runInteractiveMode();
     process.exit(0);
@@ -60,16 +57,13 @@ async function runHelpMode() {
 }
 
 async function runNonInteractiveMode() {
-  const [scopeRef, path] = BinaryApi.decodeScopeAndPath(argsExcludingFlags[0]);
-  if (!scopeRef) {
-    throw new Error();
-  }
+  const header = BinaryApi.decodeFQHeader(argsExcludingFlags[0]);
   const command: Command = {
-    path,
+    ...header,
     input: argsExcludingFlags.length > 1 ? BinaryApi.decodeCommandInput(argsExcludingFlags[1]) : undefined,
   };
-  await warnUserIfNecessary(scopeRef, command);
-  const scope = await app.requireScope(scopeRef);
+  await warnUserIfNecessary(header);
+  const scope = await app.requireScope(header.scope);
   if (process.stdin.isTTY || command.input !== undefined) {
     try {
       await pipe(
@@ -104,7 +98,7 @@ async function runInteractiveMode() {
     };
     readlineInterface().once('SIGINT', sigintListener);
     try {
-      await warnUserIfNecessary(scopeRef, command);
+      await warnUserIfNecessary({ scope: scopeRef, path: command.path, endpoint: command.endpoint });
       const scope = await app.requireScope(scopeRef);
       let numOutputs = 0;
       if (!interrupted) {
@@ -139,7 +133,7 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
   while (true) {
     process.stderr.write('Enter `help` to see a list of available commands.\n\n');
     const commandLine = await ask({
-      question: `sdm ${BinaryApi.encodeScope(scopeRef)}> `,
+      question: `sdm ${BinaryApi.encodeHeader({ scope: scopeRef })}> `,
       completer: (line: string) => {
         const additionalSuggestions = 'help'.startsWith(line) ? ['help'] : [];
         const commandSuggestions = suggestCommands(scope.connector.$definition, line);
@@ -150,26 +144,28 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
       process.stderr.write(Shell.explainInteractiveCliUsage(scope.connector.$definition));
       continue;
     }
-    return BinaryApi.decodeCommand(commandLine);
+    try {
+      return BinaryApi.decodeCommand(commandLine);
+    } catch {}
   }
 }
 
 function suggestCommands(connector: ConnectorDefinition, line: string): string[] {
   try {
     const selectHost = Path.selector(connector.resources);
-    const path = BinaryApi.decodePartialPath(line);
+    const path = BinaryApi.decodeIncompletePath(line);
     const lastElement = path.slice(-1)[0];
     if (Array.isArray(lastElement)) {
       // [full resource name, doc ID]
       const host = selectHost(path);
-      return Path.computeAll(host, path)
-        .map(BinaryApi.encodePath);
+      return Path.computeAllHeaders(host, path)
+        .map(BinaryApi.encodeHeader);
     } else {
       // partial resource name
       const hostPath = path.slice(0, -1);
       const host = hostPath.length === 0 ? connector : selectHost(hostPath);
-      return Path.computeAll(host, hostPath)
-        .map(BinaryApi.encodePath)
+      return Path.computeAllHeaders(host, hostPath)
+        .map(BinaryApi.encodeHeader)
         .filter(encodedPath => encodedPath.startsWith(line));
     }
   } catch (e) {
@@ -254,22 +250,21 @@ Enter a scope: `,
 }
 
 async function getAvailableScopes(): Promise<string[]> {
-  return (await app.listScopes()).map(BinaryApi.encodeScope);
+  return (await app.listScopes()).map(scope => BinaryApi.encodeHeader({ scope }));
 }
 
 const safeEndpoints = ['get', 'list'];
-async function warnUserIfNecessary(scopeRef: ScopeRef, command: Command): Promise<void> {
-  const [, endpointName] = Path.popEndpointName(command.path);
-  if (flags.includes(Flag.Force) || safeEndpoints.includes(endpointName)) {
+async function warnUserIfNecessary(header: FullyQualifiedMessageHeader): Promise<void> {
+  if (flags.includes(Flag.Force) || safeEndpoints.includes(header.endpoint)) {
     return;
   }
 
-  const scope = await app.requireScope(scopeRef); 
+  const scope = await app.requireScope(header.scope); 
   const warning = await scope.getWarningMessage()
   if (!warning) {
     return;
   }
-  const commandHeader = BinaryApi.encodeCommandHeader(command);
+  const commandHeader = BinaryApi.encodeHeader(header);
   process.stderr.write(chalk.redBright.bold(`\nWARNING: ${warning} [${commandHeader}]\n\n`));
 
   const delaySecs = 15;
@@ -312,6 +307,14 @@ async function ask(options: {question: string, completer?: readline.Completer}):
 
 function title(value: string) {
   return chalk.underline.bold(value);
+}
+
+function tryDecodeFQMessageHeader(text: string): FullyQualifiedMessageHeader|undefined {
+  try {
+    return BinaryApi.decodeFQHeader(text);
+  } catch {
+    return undefined;
+  }
 }
 
 main();

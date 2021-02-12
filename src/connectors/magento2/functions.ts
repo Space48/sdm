@@ -65,7 +65,7 @@ export namespace endpoint {
     fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 }
 
-export class UriTemplate {
+class UriTemplate {
   static uri(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string {
     const uri = UriTemplate.applyValues(uriTemplate, fieldValues);
     const missingValues = UriTemplate.fields(uri);

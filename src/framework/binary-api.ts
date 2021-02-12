@@ -1,24 +1,19 @@
 import { Command, Path, ScopeRef } from ".";
 import json5 from "json5";
+import { FullyQualifiedMessageHeader, MessageHeader } from "./connector";
 
 const PATH_SEPARATOR = '.';
 
-export function decodePartialPath(encodedPath: string): Path {
-  const path = decodePath(encodedPath);
-  const [head, tail] = Path.pop(path);
-  if (!tail) {
-    return head;
-  }
-  if (Array.isArray(tail) && tail[1] === '') {
-    return [...head, tail[0]];
-  }
-  return [...head, tail];
+export function decodeIncompletePath(encodedPath: string): Path {
+  const [head, tail] = decodeMaybeIncompletePath(encodedPath);
+  return tail === undefined ? head : [...head, tail];
 }
 
-export function decodeScopeAndPath(encodedScopeAndPath: string): [ScopeRef | undefined, Path] {
-  const [connectorAndScope, ...path] = decodePath(encodedScopeAndPath);
-  if (!connectorAndScope) {
-    return [undefined, []];
+export function decodeFQHeader(encodedHeader: string): FullyQualifiedMessageHeader {
+  const [connectorAndScope, ...path] = decodePath(encodedHeader);
+  const endpoint = path.pop();
+  if (!(path.length > 0 && typeof endpoint === 'string')) {
+    throw new Error();
   }
   const scope = Array.isArray(connectorAndScope)
     ? {
@@ -29,56 +24,37 @@ export function decodeScopeAndPath(encodedScopeAndPath: string): [ScopeRef | und
       connector: getConnectorName(connectorAndScope),
       scope: '',
     };
-  return [ scope, path ];
+  return {scope, path, endpoint};
 }
 
-export function encodeScopeAndPath(scope: ScopeRef, path: Path): string {
-  return scope.scope === null
-    ? encodePath([scope.connector, ...path])
-    : encodePath([[scope.connector, scope.scope], ...path]);
-}
-
-export function decodePath(encodedPath: string): Path {
-  const encodedPathElements = encodedPath.split(PATH_SEPARATOR);
-  return encodedPathElements.map(decodePathElement);
-}
-
-export function encodePath(path: Path): string {
-  const encodedPathElements = path.map(encodePathElement);
-  return encodedPathElements.join(PATH_SEPARATOR);
-}
-
-export function decodePathElement(encodedPathElement: string): Path[number] {
-  const match = /(^.*)\[(.*)\]$/.exec(encodedPathElement);
-  if (match) {
-    return [decodeIdentifier(match[1]), match[2]];
+export function decodeHeader(encodedHeader: string): MessageHeader {
+  const path = decodePath(encodedHeader);
+  const endpoint = path.pop();
+  if (!(path.length > 0 && typeof endpoint === 'string')) {
+    throw new Error();
   }
-  return decodeIdentifier(encodedPathElement);
+  return { path, endpoint };
 }
 
-export function encodePathElement(pathElement: Path[number]): string {
-  if (typeof pathElement === 'string') {
-    return encodeIdentifier(pathElement);
-  }
-  return `${encodeIdentifier(pathElement[0])}[${pathElement[1]}]`;
+export function encodeHeader({scope, path, endpoint}: Partial<FullyQualifiedMessageHeader>): string {
+  return encodePath([
+    scope?.scope ? [scope.connector, scope.scope] : scope?.connector,
+    ...(path ?? []),
+    endpoint,
+  ].filter(Boolean) as Path);
 }
 
-export function decodeCommand(encodedCommandLine: string): Command {
-  const [encodedPath, ...encodedInputParts] = encodedCommandLine.split(' ');
+export function decodeCommand(encodedCommand: string): Command {
+  const [encodedHeader, ...encodedInputParts] = encodedCommand.split(' ');
   const encodedInput = encodedInputParts.join(' ');
-  const path = decodePath(encodedPath);
   return {
-    path,
+    ...decodeHeader(encodedHeader),
     input: encodedInput ? decodeCommandInput(encodedInput) : undefined,
   };
 }
 
 export function decodeCommandInput(encodedInput: string): any {
   return json5.parse(encodedInput);
-}
-
-export function encodeCommandHeader(command: Command): string {
-  return encodePath(command.path);
 }
 
 export function decodeScope(encodedScopeRef: string): ScopeRef {
@@ -94,12 +70,6 @@ export function decodeScope(encodedScopeRef: string): ScopeRef {
     };
 }
 
-export function encodeScope(scopeRef: ScopeRef): string {
-  return scopeRef.scope
-    ? encodePathElement([getConnectorIdentifier(scopeRef.connector), scopeRef.scope])
-    : encodePathElement(getConnectorIdentifier(scopeRef.connector));
-}
-
 export function decodeConnectorName(encodedConnectorName: string): string {
   const connectorIdentifier = decodeIdentifier(encodedConnectorName)
   return getConnectorName(connectorIdentifier);
@@ -107,6 +77,53 @@ export function decodeConnectorName(encodedConnectorName: string): string {
 
 export function encodeConnectorName(connectorName: string): string {
   return encodeIdentifier(getConnectorIdentifier(connectorName));
+}
+
+function decodePath(encodedPath: string): Path {
+  const [path, tail] = decodeMaybeIncompletePath(encodedPath);
+  if (tail === undefined) {
+    return path;
+  }
+  throw new Error(`Invalid path '${encodedPath}'.`);
+}
+
+function decodeMaybeIncompletePath(encodedPath: string): [path: Path, invalidTail?: string] {
+  let remaining = encodedPath;
+  let elements: Path.Element[] = [];
+  while (remaining.length > 0) {
+    const match = remaining.match(/^((?:[^\.\[\]]+)(?:\[[^\]]*\])?)[\.$]*/);
+    if (!match) {
+      return [elements, remaining];
+    }
+    elements.push(decodePathElement(match[1]));
+    remaining = remaining.slice(match[0].length);
+  }
+  return [elements];
+}
+
+function encodePath(path: Path): string {
+  try {
+    const encodedPathElements = path.map(encodePathElement);
+    return encodedPathElements.join(PATH_SEPARATOR);
+  } catch (e) {
+    console.log({path})
+    throw e;
+  }
+}
+
+function decodePathElement(encodedPathElement: string): Path[number] {
+  const match = /(^.*)\[(.*)\]$/.exec(encodedPathElement);
+  if (match) {
+    return [decodeIdentifier(match[1]), match[2]];
+  }
+  return decodeIdentifier(encodedPathElement);
+}
+
+function encodePathElement(pathElement: Path[number]): string {
+  if (typeof pathElement === 'string') {
+    return encodeIdentifier(pathElement);
+  }
+  return `${encodeIdentifier(pathElement[0])}[${pathElement[1]}]`;
 }
 
 function getConnectorName(connectorIdentifier: string): string {

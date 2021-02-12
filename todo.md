@@ -1,10 +1,7 @@
-# Needed for Ash
-
-- Build not failing
-
 # Backlog
 
-- Add preserverOrder support to flatMapAsync
+- Re-enable magento 1, delete legacy framework code
+- Fix Shopify endpoints like product-variants which do not require doc IDs of parent resources
 - Re-enable `sdm-watch`
 - Support batching of inputs where appropriate to improve performance
 - BC rate limiting ?

@@ -9,7 +9,7 @@ export const configManagementConnector = (
   connectors: Readonly<Record<string, Connector>>,
   repository: ConfigRepository,
 ) => connector({
-  getScope: () => null,
+  getScope: () => new Context(connectors, repository),
 
   scopeNameExample: null,
 
@@ -44,32 +44,15 @@ export const configManagementConnector = (
         resources: {
           scopes: {
             endpoints: {
-              add: () => async ({path, input: scopeConfig}) => {
-                const [connectorName] = Path.getDocIds(path);
-                const connector = getConnector(connectors, connectorName);
-                const scopeRef = {
-                  connector: connectorName as string,
-                  scope: connector(scopeConfig).scopeName,
-                };
-                const existingConfig = await repository.getConfig(scopeRef);
-                if (existingConfig) {
-                  throw new EndpointError(`Connector ${connectorName} already has a scope named ${scopeRef.scope}.`);
-                }
-                await repository.setConfig(scopeRef, scopeConfig);
+              add: context => async ({ docId: [connectorName], input: scopeConfig }) => {
+                await context.addConfig(connectorName, scopeConfig);
               },
 
-              save: () => async ({path, input: scopeConfig}) => {
-                const [connectorName] = Path.getDocIds(path);
-                const connector = getConnector(connectors, connectorName);
-                const scopeRef: ScopeRef = {
-                  connector: connectorName as string,
-                  scope: connector(scopeConfig).scopeName,
-                };
-                await repository.setConfig(scopeRef, scopeConfig);
+              save: context => async ({ docId: [connectorName], input: scopeConfig }) => {
+                await context.setConfig(connectorName, scopeConfig);
               },
 
-              list: () => async function* ({path}) {
-                const [connectorName] = Path.getDocIds(path);
+              list: () => async function* ({ docId: [connectorName] }) {
                 const allScopes = await repository.getScopes();
                 yield* allScopes
                   .filter(({connector}) => connector === connectorName)
@@ -88,35 +71,43 @@ export const configManagementConnector = (
               },
       
               endpoints: {
-                delete: () => async ({path}) => {
-                  const scopeRef = getScopeRef(connectors, path);
-                  return await repository.removeConfig(scopeRef);
+                delete: context => async ({ docId: [connector, scope] }) => {
+                  return await context.removeConfig(connector, scope);
                 },
 
-                get: () => async ({path}) => {
-                  const scopeRef = getScopeRef(connectors, path);
-                  return (await repository.getConfig(scopeRef)) ?? null;
+                get: context => async ({ docId: [connector, scope] }) => {
+                  return (await context.getConfig(connector, scope)) ?? null;
                 },
 
-                update: () => async ({path, input: configUpdate}) => {
-                  const scopeRef = getScopeRef(connectors, path);
-                  const existingConfig = await repository.getConfig(scopeRef);
-                  if (!existingConfig) {
-                    throw new EndpointError(`Connector ${scopeRef.connector} does not have any scope named ${scopeRef.scope}.`);
-                  }
-                  const updatedConfig = {...existingConfig, ...configUpdate};
-                  const connector = connectors[scopeRef.connector];
-                  const newScopeName = connector(updatedConfig).scopeName;
-                  if (newScopeName === scopeRef.scope) {
-                    await repository.setConfig(scopeRef, updatedConfig); 
-                  } else {
-                    const newScopeRef = {
-                      connector: scopeRef.connector,
-                      scope: newScopeName,
-                    };
-                    await repository.setConfig(newScopeRef, updatedConfig);
-                    await repository.removeConfig(scopeRef);
-                  }
+                update: context => async ({ docId: [connector, scope], input }) => {
+                  return await context.updateConfig(connector, scope, input);
+                },
+              },
+
+              resources: {
+                fields: {
+                  documents: {
+                    idField: 'path',
+
+                    endpoints: {
+                      delete: context => async ({ docId: [connector, scope, field] }) => {
+                        return await context.updateConfig(connector, scope, existingConfig => {
+                          return R.dissocPath(String(field).split('.'), existingConfig);
+                        });
+                      },
+
+                      get: context => async ({ docId: [connector, scope, field] }) => {
+                        const config = await context.getConfig(connector, scope);
+                        return R.path(String(field).split('.'), config);
+                      },
+
+                      set: context => async ({ docId: [connector, scope, field], input }) => {
+                        return await context.updateConfig(connector, scope, existingConfig => {
+                          return R.assocPath(String(field).split('.'), input, existingConfig);
+                        });
+                      },
+                    },
+                  },
                 },
               },
             },
@@ -127,18 +118,71 @@ export const configManagementConnector = (
   },
 });
 
-function getConnector(connectors: Record<string, Connector>, connectorName: DocId): Connector {
-  if (!(connectorName in connectors)) {
-    throw new EndpointError(`No such connector ${connectorName}. Available connectors: ${R.keys(connectors).join(', ')}`)
-  }
-  return connectors[connectorName];
-}
+class Context {
+  constructor(
+    private readonly connectors: Readonly<Record<string, Connector>>,
+    private readonly repository: ConfigRepository,
+  ) {}
 
-function getScopeRef(connectors: Record<string, Connector>, path: Path): ScopeRef {
-  const [connectorName, scopeName] = Path.getDocIds(path);
-  getConnector(connectors, connectorName);
-  return {
-    connector: connectorName as string,
-    scope: scopeName as string,
-  };
+  validateConnectorName(name: DocId): void {
+    this.connector(name);
+  }
+
+  connector(name: DocId): Connector {
+    if (!(name in this.connectors)) {
+      throw new EndpointError(`No such connector ${name}. Available connectors: ${R.keys(this.connectors).join(', ')}`)
+    }
+    return this.connectors[name];
+  }
+
+  scope(connector: DocId, scope: DocId): ScopeRef {
+    this.validateConnectorName(connector as string);
+    return { connector: connector as string, scope: scope as string };
+  }
+
+  async getConfig(connectorName: DocId, scope: DocId): Promise<any> {
+    this.validateConnectorName(connectorName);
+    return await this.repository.getConfig({
+      connector: connectorName as string,
+      scope: scope as string,
+    });
+  }
+
+  async addConfig<T>(connectorName: DocId, config: T): Promise<void> {
+    const connector = this.connector(connectorName);
+    const scope = connector(config).scopeName;
+    const existingConfig = await this.getConfig(connectorName, scope);
+    if (existingConfig) {
+      throw new EndpointError(`Connector ${connectorName} already has a scope named ${scope}.`);
+    }
+    await this.repository.setConfig({ connector: connectorName as string, scope }, config);
+  }
+
+  async setConfig<T>(connectorName: DocId, config: T): Promise<void> {
+    const connector = this.connector(connectorName);
+    const scope = connector(config).scopeName;
+    await this.repository.setConfig({ connector: connectorName as string, scope }, config);
+  }
+
+  async updateConfig<T>(connectorName: DocId, scope: DocId, fn: (existingConfig: T) => T): Promise<T>
+  async updateConfig<T>(connectorName: DocId, scope: DocId, config: T): Promise<T>
+  async updateConfig<T>(connectorName: DocId, scope: DocId, fnOrConfig: any): Promise<T> {
+    const connector = this.connector(connectorName);
+    const existingConfig = await this.repository.getConfig({ connector: connectorName as string, scope: scope as string });
+    if (!existingConfig) {
+      throw new EndpointError(`Connector ${connector} does not have any scope named ${scope}.`);
+    }
+    const updatedConfig = typeof fnOrConfig === 'function' ? fnOrConfig(existingConfig) : fnOrConfig;
+    const newScope = connector(updatedConfig).scopeName;
+    await this.repository.setConfig({ connector: connectorName as string, scope: newScope }, updatedConfig);
+    if (newScope !== scope) {
+      this.repository.removeConfig({ connector: connectorName as string, scope: scope as string });
+    }
+    return updatedConfig;
+  }
+
+  async removeConfig(connectorName: DocId, scope: DocId): Promise<void> {
+    this.validateConnectorName(connectorName);
+    await this.repository.removeConfig({ connector: connectorName as string, scope: scope as string });
+  }
 }
