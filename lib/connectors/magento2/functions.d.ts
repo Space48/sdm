@@ -32,8 +32,3 @@ export declare namespace endpoint {
     export const update: (uriPattern: string) => EndpointDefinition<Magento2, object, object>;
     export {};
 }
-export declare class UriTemplate {
-    static uri(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string;
-    static applyValues(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string;
-    static fields(uriTemplate: string): string[];
-}

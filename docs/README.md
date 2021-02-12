@@ -8,5 +8,6 @@
 ## Reference
 
 * [BigCommerce reference](big-commerce/reference.md)
+* [Magento 1 reference](magento2/reference.md)
 * [Magento 2 reference](magento2/reference.md)
 * [Shopify reference](shopify/reference.md)

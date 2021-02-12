@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
 import Shopify from 'shopify-api-node';
-import { ScopeConfig } from '../../framework';
+import { MutableReference } from '../../framework';
 export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.TypeC<{
     shopName: t.StringC;
@@ -11,7 +11,7 @@ export declare const configSchema: t.TypeC<{
 }>;
 export declare class Scope {
     private readonly config;
-    constructor(config: ScopeConfig<Config>);
+    constructor(config: MutableReference<Config>);
     private clientConfig?;
     private _client?;
     client(): Shopify;

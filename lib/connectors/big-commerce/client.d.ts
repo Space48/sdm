@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { ScopeConfig } from "../../framework";
+import { MutableReference } from "../../framework";
 export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.TypeC<{
     storeAlias: t.StringC;
@@ -11,8 +11,8 @@ export declare const configSchema: t.TypeC<{
 }>;
 export default class BigCommerce {
     private readonly config;
-    constructor(config: ScopeConfig<Config>);
-    private readonly agent;
+    constructor(config: MutableReference<Config>);
+    private static readonly agent;
     get<T = any>(uri: string, params?: Record<string, any>): Promise<T>;
     list<T = any>(uri: string, params?: Record<string, any>): AsyncIterable<T>;
     post<T = any>(uri: string, content: any): Promise<T>;

@@ -8,14 +8,6 @@ export declare const shopify: f.Connector<{
         password: string;
     };
 }, client.Scope, {
-    user: f.ResourceDefinition<client.Scope, {
-        list: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
-        current: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
-    }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
-        };
-    }>;
     location: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocation>;
         count: f.EndpointDefinition<client.Scope, undefined, number>;
@@ -25,48 +17,24 @@ export declare const shopify: f.Connector<{
             inventoryLevels: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
         };
     }>;
-    customer: f.ResourceDefinition<client.Scope, {
-        search: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
-        list: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
-        create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
+    comment: f.ResourceDefinition<client.Scope, {
+        list: f.EndpointDefinition<client.Scope, any, Shopify.IComment>;
+        create: f.EndpointDefinition<client.Scope, Shopify.ICreateComment, Shopify.IComment>;
+        spam: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
         count: f.EndpointDefinition<client.Scope, any, number>;
-        accountActivationUrl: f.EndpointDefinition<client.Scope, number, unknown> | f.EndpointDefinition<client.Scope, number, any>;
+        notSpam: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
+        approve: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
+        remove: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
+        restore: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
     }, {}, {
         endpoints: {
-            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-            get: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
-            orders: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
-            accountActivationUrl: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-        };
-        resources: {
-            customerAddress: f.ResourceDefinition<client.Scope, {
-                set: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
-                list: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
-                create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
-            }, {}, {
-                endpoints: {
-                    get: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
-                    default: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
-                    delete: f.EndpointDefinition<client.Scope, undefined, void>;
-                    update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
-                };
-            }>;
-        };
-    }>;
-    dispute: f.ResourceDefinition<client.Scope, {
-        list: f.EndpointDefinition<client.Scope, any, Shopify.IDispute>;
-    }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IDispute>;
-        };
-    }>;
-    payout: f.ResourceDefinition<client.Scope, {
-        list: f.EndpointDefinition<client.Scope, any, Shopify.IPayout>;
-    }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IPayout>;
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IComment>;
+            spam: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
+            update: f.EndpointDefinition<client.Scope, Shopify.IUpdateComment, Shopify.IComment>;
+            notSpam: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
+            approve: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
+            remove: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
+            restore: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
         };
     }>;
     product: f.ResourceDefinition<client.Scope, {
@@ -74,11 +42,6 @@ export declare const shopify: f.Connector<{
         create: f.EndpointDefinition<client.Scope, any, Shopify.IProduct>;
         count: f.EndpointDefinition<client.Scope, any, number>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IProduct>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.IProduct>;
-        };
         resources: {
             productImage: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IProductImage>;
@@ -107,6 +70,55 @@ export declare const shopify: f.Connector<{
                 create: f.EndpointDefinition<client.Scope, undefined, Shopify.IResourceFeedback>;
             }, {}, {}>;
         };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IProduct>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.IProduct>;
+        };
+    }>;
+    customer: f.ResourceDefinition<client.Scope, {
+        search: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
+        list: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
+        create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
+        count: f.EndpointDefinition<client.Scope, any, number>;
+        accountActivationUrl: f.EndpointDefinition<client.Scope, number, unknown> | f.EndpointDefinition<client.Scope, number, any>;
+    }, {}, {
+        resources: {
+            customerAddress: f.ResourceDefinition<client.Scope, {
+                set: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
+                list: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
+                create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
+            }, {}, {
+                endpoints: {
+                    get: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
+                    default: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomerAddress>;
+                    delete: f.EndpointDefinition<client.Scope, undefined, void>;
+                    update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomerAddress>;
+                };
+            }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
+            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            orders: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
+            accountActivationUrl: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+        };
+    }>;
+    dispute: f.ResourceDefinition<client.Scope, {
+        list: f.EndpointDefinition<client.Scope, any, Shopify.IDispute>;
+    }, {}, {
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IDispute>;
+        };
+    }>;
+    payout: f.ResourceDefinition<client.Scope, {
+        list: f.EndpointDefinition<client.Scope, any, Shopify.IPayout>;
+    }, {}, {
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IPayout>;
+        };
     }>;
     collection: f.ResourceDefinition<client.Scope, {}, {}, {
         endpoints: {
@@ -132,17 +144,11 @@ export declare const shopify: f.Connector<{
     }>;
     checkout: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, any, Shopify.ICheckout>;
+        complete: f.EndpointDefinition<client.Scope, string, unknown> | f.EndpointDefinition<client.Scope, string, any>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.ICheckout>;
         count: f.EndpointDefinition<client.Scope, any, number>;
-        complete: f.EndpointDefinition<client.Scope, string, unknown> | f.EndpointDefinition<client.Scope, string, any>;
         shippingRates: f.EndpointDefinition<client.Scope, string, unknown> | f.EndpointDefinition<client.Scope, string, any>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.ICheckout>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.ICheckout>;
-            complete: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-            shippingRates: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-        };
         resources: {
             payment: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
@@ -154,21 +160,18 @@ export declare const shopify: f.Connector<{
                 };
             }>;
         };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.ICheckout>;
+            complete: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.ICheckout>;
+            shippingRates: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+        };
     }>;
     order: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
         count: f.EndpointDefinition<client.Scope, any, number>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
-            close: f.EndpointDefinition<client.Scope, undefined, Shopify.IOrder>;
-            open: f.EndpointDefinition<client.Scope, undefined, Shopify.IOrder>;
-            cancel: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
-            delete: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
-            fulfillmentOrders: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillmentOrder>;
-        };
         resources: {
             refund: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IRefund>;
@@ -185,15 +188,6 @@ export declare const shopify: f.Connector<{
                 count: f.EndpointDefinition<client.Scope, any, number>;
                 updateTracking: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillment>;
             }, {}, {
-                endpoints: {
-                    get: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillment>;
-                    open: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
-                    cancel: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
-                    update: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillment>;
-                    complete: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
-                    createV2: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
-                    updateTracking: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
-                };
                 resources: {
                     fulfillmentEvent: f.ResourceDefinition<client.Scope, {
                         list: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillmentEvent>;
@@ -205,6 +199,15 @@ export declare const shopify: f.Connector<{
                             update: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillmentEvent>;
                         };
                     }>;
+                };
+                endpoints: {
+                    get: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillment>;
+                    open: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
+                    complete: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
+                    cancel: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
+                    update: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillment>;
+                    createV2: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
+                    updateTracking: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillment>;
                 };
             }>;
             orderRisk: f.ResourceDefinition<client.Scope, {
@@ -226,6 +229,15 @@ export declare const shopify: f.Connector<{
                     get: f.EndpointDefinition<client.Scope, any, Shopify.ITransaction>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
+            close: f.EndpointDefinition<client.Scope, undefined, Shopify.IOrder>;
+            open: f.EndpointDefinition<client.Scope, undefined, Shopify.IOrder>;
+            cancel: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
+            delete: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
+            fulfillmentOrders: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillmentOrder>;
         };
     }>;
     accessScope: f.ResourceDefinition<client.Scope, {
@@ -267,11 +279,6 @@ export declare const shopify: f.Connector<{
         create: f.EndpointDefinition<client.Scope, Shopify.ICreateBlog, Shopify.IBlog>;
         count: f.EndpointDefinition<client.Scope, undefined, number>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IBlog>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.IBlog>;
-        };
         resources: {
             article: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IArticle>;
@@ -287,6 +294,11 @@ export declare const shopify: f.Connector<{
                     tags: f.EndpointDefinition<client.Scope, undefined, string>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IBlog>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.IBlog>;
         };
     }>;
     carrierService: f.ResourceDefinition<client.Scope, {
@@ -318,36 +330,11 @@ export declare const shopify: f.Connector<{
             productIds: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
         };
     }>;
-    comment: f.ResourceDefinition<client.Scope, {
-        list: f.EndpointDefinition<client.Scope, any, Shopify.IComment>;
-        create: f.EndpointDefinition<client.Scope, Shopify.ICreateComment, Shopify.IComment>;
-        spam: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
-        count: f.EndpointDefinition<client.Scope, any, number>;
-        notSpam: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
-        approve: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
-        remove: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
-        restore: f.EndpointDefinition<client.Scope, number, Shopify.IComment>;
-    }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IComment>;
-            spam: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
-            update: f.EndpointDefinition<client.Scope, Shopify.IUpdateComment, Shopify.IComment>;
-            notSpam: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
-            approve: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
-            remove: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
-            restore: f.EndpointDefinition<client.Scope, undefined, Shopify.IComment>;
-        };
-    }>;
     country: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, any, Shopify.ICountry>;
         create: f.EndpointDefinition<client.Scope, Shopify.ICreateCountry, Shopify.ICountry>;
         count: f.EndpointDefinition<client.Scope, undefined, number>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.ICountry>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, Shopify.IUpdateCountry, Shopify.ICountry>;
-        };
         resources: {
             province: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IProvince>;
@@ -358,6 +345,11 @@ export declare const shopify: f.Connector<{
                     update: f.EndpointDefinition<client.Scope, any, Shopify.IProvince>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.ICountry>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, Shopify.IUpdateCountry, Shopify.ICountry>;
         };
     }>;
     currency: f.ResourceDefinition<client.Scope, {
@@ -394,9 +386,9 @@ export declare const shopify: f.Connector<{
     }, {}, {
         endpoints: {
             get: f.EndpointDefinition<client.Scope, undefined, Shopify.IDraftOrder>;
+            complete: f.EndpointDefinition<client.Scope, any, Shopify.IDraftOrder>;
             delete: f.EndpointDefinition<client.Scope, undefined, void>;
             update: f.EndpointDefinition<client.Scope, any, Shopify.IDraftOrder>;
-            complete: f.EndpointDefinition<client.Scope, any, Shopify.IDraftOrder>;
             sendInvoice: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
         };
     }>;
@@ -417,13 +409,6 @@ export declare const shopify: f.Connector<{
         cancel: f.EndpointDefinition<client.Scope, number, Shopify.IFulfillmentOrder>;
         locationsForMove: f.EndpointDefinition<client.Scope, number, Shopify.ILocationForMove>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillmentOrder>;
-            close: f.EndpointDefinition<client.Scope, string | undefined, Shopify.IFulfillmentOrder>;
-            move: f.EndpointDefinition<client.Scope, number, Shopify.IFulfillmentOrder>;
-            cancel: f.EndpointDefinition<client.Scope, Shopify.IFulfillmentOrder, Shopify.IFulfillmentOrder>;
-            locationsForMove: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocationForMove>;
-        };
         resources: {
             cancellationRequest: f.ResourceDefinition<client.Scope, {
                 reject: f.EndpointDefinition<client.Scope, string | undefined, Shopify.IFulfillmentOrder>;
@@ -446,6 +431,13 @@ export declare const shopify: f.Connector<{
                 };
             }>;
         };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IFulfillmentOrder>;
+            close: f.EndpointDefinition<client.Scope, string | undefined, Shopify.IFulfillmentOrder>;
+            move: f.EndpointDefinition<client.Scope, number, Shopify.IFulfillmentOrder>;
+            cancel: f.EndpointDefinition<client.Scope, Shopify.IFulfillmentOrder, Shopify.IFulfillmentOrder>;
+            locationsForMove: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocationForMove>;
+        };
     }>;
     fulfillmentService: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, any, Shopify.IFulfillmentService>;
@@ -463,12 +455,6 @@ export declare const shopify: f.Connector<{
         create: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
         count: f.EndpointDefinition<client.Scope, any, number>;
     }, {}, {
-        endpoints: {
-            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCard>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
-            disable: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
-        };
         resources: {
             giftCardAdjustment: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCardAdjustment>;
@@ -478,6 +464,12 @@ export declare const shopify: f.Connector<{
                     get: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCardAdjustment>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCard>;
+            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
+            disable: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
         };
     }>;
     inventoryItem: f.ResourceDefinition<client.Scope, {
@@ -532,11 +524,6 @@ export declare const shopify: f.Connector<{
         list: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
-        };
         resources: {
             discountCodeCreationJob: f.ResourceDefinition<client.Scope, {
                 create: f.EndpointDefinition<client.Scope, any[], Shopify.IDiscountCodeCreation>;
@@ -558,6 +545,11 @@ export declare const shopify: f.Connector<{
                     update: f.EndpointDefinition<client.Scope, any, Shopify.IDiscountCode>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.IPriceRule>;
         };
     }>;
     productListing: f.ResourceDefinition<client.Scope, {
@@ -582,12 +574,6 @@ export declare const shopify: f.Connector<{
         activate: f.EndpointDefinition<client.Scope, number, Shopify.IRecurringApplicationCharge>;
         customize: f.EndpointDefinition<client.Scope, number, Shopify.IRecurringApplicationCharge>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            activate: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
-            customize: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
-        };
         resources: {
             usageCharge: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IUsageCharge>;
@@ -597,6 +583,12 @@ export declare const shopify: f.Connector<{
                     get: f.EndpointDefinition<client.Scope, any, Shopify.IUsageCharge>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            activate: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
+            customize: f.EndpointDefinition<client.Scope, any, Shopify.IRecurringApplicationCharge>;
         };
     }>;
     redirect: f.ResourceDefinition<client.Scope, {
@@ -664,11 +656,6 @@ export declare const shopify: f.Connector<{
         list: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
     }, {}, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
-            delete: f.EndpointDefinition<client.Scope, undefined, void>;
-            update: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
-        };
         resources: {
             asset: f.ResourceDefinition<client.Scope, {
                 list: f.EndpointDefinition<client.Scope, any, Shopify.IAsset>;
@@ -680,6 +667,19 @@ export declare const shopify: f.Connector<{
                     update: f.EndpointDefinition<client.Scope, undefined, Shopify.IAsset>;
                 };
             }>;
+        };
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
+            delete: f.EndpointDefinition<client.Scope, undefined, void>;
+            update: f.EndpointDefinition<client.Scope, any, Shopify.ITheme>;
+        };
+    }>;
+    user: f.ResourceDefinition<client.Scope, {
+        list: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
+        current: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
+    }, {}, {
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.IUser>;
         };
     }>;
     webhook: f.ResourceDefinition<client.Scope, {

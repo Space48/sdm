@@ -10,13 +10,13 @@ export interface ConnectorDefinition<Config = any, Scope = any, Resources extend
     readonly configSchema: t.Type<Config>;
     readonly resources: Resources;
     readonly scopeNameExample: string | null;
-    getScope(config: ScopeConfig<Config>): Scope;
+    getScope(config: MutableReference<Config>): Scope;
     getScopeName(config: Config): string;
     getWarningMessage(scope: Scope): Promise<string | undefined | void>;
 }
 export declare type Connector<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = {}> = ResourceMap<Resources, false> & {
     $definition: ConnectorDefinition<Config, Scope, Resources>;
-    (config: Config | ScopeConfig<Config>): ConnectorScope;
+    (config: Config | MutableReference<Config>): ConnectorScope;
 };
 export interface ConnectorScope {
     scopeName: string;
@@ -64,6 +64,7 @@ export interface EndpointFn<InT = unknown, OutT = unknown> {
 }
 export interface EndpointPayload<T = undefined> {
     readonly path: Path;
+    readonly docId: DocId[];
     readonly input: T;
 }
 export declare type DocId = number | string;
@@ -74,20 +75,26 @@ interface OptionalInputEndpointFns<InT = any, OutT = any, MultiPath extends bool
 interface MandatoryInputEndpointFns<InT = any, OutT = any, MultiPath extends boolean = boolean> {
     (input: InT): Command<InT, OutT, MultiPath>;
 }
-export interface Command<InT = unknown, OutT = unknown, MultiPath extends boolean = boolean> {
-    path: Path;
+export interface Command<InT = unknown, OutT = unknown, MultiPath extends boolean = boolean> extends MessageHeader {
     input: InT;
     __dummyProps?: {
         outT: OutT;
         multiPath: MultiPath;
     };
 }
+export interface FullyQualifiedMessageHeader extends MessageHeader {
+    scope: ScopeRef;
+}
+export interface MessageHeader {
+    path: Path;
+    endpoint: string;
+}
 interface OutputWithPath<T = any> {
     path: Path;
     output: T;
 }
-interface OutputElement<InT = unknown, OutT = unknown> {
-    command: Command<InT, OutT>;
+interface OutputElement<InT = unknown, OutT = unknown> extends MessageHeader {
+    input: InT;
     output?: OutT;
     success: boolean;
     error?: any;
@@ -98,26 +105,32 @@ export declare namespace Path {
     type DocIdWildcard = typeof WILDCARD;
     type Element = string | [resource: string, documentId: DocId | DocIdWildcard];
     function pop(path: Path): [head: Path, tail: Path.Element | undefined];
-    function popResourceName(path: Path): [head: Path, tail: string];
-    function popEndpointName(path: Path): [resourcePath: Path, endpointName: string];
-    function computeAll(host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {}, path?: Path): Path[];
+    function computeAllHeaders(host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {}, path?: Path): MessageHeader[];
     function containsWildcard(path: Path): boolean;
     class InvalidPathError extends Error {
         constructor(path: Path, message?: string);
     }
     function selector(resources: ResourceDefinitionMap): (path: Path) => ResourceDefinition | DocumentDefinition;
-    function endpointFnSelector<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): <InT, OutT>(path: Path) => EndpointFn<InT, OutT>;
+    function endpointFnSelector<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): <InT, OutT>(resourcePath: Path, endpointName: string) => EndpointFn<InT, OutT>;
+    function endpointNamesSelector(resources: ResourceDefinitionMap): (path: Path) => string[];
     function getDocIds(path: Path): DocId[];
     function expander<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path>;
 }
-export declare class ScopeConfig<T> {
-    private value;
-    private onChange?;
-    static resolve<T>(configSchema: t.Type<T>, config: T | ScopeConfig<T>): ScopeConfig<T>;
-    constructor(schema: t.Type<T>, value: T, onChange?: ((state: T) => void) | undefined);
-    private readonly validate;
-    get(): T;
-    set(value: T): void;
+declare type CompoundReference<T extends Record<string, Reference>> = 1 extends 1 ? Reference<{
+    readonly [K in keyof T]: T[K] extends Reference<infer U> ? U : never;
+}> : never;
+export declare class Reference<T = any> {
+    readonly get: () => T;
+    static combine<Refs extends Record<string, Reference>>(refs: Refs): CompoundReference<Refs>;
+    constructor(get: () => T);
+    map<U>(mapper: (config: T) => U): Reference<U>;
+}
+export declare class MutableReference<T = any> extends Reference<T> {
+    readonly get: () => T;
+    readonly set: (value: T) => void;
+    static of<T>(initialValue: T, schema?: t.Type<T>): MutableReference<T>;
+    constructor(get: () => T, set: (value: T) => void);
+    withSchema(schema: t.Type<T>): MutableReference<T>;
 }
 export declare class InvalidConnectorDefinition extends Error {
 }
