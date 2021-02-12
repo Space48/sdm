@@ -102,6 +102,14 @@ export const magento1 = connector({
           })
         },
       },
+
+      resources: {
+        tree: {
+          endpoints: {
+            get: ({ soap }) => () => soap.execute('catalogCategoryTree'),
+          },
+        },
+      },
       
       endpoints: {
         list: ({ soap }) => async function* () {
@@ -115,12 +123,6 @@ export const magento1 = connector({
           const root = await soap.execute('catalogCategoryTree');
           yield* getCategories(root);
         },
-      },
-    },
-
-    categoryTree: {
-      endpoints: {
-        get: ({ soap }) => () => soap.execute('catalogCategoryTree'),
       },
     },
 
