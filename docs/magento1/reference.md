@@ -2,7 +2,7 @@
 # Resources
 
  * [categories](#categories)
- * [category-tree](#category-tree)
+ * [categories.tree](#categoriestree)
  * [customers](#customers)
  * [customers[].addresses](#customersaddresses)
  * [customers[].addresses-soap](#customersaddresses-soap)
@@ -56,22 +56,22 @@ const command = magento1.categories.list(input?: unknown);
 ```
 
 
-## category-tree
+## categories.tree
 
 ### Endpoints
 
- * [get](#category-treeget)
+ * [get](#categoriestreeget)
 
-### category-tree.get
+### categories.tree.get
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].category-tree.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].categories.tree.get' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.categoryTree.get(input?: unknown);
+const command = magento1.categories.tree.get(input?: unknown);
 ```
 
 

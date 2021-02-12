@@ -61,13 +61,15 @@ export declare const magento1: f.Connector<{
                 get: ({ soap }: Magento1Scope) => ({ docId: [categoryId] }: f.EndpointPayload<any>) => Promise<any>;
             };
         };
+        resources: {
+            tree: {
+                endpoints: {
+                    get: ({ soap }: Magento1Scope) => () => Promise<any>;
+                };
+            };
+        };
         endpoints: {
             list: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
-        };
-    };
-    categoryTree: {
-        endpoints: {
-            get: ({ soap }: Magento1Scope) => () => Promise<any>;
         };
     };
     customers: f.ResourceDefinition<Magento1Scope, {

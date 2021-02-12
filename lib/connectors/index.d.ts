@@ -492,13 +492,15 @@ export declare const regularConnectors: {
                     get: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ docId: [categoryId] }: import("..").EndpointPayload<any>) => Promise<any>;
                 };
             };
+            resources: {
+                tree: {
+                    endpoints: {
+                        get: ({ soap }: import("./magento1/functions").Magento1Scope) => () => Promise<any>;
+                    };
+                };
+            };
             endpoints: {
                 list: ({ soap }: import("./magento1/functions").Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
-            };
-        };
-        categoryTree: {
-            endpoints: {
-                get: ({ soap }: import("./magento1/functions").Magento1Scope) => () => Promise<any>;
             };
         };
         customers: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
