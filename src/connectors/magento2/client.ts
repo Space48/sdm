@@ -208,7 +208,23 @@ function flattenParam(name: string, value: QueryParam): [string, string][] {
 
 export type Filter = [string, FilterCondition, string|number|string[]|number[]];
 
-type FilterCondition = 'eq' | 'gt' | 'in';
+type FilterCondition =
+  | 'eq'
+  | 'finset'
+  | 'from'
+  | 'gt'
+  | 'gteq'
+  | 'in'
+  | 'like'
+  | 'lt'
+  | 'lteq'
+  | 'moreq'
+  | 'neq'
+  | 'nfinset'
+  | 'nin'
+  | 'notnull'
+  | 'null'
+  | 'to';
 type SortOrder = [string, 'asc'|'desc'];
 
 export type SortKey = {
