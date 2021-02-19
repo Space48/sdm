@@ -2,7 +2,7 @@
 
 import { Command, ConnectorDefinition, EndpointError, FullyQualifiedMessageHeader, Path, ScopeRef } from "../framework";
 import * as readline from "readline";
-import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo } from "@space48/json-pipe";
+import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo, writeTo } from "@space48/json-pipe";
 import chalk from "chalk";
 import { BinaryApi } from "../framework";
 import { Shell } from "../framework/docgen";
@@ -111,10 +111,11 @@ async function runInteractiveMode() {
             return new Promise(setImmediate);
           }),
           takeWhile(() => !interrupted),
-          writeJsonLinesTo(process.stdout),
+          map(item => `${JSON.stringify(item)}\n\n`), // blank line to improve readability in interactive mode
+          writeTo(process.stdout),
         );
         const runtimeSecs = (Date.now() - startTime) / 1000;
-        process.stderr.write(`\n${numOutputs} results in ${runtimeSecs}s\n\n`);
+        process.stderr.write(`${numOutputs} results in ${runtimeSecs}s\n\n`);
       }
     } catch (e) {
       console.error(
