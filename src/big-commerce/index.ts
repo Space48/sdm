@@ -207,7 +207,7 @@ function getResources(client: BigCommerce): ResourceCollection {
 
           children: {
             metafields: resource.documentCollection('v3/catalog/products/{id}/variants/{id}/metafields'),
-          }
+          },
         },
         videos: resource.documentCollection('v3/catalog/products/{id}/videos'),
       },
