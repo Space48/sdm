@@ -1,12 +1,12 @@
 {
   "name": "@space48/sdm",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Command line tools for piping data in and out of APIs",
   "main": "./lib/index.js",
   "bin": {
-    "sdm": "./lib/bin/sdm.js",
-    "sdm-config": "./lib/bin/sdm-config.js",
-    "sdm-watch": "./lib/bin/sdm-watch.js"
+    "sdm": "lib/bin/sdm.js",
+    "sdm-config": "lib/bin/sdm-config.js",
+    "sdm-watch": "lib/bin/sdm-watch.js"
   },
   "scripts": {
     "build": "tsc",
