@@ -186,6 +186,8 @@ export const bigCommerce = connector({
       },
     ),
 
+    pages: endpoint.crud('v2/pages'),
+
     paymentMethods: {
       endpoints: {
         list: endpoint.list('v3/payments/methods'),
