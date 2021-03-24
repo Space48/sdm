@@ -207,6 +207,36 @@ function getResources(client: BigCommerce): ResourceCollection {
       },
     },
 
+    productCustomsInformation: {
+      docKey: {name: 'product_id', type: Field.integer()},
+
+      endpoints: {
+        list: {
+          scope: EndpointScope.Resource,
+          cardinality: Cardinality.Many,
+          fn: () => client.list('v3/shipping/products/customs-information'),
+        },
+
+        get: {
+          scope: EndpointScope.Document,
+          cardinality: Cardinality.One,
+          fn: ({docKeys: [productId]}) =>
+            client
+              .get('v3/shipping/products/customs-information', {'product_id:in': productId})
+              .then(result => result[0]),
+        },
+
+        save: {
+          scope: EndpointScope.Document,
+          cardinality: Cardinality.One,
+          fn: ({data}) =>
+            client
+              .put('v3/shipping/products/customs-information', [data])
+              .then(result => result[0]),
+        },
+      },
+    },
+
     // 'price-list-record': todo: this would be useful, but it requires bespoke sources and sinks
 
     store: resource.singletonResource('v2/store', {
