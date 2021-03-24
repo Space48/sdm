@@ -153,12 +153,14 @@ export interface ResourceDefinitionMap<Scope = any> {
 export type ResourceMap<
   T extends ResourceDefinitionMap = ResourceDefinitionMap,
   MultiPath extends boolean = boolean,
-> = {
-  [K in keyof T]:
-    T[K] extends ResourceDefinition<any, infer E, infer R, infer D>
-      ? Resource<E, R, D, MultiPath>
-      : never
-};
+> =
+  {___foobar: never} extends T ? {} // make it an error downstream to reference non-existent resources in paths
+  : {
+    [K in keyof T]:
+      T[K] extends object & ResourceDefinition<any, infer E, infer R, infer D>
+        ? Resource<E, R, D, MultiPath>
+        : never
+  };
 
 function resourceMap<T extends ResourceDefinitionMap>(resources: T, path: Path): ResourceMap<T> {
   return R.mapObjIndexed(
