@@ -15,7 +15,7 @@
     "docs": "node lib/bin/generate-docs",
     "infer-shopify-resources": "ts-node src/connectors/shopify/resource-inference/generate-shopify-resources",
     "clean": "rimraf lib",
-    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json"
+    "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json && npm run docs"
   },
   "engines": {
     "node": ">= 10.3.0"
