@@ -201,6 +201,15 @@ export const bigCommerce = connector({
           update: batch.updateOne('v3/catalog/products'),
         },
 
+        resources: {
+          variants: {
+            endpoints: {
+              list: endpoint.list('v3/catalog/variants'),
+              update: batch.updateOne('v3/catalog/variants'),
+            },
+          }
+        },
+
         documents: {
           resources: {
             bulkPricingRules: endpoint.crud('v3/catalog/products/{id}/bulk-pricing-rules'),
@@ -244,7 +253,17 @@ export const bigCommerce = connector({
                 },
               }
             ),
-            variants: endpoint.crud('v3/catalog/products/{id}/variants'),
+            reviews: endpoint.crud('v3/catalog/products/{id}/reviews'),
+            variants: mergeResources(
+              endpoint.crud('v3/catalog/products/{id}/variants'),
+              {
+                documents: {
+                  resources: {
+                    variants: endpoint.crud('v3/catalog/products/{id}/variants/{id}/metafields'),
+                  },
+                },
+              },
+            ),
             videos: endpoint.crud('v3/catalog/products/{id}/videos'),
           },
         },
