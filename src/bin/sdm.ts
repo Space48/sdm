@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command, ConnectorDefinition, EndpointError, FullyQualifiedMessageHeader, Path, ScopeRef, Stateful } from "../framework";
+import { Command, ConnectorDefinition, EndpointError, FullyQualifiedMessageHeader, Path, ScopeRef, State } from "../framework";
 import * as readline from "readline";
 import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo, writeTo } from "@space48/json-pipe";
 import chalk from "chalk";
@@ -81,7 +81,7 @@ async function runNonInteractiveMode() {
   } else {
     await pipe(
       readJsonLinesFrom(process.stdin),
-      Stateful.map((input): Command => ({ ...command, input })),
+      State.map((input): Command => ({ ...command, input })),
       commands => scope.execute(commands),
       writeJsonLinesTo(process.stdout),
     );
