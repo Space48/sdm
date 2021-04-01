@@ -31,7 +31,7 @@
  * [products[].metafields](#productsmetafields)
  * [products[].modifiers](#productsmodifiers)
  * [products[].modifiers[].values](#productsmodifiersvalues)
- * [products[].modifiers[].values.image](#productsmodifiersvaluesimage)
+ * [products[].modifiers[].values[].image](#productsmodifiersvaluesimage)
  * [products[].options](#productsoptions)
  * [products[].options[].values](#productsoptionsvalues)
  * [products[].reviews](#productsreviews)
@@ -1999,38 +1999,38 @@ const command = bigCommerce.products.$all.modifiers.$all.values.$all.update(inpu
 ```
 
 
-## products[].modifiers[].values.image
+## products[].modifiers[].values[].image
 
 ### Endpoints
 
  * [create](#productsmodifiersvaluesimagecreate)
  * [delete](#productsmodifiersvaluesimagedelete)
 
-### products[].modifiers[].values.image.create
+### products[].modifiers[].values[].image.create
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image.create' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].image.create' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).modifiers.$doc(id).values.image.create(input?: unknown);
-const command = bigCommerce.products.$all.modifiers.$all.values.image.create(input?: unknown);
+const command = bigCommerce.products.$doc(id).modifiers.$doc(id).values.$doc(id).image.create(input?: unknown);
+const command = bigCommerce.products.$all.modifiers.$all.values.$all.image.create(input?: unknown);
 ```
 
 
-### products[].modifiers[].values.image[].delete
+### products[].modifiers[].values[].image[].delete
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values.image[id].delete' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].modifiers[id|*].values[id|*].image[id].delete' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).modifiers.$doc(id).values.image.$doc(id).delete(input?: unknown);
-const command = bigCommerce.products.$all.modifiers.$all.values.image.$doc(id).delete(input?: unknown);
+const command = bigCommerce.products.$doc(id).modifiers.$doc(id).values.$doc(id).image.$doc(id).delete(input?: unknown);
+const command = bigCommerce.products.$all.modifiers.$all.values.$all.image.$doc(id).delete(input?: unknown);
 ```
 
 

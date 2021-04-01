@@ -388,18 +388,7 @@ export declare const bigCommerce: f.Connector<{
                     values: f.ResourceDefinition<BigCommerce, {
                         create: f.EndpointDefinition<BigCommerce, object, object>;
                         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
-                    } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
-                        image: {
-                            endpoints: {
-                                create: f.EndpointDefinition<BigCommerce, object, object>;
-                            };
-                            documents: {
-                                endpoints: {
-                                    delete: f.EndpointDefinition<BigCommerce, any, void>;
-                                };
-                            };
-                        };
-                    }, {
+                    } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
                         idField: string;
                         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
                         endpoints: {
@@ -407,7 +396,20 @@ export declare const bigCommerce: f.Connector<{
                             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                             update: f.EndpointDefinition<BigCommerce, object, object>;
                         };
-                    } & f.DocumentDefinition<BigCommerce>>;
+                    } & {
+                        resources: {
+                            image: {
+                                endpoints: {
+                                    create: f.EndpointDefinition<BigCommerce, object, object>;
+                                };
+                                documents: {
+                                    endpoints: {
+                                        delete: f.EndpointDefinition<BigCommerce, any, void>;
+                                    };
+                                };
+                            };
+                        };
+                    }>;
                 };
             }>;
             options: f.ResourceDefinition<BigCommerce, {
