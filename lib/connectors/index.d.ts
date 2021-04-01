@@ -470,7 +470,7 @@ export declare const regularConnectors: {
                     };
                 } & {
                     resources: {
-                        variants: {
+                        metafields: {
                             endpoints: {
                                 create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                                 list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;

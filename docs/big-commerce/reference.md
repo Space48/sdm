@@ -36,7 +36,7 @@
  * [products[].options[].values](#productsoptionsvalues)
  * [products[].reviews](#productsreviews)
  * [products[].variants](#productsvariants)
- * [products[].variants[].variants](#productsvariantsvariants)
+ * [products[].variants[].metafields](#productsvariantsmetafields)
  * [products[].videos](#productsvideos)
  * [products.variants](#productsvariants)
  * [store](#store)
@@ -2354,83 +2354,83 @@ const command = bigCommerce.products.$all.variants.$all.update(input?: unknown);
 ```
 
 
-## products[].variants[].variants
+## products[].variants[].metafields
 
 ### Endpoints
 
- * [create](#productsvariantsvariantscreate)
- * [delete](#productsvariantsvariantsdelete)
- * [get](#productsvariantsvariantsget)
- * [list](#productsvariantsvariantslist)
- * [update](#productsvariantsvariantsupdate)
+ * [create](#productsvariantsmetafieldscreate)
+ * [delete](#productsvariantsmetafieldsdelete)
+ * [get](#productsvariantsmetafieldsget)
+ * [list](#productsvariantsmetafieldslist)
+ * [update](#productsvariantsmetafieldsupdate)
 
-### products[].variants[].variants.create
+### products[].variants[].metafields.create
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].variants.create' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].metafields.create' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).variants.$doc(id).variants.create(input?: unknown);
-const command = bigCommerce.products.$all.variants.$all.variants.create(input?: unknown);
+const command = bigCommerce.products.$doc(id).variants.$doc(id).metafields.create(input?: unknown);
+const command = bigCommerce.products.$all.variants.$all.metafields.create(input?: unknown);
 ```
 
 
-### products[].variants[].variants[].delete
+### products[].variants[].metafields[].delete
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].variants[id|*].delete' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].metafields[id|*].delete' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).variants.$doc(id).variants.$doc(id).delete(input?: unknown);
-const command = bigCommerce.products.$all.variants.$all.variants.$all.delete(input?: unknown);
+const command = bigCommerce.products.$doc(id).variants.$doc(id).metafields.$doc(id).delete(input?: unknown);
+const command = bigCommerce.products.$all.variants.$all.metafields.$all.delete(input?: unknown);
 ```
 
 
-### products[].variants[].variants[].get
+### products[].variants[].metafields[].get
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].variants[id|*].get' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].metafields[id|*].get' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).variants.$doc(id).variants.$doc(id).get(input?: unknown);
-const command = bigCommerce.products.$all.variants.$all.variants.$all.get(input?: unknown);
+const command = bigCommerce.products.$doc(id).variants.$doc(id).metafields.$doc(id).get(input?: unknown);
+const command = bigCommerce.products.$all.variants.$all.metafields.$all.get(input?: unknown);
 ```
 
 
-### products[].variants[].variants.list
+### products[].variants[].metafields.list
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].variants.list' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].metafields.list' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).variants.$doc(id).variants.list(input?: unknown);
-const command = bigCommerce.products.$all.variants.$all.variants.list(input?: unknown);
+const command = bigCommerce.products.$doc(id).variants.$doc(id).metafields.list(input?: unknown);
+const command = bigCommerce.products.$all.variants.$all.metafields.list(input?: unknown);
 ```
 
 
-### products[].variants[].variants[].update
+### products[].variants[].metafields[].update
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].variants[id|*].update' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].products[id|*].variants[id|*].metafields[id|*].update' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.products.$doc(id).variants.$doc(id).variants.$doc(id).update(input?: unknown);
-const command = bigCommerce.products.$all.variants.$all.variants.$all.update(input?: unknown);
+const command = bigCommerce.products.$doc(id).variants.$doc(id).metafields.$doc(id).update(input?: unknown);
+const command = bigCommerce.products.$all.variants.$all.metafields.$all.update(input?: unknown);
 ```
 
 

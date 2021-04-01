@@ -468,7 +468,7 @@ export declare const bigCommerce: f.Connector<{
                 };
             } & {
                 resources: {
-                    variants: {
+                    metafields: {
                         endpoints: {
                             create: f.EndpointDefinition<BigCommerce, object, object>;
                             list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
