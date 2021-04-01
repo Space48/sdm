@@ -1,4 +1,4 @@
-import { flatMapAsync, pipe, compose, map, tap } from '@space48/json-pipe';
+import { FlatMapAsyncOptions, flatMapAsync, pipe, compose, map, tap, Transform } from '@space48/json-pipe';
 import * as t from 'io-ts'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import R from "ramda";
@@ -32,11 +32,11 @@ export function connector<
           return await definition.getWarningMessage?.(_scope);
         },
 
-        async *execute(commandOrCommands: Command | AnyIterable<Command>): any {
+        async *execute(commandOrCommands: Command | AnyIterable<Command | State>): any {
           if (isIterable(commandOrCommands)) {
             yield* pipe(
               executeCommands(commandOrCommands),
-              map(result => ({
+              Stateful.map(result => ({
                 ...result,
                 error: 
                   result.error instanceof EndpointError ? result.error.normalize()
@@ -50,7 +50,7 @@ export function connector<
             if (pathContainsWildcard) {
               yield* pipe(
                 outputElements,
-                tap(({success, error}) => {
+                Stateful.tap(({success, error}) => {
                   if (!success) {
                     if (error instanceof Error) {
                       throw error;
@@ -58,7 +58,7 @@ export function connector<
                     throw Error(error);
                   }
                 }),
-                map((outputElement): OutputWithPath => ({
+                Stateful.map((outputElement): OutputWithPath => ({
                   path: outputElement.path,
                   output: outputElement.output,
                 })),
@@ -66,7 +66,7 @@ export function connector<
             } else {
               yield* pipe(
                 outputElements,
-                tap(({success, error}) => {
+                Stateful.tap(({success, error}) => {
                   if (!success) {
                     if (error instanceof Error) {
                       throw error;
@@ -74,7 +74,7 @@ export function connector<
                     throw Error(error);
                   }
                 }),
-                map(({output}) => output),
+                Stateful.map(({output}) => output),
               );
             }
           }
@@ -143,7 +143,8 @@ export interface ConnectorScope {
   execute<OutT>(command: Command<any, OutT, false>): AsyncIterable<OutT>
   execute<OutT>(command: Command<any, OutT, true>): AsyncIterable<OutputWithPath<OutT>>
   execute<OutT>(command: Command<any, OutT, boolean>): AsyncIterable<OutT | OutputWithPath<OutT>>
-  execute<InT, OutT>(commands: Iterable<Command<InT, OutT>> | AsyncIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>
+  execute<InT, OutT>(commands: AnyIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>
+  execute<InT, OutT, StateT>(commands: AnyIterable<Command<InT, OutT> | State<StateT>>): AsyncIterable<OutputElement<InT, OutT> | State<StateT>>
 }
 
 export interface ResourceDefinitionMap<Scope = any> {
@@ -272,7 +273,7 @@ type Endpoint<
     : never;
 
 function endpoint(path: Path, endpoint: string): Endpoint {
-  return input => ({ path, endpoint, input });
+  return input => ({ path, endpoint, input: input! });
 }
 
 interface OptionalInputEndpointFns<
@@ -280,7 +281,7 @@ interface OptionalInputEndpointFns<
   OutT = any,
   MultiPath extends boolean = boolean,
 > {
-  (input?: InT): Command<InT, OutT, MultiPath>
+  <T extends InT>(input?: T): Command<T, OutT, MultiPath>
 }
 
 interface MandatoryInputEndpointFns<
@@ -288,7 +289,11 @@ interface MandatoryInputEndpointFns<
   OutT = any,
   MultiPath extends boolean = boolean,
 > {
-  (input: InT): Command<InT, OutT, MultiPath>
+  <T extends InT>(input: T): Command<T, OutT, MultiPath>
+}
+
+export interface State<T = unknown> {
+  state: T
 }
 
 export interface Command<
@@ -535,7 +540,7 @@ export namespace Path {
 }
 
 type CommandExecutor =
-  <InT, OutT>(commands: AnyIterable<Command<InT, OutT>>) => AsyncIterable<OutputElement<InT, OutT>>;
+  <InT, OutT, StateT>(commands: AnyIterable<Command<InT, OutT> | State<StateT>>) => AsyncIterable<OutputElement<InT, OutT> | State<StateT>>;
 
 type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 
@@ -548,14 +553,14 @@ function commandExecutor<Scope>(
 
   return compose(
     ensureIterableIsAsync,
-    flatMapAsync(
+    Stateful.flatMapAsync(
       {concurrency: 10},
       command => pipe(
         expandPaths(command.path),
         map(path => ({ ...command, path }))
       ),
     ),
-    flatMapAsync(
+    Stateful.flatMapAsync(
       {concurrency: 100},
       async function* <InT, OutT>(command: Command<InT, OutT>) {
         const endpointFn = selectEndpointFn<InT, OutT>(command.path, command.endpoint);
@@ -670,7 +675,7 @@ export class InvalidCommand extends Error {
   
 }
 
-function ensureIterableIsAsync<T>(iterable: AsyncIterable<T> | Iterable<T>): AsyncIterable<T> {
+function ensureIterableIsAsync<T>(iterable: AnyIterable<T>): AsyncIterable<T> {
   if (isSyncIterable(iterable)) {
     return (async function* () {
       yield* iterable;
@@ -679,7 +684,7 @@ function ensureIterableIsAsync<T>(iterable: AsyncIterable<T> | Iterable<T>): Asy
   return iterable;
 }
 
-function isIterable<T>(value: any): value is Iterable<T>|AsyncIterable<T> {
+function isIterable<T>(value: any): value is AnyIterable<T> {
   return isSyncIterable(value) || isAsyncIterable(value);
 }
 
@@ -704,5 +709,32 @@ export class EndpointError extends Error {
       message: this.message,
       detail: this.detail || undefined,
     };
+  }
+}
+
+/**
+ * Pipeline functions which pass State directly through, unmodified, but *in order*
+ * 
+ * I.e. when input is [Input<A> State<B> Input<C>], output is [Output<A> State<B> Output<C>]
+ */
+export abstract class Stateful {
+  private constructor() {}
+
+  static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT> {
+    return map(element => 'state' in element ? element : mapper(element))
+  }
+
+  static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT> {
+    return tap(element => 'state' in element ? element : fn(element))
+  }
+
+  static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT> {
+    return flatMapAsync(options, async function* (element) {
+      if ('state' in element) {
+        yield element;
+      } else {
+        yield* mapper(element);
+      }
+    });
   }
 }
