@@ -259,7 +259,7 @@ export const bigCommerce = connector({
               {
                 documents: {
                   resources: {
-                    variants: endpoint.crud('v3/catalog/products/{id}/variants/{id}/metafields'),
+                    metafields: endpoint.crud('v3/catalog/products/{id}/variants/{id}/metafields'),
                   },
                 },
               },
