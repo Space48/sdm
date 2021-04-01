@@ -34,7 +34,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
-    "@space48/json-pipe": "^0.4.10",
+    "@space48/json-pipe": "^0.4.12",
     "bluebird": "^3.7.2",
     "chalk": "^4.1.0",
     "cli-table3": "^0.6.0",

@@ -1,7 +1,8 @@
-import { FlatMapAsyncOptions, flatMapAsync, pipe, compose, map, tap, Transform } from '@space48/json-pipe';
+import { FlatMapAsyncOptions, flatMapAsync, pipe, compose, map, tap, Transform, groupWhile } from '@space48/json-pipe';
 import * as t from 'io-ts'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import R from "ramda";
+import { bigCommerce } from '../connectors';
 
 export function connector<
   Config,
@@ -36,7 +37,7 @@ export function connector<
           if (isIterable(commandOrCommands)) {
             yield* pipe(
               executeCommands(commandOrCommands),
-              Stateful.map(result => ({
+              State.map(result => ({
                 ...result,
                 error: 
                   result.error instanceof EndpointError ? result.error.normalize()
@@ -50,7 +51,7 @@ export function connector<
             if (pathContainsWildcard) {
               yield* pipe(
                 outputElements,
-                Stateful.tap(({success, error}) => {
+                State.tap(({success, error}) => {
                   if (!success) {
                     if (error instanceof Error) {
                       throw error;
@@ -58,7 +59,7 @@ export function connector<
                     throw Error(error);
                   }
                 }),
-                Stateful.map((outputElement): OutputWithPath => ({
+                State.map((outputElement): OutputWithPath => ({
                   path: outputElement.path,
                   output: outputElement.output,
                 })),
@@ -66,7 +67,7 @@ export function connector<
             } else {
               yield* pipe(
                 outputElements,
-                Stateful.tap(({success, error}) => {
+                State.tap(({success, error}) => {
                   if (!success) {
                     if (error instanceof Error) {
                       throw error;
@@ -74,7 +75,7 @@ export function connector<
                     throw Error(error);
                   }
                 }),
-                Stateful.map(({output}) => output),
+                State.map(({output}) => output),
               );
             }
           }
@@ -565,14 +566,14 @@ function commandExecutor<Scope>(
 
   return compose(
     ensureIterableIsAsync,
-    Stateful.flatMapAsync(
+    State.flatMapAsync(
       {concurrency: 10},
       command => pipe(
         expandPaths(command.path),
         map(path => ({ ...command, path }))
       ),
     ),
-    Stateful.flatMapAsync(
+    State.flatMapAsync(
       {concurrency: 100},
       async function* <InT, OutT>(command: Command<InT, OutT>) {
         const endpointFn = selectEndpointFn<InT, OutT>(command.path, command.endpoint);
@@ -729,8 +730,12 @@ export class EndpointError extends Error {
  * 
  * I.e. when input is [Input<A> State<B> Input<C>], output is [Output<A> State<B> Output<C>]
  */
-export abstract class Stateful {
+export abstract class State {
   private constructor() {}
+
+  static of<T>(value: T): State<T> {
+    return { state: value };
+  }
 
   static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT> {
     return map(element => 'state' in element ? element : mapper(element))
@@ -749,4 +754,31 @@ export abstract class Stateful {
       }
     });
   }
+
+  static collectOutputs<T extends OutputElement | State>(outputs: AsyncIterable<T>): AsyncIterable<InferStatefulOutput<T>>
+  static collectOutputs<T extends OutputElement | State>(): Transform<T, InferStatefulOutput<T>>
+  static collectOutputs<T extends OutputElement | State>(outputs?: AsyncIterable<T>): any {
+    if (!outputs) {
+      return State.collectOutputs;
+    }
+    return pipe(
+      outputs,
+      groupWhile(element => !('state' in element)),
+      map(([stateElement, ...elements]): InferStatefulOutput<any> => {
+        if (!State.isState(stateElement)) {
+          throw new Error('Stream must start with a `State` element in order to use `groupByState()`');
+        }
+        return [stateElement.state, elements as OutputElement[]];
+      }),
+    );
+  }
+
+  private static isState<T = unknown>(value: any): value is State<T> {
+    return 'state' in value;
+  }
 }
+
+type InferStatefulOutput<Input extends OutputElement | State> = 1 extends 1 ? [
+  state: Input extends State<infer StateT> ? StateT : never,
+  outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>,
+ ] : never;
