@@ -3,6 +3,7 @@ import * as client from "../client";
 import t from "ts-toolbelt";
 import { EndpointDefinition, ResourceDefinition } from '../../../framework';
 import Shopify from 'shopify-api-node';
+/** Definition inference */
 export declare function computeResourceDefinitions<C extends ShopifyConnectorConfig>(config: C): InferResourceDefnMap<InferredResources, C, '0'>;
 declare type InferResourceDefnMap<T extends Record<string, InferredResource>, Config, Depth extends string> = RemoveEmptyProps<{
     [K in keyof T]: InferResourceDefn<T[K], Prop<Config, K, undefined>, Depth>;
@@ -17,6 +18,7 @@ declare type InferEndpointDefnMap<Res extends InferredResource, Config, Target e
 }>;
 declare type InferEndpointDefn<ResourceK extends keyof Shopify, EndpointK extends string, Config, Target extends EndpointTarget, Depth extends number> = ResolveEndpointTarget<EndpointK, Config> extends Target ? EndpointK extends keyof Shopify[ResourceK] ? Shopify[ResourceK][EndpointK] extends (...args: infer Args) => Promise<infer Ret> ? Ret extends (infer RetInner)[] ? EndpointDefinition<client.Scope, Args[Depth], RetInner> : EndpointDefinition<client.Scope, Args[Depth], Ret> : never : never : never;
 declare type ResolveEndpointTarget<Key extends string, Config> = Config extends false ? never : Config extends FullEndpointConfig<infer Target> ? Target : StandardEndpointConfig<Key>['target'];
+/** Configuration types */
 export declare type ShopifyConnectorConfig = MakeValuesOptionalWhereAppropriate<ResourcesConfig<InferredResources>>;
 declare type ResourcesConfig<T extends Record<string, InferredResource>> = MakeValuesOptionalWhereAppropriate<{
     [K in keyof T]: ResourceConfig<T[K]>;
@@ -65,6 +67,7 @@ declare const standardEndpoints: {
         readonly type: "flatMap";
     };
 };
+/** Utility types */
 declare type MakeValuesOptionalWhereAppropriate<T extends object> = PermitUndefinedIfPermitsEmptyObject<MakePropsPermittingUndefinedOptional<T>>;
 declare type MakePropsPermittingUndefinedOptional<T> = MakePropsOptional<T, PropsPermittingUndefined<T>>;
 declare type PermitUndefinedIfPermitsEmptyObject<T> = {} extends T ? T | undefined : T;

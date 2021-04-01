@@ -5,6 +5,9 @@ export declare type ScopeRef = {
     connector: string;
     scope: string | null;
 };
+/**
+ * this function can help with type inference in connectors -- don't use unless necessary for type inference
+ */
 export declare function resource<T extends ResourceDefinition>(resource: T): T;
 export declare function resourceMerger<Scope>(): <E1 extends EndpointDefinitionMap<Scope>, R1 extends ResourceDefinitionMap<Scope>, D1 extends DocumentDefinition<Scope>, E2 extends EndpointDefinitionMap<Scope>, R2 extends ResourceDefinitionMap<Scope>, D2 extends DocumentDefinition<Scope>>(r1: ResourceDefinition<Scope, E1, R1, D1>, r2: ResourceDefinition<Scope, E2, R2, D2>) => ResourceDefinition<Scope, E1 & E2, R1 & R2, D1 & D2>;
 export interface ConnectorDefinition<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>> {
@@ -28,6 +31,12 @@ export interface ConnectorScope {
     execute<OutT>(command: Command<any, OutT, boolean>): AsyncIterable<OutT | OutputWithPath<OutT>>;
     execute<T extends Command | State>(commands: AnyIterable<T>): AsyncIterable<InferOutputElement<T>>;
 }
+/**
+ * This type is distributive, so
+ *  InferOutputElement<Command<A, B> | Command<C, D> | State<S1> | State<S2>>
+ * will yield
+ *  OutputElement<A, B> | OutputElement<C, D> | State<S1> | State<S2>
+ */
 declare type InferOutputElement<Input extends Command | State> = Input extends Command<infer InT, infer OutT, boolean> ? OutputElement<InT, OutT> : Input extends State<infer StateT> ? State<StateT> : never;
 export interface ResourceDefinitionMap<Scope = any> {
     readonly [key: string]: ResourceDefinition<Scope>;
@@ -121,6 +130,9 @@ export declare namespace Path {
     function endpointFnSelector<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): <InT, OutT>(resourcePath: Path, endpointName: string) => EndpointFn<InT, OutT>;
     function endpointNamesSelector(resources: ResourceDefinitionMap): (path: Path) => string[];
     function getDocIds(path: Path): DocId[];
+    /**
+     * Expand a path so that a path containing document ID wildcards is mapped to n paths containing document IDs only
+     */
     function expander<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path>;
 }
 declare type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
@@ -154,10 +166,23 @@ export declare class EndpointError extends Error {
         detail: any;
     };
 }
-export declare abstract class Stateful {
+/**
+ * Pipeline functions which pass State directly through, unmodified, but *in order*
+ *
+ * I.e. when input is [Input<A> State<B> Input<C>], output is [Output<A> State<B> Output<C>]
+ */
+export declare abstract class State {
     private constructor();
+    static of<T>(value: T): State<T>;
     static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT>;
     static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT>;
     static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT>;
+    static collectOutputs<T extends OutputElement | State>(outputs: AsyncIterable<T>): AsyncIterable<InferStatefulOutput<T>>;
+    static collectOutputs<T extends OutputElement | State>(): Transform<T, InferStatefulOutput<T>>;
+    private static isState;
 }
+declare type InferStatefulOutput<Input extends OutputElement | State> = 1 extends 1 ? [
+    state: Input extends State<infer StateT> ? StateT : never,
+    outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>
+] : never;
 export {};

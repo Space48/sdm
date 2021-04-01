@@ -1,3 +1,14 @@
+/**
+ * Here we configure endpoints which we have automatically inferred
+ * from the API of shopify-api-node. Most endpoints are standard,
+ * e.g. get, list, create, delete, etc., and do not need to be
+ * configured. We only configure endpoints which are non-standard.
+ *
+ * `false` disables a resource or endpoint. In all cases, the disabled
+ * endpoints can be enabled if they are needed -- just configure the
+ * endpoint you need in the same way that other endpoints are
+ * configured below.
+ */
 export declare const resourceDefinitions: {
     location: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
