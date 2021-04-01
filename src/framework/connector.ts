@@ -143,9 +143,21 @@ export interface ConnectorScope {
   execute<OutT>(command: Command<any, OutT, false>): AsyncIterable<OutT>
   execute<OutT>(command: Command<any, OutT, true>): AsyncIterable<OutputWithPath<OutT>>
   execute<OutT>(command: Command<any, OutT, boolean>): AsyncIterable<OutT | OutputWithPath<OutT>>
-  execute<InT, OutT>(commands: AnyIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>
-  execute<InT, OutT, StateT>(commands: AnyIterable<Command<InT, OutT> | State<StateT>>): AsyncIterable<OutputElement<InT, OutT> | State<StateT>>
+  execute<T extends Command | State>(commands: AnyIterable<T>): AsyncIterable<InferOutputElement<T>>;
 }
+
+/**
+ * This type is distributive, so
+ *  InferOutputElement<Command<A, B> | Command<C, D> | State<S1> | State<S2>>
+ * will yield
+ *  OutputElement<A, B> | OutputElement<C, D> | State<S1> | State<S2>
+ */
+type InferOutputElement<Input extends Command | State> = 
+  Input extends Command<infer InT, infer OutT, boolean>
+    ? OutputElement<InT, OutT>
+  : Input extends State<infer StateT>
+    ? State<StateT>
+  : never;
 
 export interface ResourceDefinitionMap<Scope = any> {
   readonly [key: string]: ResourceDefinition<Scope>
