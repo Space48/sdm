@@ -183,6 +183,6 @@ export declare abstract class State {
 }
 declare type InferStatefulOutput<Input extends OutputElement | State> = 1 extends 1 ? [
     state: Input extends State<infer StateT> ? StateT : never,
-    outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>
+    ...outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>
 ] : never;
 export {};
