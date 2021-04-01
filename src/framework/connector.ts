@@ -768,7 +768,7 @@ export abstract class State {
         if (!State.isState(stateElement)) {
           throw new Error('Stream must start with a `State` element in order to use `groupByState()`');
         }
-        return [stateElement.state, elements as OutputElement[]];
+        return [stateElement.state, ...elements as OutputElement[]];
       }),
     );
   }
@@ -780,5 +780,5 @@ export abstract class State {
 
 type InferStatefulOutput<Input extends OutputElement | State> = 1 extends 1 ? [
   state: Input extends State<infer StateT> ? StateT : never,
-  outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>,
+  ...outputs: ReadonlyArray<Input extends OutputElement<infer InT, infer OutT> ? OutputElement<InT, OutT> : never>,
  ] : never;
