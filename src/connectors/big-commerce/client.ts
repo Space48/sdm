@@ -155,5 +155,5 @@ type V3Pagination = {
 
 function computeNumPages(pagination: V3Pagination): number {
   // note -- total_pages does not respect the actual page size, so we cannot use it
-  return Math.ceil(pagination.total / pagination.count); 
+  return pagination.total === 0 ? 0 : Math.ceil(pagination.total / pagination.count); 
 }

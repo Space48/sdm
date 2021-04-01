@@ -35,8 +35,12 @@ export const bigCommerce = connector({
   resources: {
     blog: {
       resources: {
-        posts: endpoint.crud('v2/blog/post'),
-        tags: endpoint.crud('v2/blog/tag'),
+        posts: endpoint.crud('v2/blog/posts'),
+        tags: {
+          endpoints: {
+            list: endpoint.list('v2/blog/tags')
+          },
+        },
       },
     },
 
