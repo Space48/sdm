@@ -255,6 +255,21 @@ export declare const bigCommerce: f.Connector<{
             };
         };
     }>;
+    pages: {
+        endpoints: {
+            create: f.EndpointDefinition<BigCommerce, object, object>;
+            list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+        };
+        documents: {
+            idField: string;
+            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+            endpoints: {
+                delete: f.EndpointDefinition<BigCommerce, any, void>;
+                get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                update: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
+    };
     paymentMethods: {
         endpoints: {
             list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -265,7 +280,14 @@ export declare const bigCommerce: f.Connector<{
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
     } & {
         update: f.EndpointDefinition<BigCommerce, object, object>;
-    }, f.ResourceDefinitionMap<BigCommerce>, {
+    }, f.ResourceDefinitionMap<BigCommerce> & {
+        variants: {
+            endpoints: {
+                list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                update: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
+    }, {
         idField: string;
         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
         endpoints: {
@@ -418,7 +440,7 @@ export declare const bigCommerce: f.Connector<{
                     };
                 };
             }>;
-            variants: {
+            reviews: {
                 endpoints: {
                     create: f.EndpointDefinition<BigCommerce, object, object>;
                     list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -433,6 +455,36 @@ export declare const bigCommerce: f.Connector<{
                     };
                 };
             };
+            variants: f.ResourceDefinition<BigCommerce, {
+                create: f.EndpointDefinition<BigCommerce, object, object>;
+                list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+            } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
+                idField: string;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: f.EndpointDefinition<BigCommerce, any, void>;
+                    get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    update: f.EndpointDefinition<BigCommerce, object, object>;
+                };
+            } & {
+                resources: {
+                    variants: {
+                        endpoints: {
+                            create: f.EndpointDefinition<BigCommerce, object, object>;
+                            list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        };
+                        documents: {
+                            idField: string;
+                            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                            endpoints: {
+                                delete: f.EndpointDefinition<BigCommerce, any, void>;
+                                get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                                update: f.EndpointDefinition<BigCommerce, object, object>;
+                            };
+                        };
+                    };
+                };
+            }>;
             videos: {
                 endpoints: {
                     create: f.EndpointDefinition<BigCommerce, object, object>;

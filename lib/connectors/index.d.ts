@@ -257,6 +257,21 @@ export declare const regularConnectors: {
                 };
             };
         }>;
+        pages: {
+            endpoints: {
+                create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                    get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
+        };
         paymentMethods: {
             endpoints: {
                 list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
@@ -267,7 +282,14 @@ export declare const regularConnectors: {
             list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
         } & {
             update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
-        }, import("..").ResourceDefinitionMap<import("./big-commerce/client").default>, {
+        }, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {
+            variants: {
+                endpoints: {
+                    list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
+        }, {
             idField: string;
             listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
             endpoints: {
@@ -420,7 +442,7 @@ export declare const regularConnectors: {
                         };
                     };
                 }>;
-                variants: {
+                reviews: {
                     endpoints: {
                         create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                         list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
@@ -435,6 +457,36 @@ export declare const regularConnectors: {
                         };
                     };
                 };
+                variants: import("..").ResourceDefinition<import("./big-commerce/client").default, {
+                    create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default>, {
+                    idField: string;
+                    listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                    endpoints: {
+                        delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                        get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    };
+                } & {
+                    resources: {
+                        variants: {
+                            endpoints: {
+                                create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                                list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            };
+                            documents: {
+                                idField: string;
+                                listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                                endpoints: {
+                                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                                    get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                                };
+                            };
+                        };
+                    };
+                }>;
                 videos: {
                     endpoints: {
                         create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;

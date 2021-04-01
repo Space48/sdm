@@ -1,3 +1,4 @@
+import { FlatMapAsyncOptions, Transform } from '@space48/json-pipe';
 import * as t from 'io-ts';
 export declare function connector<Config, Scope, Resources extends ResourceDefinitionMap<Scope>>(definition: ConnectorDefinition<Config, Scope, Resources>): Connector<Config, Scope, Resources>;
 export declare type ScopeRef = {
@@ -25,13 +26,16 @@ export interface ConnectorScope {
     execute<OutT>(command: Command<any, OutT, false>): AsyncIterable<OutT>;
     execute<OutT>(command: Command<any, OutT, true>): AsyncIterable<OutputWithPath<OutT>>;
     execute<OutT>(command: Command<any, OutT, boolean>): AsyncIterable<OutT | OutputWithPath<OutT>>;
-    execute<InT, OutT>(commands: Iterable<Command<InT, OutT>> | AsyncIterable<Command<InT, OutT>>): AsyncIterable<OutputElement<InT, OutT>>;
+    execute<T extends Command | State>(commands: AnyIterable<T>): AsyncIterable<InferOutputElement<T>>;
 }
+declare type InferOutputElement<Input extends Command | State> = Input extends Command<infer InT, infer OutT, boolean> ? OutputElement<InT, OutT> : Input extends State<infer StateT> ? State<StateT> : never;
 export interface ResourceDefinitionMap<Scope = any> {
     readonly [key: string]: ResourceDefinition<Scope>;
 }
 export declare type ResourceMap<T extends ResourceDefinitionMap = ResourceDefinitionMap, MultiPath extends boolean = boolean> = {
-    [K in keyof T]: T[K] extends ResourceDefinition<any, infer E, infer R, infer D> ? Resource<E, R, D, MultiPath> : never;
+    ___foobar: never;
+} extends T ? {} : {
+    [K in keyof T]: T[K] extends object & ResourceDefinition<any, infer E, infer R, infer D> ? Resource<E, R, D, MultiPath> : never;
 };
 export interface ResourceDefinition<Scope = any, Endpoints extends EndpointDefinitionMap<Scope> = EndpointDefinitionMap<Scope>, Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>, Documents extends DocumentDefinition<Scope> = DocumentDefinition<Scope>> {
     readonly endpoints?: Endpoints;
@@ -70,10 +74,13 @@ export interface EndpointPayload<T = undefined> {
 export declare type DocId = number | string;
 declare type Endpoint<T extends EndpointDefinition = EndpointDefinition, MultiPath extends boolean = boolean> = T extends EndpointDefinition<any, infer InT, infer OutT> ? undefined extends InT ? OptionalInputEndpointFns<InT, OutT, MultiPath> : MandatoryInputEndpointFns<InT, OutT, MultiPath> : never;
 interface OptionalInputEndpointFns<InT = any, OutT = any, MultiPath extends boolean = boolean> {
-    (input?: InT): Command<InT, OutT, MultiPath>;
+    <T extends InT>(input?: T): Command<T, OutT, MultiPath>;
 }
 interface MandatoryInputEndpointFns<InT = any, OutT = any, MultiPath extends boolean = boolean> {
-    (input: InT): Command<InT, OutT, MultiPath>;
+    <T extends InT>(input: T): Command<T, OutT, MultiPath>;
+}
+export interface State<T = unknown> {
+    state: T;
 }
 export interface Command<InT = unknown, OutT = unknown, MultiPath extends boolean = boolean> extends MessageHeader {
     input: InT;
@@ -116,6 +123,7 @@ export declare namespace Path {
     function getDocIds(path: Path): DocId[];
     function expander<Scope>(resources: ResourceDefinitionMap<Scope>, scope: Scope): (path: Path) => AsyncIterable<Path>;
 }
+declare type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
 declare type CompoundReference<T extends Record<string, Reference>> = 1 extends 1 ? Reference<{
     readonly [K in keyof T]: T[K] extends Reference<infer U> ? U : never;
 }> : never;
@@ -145,5 +153,11 @@ export declare class EndpointError extends Error {
         message: string;
         detail: any;
     };
+}
+export declare abstract class Stateful {
+    private constructor();
+    static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT>;
+    static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT>;
+    static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT>;
 }
 export {};
