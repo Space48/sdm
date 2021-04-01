@@ -225,14 +225,16 @@ export const bigCommerce = connector({
                     values: mergeResources(
                       endpoint.crud('v3/catalog/products/{id}/modifiers/{id}/values'),
                       {
-                        resources: {
-                          image: {
-                            endpoints: {
-                              create: endpoint.create('v3/catalog/products/{id}/modifiers/{id}/values/{id}/image'),
-                            },
-                            documents: {
+                        documents: {
+                          resources: {
+                            image: {
                               endpoints: {
-                                delete: endpoint.del('v3/catalog/products/{id}/modifiers/{id}/values/{id}/image/{id}'),
+                                create: endpoint.create('v3/catalog/products/{id}/modifiers/{id}/values/{id}/image'),
+                              },
+                              documents: {
+                                endpoints: {
+                                  delete: endpoint.del('v3/catalog/products/{id}/modifiers/{id}/values/{id}/image/{id}'),
+                                },
                               },
                             },
                           },
