@@ -123,52 +123,7 @@ const command = bigCommerce.blog.posts.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [create](#blogtagscreate)
- * [delete](#blogtagsdelete)
- * [get](#blogtagsget)
  * [list](#blogtagslist)
- * [update](#blogtagsupdate)
-
-### blog.tags.create
-
-*CLI*
-```sh
-$ sdm 'big-commerce[some-store-alias].blog.tags.create' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = bigCommerce.blog.tags.create(input?: unknown);
-```
-
-
-### blog.tags[].delete
-
-*CLI*
-```sh
-$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].delete' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = bigCommerce.blog.tags.$doc(id).delete(input?: unknown);
-const command = bigCommerce.blog.tags.$all.delete(input?: unknown);
-```
-
-
-### blog.tags[].get
-
-*CLI*
-```sh
-$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].get' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = bigCommerce.blog.tags.$doc(id).get(input?: unknown);
-const command = bigCommerce.blog.tags.$all.get(input?: unknown);
-```
-
 
 ### blog.tags.list
 
@@ -180,20 +135,6 @@ $ sdm 'big-commerce[some-store-alias].blog.tags.list' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.blog.tags.list(input?: unknown);
-```
-
-
-### blog.tags[].update
-
-*CLI*
-```sh
-$ sdm 'big-commerce[some-store-alias].blog.tags[id|*].update' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = bigCommerce.blog.tags.$doc(id).update(input?: unknown);
-const command = bigCommerce.blog.tags.$all.update(input?: unknown);
 ```
 
 
