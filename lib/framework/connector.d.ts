@@ -105,11 +105,11 @@ export interface MessageHeader {
     path: Path;
     endpoint: string;
 }
-interface OutputWithPath<T = any> {
+export interface OutputWithPath<T = any> {
     path: Path;
     output: T;
 }
-interface OutputElement<InT = unknown, OutT = unknown> extends MessageHeader {
+export interface OutputElement<InT = unknown, OutT = unknown> extends MessageHeader {
     input: InT;
     output?: OutT;
     success: boolean;
