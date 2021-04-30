@@ -2,7 +2,6 @@ import { FlatMapAsyncOptions, flatMapAsync, pipe, compose, map, tap, Transform, 
 import * as t from 'io-ts'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import R from "ramda";
-import { bigCommerce } from '../connectors';
 
 export function connector<
   Config,
