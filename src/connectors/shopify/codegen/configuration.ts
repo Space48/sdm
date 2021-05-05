@@ -98,7 +98,10 @@ export const resourceDefinitions = computeResourceDefinitions({
     endpoints: {
       adjust: false,
       connect: false,
-      set: false,
+      set: {
+        target: 'document',
+        type: 'map',
+      },
     },
   },
   location: {
