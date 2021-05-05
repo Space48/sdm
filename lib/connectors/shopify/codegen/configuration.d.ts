@@ -483,7 +483,6 @@ export declare const resourceDefinitions: {
         };
     }>;
     inventoryLevel: import("../../..").ResourceDefinition<import("../client").Scope, {
-        set: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
         connect: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
         adjust: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;

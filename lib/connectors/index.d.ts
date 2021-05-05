@@ -1272,7 +1272,6 @@ export declare const regularConnectors: {
             };
         }>;
         inventoryLevel: import("..").ResourceDefinition<import("./shopify/client").Scope, {
-            set: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;
             connect: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;
             list: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;
             adjust: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;

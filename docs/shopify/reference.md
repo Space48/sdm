@@ -1575,6 +1575,7 @@ const command = shopify.inventoryItem.$all.update(input?: unknown);
 
  * [delete](#inventory-leveldelete)
  * [list](#inventory-levellist)
+ * [set](#inventory-levelset)
 
 ### inventory-level[].delete
 
@@ -1600,6 +1601,20 @@ $ sdm 'shopify[my-shop-name].inventory-level.list' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = shopify.inventoryLevel.list(input?: unknown);
+```
+
+
+### inventory-level[].set
+
+*CLI*
+```sh
+$ sdm 'shopify[my-shop-name].inventory-level[id|*].set' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = shopify.inventoryLevel.$doc(id).set(input?: unknown);
+const command = shopify.inventoryLevel.$all.set(input?: unknown);
 ```
 
 
