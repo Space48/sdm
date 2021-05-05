@@ -1604,17 +1604,16 @@ const command = shopify.inventoryLevel.list(input?: unknown);
 ```
 
 
-### inventory-level[].set
+### inventory-level.set
 
 *CLI*
 ```sh
-$ sdm 'shopify[my-shop-name].inventory-level[id|*].set' [input-as-json5]
+$ sdm 'shopify[my-shop-name].inventory-level.set' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = shopify.inventoryLevel.$doc(id).set(input?: unknown);
-const command = shopify.inventoryLevel.$all.set(input?: unknown);
+const command = shopify.inventoryLevel.set(input?: unknown);
 ```
 
 

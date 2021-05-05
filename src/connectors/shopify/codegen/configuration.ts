@@ -99,7 +99,7 @@ export const resourceDefinitions = computeResourceDefinitions({
       adjust: false,
       connect: false,
       set: {
-        target: 'document',
+        target: 'resource',
         type: 'map',
       },
     },

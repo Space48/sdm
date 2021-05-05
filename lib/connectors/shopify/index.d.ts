@@ -481,12 +481,12 @@ export declare const shopify: f.Connector<{
         };
     }>;
     inventoryLevel: f.ResourceDefinition<client.Scope, {
+        set: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
         connect: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
         list: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
         adjust: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
     }, {}, {
         endpoints: {
-            set: f.EndpointDefinition<client.Scope, undefined, Shopify.IInventoryLevel>;
             connect: f.EndpointDefinition<client.Scope, undefined, Shopify.IInventoryLevel>;
             delete: f.EndpointDefinition<client.Scope, undefined, void>;
             adjust: f.EndpointDefinition<client.Scope, undefined, Shopify.IInventoryLevel>;
