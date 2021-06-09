@@ -4,11 +4,17 @@ import { Credentials } from "./config";
 import pRetry from "p-retry";
 import { flatten } from "../util";
 import { ActionError } from "../action";
+import { Agent } from "https";
 
 const listConcurrency = 50;
 
 export default class BigCommerce {
   constructor(private credentials: Credentials) {}
+
+  private agent = new Agent({
+    maxSockets: 10,
+    keepAlive: true,
+  });
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
     return unwrap(await this.doGet(uri, params));
@@ -81,7 +87,7 @@ export default class BigCommerce {
         }
         return response;
       },
-      {retries: 50}
+      {retries: 50, minTimeout: 2000}
     );
     if (!response.ok) {
       throw new ActionError({
@@ -108,6 +114,7 @@ export default class BigCommerce {
     return {
       ...(init || {}),
       headers,
+      agent: this.agent,
     };
   }
 }
