@@ -137,6 +137,12 @@ function getResources(client: BigCommerce): ResourceCollection {
           cardinality: Cardinality.One,
           fn: ({ data }) => client.post('v3/customers', data),
         },
+
+        delete: {
+          scope: EndpointScope.Resource,
+          cardinality: Cardinality.One,
+          fn: ({ data }) => client.delete('v3/customers', { 'id:in': data }),
+        },
       }
     },
 
