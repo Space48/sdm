@@ -4,7 +4,7 @@ import { Connector, ConnectorScope } from '../connector';
 import { BigCommerceResourceFactory } from './resource-factory';
 import { Cardinality, ResourceCollection, EndpointScope } from '../resource';
 import BigCommerce from './client';
-import { Field } from '../action';
+import { Field, FieldType } from '../action';
 
 export type ConfigSchema = {
   credentials: config.ConfigSchema,
@@ -124,6 +124,21 @@ function getResources(client: BigCommerce): ResourceCollection {
     channels: resource.documentCollection('v3/channel', {create: true, update: true, list: true, listDocKeys: true, get: true}),
 
     customers: resource.documentCollectionWithBatchEndpoints('v3/customers'),
+
+    customersBatch: {
+      docKey: {
+        name: 'id',
+        type: Field.integer(),
+      },
+
+      endpoints: {
+        create: {
+          scope: EndpointScope.Resource,
+          cardinality: Cardinality.One,
+          fn: ({ data }) => client.post('v3/customers', data),
+        },
+      }
+    },
 
     customerAddresses: resource.documentCollectionWithBatchEndpoints('v3/customers/addresses'),
 

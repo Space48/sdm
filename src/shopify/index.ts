@@ -158,6 +158,8 @@ const resourceConfigs: ResourceConfigs = {
         scope: EndpointScope.Document,
         cardinality: Cardinality.One,
       },
+      updateTracking: false,
+      createV2: false,
     }
   },
   fulfillmentOrder: false,
