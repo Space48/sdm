@@ -76,7 +76,7 @@ export declare const magento1: f.Connector<{
         createRest: f.EndpointDefinition<Magento1Scope, object, object>;
         listRest: f.EndpointDefinition<Magento1Scope, any, object>;
     } & {
-        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => Promise<any>;
+        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
     }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
         listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
@@ -102,29 +102,28 @@ export declare const magento1: f.Connector<{
             getSoap: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
         };
     }>;
-    orders: {
+    orders: f.ResourceDefinition<Magento1Scope, {
+        listRest: f.EndpointDefinition<Magento1Scope, any, object>;
+    } & {
+        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+    }, f.ResourceDefinitionMap<Magento1Scope>, {
+        idField: string;
+        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
         endpoints: {
-            listRest: f.EndpointDefinition<Magento1Scope, any, object>;
+            getRest: f.EndpointDefinition<Magento1Scope, any, object>;
         };
-        documents: {
-            idField: string;
-            listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
-            endpoints: {
-                getRest: f.EndpointDefinition<Magento1Scope, any, object>;
-            };
-            resources: {
-                items: f.ResourceDefinition<Magento1Scope, {
-                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
-                }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
-                addresses: f.ResourceDefinition<Magento1Scope, {
-                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
-                }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
-                comments: f.ResourceDefinition<Magento1Scope, {
-                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
-                }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
-            };
+        resources: {
+            items: f.ResourceDefinition<Magento1Scope, {
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
+            }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
+            addresses: f.ResourceDefinition<Magento1Scope, {
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
+            }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
+            comments: f.ResourceDefinition<Magento1Scope, {
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
+            }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
         };
-    };
+    } & f.DocumentDefinition<Magento1Scope>>;
     products: f.ResourceDefinition<Magento1Scope, {
         createRest: f.EndpointDefinition<Magento1Scope, object, object>;
         listRest: f.EndpointDefinition<Magento1Scope, any, object>;

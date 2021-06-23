@@ -220,6 +220,7 @@ const command = magento1.customers.$all.addresses.getSoap(input?: unknown);
 
  * [get-rest](#ordersget-rest)
  * [list-rest](#orderslist-rest)
+ * [list-soap](#orderslist-soap)
 
 ### orders[].get-rest
 
@@ -245,6 +246,19 @@ $ sdm 'magento1[www.my-shop.com].orders.list-rest' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = magento1.orders.listRest(input?: unknown);
+```
+
+
+### orders.list-soap
+
+*CLI*
+```sh
+$ sdm 'magento1[www.my-shop.com].orders.list-soap' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento1.orders.listSoap(input?: unknown);
 ```
 
 

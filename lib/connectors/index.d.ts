@@ -551,7 +551,7 @@ export declare const regularConnectors: {
             createRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, object, object>;
             listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
         } & {
-            listSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ input: filters }: import("..").EndpointPayload<any>) => Promise<any>;
+            listSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ input: filters }: import("..").EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
         }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, {
             idField: string;
             listIds: (scope: import("./magento1/functions").Magento1Scope) => (path: import("..").Path) => AsyncIterable<string | number>;
@@ -577,29 +577,28 @@ export declare const regularConnectors: {
                 getSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ docId: [customerId] }: import("..").EndpointPayload<any>) => Promise<any>;
             };
         }>;
-        orders: {
+        orders: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
+            listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
+        } & {
+            listSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ input: filters }: import("..").EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+        }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, {
+            idField: string;
+            listIds: (scope: import("./magento1/functions").Magento1Scope) => (path: import("..").Path) => AsyncIterable<string | number>;
             endpoints: {
-                listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
+                getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
             };
-            documents: {
-                idField: string;
-                listIds: (scope: import("./magento1/functions").Magento1Scope) => (path: import("..").Path) => AsyncIterable<string | number>;
-                endpoints: {
-                    getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
-                };
-                resources: {
-                    items: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
-                        getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
-                    }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
-                    addresses: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
-                        getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
-                    }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
-                    comments: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
-                        getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
-                    }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
-                };
+            resources: {
+                items: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
+                    getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
+                }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
+                addresses: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
+                    getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
+                }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
+                comments: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
+                    getRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
+                }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
             };
-        };
+        } & import("..").DocumentDefinition<import("./magento1/functions").Magento1Scope>>;
         products: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
             createRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, object, object>;
             listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
