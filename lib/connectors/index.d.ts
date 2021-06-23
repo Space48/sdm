@@ -551,7 +551,7 @@ export declare const regularConnectors: {
             createRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, object, object>;
             listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
         } & {
-            listSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ input: filters }: import("..").EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+            listSoap: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
         }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, {
             idField: string;
             listIds: (scope: import("./magento1/functions").Magento1Scope) => (path: import("..").Path) => AsyncIterable<string | number>;
@@ -580,7 +580,7 @@ export declare const regularConnectors: {
         orders: import("..").ResourceDefinition<import("./magento1/functions").Magento1Scope, {
             listRest: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, object>;
         } & {
-            listSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ input: filters }: import("..").EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+            listSoap: import("..").EndpointDefinition<import("./magento1/functions").Magento1Scope, any, any>;
         }, import("..").ResourceDefinitionMap<import("./magento1/functions").Magento1Scope>, {
             idField: string;
             listIds: (scope: import("./magento1/functions").Magento1Scope) => (path: import("..").Path) => AsyncIterable<string | number>;

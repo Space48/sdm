@@ -6,17 +6,7 @@ export declare type Magento1Scope = {
     soap: Magento1SoapClient;
 };
 export declare namespace Soap {
-    function filters(restStyleFilters: any[]): {
-        complex_filter: {
-            complexObjectArray: {
-                key: any;
-                value: {
-                    key: any;
-                    value: any;
-                };
-            }[];
-        };
-    };
+    function list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T>;
 }
 export declare namespace Rest {
     export function crud<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {

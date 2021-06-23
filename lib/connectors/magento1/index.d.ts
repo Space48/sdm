@@ -76,7 +76,7 @@ export declare const magento1: f.Connector<{
         createRest: f.EndpointDefinition<Magento1Scope, object, object>;
         listRest: f.EndpointDefinition<Magento1Scope, any, object>;
     } & {
-        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+        listSoap: f.EndpointDefinition<Magento1Scope, any, any>;
     }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
         listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
@@ -105,7 +105,7 @@ export declare const magento1: f.Connector<{
     orders: f.ResourceDefinition<Magento1Scope, {
         listRest: f.EndpointDefinition<Magento1Scope, any, object>;
     } & {
-        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => AsyncGenerator<unknown, void, undefined>;
+        listSoap: f.EndpointDefinition<Magento1Scope, any, any>;
     }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
         listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
