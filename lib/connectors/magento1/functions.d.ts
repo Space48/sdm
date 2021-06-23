@@ -8,36 +8,36 @@ export declare type Magento1Scope = {
 export declare namespace Rest {
     export function crud<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
         endpoints: {
-            create: EndpointDefinition<Magento1Scope, object, object>;
-            list: EndpointDefinition<Magento1Scope, any, object>;
+            createRest: EndpointDefinition<Magento1Scope, object, object>;
+            listRest: EndpointDefinition<Magento1Scope, any, object>;
         };
         documents: {
             idField: string;
             listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<string | number>;
             endpoints: {
-                delete: EndpointDefinition<Magento1Scope, any, unknown>;
-                get: EndpointDefinition<Magento1Scope, any, object>;
-                update: EndpointDefinition<Magento1Scope, object, object>;
+                deleteRest: EndpointDefinition<Magento1Scope, any, unknown>;
+                getRest: EndpointDefinition<Magento1Scope, any, object>;
+                updateRest: EndpointDefinition<Magento1Scope, object, object>;
             };
             resources: Children<ChildName>;
         };
     };
     export function read<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
         endpoints: {
-            list: EndpointDefinition<Magento1Scope, any, object>;
+            listRest: EndpointDefinition<Magento1Scope, any, object>;
         };
         documents: {
             idField: string;
             listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<string | number>;
             endpoints: {
-                get: EndpointDefinition<Magento1Scope, any, object>;
+                getRest: EndpointDefinition<Magento1Scope, any, object>;
             };
             resources: Children<ChildName>;
         };
     };
     type Children<Name extends string> = {
         [K in Name]: ResourceDefinition<Magento1Scope, {
-            get: EndpointDefinition<Magento1Scope>;
+            getRest: EndpointDefinition<Magento1Scope>;
         }>;
     };
     export const create: (uriPattern: string) => EndpointDefinition<Magento1Scope, object, object>;

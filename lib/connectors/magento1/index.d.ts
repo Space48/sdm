@@ -58,92 +58,92 @@ export declare const magento1: f.Connector<{
             idField: string;
             listIds: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
             endpoints: {
-                get: ({ soap }: Magento1Scope) => ({ docId: [categoryId] }: f.EndpointPayload<any>) => Promise<any>;
+                getSoap: ({ soap }: Magento1Scope) => ({ docId: [categoryId] }: f.EndpointPayload<any>) => Promise<any>;
             };
         };
         resources: {
             tree: {
                 endpoints: {
-                    get: ({ soap }: Magento1Scope) => () => Promise<any>;
+                    getSoap: ({ soap }: Magento1Scope) => () => Promise<any>;
                 };
             };
         };
         endpoints: {
-            list: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
+            listSoap: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
         };
     };
     customers: f.ResourceDefinition<Magento1Scope, {
-        create: f.EndpointDefinition<Magento1Scope, object, object>;
-        list: f.EndpointDefinition<Magento1Scope, any, object>;
-    } & f.EndpointDefinitionMap<Magento1Scope>, f.ResourceDefinitionMap<Magento1Scope>, {
+        createRest: f.EndpointDefinition<Magento1Scope, object, object>;
+        listRest: f.EndpointDefinition<Magento1Scope, any, object>;
+    } & {
+        listSoap: ({ soap }: Magento1Scope) => ({ input: filters }: f.EndpointPayload<any>) => Promise<any>;
+    }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
         listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
         endpoints: {
-            delete: f.EndpointDefinition<Magento1Scope, any, unknown>;
-            get: f.EndpointDefinition<Magento1Scope, any, object>;
-            update: f.EndpointDefinition<Magento1Scope, object, object>;
+            deleteRest: f.EndpointDefinition<Magento1Scope, any, unknown>;
+            getRest: f.EndpointDefinition<Magento1Scope, any, object>;
+            updateRest: f.EndpointDefinition<Magento1Scope, object, object>;
         };
         resources: {
             addresses: f.ResourceDefinition<Magento1Scope, {
-                get: f.EndpointDefinition<Magento1Scope, any, any>;
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
         };
     } & {
         resources: {
             addressesSoap: {
                 endpoints: {
-                    get: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
+                    getSoap: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
                 };
             };
-            info: {
-                endpoints: {
-                    get: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
-                };
-            };
+        };
+        endpoints: {
+            getSoap: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
         };
     }>;
     orders: {
         endpoints: {
-            list: f.EndpointDefinition<Magento1Scope, any, object>;
+            listRest: f.EndpointDefinition<Magento1Scope, any, object>;
         };
         documents: {
             idField: string;
             listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
             endpoints: {
-                get: f.EndpointDefinition<Magento1Scope, any, object>;
+                getRest: f.EndpointDefinition<Magento1Scope, any, object>;
             };
             resources: {
                 items: f.ResourceDefinition<Magento1Scope, {
-                    get: f.EndpointDefinition<Magento1Scope, any, any>;
+                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
                 }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
                 addresses: f.ResourceDefinition<Magento1Scope, {
-                    get: f.EndpointDefinition<Magento1Scope, any, any>;
+                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
                 }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
                 comments: f.ResourceDefinition<Magento1Scope, {
-                    get: f.EndpointDefinition<Magento1Scope, any, any>;
+                    getRest: f.EndpointDefinition<Magento1Scope, any, any>;
                 }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
             };
         };
     };
     products: f.ResourceDefinition<Magento1Scope, {
-        create: f.EndpointDefinition<Magento1Scope, object, object>;
-        list: f.EndpointDefinition<Magento1Scope, any, object>;
+        createRest: f.EndpointDefinition<Magento1Scope, object, object>;
+        listRest: f.EndpointDefinition<Magento1Scope, any, object>;
     } & f.EndpointDefinitionMap<Magento1Scope>, f.ResourceDefinitionMap<Magento1Scope> & {
         attributes: {
             endpoints: {
-                list: ({ soap }: Magento1Scope) => (arg: f.EndpointPayload<any>) => AsyncIterable<any>;
+                listSoap: ({ soap }: Magento1Scope) => (arg: f.EndpointPayload<any>) => AsyncIterable<any>;
             };
             documents: {
                 idField: string;
                 listIds: ({ soap }: Magento1Scope) => (arg: f.Path) => AsyncIterable<number>;
                 endpoints: {
-                    get: ({ soap }: Magento1Scope) => ({ docId: [attribute] }: f.EndpointPayload<any>) => Promise<any>;
+                    getSoap: ({ soap }: Magento1Scope) => ({ docId: [attribute] }: f.EndpointPayload<any>) => Promise<any>;
                 };
             };
         };
         attributeSets: {
             endpoints: {
-                list: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
+                listSoap: ({ soap }: Magento1Scope) => () => AsyncGenerator<any, void, undefined>;
             };
             documents: {
                 idField: string;
@@ -151,7 +151,7 @@ export declare const magento1: f.Connector<{
                 resources: {
                     attributes: {
                         endpoints: {
-                            list: ({ soap }: Magento1Scope) => ({ docId: [setId] }: f.EndpointPayload<any>) => AsyncGenerator<any, void, undefined>;
+                            listSoap: ({ soap }: Magento1Scope) => ({ docId: [setId] }: f.EndpointPayload<any>) => AsyncGenerator<any, void, undefined>;
                         };
                     };
                 };
@@ -161,41 +161,39 @@ export declare const magento1: f.Connector<{
         idField: string;
         listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
         endpoints: {
-            delete: f.EndpointDefinition<Magento1Scope, any, unknown>;
-            get: f.EndpointDefinition<Magento1Scope, any, object>;
-            update: f.EndpointDefinition<Magento1Scope, object, object>;
+            deleteRest: f.EndpointDefinition<Magento1Scope, any, unknown>;
+            getRest: f.EndpointDefinition<Magento1Scope, any, object>;
+            updateRest: f.EndpointDefinition<Magento1Scope, object, object>;
         };
         resources: {
             categories: f.ResourceDefinition<Magento1Scope, {
-                get: f.EndpointDefinition<Magento1Scope, any, any>;
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
             images: f.ResourceDefinition<Magento1Scope, {
-                get: f.EndpointDefinition<Magento1Scope, any, any>;
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
             websites: f.ResourceDefinition<Magento1Scope, {
-                get: f.EndpointDefinition<Magento1Scope, any, any>;
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
         };
     } & {
         resources: {
-            info: {
-                endpoints: {
-                    get: ({ soap }: Magento1Scope) => ({ docId: [productId] }: f.EndpointPayload<any>) => Promise<any>;
-                };
-            };
             links: {
                 documents: {
                     idField: string;
                     endpoints: {
-                        get: ({ soap }: Magento1Scope) => ({ docId: [product, type] }: f.EndpointPayload<any>) => Promise<any>;
+                        getSoap: ({ soap }: Magento1Scope) => ({ docId: [product, type] }: f.EndpointPayload<any>) => Promise<any>;
                     };
                 };
             };
             media: {
                 endpoints: {
-                    get: ({ soap }: Magento1Scope) => ({ docId: [productId] }: f.EndpointPayload<any>) => Promise<any>;
+                    getSoap: ({ soap }: Magento1Scope) => ({ docId: [productId] }: f.EndpointPayload<any>) => Promise<any>;
                 };
             };
+        };
+        endpoints: {
+            getSoap: ({ soap }: Magento1Scope) => ({ docId: [productId] }: f.EndpointPayload<any>) => Promise<any>;
         };
     }>;
 }>;

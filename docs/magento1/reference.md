@@ -6,7 +6,6 @@
  * [customers](#customers)
  * [customers[].addresses](#customersaddresses)
  * [customers[].addresses-soap](#customersaddresses-soap)
- * [customers[].info](#customersinfo)
  * [orders](#orders)
  * [orders[].addresses](#ordersaddresses)
  * [orders[].comments](#orderscomments)
@@ -15,7 +14,6 @@
  * [products[].categories](#productscategories)
  * [products[].images](#productsimages)
  * [products[].websites](#productswebsites)
- * [products[].info](#productsinfo)
  * [products[].links](#productslinks)
  * [products[].media](#productsmedia)
  * [products.attributes](#productsattributes)
@@ -26,33 +24,33 @@
 
 ### Endpoints
 
- * [get](#categoriesget)
- * [list](#categorieslist)
+ * [get-soap](#categoriesget-soap)
+ * [list-soap](#categorieslist-soap)
 
-### categories[].get
+### categories[].get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].categories[entity_id|*].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].categories[entity_id|*].get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.categories.$doc(entity_id).get(input?: unknown);
-const command = magento1.categories.$all.get(input?: unknown);
+const command = magento1.categories.$doc(entity_id).getSoap(input?: unknown);
+const command = magento1.categories.$all.getSoap(input?: unknown);
 ```
 
 
-### categories.list
+### categories.list-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].categories.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].categories.list-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.categories.list(input?: unknown);
+const command = magento1.categories.listSoap(input?: unknown);
 ```
 
 
@@ -60,18 +58,18 @@ const command = magento1.categories.list(input?: unknown);
 
 ### Endpoints
 
- * [get](#categoriestreeget)
+ * [get-soap](#categoriestreeget-soap)
 
-### categories.tree.get
+### categories.tree.get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].categories.tree.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].categories.tree.get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.categories.tree.get(input?: unknown);
+const command = magento1.categories.tree.getSoap(input?: unknown);
 ```
 
 
@@ -79,77 +77,106 @@ const command = magento1.categories.tree.get(input?: unknown);
 
 ### Endpoints
 
- * [create](#customerscreate)
- * [delete](#customersdelete)
- * [get](#customersget)
- * [list](#customerslist)
- * [update](#customersupdate)
+ * [create-rest](#customerscreate-rest)
+ * [delete-rest](#customersdelete-rest)
+ * [get-rest](#customersget-rest)
+ * [get-soap](#customersget-soap)
+ * [list-rest](#customerslist-rest)
+ * [list-soap](#customerslist-soap)
+ * [update-rest](#customersupdate-rest)
 
-### customers.create
+### customers.create-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers.create' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers.create-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.create(input?: unknown);
+const command = magento1.customers.createRest(input?: unknown);
 ```
 
 
-### customers[].delete
+### customers[].delete-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].delete' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].delete-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).delete(input?: unknown);
-const command = magento1.customers.$all.delete(input?: unknown);
+const command = magento1.customers.$doc(entity_id).deleteRest(input?: unknown);
+const command = magento1.customers.$all.deleteRest(input?: unknown);
 ```
 
 
-### customers[].get
+### customers[].get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).get(input?: unknown);
-const command = magento1.customers.$all.get(input?: unknown);
+const command = magento1.customers.$doc(entity_id).getRest(input?: unknown);
+const command = magento1.customers.$all.getRest(input?: unknown);
 ```
 
 
-### customers.list
+### customers[].get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.list(input?: unknown);
+const command = magento1.customers.$doc(entity_id).getSoap(input?: unknown);
+const command = magento1.customers.$all.getSoap(input?: unknown);
 ```
 
 
-### customers[].update
+### customers.list-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].update' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers.list-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).update(input?: unknown);
-const command = magento1.customers.$all.update(input?: unknown);
+const command = magento1.customers.listRest(input?: unknown);
+```
+
+
+### customers.list-soap
+
+*CLI*
+```sh
+$ sdm 'magento1[www.my-shop.com].customers.list-soap' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento1.customers.listSoap(input?: unknown);
+```
+
+
+### customers[].update-rest
+
+*CLI*
+```sh
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].update-rest' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento1.customers.$doc(entity_id).updateRest(input?: unknown);
+const command = magento1.customers.$all.updateRest(input?: unknown);
 ```
 
 
@@ -157,19 +184,19 @@ const command = magento1.customers.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [get](#customersaddressesget)
+ * [get-rest](#customersaddressesget-rest)
 
-### customers[].addresses.get
+### customers[].addresses.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).addresses.get(input?: unknown);
-const command = magento1.customers.$all.addresses.get(input?: unknown);
+const command = magento1.customers.$doc(entity_id).addresses.getRest(input?: unknown);
+const command = magento1.customers.$all.addresses.getRest(input?: unknown);
 ```
 
 
@@ -177,39 +204,19 @@ const command = magento1.customers.$all.addresses.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#customersaddresses-soapget)
+ * [get-soap](#customersaddresses-soapget-soap)
 
-### customers[].addresses-soap.get
+### customers[].addresses-soap.get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses-soap.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses-soap.get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).addressesSoap.get(input?: unknown);
-const command = magento1.customers.$all.addressesSoap.get(input?: unknown);
-```
-
-
-## customers[].info
-
-### Endpoints
-
- * [get](#customersinfoget)
-
-### customers[].info.get
-
-*CLI*
-```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].info.get' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = magento1.customers.$doc(entity_id).info.get(input?: unknown);
-const command = magento1.customers.$all.info.get(input?: unknown);
+const command = magento1.customers.$doc(entity_id).addressesSoap.getSoap(input?: unknown);
+const command = magento1.customers.$all.addressesSoap.getSoap(input?: unknown);
 ```
 
 
@@ -217,33 +224,33 @@ const command = magento1.customers.$all.info.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#ordersget)
- * [list](#orderslist)
+ * [get-rest](#ordersget-rest)
+ * [list-rest](#orderslist-rest)
 
-### orders[].get
+### orders[].get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.orders.$doc(entity_id).get(input?: unknown);
-const command = magento1.orders.$all.get(input?: unknown);
+const command = magento1.orders.$doc(entity_id).getRest(input?: unknown);
+const command = magento1.orders.$all.getRest(input?: unknown);
 ```
 
 
-### orders.list
+### orders.list-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].orders.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].orders.list-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.orders.list(input?: unknown);
+const command = magento1.orders.listRest(input?: unknown);
 ```
 
 
@@ -251,19 +258,19 @@ const command = magento1.orders.list(input?: unknown);
 
 ### Endpoints
 
- * [get](#ordersaddressesget)
+ * [get-rest](#ordersaddressesget-rest)
 
-### orders[].addresses.get
+### orders[].addresses.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].addresses.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].addresses.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.orders.$doc(entity_id).addresses.get(input?: unknown);
-const command = magento1.orders.$all.addresses.get(input?: unknown);
+const command = magento1.orders.$doc(entity_id).addresses.getRest(input?: unknown);
+const command = magento1.orders.$all.addresses.getRest(input?: unknown);
 ```
 
 
@@ -271,19 +278,19 @@ const command = magento1.orders.$all.addresses.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#orderscommentsget)
+ * [get-rest](#orderscommentsget-rest)
 
-### orders[].comments.get
+### orders[].comments.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].comments.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].comments.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.orders.$doc(entity_id).comments.get(input?: unknown);
-const command = magento1.orders.$all.comments.get(input?: unknown);
+const command = magento1.orders.$doc(entity_id).comments.getRest(input?: unknown);
+const command = magento1.orders.$all.comments.getRest(input?: unknown);
 ```
 
 
@@ -291,19 +298,19 @@ const command = magento1.orders.$all.comments.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#ordersitemsget)
+ * [get-rest](#ordersitemsget-rest)
 
-### orders[].items.get
+### orders[].items.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].items.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].orders[entity_id|*].items.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.orders.$doc(entity_id).items.get(input?: unknown);
-const command = magento1.orders.$all.items.get(input?: unknown);
+const command = magento1.orders.$doc(entity_id).items.getRest(input?: unknown);
+const command = magento1.orders.$all.items.getRest(input?: unknown);
 ```
 
 
@@ -311,77 +318,92 @@ const command = magento1.orders.$all.items.get(input?: unknown);
 
 ### Endpoints
 
- * [create](#productscreate)
- * [delete](#productsdelete)
- * [get](#productsget)
- * [list](#productslist)
- * [update](#productsupdate)
+ * [create-rest](#productscreate-rest)
+ * [delete-rest](#productsdelete-rest)
+ * [get-rest](#productsget-rest)
+ * [get-soap](#productsget-soap)
+ * [list-rest](#productslist-rest)
+ * [update-rest](#productsupdate-rest)
 
-### products.create
+### products.create-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.create' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.create-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.create(input?: unknown);
+const command = magento1.products.createRest(input?: unknown);
 ```
 
 
-### products[].delete
+### products[].delete-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].delete' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].delete-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).delete(input?: unknown);
-const command = magento1.products.$all.delete(input?: unknown);
+const command = magento1.products.$doc(entity_id).deleteRest(input?: unknown);
+const command = magento1.products.$all.deleteRest(input?: unknown);
 ```
 
 
-### products[].get
+### products[].get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).get(input?: unknown);
-const command = magento1.products.$all.get(input?: unknown);
+const command = magento1.products.$doc(entity_id).getRest(input?: unknown);
+const command = magento1.products.$all.getRest(input?: unknown);
 ```
 
 
-### products.list
+### products[].get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.list(input?: unknown);
+const command = magento1.products.$doc(entity_id).getSoap(input?: unknown);
+const command = magento1.products.$all.getSoap(input?: unknown);
 ```
 
 
-### products[].update
+### products.list-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].update' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.list-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).update(input?: unknown);
-const command = magento1.products.$all.update(input?: unknown);
+const command = magento1.products.listRest(input?: unknown);
+```
+
+
+### products[].update-rest
+
+*CLI*
+```sh
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].update-rest' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento1.products.$doc(entity_id).updateRest(input?: unknown);
+const command = magento1.products.$all.updateRest(input?: unknown);
 ```
 
 
@@ -389,19 +411,19 @@ const command = magento1.products.$all.update(input?: unknown);
 
 ### Endpoints
 
- * [get](#productscategoriesget)
+ * [get-rest](#productscategoriesget-rest)
 
-### products[].categories.get
+### products[].categories.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].categories.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].categories.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).categories.get(input?: unknown);
-const command = magento1.products.$all.categories.get(input?: unknown);
+const command = magento1.products.$doc(entity_id).categories.getRest(input?: unknown);
+const command = magento1.products.$all.categories.getRest(input?: unknown);
 ```
 
 
@@ -409,19 +431,19 @@ const command = magento1.products.$all.categories.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#productsimagesget)
+ * [get-rest](#productsimagesget-rest)
 
-### products[].images.get
+### products[].images.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].images.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].images.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).images.get(input?: unknown);
-const command = magento1.products.$all.images.get(input?: unknown);
+const command = magento1.products.$doc(entity_id).images.getRest(input?: unknown);
+const command = magento1.products.$all.images.getRest(input?: unknown);
 ```
 
 
@@ -429,39 +451,19 @@ const command = magento1.products.$all.images.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#productswebsitesget)
+ * [get-rest](#productswebsitesget-rest)
 
-### products[].websites.get
+### products[].websites.get-rest
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].websites.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].websites.get-rest' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).websites.get(input?: unknown);
-const command = magento1.products.$all.websites.get(input?: unknown);
-```
-
-
-## products[].info
-
-### Endpoints
-
- * [get](#productsinfoget)
-
-### products[].info.get
-
-*CLI*
-```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].info.get' [input-as-json5]
-```
-
-*TypeScript*
-```javascript
-const command = magento1.products.$doc(entity_id).info.get(input?: unknown);
-const command = magento1.products.$all.info.get(input?: unknown);
+const command = magento1.products.$doc(entity_id).websites.getRest(input?: unknown);
+const command = magento1.products.$all.websites.getRest(input?: unknown);
 ```
 
 
@@ -469,19 +471,19 @@ const command = magento1.products.$all.info.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#productslinksget)
+ * [get-soap](#productslinksget-soap)
 
-### products[].links[].get
+### products[].links[].get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].links[type].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].links[type].get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).links.$doc(type).get(input?: unknown);
-const command = magento1.products.$all.links.$doc(type).get(input?: unknown);
+const command = magento1.products.$doc(entity_id).links.$doc(type).getSoap(input?: unknown);
+const command = magento1.products.$all.links.$doc(type).getSoap(input?: unknown);
 ```
 
 
@@ -489,19 +491,19 @@ const command = magento1.products.$all.links.$doc(type).get(input?: unknown);
 
 ### Endpoints
 
- * [get](#productsmediaget)
+ * [get-soap](#productsmediaget-soap)
 
-### products[].media.get
+### products[].media.get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products[entity_id|*].media.get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products[entity_id|*].media.get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.$doc(entity_id).media.get(input?: unknown);
-const command = magento1.products.$all.media.get(input?: unknown);
+const command = magento1.products.$doc(entity_id).media.getSoap(input?: unknown);
+const command = magento1.products.$all.media.getSoap(input?: unknown);
 ```
 
 
@@ -509,33 +511,33 @@ const command = magento1.products.$all.media.get(input?: unknown);
 
 ### Endpoints
 
- * [get](#productsattributesget)
- * [list](#productsattributeslist)
+ * [get-soap](#productsattributesget-soap)
+ * [list-soap](#productsattributeslist-soap)
 
-### products.attributes[].get
+### products.attributes[].get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.attributes[attribute_id|*].get' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.attributes[attribute_id|*].get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.attributes.$doc(attribute_id).get(input?: unknown);
-const command = magento1.products.attributes.$all.get(input?: unknown);
+const command = magento1.products.attributes.$doc(attribute_id).getSoap(input?: unknown);
+const command = magento1.products.attributes.$all.getSoap(input?: unknown);
 ```
 
 
-### products.attributes.list
+### products.attributes.list-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.attributes.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.attributes.list-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.attributes.list(input?: unknown);
+const command = magento1.products.attributes.listSoap(input?: unknown);
 ```
 
 
@@ -543,18 +545,18 @@ const command = magento1.products.attributes.list(input?: unknown);
 
 ### Endpoints
 
- * [list](#productsattribute-setslist)
+ * [list-soap](#productsattribute-setslist-soap)
 
-### products.attribute-sets.list
+### products.attribute-sets.list-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.attribute-sets.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.attribute-sets.list-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.attributeSets.list(input?: unknown);
+const command = magento1.products.attributeSets.listSoap(input?: unknown);
 ```
 
 
@@ -562,19 +564,19 @@ const command = magento1.products.attributeSets.list(input?: unknown);
 
 ### Endpoints
 
- * [list](#productsattribute-setsattributeslist)
+ * [list-soap](#productsattribute-setsattributeslist-soap)
 
-### products.attribute-sets[].attributes.list
+### products.attribute-sets[].attributes.list-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].products.attribute-sets[attribute_set_id|*].attributes.list' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].products.attribute-sets[attribute_set_id|*].attributes.list-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.products.attributeSets.$doc(attribute_set_id).attributes.list(input?: unknown);
-const command = magento1.products.attributeSets.$all.attributes.list(input?: unknown);
+const command = magento1.products.attributeSets.$doc(attribute_set_id).attributes.listSoap(input?: unknown);
+const command = magento1.products.attributeSets.$all.attributes.listSoap(input?: unknown);
 ```
 
 
