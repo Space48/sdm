@@ -131,7 +131,7 @@ export const magento1 = connector({
       {
         documents: {
           resources: {
-            addressesSoap: {
+            addresses: {
               endpoints: {
                 getSoap: ({ soap }) => ({ docId: [customerId] }) => soap.execute('customerAddressList', { customerId }),
               },
