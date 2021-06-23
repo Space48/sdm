@@ -5,7 +5,6 @@
  * [categories.tree](#categoriestree)
  * [customers](#customers)
  * [customers[].addresses](#customersaddresses)
- * [customers[].addresses-soap](#customersaddresses-soap)
  * [orders](#orders)
  * [orders[].addresses](#ordersaddresses)
  * [orders[].comments](#orderscomments)
@@ -185,6 +184,7 @@ const command = magento1.customers.$all.updateRest(input?: unknown);
 ### Endpoints
 
  * [get-rest](#customersaddressesget-rest)
+ * [get-soap](#customersaddressesget-soap)
 
 ### customers[].addresses.get-rest
 
@@ -200,23 +200,17 @@ const command = magento1.customers.$all.addresses.getRest(input?: unknown);
 ```
 
 
-## customers[].addresses-soap
-
-### Endpoints
-
- * [get-soap](#customersaddresses-soapget-soap)
-
-### customers[].addresses-soap.get-soap
+### customers[].addresses.get-soap
 
 *CLI*
 ```sh
-$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses-soap.get-soap' [input-as-json5]
+$ sdm 'magento1[www.my-shop.com].customers[entity_id|*].addresses.get-soap' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = magento1.customers.$doc(entity_id).addressesSoap.getSoap(input?: unknown);
-const command = magento1.customers.$all.addressesSoap.getSoap(input?: unknown);
+const command = magento1.customers.$doc(entity_id).addresses.getSoap(input?: unknown);
+const command = magento1.customers.$all.addresses.getSoap(input?: unknown);
 ```
 
 

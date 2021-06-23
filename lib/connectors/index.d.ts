@@ -567,7 +567,7 @@ export declare const regularConnectors: {
             };
         } & {
             resources: {
-                addressesSoap: {
+                addresses: {
                     endpoints: {
                         getSoap: ({ soap }: import("./magento1/functions").Magento1Scope) => ({ docId: [customerId] }: import("..").EndpointPayload<any>) => Promise<any>;
                     };

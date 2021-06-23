@@ -92,7 +92,7 @@ export declare const magento1: f.Connector<{
         };
     } & {
         resources: {
-            addressesSoap: {
+            addresses: {
                 endpoints: {
                     getSoap: ({ soap }: Magento1Scope) => ({ docId: [customerId] }: f.EndpointPayload<any>) => Promise<any>;
                 };
