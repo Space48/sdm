@@ -15,8 +15,8 @@ export namespace Rest {
 
     return {
       endpoints: {
-        create: create(uriPattern),
-        list: list(uriPattern),
+        createRest: create(uriPattern),
+        listRest: list(uriPattern),
       },
 
       documents: {
@@ -25,9 +25,9 @@ export namespace Rest {
         listIds: listIds(uriPattern),
 
         endpoints: {
-          delete: del(docUriPattern),
-          get: get(docUriPattern),
-          update: update(docUriPattern),
+          deleteRest: del(docUriPattern),
+          getRest: get(docUriPattern),
+          updateRest: update(docUriPattern),
         },
 
         resources: children(docUriPattern, childNames),
@@ -40,7 +40,7 @@ export namespace Rest {
 
     return {
       endpoints: {
-        list: list(uriPattern),
+        listRest: list(uriPattern),
       },
 
       documents: {
@@ -49,7 +49,7 @@ export namespace Rest {
         listIds: listIds(uriPattern),
 
         endpoints: {
-          get: get(docUriPattern),
+          getRest: get(docUriPattern),
         },
 
         resources: children(docUriPattern, childNames),
@@ -58,14 +58,14 @@ export namespace Rest {
   }
 
   type Children<Name extends string> = {
-    [K in Name]: ResourceDefinition<Magento1Scope, { get: EndpointDefinition<Magento1Scope> }>
+    [K in Name]: ResourceDefinition<Magento1Scope, { getRest: EndpointDefinition<Magento1Scope> }>
   }
 
   function children<Name extends string>(parentUri: string, children: readonly Name[]): Children<Name> {
     return R.fromPairs(
       children.map(childName => R.pair(childName, resource({
         endpoints: {
-          get: get(`${parentUri}/childName`)
+          getRest: get(`${parentUri}/childName`)
         },
       })))
     ) as Children<Name>;

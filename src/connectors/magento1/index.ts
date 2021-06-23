@@ -96,7 +96,7 @@ export const magento1 = connector({
         },
 
         endpoints: {
-          get: ({ soap }) => ({ docId: [categoryId] }) => soap.execute('catalogCategoryInfo', {
+          getSoap: ({ soap }) => ({ docId: [categoryId] }) => soap.execute('catalogCategoryInfo', {
             categoryId,
             storeView: 'default',
           })
@@ -106,13 +106,13 @@ export const magento1 = connector({
       resources: {
         tree: {
           endpoints: {
-            get: ({ soap }) => () => soap.execute('catalogCategoryTree'),
+            getSoap: ({ soap }) => () => soap.execute('catalogCategoryTree'),
           },
         },
       },
       
       endpoints: {
-        list: ({ soap }) => async function* () {
+        listSoap: ({ soap }) => async function* () {
           function* getCategories(category: any): Iterable<any> {
             const {children, ...rest} = category;
             yield rest;
@@ -133,15 +133,18 @@ export const magento1 = connector({
           resources: {
             addressesSoap: {
               endpoints: {
-                get: ({ soap }) => ({ docId: [customerId] }) => soap.execute('customerAddressList', { customerId }),
+                getSoap: ({ soap }) => ({ docId: [customerId] }) => soap.execute('customerAddressList', { customerId }),
               },
             },
-            info: {
-              endpoints: {
-                get: ({ soap }) => ({ docId: [customerId] }) => soap.execute('customerCustomerInfo', { customerId }),
-              },
-            }
           },
+
+          endpoints: {
+            getSoap: ({ soap }) => ({ docId: [customerId] }) => soap.execute('customerCustomerInfo', { customerId }),
+          },
+        },
+
+        endpoints: {
+          listSoap: ({ soap }) => ({ input: filters }) => soap.execute('customerCustomerList', { filters }),
         },
       },
     ),
@@ -153,31 +156,30 @@ export const magento1 = connector({
       {
         documents: {
           resources: {
-            info: {
-              endpoints: {
-                get: ({ soap }) => ({ docId: [productId] }) => soap.execute('catalogProductInfo', { productId }),
-              },
-            },
             links: {
               documents: {
                 idField: 'type',
                 endpoints: {
-                  get: ({ soap }) => ({ docId: [product, type] }) => soap.execute('catalogProductLinkList', { product, type }),
+                  getSoap: ({ soap }) => ({ docId: [product, type] }) => soap.execute('catalogProductLinkList', { product, type }),
                 },
               },
             },
             media: {
               endpoints: {
-                get: ({ soap }) => ({ docId: [productId] }) => soap.execute('catalogProductAttributeMediaList', { productId }),
+                getSoap: ({ soap }) => ({ docId: [productId] }) => soap.execute('catalogProductAttributeMediaList', { productId }),
               },
             },
+          },
+
+          endpoints: {
+            getSoap: ({ soap }) => ({ docId: [productId] }) => soap.execute('catalogProductInfo', { productId }),
           },
         },
 
         resources: {
           attributes: {
             endpoints: {
-              list: ({ soap }) => compose(
+              listSoap: ({ soap }) => compose(
                 async function* () {
                   const result = await soap.execute<any[]>('catalogProductAttributeSetList');
                   yield* result ?? [];
@@ -213,14 +215,14 @@ export const magento1 = connector({
               ),
               
               endpoints: {
-                get: ({ soap }) => ({ docId: [attribute]}) => soap.execute('catalogProductAttributeInfo', { attribute }),
+                getSoap: ({ soap }) => ({ docId: [attribute]}) => soap.execute('catalogProductAttributeInfo', { attribute }),
               },
             },
           },
 
           attributeSets: {
             endpoints: {
-              list: ({ soap }) => async function* () {
+              listSoap: ({ soap }) => async function* () {
                 const result = await soap.execute<any[]>('catalogProductAttributeSetList');
                 yield* result ?? [];
               },
@@ -238,7 +240,7 @@ export const magento1 = connector({
               resources: {
                 attributes: {
                   endpoints: {
-                    list: ({ soap }) => async function* ({ docId: [setId] }) {
+                    listSoap: ({ soap }) => async function* ({ docId: [setId] }) {
                       const result = await soap.execute<any[]>('catalogProductAttributeList', { setId });
                       yield* result ?? [];
                     }
