@@ -9,6 +9,21 @@ export type Magento1Scope = {
   soap: Magento1SoapClient
 };
 
+export namespace Soap {
+  export function filters(restStyleFilters: any[]) {
+    return {
+      complex_filter: {
+        complexObjectArray: restStyleFilters.map(filter => {
+          if (!(Array.isArray(filter) && filter.length === 3)) {
+            throw new Error("Filters must of format [field, condition, value]");
+          }
+          return { key: filter[0], value: { key: filter[1], value: filter[2] } };
+        }),
+      }
+    };
+  }
+}
+
 export namespace Rest {
   export function crud<ChildName extends string>(uriPattern: string, childNames: readonly ChildName[] = []) {
     const docUriPattern = `${uriPattern}/{id}`;

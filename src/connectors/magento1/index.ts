@@ -1,5 +1,5 @@
 import { connector, resourceMerger } from '../../framework';
-import { Magento1Scope, Rest } from './functions';
+import { Magento1Scope, Rest, Soap } from './functions';
 import { parse as parseUrl } from "url";
 import { Agent as HttpAgent } from "http";
 import { Agent as HttpsAgent } from "https";
@@ -144,12 +144,23 @@ export const magento1 = connector({
         },
 
         endpoints: {
-          listSoap: ({ soap }) => ({ input: filters }) => soap.execute('customerCustomerList', { filters }),
+          listSoap: ({ soap }) => async function* ({ input: filters }) {
+            yield* await soap.execute<unknown[]>('customerCustomerList', { filters: Soap.filters(filters) });
+          },
         },
       },
     ),
 
-    orders: Rest.read('orders', ['addresses', 'comments', 'items'] as const),
+    orders: mergeResources(
+      Rest.read('orders', ['addresses', 'comments', 'items'] as const),
+      {
+        endpoints: {
+          listSoap: ({ soap }) => async function* ({ input: filters }) {
+            yield* await soap.execute<unknown[]>('salesOrderList', { filters: Soap.filters(filters) });
+          },
+        }, 
+      },
+    ),
 
     products: mergeResources(
       Rest.crud('products', ['categories', 'images', 'websites'] as const),
