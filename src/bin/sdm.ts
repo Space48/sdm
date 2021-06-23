@@ -33,7 +33,7 @@ async function main() {
       await runHelpMode();
       process.exit(0);
     }
-    if (argsExcludingFlags[0] && tryDecodeFQMessageHeader(argsExcludingFlags[0])) {
+    if (!process.stdin.isTTY || (argsExcludingFlags[0] && tryDecodeFQMessageHeader(argsExcludingFlags[0]))) {
       await runNonInteractiveMode();
       process.exit(0);
     }
@@ -57,7 +57,25 @@ async function runHelpMode() {
 }
 
 async function runNonInteractiveMode() {
-  const header = BinaryApi.decodeFQHeader(argsExcludingFlags[0]);
+  const messageHeader = tryDecodeFQMessageHeader(argsExcludingFlags[0]);
+  if (messageHeader) {
+    await runNonInteractiveSingleMessageMode(messageHeader);
+  } else {
+    const scopeRef = await resolveScope(argsExcludingFlags[0], false);
+    await runNonInteractiveMultiMessageMode(scopeRef);
+  }
+}
+
+async function runNonInteractiveMultiMessageMode(scopeRef: ScopeRef) {
+  const scope = await app.requireScope(scopeRef);
+  await pipe(
+    readJsonLinesFrom<Command>(process.stdin),
+    commands => scope.execute(commands),
+    writeJsonLinesTo(process.stdout),
+  );
+}
+
+async function runNonInteractiveSingleMessageMode(header: FullyQualifiedMessageHeader) {
   const command: Command = {
     ...header,
     input: argsExcludingFlags.length > 1 ? BinaryApi.decodeCommandInput(argsExcludingFlags[1]) : undefined,
