@@ -10,7 +10,16 @@ export type Magento1Scope = {
 };
 
 export namespace Soap {
-  export function filters(restStyleFilters: any[]) {
+  export function list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T> {
+    return ({ soap }) => async function* ({ input: filters }) {
+      const result = await soap.execute<T[] | null>(method, { filters: prepareFilters(filters) });
+      if (result !== null) {
+        yield* result;
+      }
+    }
+  }
+
+  function prepareFilters(restStyleFilters: any[]) {
     return {
       complex_filter: {
         complexObjectArray: restStyleFilters.map(filter => {

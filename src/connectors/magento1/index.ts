@@ -144,9 +144,7 @@ export const magento1 = connector({
         },
 
         endpoints: {
-          listSoap: ({ soap }) => async function* ({ input: filters }) {
-            yield* await soap.execute<unknown[]>('customerCustomerList', { filters: Soap.filters(filters) });
-          },
+          listSoap: Soap.list('customerCustomerList'),
         },
       },
     ),
@@ -155,9 +153,7 @@ export const magento1 = connector({
       Rest.read('orders', ['addresses', 'comments', 'items'] as const),
       {
         endpoints: {
-          listSoap: ({ soap }) => async function* ({ input: filters }) {
-            yield* await soap.execute<unknown[]>('salesOrderList', { filters: Soap.filters(filters) });
-          },
+          listSoap: Soap.list('salesOrderList'),
         }, 
       },
     ),
