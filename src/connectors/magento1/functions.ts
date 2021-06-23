@@ -91,7 +91,7 @@ export namespace Rest {
     fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 
   export const list = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri) => m2Client.search<object>(uri, { sortKey: 'entity_id' }));
+    fn(uriPattern, (m2Client, uri, filters) => m2Client.search<object>(uri, { sortKey: 'entity_id', filters }));
 
   export const update = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
