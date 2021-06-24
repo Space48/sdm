@@ -24,9 +24,14 @@ export default class BigCommerce {
     private readonly config: MutableReference<Config>,
   ) {}
 
-	private static readonly agent = new Agent({
+	private readonly readAgent = new Agent({
     keepAlive: true,
-    maxSockets: Number.POSITIVE_INFINITY, // we rely on 429 errors rather than concurrency to regulate throughput
+    maxSockets: 100,
+  });
+
+	private readonly writeAgent = new Agent({
+    keepAlive: true,
+    maxSockets: 10,
   });
 
   async get<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
@@ -71,20 +76,20 @@ export default class BigCommerce {
   }
 
   async delete(uri: string, params?: Record<string, any>): Promise<void> {
-    const paramsString = params ? `?${stringify(params)}` : '';
-    return unwrap(await this.fetch(uri + paramsString, {
+    const paramsString = params ? `?${stringify(params, { arrayFormat: 'comma' })}` : '';
+    return unwrap(await this.fetch(this.writeAgent, uri + paramsString, {
       ...params,
       method: 'DELETE',
     }));
   }
 
   private async doGet<T = any>(uri: string, params?: Record<string, any>): Promise<T> {
-    const paramsString = params ? `?${stringify(params)}` : '';
-    return await this.fetch(uri + paramsString);
+    const paramsString = params ? `?${stringify(params, { arrayFormat: 'comma' })}` : '';
+    return await this.fetch(this.readAgent, uri + paramsString);
   }
 
   private async makeRequestWithContent<T>(method: string, uri: string, content: any): Promise<T> {
-    return unwrap(await this.fetch(uri, {
+    return unwrap(await this.fetch(this.writeAgent, uri, {
       method,
       headers: content && {
         'Content-Type': 'application/json',
@@ -93,19 +98,19 @@ export default class BigCommerce {
     }));
   }
 
-  private async fetch(relativeUri: string, init?: RequestInit): Promise<any> {
+  private async fetch(agent: Agent, relativeUri: string, init?: RequestInit): Promise<any> {
     const config = this.config.get();
     const absoluteUri = `https://api.bigcommerce.com/stores/${config.storeHash}/${relativeUri}`;
-    const initResolved = this.init(config, init);
+    const initResolved = this.init(agent, config, init);
     const response = await pRetry(
       async () => {
         const response = await fetch(absoluteUri, initResolved);
-        if (response.status === 429) {
+        if (response.status === 429 || (response.status >= 500 && response.status < 600)) {
           throw new Error; // this will trigger a retry
         }
         return response;
       },
-      {retries: 50}
+      { retries: 50, minTimeout: 2500 }
     );
     if (!response.ok) {
       throw new EndpointError(`${response.status} ${response.statusText}`, {
@@ -121,7 +126,7 @@ export default class BigCommerce {
     return await response.json();
   }
 
-  private init(config: Config, init?: RequestInit): RequestInit {
+  private init(agent: Agent, config: Config, init?: RequestInit): RequestInit {
     const headers = {
       ...init?.headers,
       Accept: 'application/json',
@@ -131,7 +136,7 @@ export default class BigCommerce {
     return {
       ...init,
       headers,
-      agent: BigCommerce.agent,
+      agent,
     };
   }
 }
