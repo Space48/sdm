@@ -154,14 +154,14 @@ export declare const regularConnectors: {
         };
         customers: import("..").ResourceDefinition<import("./big-commerce/client").default, {
             create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
-            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, void>;
             list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
             update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
         } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {
             addresses: {
                 endpoints: {
                     create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
-                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, void>;
                     list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
                     update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                 };
@@ -176,7 +176,7 @@ export declare const regularConnectors: {
             };
             attributes: import("..").ResourceDefinition<import("./big-commerce/client").default, {
                 create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
-                delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, void>;
                 list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
                 update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
             } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {

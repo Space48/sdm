@@ -152,14 +152,14 @@ export declare const bigCommerce: f.Connector<{
     };
     customers: f.ResourceDefinition<BigCommerce, {
         create: f.EndpointDefinition<BigCommerce, object, object>;
-        delete: f.EndpointDefinition<BigCommerce, object, object>;
+        delete: f.EndpointDefinition<BigCommerce, object, void>;
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
         update: f.EndpointDefinition<BigCommerce, object, object>;
     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
         addresses: {
             endpoints: {
                 create: f.EndpointDefinition<BigCommerce, object, object>;
-                delete: f.EndpointDefinition<BigCommerce, object, object>;
+                delete: f.EndpointDefinition<BigCommerce, object, void>;
                 list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                 update: f.EndpointDefinition<BigCommerce, object, object>;
             };
@@ -174,7 +174,7 @@ export declare const bigCommerce: f.Connector<{
         };
         attributes: f.ResourceDefinition<BigCommerce, {
             create: f.EndpointDefinition<BigCommerce, object, object>;
-            delete: f.EndpointDefinition<BigCommerce, object, object>;
+            delete: f.EndpointDefinition<BigCommerce, object, void>;
             list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
             update: f.EndpointDefinition<BigCommerce, object, object>;
         } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
