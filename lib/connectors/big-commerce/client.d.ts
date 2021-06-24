@@ -12,7 +12,8 @@ export declare const configSchema: t.TypeC<{
 export default class BigCommerce {
     private readonly config;
     constructor(config: MutableReference<Config>);
-    private static readonly agent;
+    private readonly readAgent;
+    private readonly writeAgent;
     get<T = any>(uri: string, params?: Record<string, any>): Promise<T>;
     list<T = any>(uri: string, params?: Record<string, any>): AsyncIterable<T>;
     post<T = any>(uri: string, content: any): Promise<T>;
