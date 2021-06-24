@@ -102,9 +102,17 @@ export default class BigCommerce {
     const config = this.config.get();
     const absoluteUri = `https://api.bigcommerce.com/stores/${config.storeHash}/${relativeUri}`;
     const initResolved = this.init(agent, config, init);
+    // response body may only be consumed once, so we have to memoize the result here
+    let responseText: Promise<string>;
     const response = await pRetry(
       async () => {
         const response = await fetch(absoluteUri, initResolved);
+        responseText = response.text();
+        if (response.status === 422) {
+          if ((await responseText).includes('saving error')) {
+            throw new Error; // this will trigger a retry  
+          }
+        }
         if (response.status === 429 || (response.status >= 500 && response.status < 600)) {
           throw new Error; // this will trigger a retry
         }
@@ -114,7 +122,7 @@ export default class BigCommerce {
     );
     if (!response.ok) {
       throw new EndpointError(`${response.status} ${response.statusText}`, {
-        detail: await response.text()
+        detail: await responseText!
           .then(JSON.parse)
           .then(data => (data.errors && JSON.stringify(data.errors) !== '{}' ? data.errors : data.title) || data)
           .catch(),
@@ -123,7 +131,7 @@ export default class BigCommerce {
     if (response.status === 204) {
       return null;
     }
-    return await response.json();
+    return await responseText!.then(JSON.parse);
   }
 
   private init(agent: Agent, config: Config, init?: RequestInit): RequestInit {
