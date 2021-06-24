@@ -174,12 +174,12 @@ export declare class EndpointError extends Error {
 export declare abstract class State {
     private constructor();
     static of<T>(value: T): State<T>;
+    static isState<T = unknown>(value: any): value is State<T>;
     static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT>;
     static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT>;
     static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT>;
     static collectOutputs<T extends OutputElement | State>(outputs: AsyncIterable<T>): AsyncIterable<InferStatefulOutput<T>>;
     static collectOutputs<T extends OutputElement | State>(): Transform<T, InferStatefulOutput<T>>;
-    private static isState;
 }
 declare type InferStatefulOutput<Input extends OutputElement | State> = 1 extends 1 ? [
     state: Input extends State<infer StateT> ? StateT : never,
