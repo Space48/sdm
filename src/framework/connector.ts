@@ -736,17 +736,21 @@ export abstract class State {
     return { state: value };
   }
 
+  static isState<T = unknown>(value: any): value is State<T> {
+    return 'state' in value;
+  }
+
   static map<StateT, InT, OutT>(mapper: (element: InT) => OutT): Transform<State<StateT> | InT, State<StateT> | OutT> {
-    return map(element => 'state' in element ? element : mapper(element))
+    return map(element => State.isState(element) ? element : mapper(element))
   }
 
   static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT> {
-    return tap(element => 'state' in element ? element : fn(element))
+    return tap(element =>  State.isState(element) ? element : fn(element))
   }
 
   static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT> {
     return flatMapAsync(options, async function* (element) {
-      if ('state' in element) {
+      if (State.isState(element)) {
         yield element;
       } else {
         yield* mapper(element);
@@ -762,7 +766,7 @@ export abstract class State {
     }
     return pipe(
       outputs,
-      groupWhile(element => !('state' in element)),
+      groupWhile(element => !State.isState(element)),
       map(([stateElement, ...elements]): InferStatefulOutput<any> => {
         if (!State.isState(stateElement)) {
           throw new Error('Stream must start with a `State` element in order to use `groupByState()`');
@@ -770,10 +774,6 @@ export abstract class State {
         return [stateElement.state, ...elements as OutputElement[]];
       }),
     );
-  }
-
-  private static isState<T = unknown>(value: any): value is State<T> {
-    return 'state' in value;
   }
 }
 
