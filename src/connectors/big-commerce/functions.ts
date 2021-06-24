@@ -62,7 +62,9 @@ export namespace batch {
     return {
       endpoints: {
         create: createOne(uriPattern),
+        delete: createOne(uriPattern),
         list: endpoint.list(uriPattern),
+        update: update(uriPattern),
       },
 
       documents: {
@@ -73,7 +75,6 @@ export namespace batch {
         endpoints: {
           delete: deleteOne(uriPattern),
           get: getOne(uriPattern),
-          update: updateOne(uriPattern),
         },
       },
     };
@@ -89,6 +90,9 @@ export namespace batch {
     }
   );
 
+  export const del = (uriPattern: string) =>
+    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.delete(uri, data));
+
   export const getOne = (uriPattern: string) => endpoint.fn(
     uriPattern,
     async (bcClient, uri, data, path) => {
@@ -97,8 +101,8 @@ export namespace batch {
     }
   );
 
-  export const updateOne = (uriPattern: string) =>
-    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, [data]));
+  export const update = (uriPattern: string) =>
+    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
 }
 
 export class UriTemplate {
