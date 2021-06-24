@@ -61,10 +61,10 @@ export namespace batch {
   export function crud(uriPattern: string, idField: string = 'id') {
     return {
       endpoints: {
-        create: createOne(uriPattern),
-        delete: createOne(uriPattern),
+        create: createOneOrMany(uriPattern),
+        delete: deleteMany(uriPattern),
         list: endpoint.list(uriPattern),
-        update: update(uriPattern),
+        update: updateMany(uriPattern),
       },
 
       documents: {
@@ -80,8 +80,11 @@ export namespace batch {
     };
   }
 
-  export const createOne = (uriPattern: string) =>
-    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.post<object>(uri, [data]));
+  export const createOneOrMany = (uriPattern: string) =>
+    endpoint.fn(
+      uriPattern,
+      (bcClient, uri, data: object) => bcClient.post<object>(uri, Array.isArray(data) ? data : [data])
+    );
 
   export const deleteOne = (uriPattern: string) => endpoint.fn(
     uriPattern,
@@ -90,7 +93,7 @@ export namespace batch {
     }
   );
 
-  export const del = (uriPattern: string) =>
+  export const deleteMany = (uriPattern: string) =>
     endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.delete(uri, data));
 
   export const getOne = (uriPattern: string) => endpoint.fn(
@@ -101,7 +104,7 @@ export namespace batch {
     }
   );
 
-  export const update = (uriPattern: string) =>
+  export const updateMany = (uriPattern: string) =>
     endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
 }
 

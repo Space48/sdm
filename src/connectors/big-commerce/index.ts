@@ -156,9 +156,9 @@ export const bigCommerce = connector({
               resources: {
                 values: {
                   endpoints: {
-                    delete: batch.del('v3/customers/attribute-values'),
+                    delete: batch.deleteMany('v3/customers/attribute-values'),
                     list: endpoint.list('v3/customers/attribute-values'),
-                    upsert: batch.update('v3/customers/attribute-values'),
+                    upsert: batch.updateMany('v3/customers/attribute-values'),
                   },
       
                   documents: {
@@ -203,14 +203,14 @@ export const bigCommerce = connector({
       endpoint.crud('v3/catalog/products'),
       {
         endpoints: {
-          update: batch.update('v3/catalog/products'),
+          update: batch.updateMany('v3/catalog/products'),
         },
 
         resources: {
           variants: {
             endpoints: {
               list: endpoint.list('v3/catalog/variants'),
-              update: batch.update('v3/catalog/variants'),
+              update: batch.updateMany('v3/catalog/variants'),
             },
           }
         },
