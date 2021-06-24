@@ -152,12 +152,16 @@ export declare const bigCommerce: f.Connector<{
     };
     customers: f.ResourceDefinition<BigCommerce, {
         create: f.EndpointDefinition<BigCommerce, object, object>;
+        delete: f.EndpointDefinition<BigCommerce, object, object>;
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+        update: f.EndpointDefinition<BigCommerce, object, object>;
     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
         addresses: {
             endpoints: {
                 create: f.EndpointDefinition<BigCommerce, object, object>;
+                delete: f.EndpointDefinition<BigCommerce, object, object>;
                 list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                update: f.EndpointDefinition<BigCommerce, object, object>;
             };
             documents: {
                 idField: string;
@@ -165,22 +169,24 @@ export declare const bigCommerce: f.Connector<{
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, any, any>;
-                    update: f.EndpointDefinition<BigCommerce, object, object>;
                 };
             };
         };
         attributes: f.ResourceDefinition<BigCommerce, {
             create: f.EndpointDefinition<BigCommerce, object, object>;
+            delete: f.EndpointDefinition<BigCommerce, object, object>;
             list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+            update: f.EndpointDefinition<BigCommerce, object, object>;
         } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
             values: {
                 endpoints: {
+                    delete: f.EndpointDefinition<BigCommerce, object, void>;
                     list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    upsert: f.EndpointDefinition<BigCommerce, object, object>;
                 };
                 documents: {
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
-                        set: f.EndpointDefinition<BigCommerce, object, object>;
                     };
                 };
             };
@@ -190,7 +196,6 @@ export declare const bigCommerce: f.Connector<{
             endpoints: {
                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                 get: f.EndpointDefinition<BigCommerce, any, any>;
-                update: f.EndpointDefinition<BigCommerce, object, object>;
             };
         } & {
             resources: {
@@ -207,7 +212,6 @@ export declare const bigCommerce: f.Connector<{
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, any, any>;
-            update: f.EndpointDefinition<BigCommerce, object, object>;
         };
     } & f.DocumentDefinition<BigCommerce>>;
     giftCertificates: {

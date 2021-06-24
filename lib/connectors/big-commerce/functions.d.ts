@@ -30,7 +30,9 @@ export declare namespace batch {
     function crud(uriPattern: string, idField?: string): {
         endpoints: {
             create: EndpointDefinition<BigCommerce, object, object>;
+            delete: EndpointDefinition<BigCommerce, object, object>;
             list: EndpointDefinition<BigCommerce, Query | undefined, object>;
+            update: EndpointDefinition<BigCommerce, object, object>;
         };
         documents: {
             idField: string;
@@ -38,14 +40,14 @@ export declare namespace batch {
             endpoints: {
                 delete: EndpointDefinition<BigCommerce, any, void>;
                 get: EndpointDefinition<BigCommerce, any, any>;
-                update: EndpointDefinition<BigCommerce, object, object>;
             };
         };
     };
     const createOne: (uriPattern: string) => EndpointDefinition<BigCommerce, object, object>;
     const deleteOne: (uriPattern: string) => EndpointDefinition<BigCommerce, any, void>;
+    const del: (uriPattern: string) => EndpointDefinition<BigCommerce, object, void>;
     const getOne: (uriPattern: string) => EndpointDefinition<BigCommerce, any, any>;
-    const updateOne: (uriPattern: string) => EndpointDefinition<BigCommerce, object, object>;
+    const update: (uriPattern: string) => EndpointDefinition<BigCommerce, object, object>;
 }
 export declare class UriTemplate {
     static uri(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string;

@@ -720,6 +720,7 @@ const command = bigCommerce.channels.$all.update(input?: unknown);
 
  * [create](#customerscreate)
  * [delete](#customersdelete)
+ * [delete](#customersdelete)
  * [get](#customersget)
  * [list](#customerslist)
  * [update](#customersupdate)
@@ -734,6 +735,19 @@ $ sdm 'big-commerce[some-store-alias].customers.create' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.create(input?: unknown);
+```
+
+
+### customers.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.delete(input?: unknown);
 ```
 
 
@@ -778,17 +792,16 @@ const command = bigCommerce.customers.list(input?: unknown);
 ```
 
 
-### customers[].update
+### customers.update
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].customers[id|*].update' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].customers.update' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.customers.$doc(id).update(input?: unknown);
-const command = bigCommerce.customers.$all.update(input?: unknown);
+const command = bigCommerce.customers.update(input?: unknown);
 ```
 
 
@@ -797,6 +810,7 @@ const command = bigCommerce.customers.$all.update(input?: unknown);
 ### Endpoints
 
  * [create](#customersaddressescreate)
+ * [delete](#customersaddressesdelete)
  * [delete](#customersaddressesdelete)
  * [get](#customersaddressesget)
  * [list](#customersaddresseslist)
@@ -812,6 +826,19 @@ $ sdm 'big-commerce[some-store-alias].customers.addresses.create' [input-as-json
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.addresses.create(input?: unknown);
+```
+
+
+### customers.addresses.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.addresses.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.addresses.delete(input?: unknown);
 ```
 
 
@@ -856,17 +883,16 @@ const command = bigCommerce.customers.addresses.list(input?: unknown);
 ```
 
 
-### customers.addresses[].update
+### customers.addresses.update
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].customers.addresses[id|*].update' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].customers.addresses.update' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.customers.addresses.$doc(id).update(input?: unknown);
-const command = bigCommerce.customers.addresses.$all.update(input?: unknown);
+const command = bigCommerce.customers.addresses.update(input?: unknown);
 ```
 
 
@@ -875,6 +901,7 @@ const command = bigCommerce.customers.addresses.$all.update(input?: unknown);
 ### Endpoints
 
  * [create](#customersattributescreate)
+ * [delete](#customersattributesdelete)
  * [delete](#customersattributesdelete)
  * [get](#customersattributesget)
  * [list](#customersattributeslist)
@@ -890,6 +917,19 @@ $ sdm 'big-commerce[some-store-alias].customers.attributes.create' [input-as-jso
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.attributes.create(input?: unknown);
+```
+
+
+### customers.attributes.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.attributes.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.attributes.delete(input?: unknown);
 ```
 
 
@@ -934,17 +974,16 @@ const command = bigCommerce.customers.attributes.list(input?: unknown);
 ```
 
 
-### customers.attributes[].update
+### customers.attributes.update
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].customers.attributes[id|*].update' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].customers.attributes.update' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.customers.attributes.$doc(id).update(input?: unknown);
-const command = bigCommerce.customers.attributes.$all.update(input?: unknown);
+const command = bigCommerce.customers.attributes.update(input?: unknown);
 ```
 
 
@@ -973,8 +1012,22 @@ const command = bigCommerce.customers.attributes.$all.values.list(input?: unknow
 ### Endpoints
 
  * [delete](#customersattributesvaluesdelete)
+ * [delete](#customersattributesvaluesdelete)
  * [list](#customersattributesvalueslist)
- * [set](#customersattributesvaluesset)
+ * [upsert](#customersattributesvaluesupsert)
+
+### customers.attributes.values.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.attributes.values.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.attributes.values.delete(input?: unknown);
+```
+
 
 ### customers.attributes.values[].delete
 
@@ -1002,16 +1055,16 @@ const command = bigCommerce.customers.attributes.values.list(input?: unknown);
 ```
 
 
-### customers.attributes.values[].set
+### customers.attributes.values.upsert
 
 *CLI*
 ```sh
-$ sdm 'big-commerce[some-store-alias].customers.attributes.values[id].set' [input-as-json5]
+$ sdm 'big-commerce[some-store-alias].customers.attributes.values.upsert' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
-const command = bigCommerce.customers.attributes.values.$doc(id).set(input?: unknown);
+const command = bigCommerce.customers.attributes.values.upsert(input?: unknown);
 ```
 
 

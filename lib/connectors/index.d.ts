@@ -154,12 +154,16 @@ export declare const regularConnectors: {
         };
         customers: import("..").ResourceDefinition<import("./big-commerce/client").default, {
             create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
             list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
         } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {
             addresses: {
                 endpoints: {
                     create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                     list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                 };
                 documents: {
                     idField: string;
@@ -167,22 +171,24 @@ export declare const regularConnectors: {
                     endpoints: {
                         delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
                         get: import("..").EndpointDefinition<import("./big-commerce/client").default, any, any>;
-                        update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                     };
                 };
             };
             attributes: import("..").ResourceDefinition<import("./big-commerce/client").default, {
                 create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                 list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
             } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {
                 values: {
                     endpoints: {
+                        delete: import("..").EndpointDefinition<import("./big-commerce/client").default, object, void>;
                         list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        upsert: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                     };
                     documents: {
                         endpoints: {
                             delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
-                            set: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                         };
                     };
                 };
@@ -192,7 +198,6 @@ export declare const regularConnectors: {
                 endpoints: {
                     delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
                     get: import("..").EndpointDefinition<import("./big-commerce/client").default, any, any>;
-                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                 };
             } & {
                 resources: {
@@ -209,7 +214,6 @@ export declare const regularConnectors: {
             endpoints: {
                 delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
                 get: import("..").EndpointDefinition<import("./big-commerce/client").default, any, any>;
-                update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
             };
         } & import("..").DocumentDefinition<import("./big-commerce/client").default>>;
         giftCertificates: {
