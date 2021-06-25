@@ -8,6 +8,7 @@ import { Reference } from "../../framework";
 import * as t from 'io-ts'
 import R from "ramda";
 import { useAgent } from "./functions";
+import { mergeUnordered, pipe } from "@space48/json-pipe";
 
 export type Magento1RestConfig = t.TypeOf<typeof magento1RestConfigSchema>;
 
@@ -36,6 +37,52 @@ export class Magento1RestClient {
   }
 
   async* search<T extends Record<string, any> = any>(
+    uri: string,
+    {sortKey, filters=[]}: {sortKey: string, filters?: Filter[]}
+  ): AsyncIterable<T> {
+    const [minId, maxId] = await Promise.all([
+      this.getFirstItemId(uri, {sortKey, filters}, 'asc'),
+      this.getFirstItemId(uri, {sortKey, filters}, 'desc'),
+    ]);
+
+    if (minId === null || maxId === null) {
+      return;
+    }
+
+    const maxNumShards = 100;
+    const pageSize = 100;
+    const maxPossibleNumItems = Number(maxId) - Number(minId) + 1;
+    const maxPossibleNumPages = Math.ceil(maxPossibleNumItems / pageSize);
+    const numShards = Math.min(maxNumShards, maxPossibleNumPages);
+    const idsPerShard = Math.ceil(maxPossibleNumItems / numShards);
+    const shardFilters: Filter[][] = range(numShards).map(n => [
+      [sortKey, "gteq", Number(minId) + idsPerShard * n],
+      [sortKey, "lt", Number(minId) + idsPerShard * (n + 1)],
+    ]);
+    const shards = shardFilters.map(filters => this.searchRange(uri, ({sortKey, filters})));
+    yield* mergeUnordered(...shards);
+  }
+
+  private async getFirstItemId<T extends Record<string, any> = any>(
+    uri: string,
+    {sortKey, filters=[]}: {sortKey: string, filters?: Filter[]},
+    dir: 'asc' | 'desc'
+  ): Promise<string|number|null> {
+    const content = await this.get<Record<string, T>>(uri, {
+      filter: filters
+        .map(([attribute, conditionType, value]) => ({attribute, [conditionType]: value})),
+      order: sortKey,
+      dir,
+      limit: 1,
+    });
+    const items = Object.values(content);
+    if (items.length === 0) {
+      return null;
+    }
+    return items.slice(-1)[0][sortKey] as string|number;
+  }
+
+  private async* searchRange<T extends Record<string, any> = any>(
     uri: string,
     {sortKey, filters=[]}: {sortKey: string, filters?: Filter[]}
   ): AsyncIterable<T> {
@@ -161,7 +208,7 @@ function flattenParam(name: string, value: QueryParam): [string, string][] {
   }
 }
 
-type FilterCondition = 'eq' | 'gt' | 'in';
+type FilterCondition = 'eq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'in';
 type Filter = [string, FilterCondition, string|number|string[]|number[]];
 
 export async function getAccessToken(baseUrl: string, credentials: Magento1RestConfig['credentials']): Promise<Magento1RestConfig['accessToken']> {
@@ -204,3 +251,5 @@ function getOauthClient(baseUrl: string, credentials: Magento1RestConfig['creden
     'HMAC-SHA1'
   );
 }
+
+const range = (n: number) => Array.from(Array(n).keys());
