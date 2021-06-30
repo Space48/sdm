@@ -188,6 +188,21 @@ export const bigCommerce = connector({
             },
           },
         },
+
+        resources: {
+          statuses: {
+            endpoints: {
+              list: endpoint.fn('v2/order_statuses', async function* (bcClient, uri) {
+                yield* await bcClient.get<object[]>(uri);
+              }),
+            },
+            documents: {
+              endpoints: {
+                get: endpoint.get('v2/order_statuses/{id}'),
+              },
+            },
+          },
+        },
       },
     ),
 
