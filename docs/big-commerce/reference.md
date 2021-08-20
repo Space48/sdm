@@ -23,6 +23,7 @@
  * [orders[].refunds](#ordersrefunds)
  * [orders[].shipping-addresses](#ordersshipping-addresses)
  * [orders[].products](#ordersproducts)
+ * [orders.statuses](#ordersstatuses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
  * [products](#products)
@@ -1328,6 +1329,39 @@ $ sdm 'big-commerce[some-store-alias].orders[id|*].products.list' [input-as-json
 ```javascript
 const command = bigCommerce.orders.$doc(id).products.list(input?: unknown);
 const command = bigCommerce.orders.$all.products.list(input?: unknown);
+```
+
+
+## orders.statuses
+
+### Endpoints
+
+ * [get](#ordersstatusesget)
+ * [list](#ordersstatuseslist)
+
+### orders.statuses[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders.statuses[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.statuses.$doc(id).get(input?: unknown);
+```
+
+
+### orders.statuses.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders.statuses.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.statuses.list(input?: unknown);
 ```
 
 

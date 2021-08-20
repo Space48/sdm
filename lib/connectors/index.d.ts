@@ -234,7 +234,18 @@ export declare const regularConnectors: {
         orders: import("..").ResourceDefinition<import("./big-commerce/client").default, {
             create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
             list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
-        } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default>, {
+        } & import("..").EndpointDefinitionMap<import("./big-commerce/client").default>, import("..").ResourceDefinitionMap<import("./big-commerce/client").default> & {
+            statuses: {
+                endpoints: {
+                    list: import("..").EndpointDefinition<import("./big-commerce/client").default, any, object>;
+                };
+                documents: {
+                    endpoints: {
+                        get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    };
+                };
+            };
+        }, {
             idField: string;
             listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
             endpoints: {

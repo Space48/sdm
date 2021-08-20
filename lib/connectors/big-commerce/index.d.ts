@@ -232,7 +232,18 @@ export declare const bigCommerce: f.Connector<{
     orders: f.ResourceDefinition<BigCommerce, {
         create: f.EndpointDefinition<BigCommerce, object, object>;
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
-    } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
+    } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
+        statuses: {
+            endpoints: {
+                list: f.EndpointDefinition<BigCommerce, any, object>;
+            };
+            documents: {
+                endpoints: {
+                    get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                };
+            };
+        };
+    }, {
         idField: string;
         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
         endpoints: {
