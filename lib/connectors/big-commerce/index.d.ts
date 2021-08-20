@@ -247,6 +247,27 @@ export declare const bigCommerce: f.Connector<{
                     get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                 };
             };
+            shippingAddresses: {
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        update: f.EndpointDefinition<BigCommerce, object, object>;
+                    };
+                };
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                };
+            };
+            products: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                };
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    };
+                };
+            };
         };
     }>;
     pages: {
