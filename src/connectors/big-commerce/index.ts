@@ -11,13 +11,13 @@ const mergeResources = resourceMerger<BigCommerce>();
 
 export const bigCommerce = connector({
   configSchema,
-  
+
   scopeNameExample: 'some-store-alias',
-  
+
   getScopeName: config => config.storeAlias,
 
   getScope: config => new BigCommerce(config),
-  
+
   getWarningMessage: async (client: BigCommerce) => {
     try {
       const store = await client.get('v2/store');
@@ -160,7 +160,7 @@ export const bigCommerce = connector({
                     list: endpoint.list('v3/customers/attribute-values'),
                     upsert: batch.updateMany('v3/customers/attribute-values'),
                   },
-      
+
                   documents: {
                     endpoints: {
                       delete: batch.deleteOne('v3/customers/attribute-values'),
@@ -175,7 +175,7 @@ export const bigCommerce = connector({
     ),
 
     giftCertificates: endpoint.crud('v2/gift_certificates'),
-    
+
     orders: mergeResources(
       endpoint.crud('v2/orders'),
       {
@@ -184,6 +184,17 @@ export const bigCommerce = connector({
             refunds: {
               endpoints: {
                 get: endpoint.get('v3/orders/{id}/payment_actions/refunds'),
+              },
+            },
+            shippingAddresses: {
+              documents: {
+                endpoints: {
+                  get: endpoint.get('v2/orders/{id}/shipping_addresses'),
+                  update: endpoint.update('v2/orders/{id}/shipping_addresses'),
+                },
+              },
+              endpoints: {
+                list: endpoint.list('v2/orders/{id}/shipping_addresses'),
               },
             },
           },

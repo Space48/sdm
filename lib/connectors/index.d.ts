@@ -249,6 +249,17 @@ export declare const regularConnectors: {
                         get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
                     };
                 };
+                shippingAddresses: {
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                        };
+                    };
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    };
+                };
             };
         }>;
         pages: {

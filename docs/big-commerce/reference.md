@@ -21,6 +21,7 @@
  * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
+ * [orders[].shipping-addresses](#ordersshipping-addresses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
  * [products](#products)
@@ -1241,6 +1242,56 @@ $ sdm 'big-commerce[some-store-alias].orders[id|*].refunds.get' [input-as-json5]
 ```javascript
 const command = bigCommerce.orders.$doc(id).refunds.get(input?: unknown);
 const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
+```
+
+
+## orders[].shipping-addresses
+
+### Endpoints
+
+ * [get](#ordersshipping-addressesget)
+ * [list](#ordersshipping-addresseslist)
+ * [update](#ordersshipping-addressesupdate)
+
+### orders[].shipping-addresses[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipping-addresses[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shippingAddresses.$doc(id).get(input?: unknown);
+const command = bigCommerce.orders.$all.shippingAddresses.$doc(id).get(input?: unknown);
+```
+
+
+### orders[].shipping-addresses.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipping-addresses.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shippingAddresses.list(input?: unknown);
+const command = bigCommerce.orders.$all.shippingAddresses.list(input?: unknown);
+```
+
+
+### orders[].shipping-addresses[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipping-addresses[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shippingAddresses.$doc(id).update(input?: unknown);
+const command = bigCommerce.orders.$all.shippingAddresses.$doc(id).update(input?: unknown);
 ```
 
 
