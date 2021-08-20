@@ -249,6 +249,16 @@ export declare const regularConnectors: {
                         get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
                     };
                 };
+                products: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    };
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        };
+                    };
+                };
             };
         }>;
         pages: {

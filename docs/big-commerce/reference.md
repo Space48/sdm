@@ -21,6 +21,7 @@
  * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
+ * [orders[].products](#ordersproducts)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
  * [products](#products)
@@ -1241,6 +1242,41 @@ $ sdm 'big-commerce[some-store-alias].orders[id|*].refunds.get' [input-as-json5]
 ```javascript
 const command = bigCommerce.orders.$doc(id).refunds.get(input?: unknown);
 const command = bigCommerce.orders.$all.refunds.get(input?: unknown);
+```
+
+
+## orders[].products
+
+### Endpoints
+
+ * [get](#ordersproductsget)
+ * [list](#ordersproductslist)
+
+### orders[].products[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].products[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).products.$doc(id).get(input?: unknown);
+const command = bigCommerce.orders.$all.products.$doc(id).get(input?: unknown);
+```
+
+
+### orders[].products.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].products.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).products.list(input?: unknown);
+const command = bigCommerce.orders.$all.products.list(input?: unknown);
 ```
 
 
