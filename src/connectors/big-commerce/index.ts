@@ -192,7 +192,7 @@ export const bigCommerce = connector({
               },
               documents: {
                 endpoints: {
-                  get: endpoint.get('v2/orders/{id}/products'),
+                  get: endpoint.get('v2/orders/{id}/products/{product_id}'),
                 },
               },
             },
