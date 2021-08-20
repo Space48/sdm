@@ -189,8 +189,8 @@ export const bigCommerce = connector({
             shippingAddresses: {
               documents: {
                 endpoints: {
-                  get: endpoint.get('v2/orders/{id}/shipping_addresses'),
-                  update: endpoint.update('v2/orders/{id}/shipping_addresses'),
+                  get: endpoint.get('v2/orders/{id}/shipping_addresses/{shipping_address_id}'),
+                  update: endpoint.update('v2/orders/{id}/shipping_addresses/{shipping_address_id}'),
                 },
               },
               endpoints: {
