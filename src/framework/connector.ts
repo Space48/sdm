@@ -745,7 +745,11 @@ export abstract class State {
   }
 
   static tap<StateT, InT>(fn: (element: InT) => void): Transform<State<StateT> | InT, State<StateT> | InT> {
-    return tap(element =>  State.isState(element) ? element : fn(element))
+    return tap(element => {
+      if (!State.isState(element)) {
+        fn(element);
+      }
+    })
   }
 
   static flatMapAsync<StateT, InT, OutT>(options: FlatMapAsyncOptions, mapper: (element: InT) => AsyncIterable<OutT>): Transform<State<StateT> | InT, State<StateT> | OutT> {
