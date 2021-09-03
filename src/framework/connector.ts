@@ -289,19 +289,19 @@ function endpoint(path: Path, endpoint: string): Endpoint {
 }
 
 interface OptionalInputEndpointFns<
-  InT = any,
-  OutT = any,
+  InTConstraint = any,
+  OutTConstraint = any,
   MultiPath extends boolean = boolean,
 > {
-  <T extends InT>(input?: T): Command<T, OutT, MultiPath>
+  <OutT extends OutTConstraint = OutTConstraint, InT extends InTConstraint = InTConstraint>(input?: InT): Command<typeof input, OutT, MultiPath>
 }
 
 interface MandatoryInputEndpointFns<
-  InT = any,
-  OutT = any,
+  InTConstraint = any,
+  OutTConstraint = any,
   MultiPath extends boolean = boolean,
 > {
-  <T extends InT>(input: T): Command<T, OutT, MultiPath>
+  <OutT extends OutTConstraint = OutTConstraint, InT extends InTConstraint = InTConstraint>(input: InT): Command<InT, OutT, MultiPath>
 }
 
 export interface State<T = unknown> {
