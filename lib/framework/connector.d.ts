@@ -10,12 +10,43 @@ export declare type ScopeRef = {
  */
 export declare function resource<T extends ResourceDefinition>(resource: T): T;
 export declare function resourceMerger<Scope>(): <E1 extends EndpointDefinitionMap<Scope>, R1 extends ResourceDefinitionMap<Scope>, D1 extends DocumentDefinition<Scope>, E2 extends EndpointDefinitionMap<Scope>, R2 extends ResourceDefinitionMap<Scope>, D2 extends DocumentDefinition<Scope>>(r1: ResourceDefinition<Scope, E1, R1, D1>, r2: ResourceDefinition<Scope, E2, R2, D2>) => ResourceDefinition<Scope, E1 & E2, R1 & R2, D1 & D2>;
+/**
+ * A definition of a connector describing the required configuration and available
+ * endpoints for that connector.
+ */
 export interface ConnectorDefinition<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>> {
+    /**
+     * Schema describing config required by this connector, e.g. authentication,
+     * concurrency, etc.
+     */
     readonly configSchema: t.Type<Config>;
+    /**
+     * Resources available on this connector
+     */
     readonly resources: Resources;
+    /**
+     * An example of a resource name to be used when generating docs. See existing
+     * connectors for examples.
+     */
     readonly scopeNameExample: string | null;
+    /**
+     * Create a "scope" which can be used to execute commands against this connector.
+     *
+     * Scope will typically be some kind of HTTP client which is updated whenever the
+     * config changes. (E.g. when a user modifies the config while a long running process
+     * is running, such as changing a concurrency limit.)
+     */
     getScope(config: MutableReference<Config>): Scope;
+    /**
+     * Given a scope config, returns a unique name for the scope. E.g. this might be
+     * a base URL in the case of Magento or a shop identifier in the case of Shopify.
+     */
     getScopeName(config: Config): string;
+    /**
+     * Returns a warning message to be shown to a user before they execute commands
+     * against this scope. For example, this might be a message warning the user that
+     * the given scope relates to a production instance.
+     */
     getWarningMessage(scope: Scope): Promise<string | undefined | void>;
 }
 export declare type Connector<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = {}> = ResourceMap<Resources, false> & {

@@ -114,16 +114,52 @@ export function resourceMerger<Scope>() {
   }
 }
 
+/**
+ * A definition of a connector describing the required configuration and available
+ * endpoints for that connector.
+ */
 export interface ConnectorDefinition<
   Config = any,
   Scope = any,
   Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>,
 > {
+  /**
+   * Schema describing config required by this connector, e.g. authentication,
+   * concurrency, etc.
+   */
   readonly configSchema: t.Type<Config>
+
+  /**
+   * Resources available on this connector
+   */
   readonly resources: Resources
+
+  /**
+   * An example of a resource name to be used when generating docs. See existing
+   * connectors for examples.
+   */
   readonly scopeNameExample: string|null
+
+  /**
+   * Create a "scope" which can be used to execute commands against this connector.
+   * 
+   * Scope will typically be some kind of HTTP client which is updated whenever the
+   * config changes. (E.g. when a user modifies the config while a long running process
+   * is running, such as changing a concurrency limit.)
+   */
   getScope(config: MutableReference<Config>): Scope
+
+  /**
+   * Given a scope config, returns a unique name for the scope. E.g. this might be
+   * a base URL in the case of Magento or a shop identifier in the case of Shopify.
+   */
   getScopeName(config: Config): string
+
+  /**
+   * Returns a warning message to be shown to a user before they execute commands 
+   * against this scope. For example, this might be a message warning the user that
+   * the given scope relates to a production instance.
+   */
   getWarningMessage(scope: Scope): Promise<string|undefined|void>
 }
 
