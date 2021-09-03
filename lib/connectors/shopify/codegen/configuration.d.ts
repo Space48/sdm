@@ -10,6 +10,9 @@
  * configured below.
  */
 export declare const resourceDefinitions: {
+    currency: import("../../..").ResourceDefinition<import("../client").Scope, {
+        list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICurrency>;
+    }, {}, {}>;
     location: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
         count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
@@ -92,16 +95,16 @@ export declare const resourceDefinitions: {
                 create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
             }, {}, {
                 endpoints: {
-                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                     default: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
+                    get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICustomerAddress>;
                     delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
                     update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomerAddress>;
                 };
             }>;
         };
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
             search: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
             orders: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IOrder>;
             delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomer>;
@@ -354,9 +357,6 @@ export declare const resourceDefinitions: {
             update: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").IUpdateCountry, import("shopify-api-node").ICountry>;
         };
     }>;
-    currency: import("../../..").ResourceDefinition<import("../client").Scope, {
-        list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ICurrency>;
-    }, {}, {}>;
     customCollection: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomCollection>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").ICustomCollection>;
@@ -468,8 +468,8 @@ export declare const resourceDefinitions: {
             }>;
         };
         endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IGiftCard>;
             search: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IGiftCard>;
             update: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IGiftCard>;
             disable: import("../../..").EndpointDefinition<import("../client").Scope, undefined, unknown> | import("../../..").EndpointDefinition<import("../client").Scope, undefined, any>;
         };

@@ -82,11 +82,11 @@ export interface EndpointPayload<T = undefined> {
 }
 export declare type DocId = number | string;
 declare type Endpoint<T extends EndpointDefinition = EndpointDefinition, MultiPath extends boolean = boolean> = T extends EndpointDefinition<any, infer InT, infer OutT> ? undefined extends InT ? OptionalInputEndpointFns<InT, OutT, MultiPath> : MandatoryInputEndpointFns<InT, OutT, MultiPath> : never;
-interface OptionalInputEndpointFns<InT = any, OutT = any, MultiPath extends boolean = boolean> {
-    <T extends InT>(input?: T): Command<T, OutT, MultiPath>;
+interface OptionalInputEndpointFns<InTConstraint = any, OutTConstraint = any, MultiPath extends boolean = boolean> {
+    <OutT extends OutTConstraint = OutTConstraint, InT extends InTConstraint = InTConstraint>(input?: InT): Command<typeof input, OutT, MultiPath>;
 }
-interface MandatoryInputEndpointFns<InT = any, OutT = any, MultiPath extends boolean = boolean> {
-    <T extends InT>(input: T): Command<T, OutT, MultiPath>;
+interface MandatoryInputEndpointFns<InTConstraint = any, OutTConstraint = any, MultiPath extends boolean = boolean> {
+    <OutT extends OutTConstraint = OutTConstraint, InT extends InTConstraint = InTConstraint>(input: InT): Command<InT, OutT, MultiPath>;
 }
 export interface State<T = unknown> {
     state: T;
