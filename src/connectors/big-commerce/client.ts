@@ -5,6 +5,7 @@ import * as t from 'io-ts'
 import { EndpointError, MutableReference } from "../../framework";
 import { Agent } from "https";
 import R from "ramda";
+import {first} from "@space48/json-pipe";
 
 const listConcurrency = 50;
 
@@ -41,6 +42,9 @@ export default class BigCommerce {
   async* list<T = any>(uri: string, params?: Record<string, any>): AsyncIterable<T> {
     // a lot of list reqs involve a single page or don't support pagination, only do one req in those cases
     const firstPage = await this.doGet(uri, {page: 1, ...(params || {})});
+    if (!firstPage) {
+      return;
+    }
     yield* unwrap(firstPage);
 
     const totalPages =
@@ -110,7 +114,7 @@ export default class BigCommerce {
         responseText = response.text();
         if (response.status === 422) {
           if ((await responseText).includes('saving error')) {
-            throw new Error; // this will trigger a retry  
+            throw new Error; // this will trigger a retry
           }
         }
         if (response.status === 429 || (response.status >= 500 && response.status < 600)) {
@@ -168,5 +172,5 @@ type V3Pagination = {
 
 function computeNumPages(pagination: V3Pagination): number {
   // note -- total_pages does not respect the actual page size, so we cannot use it
-  return pagination.total === 0 ? 0 : Math.ceil(pagination.total / pagination.count); 
+  return pagination.total === 0 ? 0 : Math.ceil(pagination.total / pagination.count);
 }
