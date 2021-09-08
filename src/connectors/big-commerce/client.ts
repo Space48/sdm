@@ -5,7 +5,6 @@ import * as t from 'io-ts'
 import { EndpointError, MutableReference } from "../../framework";
 import { Agent } from "https";
 import R from "ramda";
-import {first} from "@space48/json-pipe";
 
 const listConcurrency = 50;
 
