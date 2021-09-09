@@ -207,6 +207,11 @@ export const bigCommerce = connector({
                 },
               },
             },
+            coupons: {
+              endpoints: {
+                list: endpoint.list('v2/orders/{id}/coupons'),
+              }
+            },
           },
         },
 

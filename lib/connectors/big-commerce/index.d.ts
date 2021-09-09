@@ -279,6 +279,11 @@ export declare const bigCommerce: f.Connector<{
                     };
                 };
             };
+            coupons: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                };
+            };
         };
     }>;
     pages: {
