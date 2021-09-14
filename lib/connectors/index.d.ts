@@ -286,6 +286,20 @@ export declare const regularConnectors: {
                         list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
                     };
                 };
+                shipments: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                        delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                    };
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                        };
+                    };
+                };
             };
         }>;
         pages: {

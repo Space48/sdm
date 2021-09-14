@@ -212,6 +212,20 @@ export const bigCommerce = connector({
                 list: endpoint.list('v2/orders/{id}/coupons'),
               }
             },
+            shipments: {
+              endpoints: {
+                list: endpoint.list('v2/orders/{id}/shipments'),
+                create: endpoint.create('v2/orders/{id}/shipments'),
+                delete: endpoint.del('v2/orders/{id}/shipments'),
+              },
+              documents: {
+                endpoints: {
+                  get: endpoint.get('v2/orders/{id}/shipments/{shipment_id}'),
+                  update: endpoint.update('v2/orders/{id}/shipments/{shipment_id}'),
+                  delete: endpoint.del('v2/orders/{id}/shipments/{shipment_id}'),
+                },
+              },
+            },
           },
         },
 

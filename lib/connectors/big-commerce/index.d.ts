@@ -284,6 +284,20 @@ export declare const bigCommerce: f.Connector<{
                     list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                 };
             };
+            shipments: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    create: f.EndpointDefinition<BigCommerce, object, object>;
+                    delete: f.EndpointDefinition<BigCommerce, any, void>;
+                };
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        update: f.EndpointDefinition<BigCommerce, object, object>;
+                        delete: f.EndpointDefinition<BigCommerce, any, void>;
+                    };
+                };
+            };
         };
     }>;
     pages: {
