@@ -1,35 +1,23 @@
-import { Command } from "./resource";
-import { tap, compose, streamJson, transformJson } from "@space48/json-pipe";
+import { Command, ConnectorScope } from "./connector";
+import { onEnd, tap, compose, pipe, streamJson, transformJson } from "@space48/json-pipe";
 import ipc from "node-ipc";
 
-export async function streamAndReportProgress(scope: string, command: Command, processor: () => AsyncIterable<any>): Promise<void> {
-  const progress = Client.reportProgress(scope, command);
-  const wrappedProcessor = compose(
-    processor,
-    tap(() => progress.recordOutput()),
-  );
-  try {
-    await streamJson(() => wrappedProcessor(null));
-    progress.finish();
-  } catch (e) {
-    progress.finish(e);
-    throw e;
-  }
-}
-
-export async function transformAndReportProgress(scope: string, command: Command, processor: (input: AsyncIterable<any>) => AsyncIterable<any>): Promise<void> {
-  const progress = Client.reportProgress(scope, command);
-  const wrappedProcessor = compose(
-    processor,
-    tap(() => progress.recordOutput()),
-  );
-  try {
-    await transformJson(wrappedProcessor);
-    progress.finish();
-  } catch (e) {
-    progress.finish(e);
-    throw e;
-  }
+export function watchScope(scope: ConnectorScope): ConnectorScope {
+  return {
+    ...scope,
+    execute: async function* (commands) {
+      const progress = Client.reportProgress(scope.scopeName, commands);
+      try {
+        for await (const output of scope.execute(commands)) {
+          progress.recordOutput(output);
+          yield output as any;
+        }
+        progress.finish()
+      } catch (e) {
+        progress.finish(e);
+      }
+    }
+  };
 }
 
 export function listenForProgress(listener: (state: ProcessSnapshot[]) => void): () => void {
@@ -78,7 +66,7 @@ class Client {
   private static connected = false;
   private static nextCommandId = 1;
 
-  static reportProgress(scope: string, command: Command): CommandProgress {
+  static reportProgress(scope: string, commandOrCommands: any): ExecutionProgress {
     Client.start();
     const data = {
       pid: process.pid,
@@ -147,6 +135,29 @@ class Client {
   }
 }
 
+class ExecutionProgress {
+  private multiCommand: boolean;
+
+  constructor(commandOrCommands) {
+    this.multiCommand = isIterable(commandOrCommands);
+  }
+
+  recordOutput(output: unknown) {
+    if (this.multiCommand) {
+
+    } else {
+
+    }
+  }
+
+  finish(error?: Error): void {
+    const timestamp = new Date();
+    this.progress.error = error?.message ?? null;
+    this.progress.finishTime = timestamp;
+    this.onFinish(this.getStats(timestamp));
+  }
+}
+
 class CommandProgress {
   private outputCount: number = 0;
   private checkpoints: Array<[number, number]> = [];
@@ -166,13 +177,6 @@ class CommandProgress {
 
   recordOutput(): void {
     this.outputCount++;
-  }
-
-  finish(error?: Error): void {
-    const timestamp = new Date();
-    this.progress.error = error?.message ?? null;
-    this.progress.finishTime = timestamp;
-    this.onFinish(this.getStats(timestamp));
   }
 
   getStats(timestamp: Date): CommandProgressSnapshot {
@@ -235,4 +239,18 @@ function deserializeProcessState(state: any): ProcessSnapshot {
       },
     })),
   };
+}
+
+type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
+
+function isIterable<T>(value: any): value is AnyIterable<T> {
+  return isSyncIterable(value) || isAsyncIterable(value);
+}
+
+function isSyncIterable(value: any): value is Iterable<any> {
+  return Symbol.iterator in value;
+}
+
+function isAsyncIterable(value: any): value is AsyncIterable<any> {
+  return Symbol.asyncIterator in value;
 }

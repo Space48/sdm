@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-import { CommandProgressSnapshot, listenForProgress, ProcessSnapshot } from "../watch";
-import { flatten, distinct } from "../util";
+import { CommandProgressSnapshot, listenForProgress, ProcessSnapshot } from "../framework/watch";
 import Table from "cli-table3";
 import readline from "readline";
 import chalk from "chalk";
@@ -32,7 +31,7 @@ class ProgressLog {
   private data = new Map<string, CommandProgressSnapshot>();
 
   apply(processes: ProcessSnapshot[]) {
-    const commandProgress = processes.map(({commands}) => commands).reduce(flatten, []);
+    const commandProgress = processes.flatMap(({commands}) => commands);
     commandProgress.forEach(progress => {
       const commandIdentifier = `${progress.pid}-${progress.commandId}`;
       this.data.set(commandIdentifier, progress);
@@ -40,9 +39,9 @@ class ProgressLog {
   }
 
   getScopes(): string[] {
-    return [...this.data.values()]
-      .map(commandProgress => commandProgress.scope)
-      .filter(distinct);
+    return distinct(
+      [...this.data.values()].map(commandProgress => commandProgress.scope)
+    );
   }
 
   getCommands(scope: string): CommandProgressSnapshot[] {
@@ -56,7 +55,7 @@ function renderProgressTable(commands: CommandProgressSnapshot[]): string {
   const table = new Table({head});
   const lines = commands
     .sort((command1, command2) => compareCommandsForSort(command1, command2))
-    .map(command => {
+    .flatMap(command => {
       const runtimeMillis = command.stats.timestamp.getTime() - command.startTime.getTime();
       const rows = [
         [
@@ -77,8 +76,7 @@ function renderProgressTable(commands: CommandProgressSnapshot[]): string {
         ]
       ];
       return command.error ? rows : rows.slice(0, 1);
-    })
-    .reduce(flatten, []);
+    });
   table.push(...lines);
   return table.toString();
 }
@@ -130,3 +128,7 @@ class Clock {
 }
 
 main();
+
+function distinct<T>(values: T[]): T[] {
+  return [...new Set(values)];
+}
