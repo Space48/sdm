@@ -9,12 +9,11 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": ["ES2018"],
+    "lib": ["ES2019"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": true,
     "strictNullChecks": true
   },
   "include": ["src"],
-  "exclude": ["src/bin/sdm-watch.ts", "src/framework/watch.ts"]
 }
