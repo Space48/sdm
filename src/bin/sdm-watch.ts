@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { CommandProgressSnapshot, listenForProgress, ProcessSnapshot } from "../framework/watch";
+import { CommandProgressSnapshot, ExecutionProgressSnapshot, listenForProgress, ProcessSnapshot } from "../framework/watch";
 import Table from "cli-table3";
 import readline from "readline";
 import chalk from "chalk";
@@ -14,9 +14,10 @@ function main() {
   const stop = listenForProgress(async processes => {
     progressLog.apply(processes);
     const output = progressLog.getScopes()
-      .map(scope => ` ${chalk.red.underline.bold(scope)}\n\n${renderProgressTable(progressLog.getCommands(scope))}`)
+      .map(scope => ` ${chalk.red.underline.bold(scope)}\n\n${renderProgressTable(progressLog.getExecutions(scope))}`)
       .join('\n\n');
     readline.cursorTo(process.stdout, 0, 0);
+    console.error(`Cursor`)
     readline.clearScreenDown(process.stdout);
     process.stdout.write(output + '\n');
   });
@@ -28,12 +29,12 @@ function main() {
 }
 
 class ProgressLog {
-  private data = new Map<string, CommandProgressSnapshot>();
+  private data = new Map<string, ExecutionProgressSnapshot>();
 
   apply(processes: ProcessSnapshot[]) {
-    const commandProgress = processes.flatMap(({commands}) => commands);
-    commandProgress.forEach(progress => {
-      const commandIdentifier = `${progress.pid}-${progress.commandId}`;
+    const executionProgress = processes.map(({executions}) => executions).flat();
+    executionProgress.forEach(progress => {
+      const commandIdentifier = `${progress.pid}-${progress.executionId}`;
       this.data.set(commandIdentifier, progress);
     });
   }
@@ -44,52 +45,54 @@ class ProgressLog {
     );
   }
 
-  getCommands(scope: string): CommandProgressSnapshot[] {
+  getExecutions(scope: string): ExecutionProgressSnapshot[] {
     return [...this.data.values()]
       .filter(commandProgress => commandProgress.scope === scope);
   }
 }
 
-function renderProgressTable(commands: CommandProgressSnapshot[]): string {
-  const head = ['PID', 'Command', 'Runtime', 'Items', 'RPM', 'RPM 10s', 'RPM 60s', 'RPM 5m', 'Start', 'Finish'];
+function renderProgressTable(executions: ExecutionProgressSnapshot[]): string {
+  const head = ['Command', 'Runtime', 'Items', 'RPM', 'RPM 10s', 'RPM 60s', 'RPM 5m', 'Start', 'Finish'];
   const table = new Table({head});
-  const lines = commands
-    .sort((command1, command2) => compareCommandsForSort(command1, command2))
-    .flatMap(command => {
-      const runtimeMillis = command.stats.timestamp.getTime() - command.startTime.getTime();
+  const lines = executions
+    .sort(compareExecutionsForSort)
+    .flatMap(execution => {
+      const runtimeMillis = execution.timestamp.getTime() - execution.startTime.getTime();
+      const commandRows = execution.commands.flatMap(command => [
+        `${command.command.endpoint} ${command.command.path}`,
+        formatDuration(execution.startTime, command.stats.timestamp),
+        command.stats.outputs,
+        computeRpm(command.stats.outputs, runtimeMillis),
+        computeRpm(command.stats.outputs10, Math.min(10_000, runtimeMillis)),
+        computeRpm(command.stats.outputs60, Math.min(60_000, runtimeMillis)),
+        computeRpm(command.stats.outputs300, Math.min(300_000, runtimeMillis)),
+        formatTimestamp(execution.startTime),
+        execution.finishTime ? formatTimestamp(execution.finishTime) : '-',
+      ])
+      console.error(`Command Rows: ${JSON.stringify(commandRows)}`)
       const rows = [
-        [
-          command.pid,
-          `${command.command.name} ${command.command.path}`,
-          formatDuration(command.startTime, command.stats.timestamp),
-          command.stats.outputs,
-          computeRpm(command.stats.outputs, runtimeMillis),
-          computeRpm(command.stats.outputs10, Math.min(10_000, runtimeMillis)),
-          computeRpm(command.stats.outputs60, Math.min(60_000, runtimeMillis)),
-          computeRpm(command.stats.outputs300, Math.min(300_000, runtimeMillis)),
-          formatTimestamp(command.startTime),
-          command.finishTime ? formatTimestamp(command.finishTime) : '-',
-        ],
+        commandRows,
         [
           '',
-          {colSpan: head.length - 1, content: `↳ Error: ${command.error}`}
+          {colSpan: head.length - 1, content: `↳ Error: ${execution.error}`}
         ]
       ];
-      return command.error ? rows : rows.slice(0, 1);
+      return execution.error ? rows : rows.slice(0, 1);
     });
+  console.error(`Lines: ${JSON.stringify(lines)}`)
   table.push(...lines);
   return table.toString();
 }
 
-function compareCommandsForSort(command1: CommandProgressSnapshot, command2: CommandProgressSnapshot): number {
-  if (command1.finishTime && !command2.finishTime) {
+function compareExecutionsForSort(execution1: ExecutionProgressSnapshot, execution2: ExecutionProgressSnapshot): number {
+  if (execution1.finishTime && !execution2.finishTime) {
     return -1;
   }
-  if (command2.finishTime && !command1.finishTime) {
+  if (execution2.finishTime && !execution1.finishTime) {
     return 1;
   }
-  const command1ComparisonValue = command1.finishTime?.getTime() ?? command1.startTime.getTime();
-  const command2ComparisonValue = command2.finishTime?.getTime() ?? command2.startTime.getTime();
+  const command1ComparisonValue = execution1.finishTime?.getTime() ?? execution1.startTime.getTime();
+  const command2ComparisonValue = execution2.finishTime?.getTime() ?? execution2.startTime.getTime();
   return command2ComparisonValue < command1ComparisonValue ? 1 : -1;
 }
 
