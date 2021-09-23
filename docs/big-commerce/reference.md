@@ -24,6 +24,7 @@
  * [orders[].shipping-addresses](#ordersshipping-addresses)
  * [orders[].products](#ordersproducts)
  * [orders[].coupons](#orderscoupons)
+ * [orders[].shipments](#ordersshipments)
  * [orders.statuses](#ordersstatuses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
@@ -1350,6 +1351,101 @@ $ sdm 'big-commerce[some-store-alias].orders[id|*].coupons.list' [input-as-json5
 ```javascript
 const command = bigCommerce.orders.$doc(id).coupons.list(input?: unknown);
 const command = bigCommerce.orders.$all.coupons.list(input?: unknown);
+```
+
+
+## orders[].shipments
+
+### Endpoints
+
+ * [create](#ordersshipmentscreate)
+ * [delete](#ordersshipmentsdelete)
+ * [delete](#ordersshipmentsdelete)
+ * [get](#ordersshipmentsget)
+ * [list](#ordersshipmentslist)
+ * [update](#ordersshipmentsupdate)
+
+### orders[].shipments.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.create(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.create(input?: unknown);
+```
+
+
+### orders[].shipments.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.delete(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.delete(input?: unknown);
+```
+
+
+### orders[].shipments[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.$doc(id).delete(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.$doc(id).delete(input?: unknown);
+```
+
+
+### orders[].shipments[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.$doc(id).get(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.$doc(id).get(input?: unknown);
+```
+
+
+### orders[].shipments.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.list(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.list(input?: unknown);
+```
+
+
+### orders[].shipments[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].shipments[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).shipments.$doc(id).update(input?: unknown);
+const command = bigCommerce.orders.$all.shipments.$doc(id).update(input?: unknown);
 ```
 
 
