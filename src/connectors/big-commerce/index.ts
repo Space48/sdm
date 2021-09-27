@@ -254,6 +254,32 @@ export const bigCommerce = connector({
       },
     },
 
+    priceLists: mergeResources(
+      endpoint.crud('v3/pricelists'),
+      {
+        resources: {
+          assignments: {
+            endpoints: {
+              create: endpoint.create('v3/pricelists/assignments'),
+              list: endpoint.list('v3/pricelists/assignments'),
+              delete: endpoint.del('v3/pricelists/assignments'),
+            },
+          },
+        },
+        documents: {
+          resources: {
+            records: {
+              endpoints: {
+                list: endpoint.list('v3/pricelists/{id}/records'),
+                upsert: endpoint.update('v3/pricelists/{id}/records'),
+                delete: endpoint.del('v3/pricelists/{id}/records'),
+              },
+            },
+          },
+        },
+      },
+    ),
+
     products: mergeResources(
       endpoint.crud('v3/catalog/products'),
       {
