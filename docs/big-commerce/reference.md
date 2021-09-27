@@ -28,6 +28,9 @@
  * [orders.statuses](#ordersstatuses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
+ * [price-lists](#price-lists)
+ * [price-lists[].records](#price-listsrecords)
+ * [price-lists.assignments](#price-listsassignments)
  * [products](#products)
  * [products[].bulk-pricing-rules](#productsbulk-pricing-rules)
  * [products[].complex-rules](#productscomplex-rules)
@@ -1576,6 +1579,181 @@ $ sdm 'big-commerce[some-store-alias].payment-methods.list' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.paymentMethods.list(input?: unknown);
+```
+
+
+## price-lists
+
+### Endpoints
+
+ * [create](#price-listscreate)
+ * [delete](#price-listsdelete)
+ * [get](#price-listsget)
+ * [list](#price-listslist)
+ * [update](#price-listsupdate)
+
+### price-lists.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.create(input?: unknown);
+```
+
+
+### price-lists[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).delete(input?: unknown);
+const command = bigCommerce.priceLists.$all.delete(input?: unknown);
+```
+
+
+### price-lists[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).get(input?: unknown);
+const command = bigCommerce.priceLists.$all.get(input?: unknown);
+```
+
+
+### price-lists.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.list(input?: unknown);
+```
+
+
+### price-lists[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).update(input?: unknown);
+const command = bigCommerce.priceLists.$all.update(input?: unknown);
+```
+
+
+## price-lists[].records
+
+### Endpoints
+
+ * [delete](#price-listsrecordsdelete)
+ * [list](#price-listsrecordslist)
+ * [upsert](#price-listsrecordsupsert)
+
+### price-lists[].records.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].records.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).records.delete(input?: unknown);
+const command = bigCommerce.priceLists.$all.records.delete(input?: unknown);
+```
+
+
+### price-lists[].records.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].records.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).records.list(input?: unknown);
+const command = bigCommerce.priceLists.$all.records.list(input?: unknown);
+```
+
+
+### price-lists[].records.upsert
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists[id|*].records.upsert' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.$doc(id).records.upsert(input?: unknown);
+const command = bigCommerce.priceLists.$all.records.upsert(input?: unknown);
+```
+
+
+## price-lists.assignments
+
+### Endpoints
+
+ * [create](#price-listsassignmentscreate)
+ * [delete](#price-listsassignmentsdelete)
+ * [list](#price-listsassignmentslist)
+
+### price-lists.assignments.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists.assignments.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.assignments.create(input?: unknown);
+```
+
+
+### price-lists.assignments.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists.assignments.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.assignments.delete(input?: unknown);
+```
+
+
+### price-lists.assignments.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].price-lists.assignments.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.priceLists.assignments.list(input?: unknown);
 ```
 
 
