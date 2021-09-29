@@ -114,7 +114,7 @@ To input data, whether as part of the path (such as an id), or as the body of th
 
 ```
 echo "{id: 1, body: "Updated blog text", "url":"/your-first-blog-post/"}" \
-| jq -c '{ path: [["blog.posts", .id]], endpoint: "update", input: . }' \
+| jq -c '{ path: ["blog", ["posts", .id]], endpoint: "update", input: del(.id) }' \
 | $(big-commerce)
 ```
 
