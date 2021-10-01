@@ -1,35 +1,27 @@
-import { Command } from "./resource";
-import { tap, compose, streamJson, transformJson } from "@space48/json-pipe";
+import { Command, ConnectorScope, OutputElement } from "./connector";
+import { onEnd, tap, compose, pipe, streamJson, transformJson } from "@space48/json-pipe";
 import ipc from "node-ipc";
+import { MessageHeader, Path } from ".";
+import { encodeHeader } from './binary-api';
+import { throws } from "assert";
+import { time, timeStamp } from "console";
 
-export async function streamAndReportProgress(scope: string, command: Command, processor: () => AsyncIterable<any>): Promise<void> {
-  const progress = Client.reportProgress(scope, command);
-  const wrappedProcessor = compose(
-    processor,
-    tap(() => progress.recordOutput()),
-  );
-  try {
-    await streamJson(() => wrappedProcessor(null));
-    progress.finish();
-  } catch (e) {
-    progress.finish(e);
-    throw e;
-  }
-}
-
-export async function transformAndReportProgress(scope: string, command: Command, processor: (input: AsyncIterable<any>) => AsyncIterable<any>): Promise<void> {
-  const progress = Client.reportProgress(scope, command);
-  const wrappedProcessor = compose(
-    processor,
-    tap(() => progress.recordOutput()),
-  );
-  try {
-    await transformJson(wrappedProcessor);
-    progress.finish();
-  } catch (e) {
-    progress.finish(e);
-    throw e;
-  }
+export function watchScope(scope: ConnectorScope): ConnectorScope {
+  return {
+    ...scope,
+    execute: async function* (commands: any) {
+      const progress = Client.reportProgress(scope.scopeName, commands);
+      try {
+        for await (const output of scope.execute(commands)) {
+          progress.recordOutput(output);
+          yield output as any;
+        }
+        progress.finish()
+      } catch (e) {
+        progress.finish(e);
+      }
+    }
+  };
 }
 
 export function listenForProgress(listener: (state: ProcessSnapshot[]) => void): () => void {
@@ -48,19 +40,25 @@ export function listenForProgress(listener: (state: ProcessSnapshot[]) => void):
   return () => ipc.server.stop();
 }
 
-export type ProcessSnapshot = {
+export type ProcessSnapshot = Readonly<{
   pid: number,
-  commands: CommandProgressSnapshot[],
-};
+  executions: ExecutionProgressSnapshot[],
+}>;
 
-export type CommandProgressSnapshot = {
-  pid: number,
-  commandId: number,
-  scope: string,
-  command: Command,
+export type ExecutionProgressSnapshot = Readonly<{
+  pid: number;
+  executionId: number,
+  error: string|null,
+  commands: CommandProgressSnapshot[],
+  timestamp: Date,
   startTime: Date,
   finishTime: Date|null,
-  error: string|null,
+  scope: string,
+}>
+
+export type CommandProgressSnapshot = Readonly<{
+  commandId: number,
+  command: MessageHeader,
   stats: {
     timestamp: Date,
     outputs: number,
@@ -68,33 +66,26 @@ export type CommandProgressSnapshot = {
     outputs60: number,
     outputs300: number,
   },
-};
+}>;
 
 class Client {
   // note that state is mutable
-  private static activeCommands: CommandProgress[] = [];
-  private static finishedCommands: CommandProgressSnapshot[] = [];
+  private static activeExecutions: ExecutionProgress[] = [];
+  private static finishedExecutions: ExecutionProgressSnapshot[] = [];
   private static interval: NodeJS.Timeout|undefined = undefined;
   private static connected = false;
-  private static nextCommandId = 1;
 
-  static reportProgress(scope: string, command: Command): CommandProgress {
+  static reportProgress(scope: string, commandOrCommands: any): ExecutionProgress {
     Client.start();
-    const data = {
-      pid: process.pid,
-      commandId: Client.nextCommandId++,
-      scope,
-      command,
-    };
-    const progress = new CommandProgress(data, finalProgress => {
-      Client.activeCommands = Client.activeCommands.filter(_progress => _progress !== progress);
-      Client.finishedCommands = [...Client.finishedCommands, finalProgress];
-      if (Client.activeCommands.length === 0) {
+    const progress = new ExecutionProgress(scope, commandOrCommands, process.pid, finalProgress => {
+      Client.activeExecutions = Client.activeExecutions.filter(_progress => _progress !== progress);
+      Client.finishedExecutions = [...Client.finishedExecutions, finalProgress];
+      if (Client.activeExecutions.length === 0) {
         Client.broadcast({includeFinished: true});
         Client.stop();
       }
     });
-    this.activeCommands.push(progress);
+    this.activeExecutions.push(progress);
     return progress;
   }
 
@@ -117,9 +108,9 @@ class Client {
       const timestamp = new Date();
       ipc.of[ipcId].emit(MessageType.ProcessState, serializeProcessState({
         pid: process.pid,
-        commands: [
-          ...Client.activeCommands.map(progress => progress.getStats(timestamp)),
-          ...(includeFinished ? Client.finishedCommands : []),
+        executions: [
+          ...Client.activeExecutions.map(progress => progress.getSnapshot(timestamp)),
+          ...(includeFinished ? Client.finishedExecutions : []),
         ],
       }));
     }
@@ -147,38 +138,123 @@ class Client {
   }
 }
 
-class CommandProgress {
-  private outputCount: number = 0;
+class ExecutionProgress {
+  private multiCommand: boolean;
+  private snapshot: Omit<ExecutionProgressSnapshot, "commands">;
   private checkpoints: Array<[number, number]> = [];
-  private progress: Omit<CommandProgressSnapshot, 'stats'>;
+  private outputCount: number = 0;
+  private singletonCommandProgress: CommandProgress | undefined;
+
+  private static nextExecutionId = 1;
 
   constructor(
-    data: Omit<CommandProgressSnapshot, 'error' | 'startTime' | 'finishTime' | 'stats'>,
-    private onFinish: (result: CommandProgressSnapshot) => void
+    scope: string,
+    commandOrCommands: Command | Iterable<Command> | AsyncIterable<Command>,
+    pid: number,
+    private onFinish: (result: ExecutionProgressSnapshot) => void
   ) {
-    this.progress = {
-      ...data,
+    this.multiCommand = isIterable(commandOrCommands);
+    if(!this.multiCommand) {
+      this.singletonCommandProgress = this.createCommandProgress(commandOrCommands as Command);
+    }
+    this.snapshot = {
+      pid,
       startTime: new Date(),
+      timestamp: new Date(),
+      scope,
+      executionId: ExecutionProgress.nextExecutionId++,
       finishTime: null,
       error: null,
+    }
+  }
+
+  getSnapshot(timestamp: Date): ExecutionProgressSnapshot {
+    if (this.snapshot.finishTime) {
+      timestamp = this.snapshot.finishTime;
+    }
+    const commandProgresses = this.multiCommand  ? Object.values(this.commandProgresses) : [this.singletonCommandProgress!];
+    return {
+      ...this.snapshot,
+      timestamp,
+      commands: commandProgresses.map(progress => progress.getSnapshot(timestamp))
     };
   }
 
-  recordOutput(): void {
+  recordOutput(output: unknown) {
+    if (this.multiCommand) {
+      const outputEl = output as OutputElement;
+      this.getCommandProgress(outputEl).recordOutput();
+    } else {
+      this.singletonCommandProgress!.recordOutput();
+    }
     this.outputCount++;
   }
 
   finish(error?: Error): void {
     const timestamp = new Date();
-    this.progress.error = error?.message ?? null;
-    this.progress.finishTime = timestamp;
-    this.onFinish(this.getStats(timestamp));
+    this.snapshot = {
+      ...this.snapshot,
+      error: error?.message ?? null,
+      finishTime: timestamp
+    };
+    this.onFinish(this.getSnapshot(timestamp));
   }
 
-  getStats(timestamp: Date): CommandProgressSnapshot {
-    if (this.progress.finishTime) {
-      timestamp = this.progress.finishTime;
+  private commandProgresses: Record<string, CommandProgress> = {};
+
+  private getCommandProgress(outputEl: OutputElement): CommandProgress {
+    const strippedPath = ExecutionProgress.stripDocIds(outputEl.path);
+    const encodedHeader = encodeHeader({
+      path: strippedPath,
+      endpoint: outputEl.endpoint,
+    });
+    if(!this.commandProgresses[encodedHeader]) {
+      this.commandProgresses[encodedHeader] = this.createCommandProgress({
+        ...outputEl,
+        path: strippedPath,
+      })
     }
+    return this.commandProgresses[encodedHeader];
+  }
+
+  private nextCommandId = 1;
+
+  private createCommandProgress(messageHeader: MessageHeader): CommandProgress {
+    return new CommandProgress({
+      command: messageHeader,
+      commandId: this.nextCommandId++,
+    })
+  }
+
+  private static stripDocIds(path: Path): Path {
+    return path.map(pathElement => {
+      if(Array.isArray(pathElement)) {
+        return [pathElement[0], Path.WILDCARD];
+      } else {
+        return pathElement;
+      }
+    })
+  }
+
+  private getOutputsSince(unixTimestampMs: number): number {
+    const index = this.checkpoints.findIndex(([checkpointTime]) => checkpointTime >= unixTimestampMs) - 1;
+    return index < 0 ? this.outputCount : this.outputCount - this.checkpoints[index][1];
+  }
+}
+
+class CommandProgress {
+  private outputCount: number = 0;
+  private checkpoints: Array<[number, number]> = [];
+
+  constructor(
+    private progress: Omit<CommandProgressSnapshot, 'stats'>,
+  ) {}
+
+  recordOutput(): void {
+    this.outputCount++;
+  }
+
+  getSnapshot(timestamp: Date): CommandProgressSnapshot {
     const unixTimestampMs = timestamp.getTime();
     this.checkpoints = [...this.checkpoints.slice(-300), [unixTimestampMs, this.outputCount]];
     return {
@@ -206,17 +282,19 @@ enum MessageType {
 };
 
 function serializeProcessState(state: ProcessSnapshot): any {
-  return state;
   return {
     ...state,
-    commands: state.commands.map(commandProgress => ({
-      ...commandProgress,
-      startTime: commandProgress.startTime.toISOString(),
-      finishTime: commandProgress.finishTime?.toISOString() ?? null,
-      stats: {
-        ...commandProgress.stats,
-        timestamp: commandProgress.stats.timestamp.toISOString(),
-      },
+    executions: state.executions.map(executionProgress => ({
+      ...executionProgress,
+      startTime: executionProgress.startTime.toISOString(),
+      finishTime: executionProgress.finishTime?.toISOString() ?? null, 
+      commands: executionProgress.commands.map(command => ({
+        ...command,
+        stats: {
+          ...command.stats,
+          timestamp: command.stats.timestamp.toISOString()
+        }
+      }))
     })),
   };
 }
@@ -224,15 +302,32 @@ function serializeProcessState(state: ProcessSnapshot): any {
 function deserializeProcessState(state: any): ProcessSnapshot {
   return {
     ...state,
-    commands: state.commands.map((commandProgress: any) => ({
-      ...commandProgress,
-      startTime: new Date(commandProgress.startTime),
-      finishTime: commandProgress.finishTime && new Date(commandProgress.finishTime),
-      timestamp: new Date(commandProgress.timestamp),
-      stats: {
-        ...commandProgress.stats,
-        timestamp: new Date(commandProgress.stats.timestamp),
-      },
+    executions: state.executions.map((executionProgress: any) => ({
+      ...executionProgress,
+      startTime: new Date(executionProgress.startTime),
+      finishTime: executionProgress.finishTime && new Date(executionProgress.finishTime),
+      timestamp: new Date(executionProgress.timestamp),
+      commands: executionProgress.commands.map((command: any) => ({
+        ...command,
+        stats: {
+          ...command.stats,
+          timestamp: new Date(command.stats.timestamp)
+        }
+      })) 
     })),
   };
+}
+
+type AnyIterable<T> = AsyncIterable<T> | Iterable<T>;
+
+function isIterable<T>(value: any): value is AnyIterable<T> {
+  return isSyncIterable(value) || isAsyncIterable(value);
+}
+
+function isSyncIterable(value: any): value is Iterable<any> {
+  return Symbol.iterator in value;
+}
+
+function isAsyncIterable(value: any): value is AsyncIterable<any> {
+  return Symbol.asyncIterator in value;
 }

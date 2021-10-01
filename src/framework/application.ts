@@ -1,6 +1,7 @@
 import { ConnectorScope, MutableReference } from "./connector";
 import { ConfigRepository } from "./config-repository";
 import { Connector, ScopeRef } from "./connector";
+import { watchScope } from "./watch";
 import R from "ramda";
 
 export type ApplicationConfig = {
@@ -89,7 +90,9 @@ export class Application {
 
     const configSchema = connector.$definition.configSchema;
 
-    return connector(configRef.withSchema(configSchema));
+    const scope = connector(configRef.withSchema(configSchema));
+
+    return watchScope(scope);
   }
 }
 
