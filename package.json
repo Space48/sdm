@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "sdm": "lib/bin/sdm.js"
+    "sdm": "lib/bin/sdm.js",
+    "sdm-watch": "lib/bin/sdm-watch.js"
   },
   "files": [
     "lib"
