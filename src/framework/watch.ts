@@ -19,6 +19,7 @@ export function watchScope(scope: ConnectorScope): ConnectorScope {
         progress.finish()
       } catch (e) {
         progress.finish(e);
+        throw e
       }
     }
   };
