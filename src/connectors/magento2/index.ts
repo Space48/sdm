@@ -86,11 +86,14 @@ export const magento2 = connector({
         },
 
         resources: {
-          attributes: {
-            endpoints: {
-              list: endpoint.list('products/attributes', { query: 'attribute_id', response: 'attribute_id' }),
-            },
-
+          attributes: mergeResources( 
+            endpoint.crud('products/attributes', {
+              idField: 'attribute_id',
+              list: {
+                sortKey: { query: 'attribute_id', response: 'attribute_id' },
+              },
+            }),
+            {
             documents: {
               idField: 'attribute_code',
 
@@ -102,7 +105,7 @@ export const magento2 = connector({
                 },
               },
             },
-          },
+          }),
 
           configurables: {
             documents: {
