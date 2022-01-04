@@ -353,7 +353,52 @@ const command = magento2.products.$all.links.$doc(type).get(input?: unknown);
 
 ### Endpoints
 
+ * [create](#productsattributescreate)
+ * [delete](#productsattributesdelete)
+ * [get](#productsattributesget)
  * [list](#productsattributeslist)
+ * [update](#productsattributesupdate)
+
+### products.attributes.create
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attributes.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributes.create(input?: unknown);
+```
+
+
+### products.attributes[].delete
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributes.$doc(attribute_code).delete(input?: unknown);
+const command = magento2.products.attributes.$all.delete(input?: unknown);
+```
+
+
+### products.attributes[].get
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributes.$doc(attribute_code).get(input?: unknown);
+const command = magento2.products.attributes.$all.get(input?: unknown);
+```
+
 
 ### products.attributes.list
 
@@ -368,6 +413,20 @@ const command = magento2.products.attributes.list(input?: unknown);
 ```
 
 
+### products.attributes[].update
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributes.$doc(attribute_code).update(input?: unknown);
+const command = magento2.products.attributes.$all.update(input?: unknown);
+```
+
+
 ## products.attributes[].options
 
 ### Endpoints
@@ -378,12 +437,13 @@ const command = magento2.products.attributes.list(input?: unknown);
 
 *CLI*
 ```sh
-$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code].options.get' [input-as-json5]
+$ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code|*].options.get' [input-as-json5]
 ```
 
 *TypeScript*
 ```javascript
 const command = magento2.products.attributes.$doc(attribute_code).options.get(input?: unknown);
+const command = magento2.products.attributes.$all.options.get(input?: unknown);
 ```
 
 
