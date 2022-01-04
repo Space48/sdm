@@ -821,21 +821,27 @@ export declare const regularConnectors: {
             create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
             list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
         } & import("..").EndpointDefinitionMap<import("./magento2/client").default>, import("..").ResourceDefinitionMap<import("./magento2/client").default> & {
-            attributes: {
+            attributes: import("..").ResourceDefinition<import("./magento2/client").default, {
+                create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
+            } & import("..").EndpointDefinitionMap<import("./magento2/client").default>, import("..").ResourceDefinitionMap<import("./magento2/client").default>, {
+                idField: string;
+                listIds: (client: import("./magento2/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
                 endpoints: {
-                    list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
+                    delete: import("..").EndpointDefinition<import("./magento2/client").default, any, unknown>;
+                    get: import("..").EndpointDefinition<import("./magento2/client").default, any, object>;
+                    update: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
                 };
-                documents: {
-                    idField: string;
-                    resources: {
-                        options: {
-                            endpoints: {
-                                get: import("..").EndpointDefinition<import("./magento2/client").default, any, object>;
-                            };
+            } & {
+                idField: string;
+                resources: {
+                    options: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./magento2/client").default, any, object>;
                         };
                     };
                 };
-            };
+            }>;
             configurables: {
                 documents: {
                     idField: string;

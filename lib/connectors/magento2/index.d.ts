@@ -66,21 +66,27 @@ export declare const magento2: f.Connector<{
         create: f.EndpointDefinition<Magento2, object, object>;
         list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
     } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2> & {
-        attributes: {
+        attributes: f.ResourceDefinition<Magento2, {
+            create: f.EndpointDefinition<Magento2, object, object>;
+            list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
+        } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2>, {
+            idField: string;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
             endpoints: {
-                list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
+                delete: f.EndpointDefinition<Magento2, any, unknown>;
+                get: f.EndpointDefinition<Magento2, any, object>;
+                update: f.EndpointDefinition<Magento2, object, object>;
             };
-            documents: {
-                idField: string;
-                resources: {
-                    options: {
-                        endpoints: {
-                            get: f.EndpointDefinition<Magento2, any, object>;
-                        };
+        } & {
+            idField: string;
+            resources: {
+                options: {
+                    endpoints: {
+                        get: f.EndpointDefinition<Magento2, any, object>;
                     };
                 };
             };
-        };
+        }>;
         configurables: {
             documents: {
                 idField: string;

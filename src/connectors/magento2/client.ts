@@ -6,6 +6,7 @@ import { Agent as HttpAgent } from "http";
 import { Agent as HttpsAgent } from "https";
 import { parse as parseUrl } from "url";
 import R from "ramda";
+import { boolean } from "fp-ts";
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -66,7 +67,7 @@ export default class Magento2 {
   }
 
   async post<T>(uri: string, content: any): Promise<T> {
-    return this.fetch({method: 'POST', uri, content, auth: true});
+    return this.fetch({method: 'POST', uri, content, auth: true, makeAsync: true});
   }
 
   async put<T>(uri: string, content: any): Promise<T> {
@@ -97,9 +98,10 @@ export default class Magento2 {
     return items;
   }
 
-  private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean}): Promise<T> {
+  private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean, makeAsync?: boolean}): Promise<T> {
+    const async = options?.makeAsync ? '/async' : undefined;
     const doFetch = (config: Config) => {
-      return fetch(`${config.baseUrl}/rest/V1/${options.uri}`, {
+      return fetch(`${config.baseUrl}/rest${async}/V1/${options.uri}`, {
         headers: {
           Accept: 'application/json',
           ...(options.content ? { 'Content-Type': 'application/json' } : {}),
@@ -150,7 +152,7 @@ export default class Magento2 {
       method: 'POST',
       uri: 'integration/admin/token',
       content: credentials,
-      auth: false,
+      auth: false
     });
     return {
       value: tokenValue,
