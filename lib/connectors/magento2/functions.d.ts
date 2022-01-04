@@ -26,6 +26,7 @@ export declare namespace endpoint {
     };
     export function fn<I = any, O = any>(uriPattern: string, _fn: (client: Magento2, uri: string, data: I, path: ReadonlyArray<DocId>) => Promise<O> | AsyncIterable<O>): EndpointDefinition<Magento2, I, O>;
     export const create: (uriPattern: string) => EndpointDefinition<Magento2, object, object>;
+    export const createAsync: (uriPattern: string) => EndpointDefinition<Magento2, object, object>;
     export const del: (uriPattern: string) => EndpointDefinition<Magento2, any, unknown>;
     export const get: (uriPattern: string) => EndpointDefinition<Magento2, any, object>;
     export const list: (uriPattern: string, sortKey: SortKey) => EndpointDefinition<Magento2, Filter[] | undefined, object>;

@@ -52,9 +52,12 @@ export namespace endpoint {
   export const create = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
 
+  export const createAsync = (uriPattern: string) =>
+    fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data, true));
+
   export const del = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
-  
+
   export const get = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 

@@ -66,8 +66,8 @@ export default class Magento2 {
     }
   }
 
-  async post<T>(uri: string, content: any): Promise<T> {
-    return this.fetch({method: 'POST', uri, content, auth: true, makeAsync: true});
+  async post<T>(uri: string, content: any, fetchAsynchronously?: boolean): Promise<T> {
+    return this.fetch({method: 'POST', uri, content, auth: true, fetchAsynchronously});
   }
 
   async put<T>(uri: string, content: any): Promise<T> {
@@ -98,8 +98,8 @@ export default class Magento2 {
     return items;
   }
 
-  private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean, makeAsync?: boolean}): Promise<T> {
-    const async = options?.makeAsync ? '/async' : undefined;
+  private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean, fetchAsynchronously?: boolean}): Promise<T> {
+    const async = options?.fetchAsynchronously ? '/async' : undefined;
     const doFetch = (config: Config) => {
       return fetch(`${config.baseUrl}/rest${async}/V1/${options.uri}`, {
         headers: {

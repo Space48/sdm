@@ -23,7 +23,7 @@ export default class Magento2 {
         sortKey: SortKey;
         filters?: Filter[];
     }): AsyncIterable<T>;
-    post<T>(uri: string, content: any): Promise<T>;
+    post<T>(uri: string, content: any, fetchAsynchronously?: boolean): Promise<T>;
     put<T>(uri: string, content: any): Promise<T>;
     patch<T>(uri: string, content: any): Promise<T>;
     delete<T>(uri: string, content?: any): Promise<T>;
