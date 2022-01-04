@@ -17,6 +17,7 @@ export declare const magento2: f.Connector<{
 }, Magento2, {
     categories: f.ResourceDefinition<Magento2, {
         create: f.EndpointDefinition<Magento2, object, object>;
+        createAsync: f.EndpointDefinition<Magento2, object, object>;
         list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
     } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2> & {
         tree: {
@@ -36,6 +37,7 @@ export declare const magento2: f.Connector<{
     customers: {
         endpoints: {
             create: f.EndpointDefinition<Magento2, object, object>;
+            createAsync: f.EndpointDefinition<Magento2, object, object>;
             list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
         };
         documents: {
@@ -64,10 +66,12 @@ export declare const magento2: f.Connector<{
     };
     products: f.ResourceDefinition<Magento2, {
         create: f.EndpointDefinition<Magento2, object, object>;
+        createAsync: f.EndpointDefinition<Magento2, object, object>;
         list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
     } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2> & {
         attributes: f.ResourceDefinition<Magento2, {
             create: f.EndpointDefinition<Magento2, object, object>;
+            createAsync: f.EndpointDefinition<Magento2, object, object>;
             list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
         } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2>, {
             idField: string;

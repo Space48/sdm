@@ -17,6 +17,7 @@
 ### Endpoints
 
  * [create](#categoriescreate)
+ * [create-async](#categoriescreate-async)
  * [delete](#categoriesdelete)
  * [get](#categoriesget)
  * [list](#categorieslist)
@@ -32,6 +33,19 @@ $ sdm 'magento2[www.my-shop.com].categories.create' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = magento2.categories.create(input?: unknown);
+```
+
+
+### categories.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].categories.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.categories.createAsync(input?: unknown);
 ```
 
 
@@ -114,6 +128,7 @@ const command = magento2.categories.tree.get(input?: unknown);
 ### Endpoints
 
  * [create](#customerscreate)
+ * [create-async](#customerscreate-async)
  * [delete](#customersdelete)
  * [get](#customersget)
  * [list](#customerslist)
@@ -129,6 +144,19 @@ $ sdm 'magento2[www.my-shop.com].customers.create' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = magento2.customers.create(input?: unknown);
+```
+
+
+### customers.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].customers.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.customers.createAsync(input?: unknown);
 ```
 
 
@@ -256,6 +284,7 @@ const command = magento2.orders.$all.update(input?: unknown);
 ### Endpoints
 
  * [create](#productscreate)
+ * [create-async](#productscreate-async)
  * [delete](#productsdelete)
  * [get](#productsget)
  * [list](#productslist)
@@ -271,6 +300,19 @@ $ sdm 'magento2[www.my-shop.com].products.create' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = magento2.products.create(input?: unknown);
+```
+
+
+### products.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.createAsync(input?: unknown);
 ```
 
 
@@ -354,6 +396,7 @@ const command = magento2.products.$all.links.$doc(type).get(input?: unknown);
 ### Endpoints
 
  * [create](#productsattributescreate)
+ * [create-async](#productsattributescreate-async)
  * [delete](#productsattributesdelete)
  * [get](#productsattributesget)
  * [list](#productsattributeslist)
@@ -369,6 +412,19 @@ $ sdm 'magento2[www.my-shop.com].products.attributes.create' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = magento2.products.attributes.create(input?: unknown);
+```
+
+
+### products.attributes.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attributes.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributes.createAsync(input?: unknown);
 ```
 
 

@@ -12,6 +12,7 @@ export declare namespace endpoint {
     export function crud<T extends CrudOptions>(uriPattern: string, options: T): {
         endpoints: {
             create: EndpointDefinition<Magento2, object, object>;
+            createAsync: EndpointDefinition<Magento2, object, object>;
             list: EndpointDefinition<Magento2, Filter[] | undefined, object>;
         };
         documents: {

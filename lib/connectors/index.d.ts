@@ -772,6 +772,7 @@ export declare const regularConnectors: {
     }, import("./magento2/client").default, {
         categories: import("..").ResourceDefinition<import("./magento2/client").default, {
             create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
+            createAsync: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
             list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
         } & import("..").EndpointDefinitionMap<import("./magento2/client").default>, import("..").ResourceDefinitionMap<import("./magento2/client").default> & {
             tree: {
@@ -791,6 +792,7 @@ export declare const regularConnectors: {
         customers: {
             endpoints: {
                 create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
+                createAsync: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
                 list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
             };
             documents: {
@@ -819,10 +821,12 @@ export declare const regularConnectors: {
         };
         products: import("..").ResourceDefinition<import("./magento2/client").default, {
             create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
+            createAsync: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
             list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
         } & import("..").EndpointDefinitionMap<import("./magento2/client").default>, import("..").ResourceDefinitionMap<import("./magento2/client").default> & {
             attributes: import("..").ResourceDefinition<import("./magento2/client").default, {
                 create: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
+                createAsync: import("..").EndpointDefinition<import("./magento2/client").default, object, object>;
                 list: import("..").EndpointDefinition<import("./magento2/client").default, import("./magento2/client").Filter[] | undefined, object>;
             } & import("..").EndpointDefinitionMap<import("./magento2/client").default>, import("..").ResourceDefinitionMap<import("./magento2/client").default>, {
                 idField: string;

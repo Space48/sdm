@@ -18,6 +18,7 @@ export namespace endpoint {
     return {
       endpoints: {
         create: create(uriPattern),
+        createAsync: createAsync(uriPattern),
         list: list(options.list.uri ?? uriPattern, options.list.sortKey),
       },
 
