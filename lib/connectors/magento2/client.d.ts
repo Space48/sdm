@@ -24,7 +24,7 @@ export default class Magento2 {
         filters?: Filter[];
     }): AsyncIterable<T>;
     post<T>(uri: string, content: any, fetchAsynchronously?: boolean): Promise<T>;
-    put<T>(uri: string, content: any): Promise<T>;
+    put<T>(uri: string, content: any, fetchAsynchronously?: boolean): Promise<T>;
     patch<T>(uri: string, content: any): Promise<T>;
     delete<T>(uri: string, content?: any): Promise<T>;
     private fetchSearchResultsPage;

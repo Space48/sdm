@@ -32,5 +32,6 @@ export declare namespace endpoint {
     export const get: (uriPattern: string) => EndpointDefinition<Magento2, any, object>;
     export const list: (uriPattern: string, sortKey: SortKey) => EndpointDefinition<Magento2, Filter[] | undefined, object>;
     export const update: (uriPattern: string) => EndpointDefinition<Magento2, object, object>;
+    export const updateAsync: (uriPattern: string) => EndpointDefinition<Magento2, object, object>;
     export {};
 }

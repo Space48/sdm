@@ -70,8 +70,8 @@ export default class Magento2 {
     return this.fetch({method: 'POST', uri, content, auth: true, fetchAsynchronously});
   }
 
-  async put<T>(uri: string, content: any): Promise<T> {
-    return this.fetch({method: 'PUT', uri, content, auth: true});
+  async put<T>(uri: string, content: any, fetchAsynchronously?: boolean): Promise<T> {
+    return this.fetch({method: 'PUT', uri, content, auth: true, fetchAsynchronously});
   }
 
   async patch<T>(uri: string, content: any): Promise<T> {
