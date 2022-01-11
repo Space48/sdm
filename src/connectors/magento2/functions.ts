@@ -68,7 +68,10 @@ export namespace endpoint {
   export const update = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 
-    export const updateAsync = (uriPattern: string) =>
+  export const updateAsync = (uriPattern: string) =>
+    fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
+
+  export const updateAsyncTEST = (uriPattern: string) =>
     fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
 }
 
