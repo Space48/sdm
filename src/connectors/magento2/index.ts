@@ -15,13 +15,13 @@ export const magento2 = connector({
   configSchema,
 
   scopeNameExample: getScopeName('www.my-shop.com'),
-  
+
   getScopeName: config => getScopeName(config.baseUrl),
 
   getScope: config => new Magento2(config),
 
   getWarningMessage: async (client: Magento2) => {},
-  
+
   resources: {
     categories: mergeResources(
       endpoint.crud('categories', {
@@ -82,11 +82,11 @@ export const magento2 = connector({
                 },
               },
             },
-          },  
+          },
         },
 
         resources: {
-          attributes: mergeResources( 
+          attributes: mergeResources(
             endpoint.crud('products/attributes', {
               idField: 'attribute_id',
               list: {
@@ -94,18 +94,57 @@ export const magento2 = connector({
               },
             }),
             {
-            documents: {
-              idField: 'attribute_code',
-
-              resources: {
-                options: {
-                  endpoints: {
-                    get: endpoint.get('products/attributes/{attributeCode}/options'),
+              documents: {
+                idField: 'attribute_code',
+                resources: {
+                  options: {
+                    endpoints: {
+                      get: endpoint.get('products/attributes/{attributeCode}/options'),
+                    },
                   },
                 },
               },
-            },
+            }
+          ),
+
+          attributeGroups: endpoint.crud('products/attribute-sets/groups', {
+            idField: 'group_id',
+            list: {
+              uri: 'products/attribute-sets/groups/list',
+              sortKey: { query: 'attribute_set_id', response: 'attribute_set_id' }
+            }
           }),
+
+          attributeSets: mergeResources(
+            endpoint.crud('products/attribute-sets', {
+              idField: 'attribute_set_id',
+              list: {
+                uri: 'products/attribute-sets/sets/list',
+                sortKey: { query: 'attribute_set_id', response: 'attribute_set_id' },
+              },
+            }),
+            {
+              documents: {
+                resources: {
+                  attributes: {
+                    documents: {
+                      idField: 'attribute_code',
+                      endpoints: {
+                        get: endpoint.get('products/attribute-sets/{attributeSetId}/attributes/{attributeCode}'),
+                        delete: endpoint.del('products/attribute-sets/{attributeSetId}/attributes/{attributeCode}'),
+                      },
+                    },
+                  },
+
+                  groups: {
+                    endpoints: {
+                      put: endpoint.update('products/attribute-sets/{attributeSetId}/groups')
+                    }
+                  }
+                },
+              },
+            }
+          ),
 
           configurables: {
             documents: {

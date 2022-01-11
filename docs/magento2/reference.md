@@ -9,6 +9,10 @@
  * [products[].links](#productslinks)
  * [products.attributes](#productsattributes)
  * [products.attributes[].options](#productsattributesoptions)
+ * [products.attribute-groups](#productsattribute-groups)
+ * [products.attribute-sets](#productsattribute-sets)
+ * [products.attribute-sets[].attributes](#productsattribute-setsattributes)
+ * [products.attribute-sets[].groups](#productsattribute-setsgroups)
  * [products.configurables[].children](#productsconfigurableschildren)
  * [products.configurables[].options](#productsconfigurablesoptions)
 
@@ -500,6 +504,245 @@ $ sdm 'magento2[www.my-shop.com].products.attributes[attribute_code|*].options.g
 ```javascript
 const command = magento2.products.attributes.$doc(attribute_code).options.get(input?: unknown);
 const command = magento2.products.attributes.$all.options.get(input?: unknown);
+```
+
+
+## products.attribute-groups
+
+### Endpoints
+
+ * [create](#productsattribute-groupscreate)
+ * [create-async](#productsattribute-groupscreate-async)
+ * [delete](#productsattribute-groupsdelete)
+ * [get](#productsattribute-groupsget)
+ * [list](#productsattribute-groupslist)
+ * [update](#productsattribute-groupsupdate)
+
+### products.attribute-groups.create
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.create(input?: unknown);
+```
+
+
+### products.attribute-groups.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.createAsync(input?: unknown);
+```
+
+
+### products.attribute-groups[].delete
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups[group_id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.$doc(group_id).delete(input?: unknown);
+const command = magento2.products.attributeGroups.$all.delete(input?: unknown);
+```
+
+
+### products.attribute-groups[].get
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups[group_id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.$doc(group_id).get(input?: unknown);
+const command = magento2.products.attributeGroups.$all.get(input?: unknown);
+```
+
+
+### products.attribute-groups.list
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.list(input?: unknown);
+```
+
+
+### products.attribute-groups[].update
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-groups[group_id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeGroups.$doc(group_id).update(input?: unknown);
+const command = magento2.products.attributeGroups.$all.update(input?: unknown);
+```
+
+
+## products.attribute-sets
+
+### Endpoints
+
+ * [create](#productsattribute-setscreate)
+ * [create-async](#productsattribute-setscreate-async)
+ * [delete](#productsattribute-setsdelete)
+ * [get](#productsattribute-setsget)
+ * [list](#productsattribute-setslist)
+ * [update](#productsattribute-setsupdate)
+
+### products.attribute-sets.create
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.create(input?: unknown);
+```
+
+
+### products.attribute-sets.create-async
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets.create-async' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.createAsync(input?: unknown);
+```
+
+
+### products.attribute-sets[].delete
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).delete(input?: unknown);
+const command = magento2.products.attributeSets.$all.delete(input?: unknown);
+```
+
+
+### products.attribute-sets[].get
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).get(input?: unknown);
+const command = magento2.products.attributeSets.$all.get(input?: unknown);
+```
+
+
+### products.attribute-sets.list
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.list(input?: unknown);
+```
+
+
+### products.attribute-sets[].update
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).update(input?: unknown);
+const command = magento2.products.attributeSets.$all.update(input?: unknown);
+```
+
+
+## products.attribute-sets[].attributes
+
+### Endpoints
+
+ * [delete](#productsattribute-setsattributesdelete)
+ * [get](#productsattribute-setsattributesget)
+
+### products.attribute-sets[].attributes[].delete
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].attributes[attribute_code].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).attributes.$doc(attribute_code).delete(input?: unknown);
+const command = magento2.products.attributeSets.$all.attributes.$doc(attribute_code).delete(input?: unknown);
+```
+
+
+### products.attribute-sets[].attributes[].get
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].attributes[attribute_code].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).attributes.$doc(attribute_code).get(input?: unknown);
+const command = magento2.products.attributeSets.$all.attributes.$doc(attribute_code).get(input?: unknown);
+```
+
+
+## products.attribute-sets[].groups
+
+### Endpoints
+
+ * [put](#productsattribute-setsgroupsput)
+
+### products.attribute-sets[].groups.put
+
+*CLI*
+```sh
+$ sdm 'magento2[www.my-shop.com].products.attribute-sets[attribute_set_id|*].groups.put' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = magento2.products.attributeSets.$doc(attribute_set_id).groups.put(input?: unknown);
+const command = magento2.products.attributeSets.$all.groups.put(input?: unknown);
 ```
 
 

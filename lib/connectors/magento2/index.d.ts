@@ -91,6 +91,52 @@ export declare const magento2: f.Connector<{
                 };
             };
         }>;
+        attributeGroups: {
+            endpoints: {
+                create: f.EndpointDefinition<Magento2, object, object>;
+                createAsync: f.EndpointDefinition<Magento2, object, object>;
+                list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: f.EndpointDefinition<Magento2, any, unknown>;
+                    get: f.EndpointDefinition<Magento2, any, object>;
+                    update: f.EndpointDefinition<Magento2, object, object>;
+                };
+            };
+        };
+        attributeSets: f.ResourceDefinition<Magento2, {
+            create: f.EndpointDefinition<Magento2, object, object>;
+            createAsync: f.EndpointDefinition<Magento2, object, object>;
+            list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
+        } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2>, {
+            idField: string;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+            endpoints: {
+                delete: f.EndpointDefinition<Magento2, any, unknown>;
+                get: f.EndpointDefinition<Magento2, any, object>;
+                update: f.EndpointDefinition<Magento2, object, object>;
+            };
+        } & {
+            resources: {
+                attributes: {
+                    documents: {
+                        idField: string;
+                        endpoints: {
+                            get: f.EndpointDefinition<Magento2, any, object>;
+                            delete: f.EndpointDefinition<Magento2, any, unknown>;
+                        };
+                    };
+                };
+                groups: {
+                    endpoints: {
+                        put: f.EndpointDefinition<Magento2, object, object>;
+                    };
+                };
+            };
+        }>;
         configurables: {
             documents: {
                 idField: string;
