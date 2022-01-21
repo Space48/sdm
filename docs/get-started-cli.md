@@ -4,7 +4,7 @@
 
 From your shell terminal, run
 ```sh
-nvm use 12
+nvm use 14
 npm install --global @space48/sdm
 ```
 

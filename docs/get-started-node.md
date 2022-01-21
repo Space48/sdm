@@ -6,9 +6,9 @@ From your shell terminal, run
 ```sh
 mkdir ~/sdm-tutorial
 cd ~/sdm-tutorial
-nvm use 12
-npm i csv-parser @space48/json-pipe @space48/sdm@^0.10.0-dev9
-npm i --save-dev typescript @tsconfig/node12 @types/node@^12 ts-node
+nvm use 14
+npm i csv-parser @space48/json-pipe @space48/sdm@^0.10.0
+npm i --save-dev typescript @tsconfig/node14 @types/node@^14 ts-node
 echo '{"extends": "@tsconfig/node12/tsconfig.json", "include": ["src"]}' > tsconfig.json
 mkdir src
 ```
