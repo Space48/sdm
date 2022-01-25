@@ -1,0 +1,24 @@
+{
+  "name": "m2-to-bc-migration-example",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@space48/json-pipe": "^0.4.9",
+    "@space48/sdm": "^0.10.0-dev52",
+    "csv-parser": "^3.0.0",
+    "file-join": "^0.1.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@types/node": "^12.19.16",
+    "quicktype": "^15.0.258",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.4"
+  }
+}
