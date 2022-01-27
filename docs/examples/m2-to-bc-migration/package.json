@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@space48/json-pipe": "^0.4.9",
-    "@space48/sdm": "^0.10.0-dev52",
+    "@space48/sdm": "^0.11.0",
     "csv-parser": "^3.0.0",
     "file-join": "^0.1.1"
   },
