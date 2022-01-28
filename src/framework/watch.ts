@@ -1,7 +1,7 @@
 import { Command, ConnectorScope, OutputElement } from "./connector";
 import { onEnd, tap, compose, pipe, streamJson, transformJson } from "@space48/json-pipe";
 import ipc from "node-ipc";
-import { MessageHeader, Path } from ".";
+import { MessageHeader, Path, State } from ".";
 import { encodeHeader } from './binary-api';
 import { throws } from "assert";
 import { time, timeStamp } from "console";
@@ -20,7 +20,7 @@ export function watchScope(scope: ConnectorScope): ConnectorScope {
       } catch (e) {
         progress.finish(e);
         throw e
-      }
+      } 
     }
   };
 }
@@ -181,7 +181,10 @@ class ExecutionProgress {
     };
   }
 
-  recordOutput(output: unknown) {
+  recordOutput(output: any) {
+    if(State.isState(output)) {
+      return;
+    }
     if (this.multiCommand) {
       const outputEl = output as OutputElement;
       this.getCommandProgress(outputEl).recordOutput();
