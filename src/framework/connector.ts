@@ -24,7 +24,7 @@ export function connector<
       
       const executeCommands = commandExecutor(definition.resources, _scope);
 
-      return {
+      return watchScope({
         scopeName: definition.getScopeName(config.get()),
 
         connector,
@@ -80,7 +80,7 @@ export function connector<
             }
           }
         },
-      }
+      })
     }
     
     const connector = addPropertiesToFunction(
