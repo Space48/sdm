@@ -122,12 +122,9 @@ export default class Magento2 {
     }
 
     if (!response.ok) {
-      let detail = undefined;
+      let detail: any = undefined; 
       try {
-        let detail: any = await response.text();
-        try {
-          detail = JSON.parse(detail);
-        } catch {}
+        detail = await response.json();
       } catch {}
       throw new EndpointError(`${response.status} ${response.statusText}`, {detail});
     }
