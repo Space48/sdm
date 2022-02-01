@@ -206,6 +206,12 @@ export declare const bigCommerce: f.Connector<{
                 };
             };
         }>;
+        formFieldValues: {
+            endpoints: {
+                list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                upsert: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
     }, {
         idField: string;
         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
