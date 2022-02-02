@@ -102,7 +102,7 @@ export default class Magento2 {
   private async fetch<T>(options: {method: string, uri: string, content?: any, auth: boolean, fetchAsynchronously?: boolean}): Promise<T> {
     const async = (!!options.fetchAsynchronously) ? '/async' : '';
     const doFetch = (config: Config) => {
-      return fetch(`${config.baseUrl}/${config.storeView || 'default'}/rest${async}/V1/${options.uri}`, {
+      return fetch(`${config.baseUrl}/rest/${config.storeView || 'default'}${async}/V1/${options.uri}`, {
         headers: {
           Accept: 'application/json',
           ...(options.content ? { 'Content-Type': 'application/json' } : {}),
