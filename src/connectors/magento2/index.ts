@@ -169,8 +169,8 @@ export const magento2 = connector({
   },
 });
 
-function getScopeName(storeBaseUrl: string, storeView?: string): string {
+function getScopeName(storeBaseUrl: string, storeView: string = 'default'): string {
   const {host, path} = parseUrl(storeBaseUrl);
   return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase()
-    + `/${storeView || "default"}`; 
+    + `/${storeView}`; 
 }
