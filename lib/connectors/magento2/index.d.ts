@@ -4,6 +4,7 @@ export declare type Magento2Config = Config;
 export declare const magento2: f.Connector<{
     baseUrl: string;
 } & {
+    storeView?: string | undefined;
     concurrency?: number | undefined;
     credentials?: {
         username: string;

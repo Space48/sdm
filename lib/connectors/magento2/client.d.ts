@@ -4,6 +4,7 @@ export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.IntersectionC<[t.TypeC<{
     baseUrl: t.StringC;
 }>, t.PartialC<{
+    storeView: t.StringC;
     concurrency: t.NumberC;
     credentials: t.TypeC<{
         username: t.StringC;

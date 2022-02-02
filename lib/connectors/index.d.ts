@@ -759,6 +759,7 @@ export declare const regularConnectors: {
     magento2: import("..").Connector<{
         baseUrl: string;
     } & {
+        storeView?: string | undefined;
         concurrency?: number | undefined;
         credentials?: {
             username: string;
