@@ -16,7 +16,7 @@ export const magento2 = connector({
 
   scopeNameExample: getScopeName('www.my-shop.com'),
 
-  getScopeName: config => getScopeName(config.baseUrl),
+  getScopeName: config => getScopeName(config.baseUrl, config.storeView) ,
 
   getScope: config => new Magento2(config),
 
@@ -169,7 +169,8 @@ export const magento2 = connector({
   },
 });
 
-function getScopeName(storeBaseUrl: string): string {
+function getScopeName(storeBaseUrl: string, storeView: string = 'default'): string {
   const {host, path} = parseUrl(storeBaseUrl);
-  return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase(); 
+  return `${host || ''}${path}`.replace(/\/$/, '').toLowerCase()
+    + `/${storeView}`; 
 }
