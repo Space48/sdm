@@ -208,6 +208,12 @@ export declare const regularConnectors: {
                     };
                 };
             }>;
+            formFieldValues: {
+                endpoints: {
+                    list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    upsert: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
         }, {
             idField: string;
             listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;

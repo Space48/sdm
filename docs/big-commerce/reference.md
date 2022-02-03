@@ -18,6 +18,7 @@
  * [customers.attributes](#customersattributes)
  * [customers.attributes[].values](#customersattributesvalues)
  * [customers.attributes.values](#customersattributesvalues)
+ * [customers.form-field-values](#customersform-field-values)
  * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
@@ -1073,6 +1074,39 @@ $ sdm 'big-commerce[some-store-alias].customers.attributes.values.upsert' [input
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.attributes.values.upsert(input?: unknown);
+```
+
+
+## customers.form-field-values
+
+### Endpoints
+
+ * [list](#customersform-field-valueslist)
+ * [upsert](#customersform-field-valuesupsert)
+
+### customers.form-field-values.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.form-field-values.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.formFieldValues.list(input?: unknown);
+```
+
+
+### customers.form-field-values.upsert
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.form-field-values.upsert' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.formFieldValues.upsert(input?: unknown);
 ```
 
 
