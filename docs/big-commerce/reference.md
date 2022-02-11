@@ -19,6 +19,7 @@
  * [customers.attributes[].values](#customersattributesvalues)
  * [customers.attributes.values](#customersattributesvalues)
  * [customers.form-field-values](#customersform-field-values)
+ * [customers.customer-groups](#customerscustomer-groups)
  * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
@@ -1107,6 +1108,39 @@ $ sdm 'big-commerce[some-store-alias].customers.form-field-values.upsert' [input
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.formFieldValues.upsert(input?: unknown);
+```
+
+
+## customers.customer-groups
+
+### Endpoints
+
+ * [create](#customerscustomer-groupscreate)
+ * [list](#customerscustomer-groupslist)
+
+### customers.customer-groups.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.customer-groups.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.customerGroups.create(input?: unknown);
+```
+
+
+### customers.customer-groups.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.customer-groups.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.customerGroups.list(input?: unknown);
 ```
 
 
