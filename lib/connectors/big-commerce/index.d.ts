@@ -212,6 +212,12 @@ export declare const bigCommerce: f.Connector<{
                 upsert: f.EndpointDefinition<BigCommerce, object, object>;
             };
         };
+        customerGroups: {
+            endpoints: {
+                list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                create: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
     }, {
         idField: string;
         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;

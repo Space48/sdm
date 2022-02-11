@@ -214,6 +214,12 @@ export declare const regularConnectors: {
                     upsert: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
                 };
             };
+            customerGroups: {
+                endpoints: {
+                    list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
         }, {
             idField: string;
             listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
