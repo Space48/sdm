@@ -176,6 +176,13 @@ export const bigCommerce = connector({
               list: endpoint.list('v3/customers/form-field-values'),
               upsert: batch.updateMany('v3/customers/form-field-values')
             }
+          },
+
+          customerGroups: {
+            endpoints: {
+              list: endpoint.list('v2/customers/customer_groups'),
+              create: endpoint.create('v2/customers/customer_groups')
+            }
           }
         },
       },
