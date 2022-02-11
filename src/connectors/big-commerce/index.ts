@@ -180,8 +180,8 @@ export const bigCommerce = connector({
 
           customerGroups: {
             endpoints: {
-              list: endpoint.list('v2/customers/customer_groups'),
-              create: endpoint.create('v2/customers/customer_groups')
+              list: endpoint.list('v2/customer_groups'),
+              create: endpoint.create('v2/customer_groups')
             }
           }
         },
