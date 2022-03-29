@@ -593,6 +593,21 @@ export declare const regularConnectors: {
                 };
             };
         }>;
+        promotions: {
+            endpoints: {
+                create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: import("./big-commerce/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                    get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
+        };
         store: {
             endpoints: {
                 get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;

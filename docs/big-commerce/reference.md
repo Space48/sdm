@@ -49,6 +49,7 @@
  * [products[].variants[].metafields](#productsvariantsmetafields)
  * [products[].videos](#productsvideos)
  * [products.variants](#productsvariants)
+ * [promotions](#promotions)
  * [store](#store)
 
 ## blog.posts
@@ -3022,6 +3023,84 @@ $ sdm 'big-commerce[some-store-alias].products.variants.update' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.products.variants.update(input?: unknown);
+```
+
+
+## promotions
+
+### Endpoints
+
+ * [create](#promotionscreate)
+ * [delete](#promotionsdelete)
+ * [get](#promotionsget)
+ * [list](#promotionslist)
+ * [update](#promotionsupdate)
+
+### promotions.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.create(input?: unknown);
+```
+
+
+### promotions[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).delete(input?: unknown);
+const command = bigCommerce.promotions.$all.delete(input?: unknown);
+```
+
+
+### promotions[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).get(input?: unknown);
+const command = bigCommerce.promotions.$all.get(input?: unknown);
+```
+
+
+### promotions.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.list(input?: unknown);
+```
+
+
+### promotions[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).update(input?: unknown);
+const command = bigCommerce.promotions.$all.update(input?: unknown);
 ```
 
 
