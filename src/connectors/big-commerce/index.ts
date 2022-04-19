@@ -372,6 +372,8 @@ export const bigCommerce = connector({
       },
     ),
 
+    promotions: endpoint.crud('v3/promotions'),
+
     store: {
       endpoints: {
         get: endpoint.get('v2/store'),

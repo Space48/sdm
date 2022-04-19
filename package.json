@@ -1,6 +1,6 @@
 {
   "name": "@space48/sdm",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Command line tools for piping data in and out of APIs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -45,7 +45,7 @@
     "io-ts": "^2.2.13",
     "json5": "^2.2.0",
     "node-fetch": "^2.6.0",
-    "node-ipc": "^9.1.1",
+    "node-ipc": "9.1.1",
     "oauth": "^0.9.15",
     "open": "^7.0.3",
     "p-retry": "^4.2.0",
