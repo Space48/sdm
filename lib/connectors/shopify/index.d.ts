@@ -77,7 +77,7 @@ export declare const shopify: f.Connector<{
         };
     }>;
     customer: f.ResourceDefinition<client.Scope, {
-        search: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
+        search: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
         list: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
         count: f.EndpointDefinition<client.Scope, any, number>;
@@ -99,11 +99,12 @@ export declare const shopify: f.Connector<{
         };
         endpoints: {
             get: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
-            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            search: f.EndpointDefinition<client.Scope, undefined, Shopify.ICustomer>;
             orders: f.EndpointDefinition<client.Scope, any, Shopify.IOrder>;
             delete: f.EndpointDefinition<client.Scope, undefined, void>;
             update: f.EndpointDefinition<client.Scope, any, Shopify.ICustomer>;
             accountActivationUrl: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            sendInvite: f.EndpointDefinition<client.Scope, Shopify.ICustomerSendInvite | undefined, Shopify.ICustomerSendInvite>;
         };
     }>;
     dispute: f.ResourceDefinition<client.Scope, {
@@ -268,7 +269,7 @@ export declare const shopify: f.Connector<{
     }>;
     balance: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, undefined, Shopify.IBalance>;
-        transactions: f.EndpointDefinition<client.Scope, undefined, Shopify.IBalanceTransaction>;
+        transactions: f.EndpointDefinition<client.Scope, any, Shopify.IBalanceTransaction>;
     }, {}, {
         endpoints: {
             transactions: f.EndpointDefinition<client.Scope, undefined, Shopify.IBalanceTransaction>;
@@ -450,7 +451,7 @@ export declare const shopify: f.Connector<{
         };
     }>;
     giftCard: f.ResourceDefinition<client.Scope, {
-        search: f.EndpointDefinition<client.Scope, any, any> | f.EndpointDefinition<client.Scope, any, unknown>;
+        search: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
         list: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
         create: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
         count: f.EndpointDefinition<client.Scope, any, number>;
@@ -467,7 +468,7 @@ export declare const shopify: f.Connector<{
         };
         endpoints: {
             get: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCard>;
-            search: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
+            search: f.EndpointDefinition<client.Scope, undefined, Shopify.IGiftCard>;
             update: f.EndpointDefinition<client.Scope, any, Shopify.IGiftCard>;
             disable: f.EndpointDefinition<client.Scope, undefined, unknown> | f.EndpointDefinition<client.Scope, undefined, any>;
         };
