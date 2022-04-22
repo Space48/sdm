@@ -20,6 +20,7 @@
  * [customers.attributes.values](#customersattributesvalues)
  * [customers.form-field-values](#customersform-field-values)
  * [customers.customer-groups](#customerscustomer-groups)
+ * [customers.subscribers](#customerssubscribers)
  * [gift-certificates](#gift-certificates)
  * [orders](#orders)
  * [orders[].refunds](#ordersrefunds)
@@ -1142,6 +1143,84 @@ $ sdm 'big-commerce[some-store-alias].customers.customer-groups.list' [input-as-
 *TypeScript*
 ```javascript
 const command = bigCommerce.customers.customerGroups.list(input?: unknown);
+```
+
+
+## customers.subscribers
+
+### Endpoints
+
+ * [create](#customerssubscriberscreate)
+ * [delete](#customerssubscribersdelete)
+ * [get](#customerssubscribersget)
+ * [list](#customerssubscriberslist)
+ * [update](#customerssubscribersupdate)
+
+### customers.subscribers.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.subscribers.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.subscribers.create(input?: unknown);
+```
+
+
+### customers.subscribers[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.subscribers[id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.subscribers.$doc(id).delete(input?: unknown);
+const command = bigCommerce.customers.subscribers.$all.delete(input?: unknown);
+```
+
+
+### customers.subscribers[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.subscribers[id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.subscribers.$doc(id).get(input?: unknown);
+const command = bigCommerce.customers.subscribers.$all.get(input?: unknown);
+```
+
+
+### customers.subscribers.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.subscribers.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.subscribers.list(input?: unknown);
+```
+
+
+### customers.subscribers[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].customers.subscribers[id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.customers.subscribers.$doc(id).update(input?: unknown);
+const command = bigCommerce.customers.subscribers.$all.update(input?: unknown);
 ```
 
 
