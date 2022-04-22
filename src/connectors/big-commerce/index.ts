@@ -143,7 +143,7 @@ export const bigCommerce = connector({
                     endpoints: {
                       list: endpoint.fn(
                         'v3/customers/attribute-values',
-                        (bcClient, uri, query: Query|undefined, [attributeId]) => bcClient.list<object>(uri, {
+                        (bcClient, uri, query: Query | undefined, [attributeId]) => bcClient.list<object>(uri, {
                           ...query,
                           'attribute_id:in': attributeId,
                         })
@@ -183,7 +183,9 @@ export const bigCommerce = connector({
               list: endpoint.list('v2/customer_groups'),
               create: endpoint.create('v2/customer_groups')
             }
-          }
+          },
+
+          subscribers: endpoint.crud('v3/customers/subscribers')
         },
       },
     ),
