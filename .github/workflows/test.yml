@@ -1,0 +1,10 @@
+name: Run Tests
+
+on: [push]
+
+jobs: 
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run jest
+        run: npm run test
