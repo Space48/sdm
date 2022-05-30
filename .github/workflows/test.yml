@@ -6,5 +6,7 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Install
+        run: npm ci
       - name: Run jest
         run: npm run test
