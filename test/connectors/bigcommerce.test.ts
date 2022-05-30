@@ -1,6 +1,4 @@
-import { pipe } from "@space48/json-pipe";
 import { bigCommerce } from "../../src/connectors/big-commerce";
-import {post} from "../../src/connectors/big-commerce/client";
 
 describe('bigCommerce', () => {
     it('lists products', () => {
