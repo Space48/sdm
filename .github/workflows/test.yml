@@ -11,11 +11,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add credentials
-        with:
-          githubToken: ${{secrets.GITHUB_TOKEN}}
         run: |-
           echo @space48:registry=https://npm.pkg.github.com/ >> .npmrc 
-          echo //npm.pkg.github.com/:_authToken=$githubToken >> .npmrc
+          echo //npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}>> .npmrc
       - name: Install
         run: npm ci
       - name: Run jest
