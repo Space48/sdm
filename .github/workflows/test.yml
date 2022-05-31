@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Write to .npmrc
+      - name: Add credentials
         with: 
           githubToken: ${{secrets.GITHUB_TOKEN}}
         run: |-
