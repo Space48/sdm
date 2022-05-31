@@ -4,16 +4,18 @@ on: [push]
 
 jobs: 
   run-test:
+    permissions: 
+      packages: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - name: Write first line of .npmrc
-      #   run: echo @space48:registry=https://npm.pkg.github.com/ >> .npmrc 
-      # - name: Write second line of .npmrc
-      #   with: 
-      #     githubToken: ${{secrets.githubToken}}
-      #   run: echo //npm.pkg.github.com/:_authToken=$githubToken >> .npmrc
+      - name: Write to .npmrc
+        with: 
+          githubToken: ${{secrets.GITHUB_TOKEN}}
+        run: |-
+          echo @space48:registry=https://npm.pkg.github.com/ >> .npmrc 
+          echo //npm.pkg.github.com/:_authToken=$githubToken >> .npmrc
       - name: Install
         run: npm ci
       - name: Run jest
