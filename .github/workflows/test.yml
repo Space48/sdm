@@ -4,6 +4,9 @@ on: [push]
 
 jobs: 
   run-test:
+    permissions: 
+      packages: read
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
