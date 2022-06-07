@@ -9,8 +9,6 @@ export type BigCommerceConfig = Config;
 
 const mergeResources = resourceMerger<BigCommerce>();
 
-// the idea is to group together all edpoints related to a given thing in BC, eg products, so its one coherent object
-
 export const bigCommerce = connector({
   configSchema,
 
@@ -45,7 +43,7 @@ export const bigCommerce = connector({
         },
       },
     },
-    // mergeResources function is used in combination with crud to add on extra fields/endpoints and subresources to the resource object
+
     brands: mergeResources(
       endpoint.crud('v3/catalog/brands'),
       {
@@ -62,8 +60,6 @@ export const bigCommerce = connector({
         },
       }
     ),
-
-    // for resources that dont follow the boilerplate crud fn structure, just define it manually as done here
 
     carts: {
       endpoints: {
@@ -403,5 +399,6 @@ export const bigCommerce = connector({
           },
         },
     })
+
   },
 });
