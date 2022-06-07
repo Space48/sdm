@@ -626,4 +626,27 @@ export declare const bigCommerce: f.Connector<{
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
         };
     };
+    wishlists: f.ResourceDefinition<BigCommerce, {
+        create: f.EndpointDefinition<BigCommerce, object, object>;
+        list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+    } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce> & {
+        items: {
+            endpoints: {
+                create: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+            documents: {
+                endpoints: {
+                    delete: f.EndpointDefinition<BigCommerce, any, void>;
+                };
+            };
+        };
+    }, {
+        idField: string;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        endpoints: {
+            delete: f.EndpointDefinition<BigCommerce, any, void>;
+            get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+            update: f.EndpointDefinition<BigCommerce, object, object>;
+        };
+    } & f.DocumentDefinition<BigCommerce>>;
 }>;
