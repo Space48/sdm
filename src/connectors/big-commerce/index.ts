@@ -381,5 +381,27 @@ export const bigCommerce = connector({
         get: endpoint.get('v2/store'),
       },
     },
+
+    wishlists: mergeResources(
+      endpoint.crud('v3/wishlists'), 
+      { 
+        documents:
+        {
+          resources: {
+            items: {
+              endpoints: {
+                create: endpoint.create('v3/wishlists/{id}/items'),
+              },
+
+              documents: {
+                endpoints: {
+                  delete: endpoint.del('v3/wishlists/{id}/items/{id}'),
+                },
+              },
+            },
+          },
+        }
+  })
+
   },
 });
