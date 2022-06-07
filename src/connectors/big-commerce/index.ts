@@ -384,21 +384,24 @@ export const bigCommerce = connector({
 
     wishlists: mergeResources(
       endpoint.crud('v3/wishlists'), 
-      {
-        resources: {
-          items: {
-            endpoints: {
-              create: endpoint.create('v3/wishlists/{wishlist_id}/items'),
-            },
-
-            documents: {
+      { 
+        documents:
+        {
+          resources: {
+            items: {
               endpoints: {
-                delete: endpoint.del('v3/wishlists/{wishlist_id}/items/{item_id}'),
+                create: endpoint.create('v3/wishlists/{id}/items'),
+              },
+
+              documents: {
+                endpoints: {
+                  delete: endpoint.del('v3/wishlists/{id}/items/{id}'),
+                },
               },
             },
           },
-        },
-    })
+        }
+  })
 
   },
 });
