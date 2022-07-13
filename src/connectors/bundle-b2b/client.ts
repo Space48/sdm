@@ -10,22 +10,27 @@ const listConcurrency = 50;
 
 export type Config = t.TypeOf<typeof configSchema>;
 
-export const configSchema = t.type({
-  storeAlias: t.string,
-  storeHash: t.string,
-  credentials: t.type({
-    authToken: t.string,
+export const configSchema = t.intersection([
+  t.type({
+    storeAlias: t.string,
+    storeHash: t.string,
+    credentials: t.type({
+      email: t.string,
+      password: t.string,
+    }),
   }),
-});
-
+  t.partial({
+    token: t.type({
+      value: t.string,
+      expiration: t.number,
+    }),
+  }),
+]);
 
 export default class BundleB2b {
   constructor(
     private readonly config: MutableReference<Config>,
-  ) {
-    let authToken = this.config.get().credentials.authToken;
-    console.log(authToken);
-  }
+  ) {}
 
 	private readonly readAgent = new Agent({
     keepAlive: true,
@@ -108,7 +113,7 @@ export default class BundleB2b {
   private async fetch(agent: Agent, relativeUri: string, init?: RequestInit): Promise<any> {
     const config = this.config.get();
     const absoluteUri = `https://api.bundleb2b.net/api/${relativeUri}`;
-    const initResolved = this.init(agent, config, init);
+    const initResolved = this.init(agent, config.token ?? await this.refreshToken(), init);
     // response body may only be consumed once, so we have to memoize the result here
     let responseText: Promise<string>;
     const response = await pRetry(
@@ -141,17 +146,50 @@ export default class BundleB2b {
     return await responseText!.then(JSON.parse);
   }
 
-  private init(agent: Agent, config: Config, init?: RequestInit): RequestInit {
+  private init(agent: Agent, token: NonNullable<Config["token"]>, init?: RequestInit): RequestInit {
     const headers = {
       ...init?.headers,
+      'Content-Type': 'application/json',
       Accept: 'application/json',
-      'authToken': config.credentials.authToken,
+      'authToken': token.value,
     }
     return {
       ...init,
       headers,
       agent,
     };
+  }
+
+  private async refreshToken(): Promise<Config> {
+    const config = this.config.get();
+    const token = await this.getToken(config);
+    const updatedConfig = { ...config, token };
+    return updatedConfig;
+  }
+
+  private async getToken(config: Config): Promise<Config["token"]> {
+    const now = Math.floor(Date.now() / 1000);
+    const fourHoursFromNow = now + 4 * 3_600;
+    const tokenResponse = await fetch("https://api.bundleb2b.net/api/io/auth/backend", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        storeHash: config.storeHash,
+        ...config.credentials,
+        channelId: 1,
+        beginAt: now,
+        endAt: fourHoursFromNow,
+      }),
+    });
+    if (!tokenResponse.ok) {
+      throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
+    }
+    const token = await tokenResponse.json();
+    return {
+      value: token.data[0].token,
+      expiration: fourHoursFromNow,
+    }
   }
 }
 
