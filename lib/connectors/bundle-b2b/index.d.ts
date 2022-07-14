@@ -1,5 +1,5 @@
-import BundleB2b, { Config } from './client';
-import * as f from '../../framework';
+import BundleB2b, { Config } from "./client";
+import * as f from "../../framework";
 export declare type BundleB2bConfig = Config;
 export declare const bundleB2b: f.Connector<{
     storeAlias: string;

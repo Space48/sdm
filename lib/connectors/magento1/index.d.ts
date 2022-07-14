@@ -1,8 +1,8 @@
-import { Magento1Scope } from './functions';
-import * as t from 'io-ts';
-import { Magento1SoapClient } from './soap';
-import { Magento1RestClient } from './rest';
-import * as f from '../../framework';
+import { Magento1Scope } from "./functions";
+import * as t from "io-ts";
+import { Magento1SoapClient } from "./soap";
+import { Magento1RestClient } from "./rest";
+import * as f from "../../framework";
 export declare type Magento1Config = t.TypeOf<typeof configSchema>;
 declare const configSchema: t.IntersectionC<[t.TypeC<{
     baseUrl: t.StringC;

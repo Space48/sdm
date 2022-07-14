@@ -1,5 +1,5 @@
 import { ConfigRepository, Connector, Path, ScopeRef, DocId } from "../../framework";
-import * as f from '../../framework';
+import * as f from "../../framework";
 export declare const configManagementConnector: (connectors: Readonly<Record<string, Connector>>, repository: ConfigRepository) => Connector<null, Context, {
     blob: {
         endpoints: {
