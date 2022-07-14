@@ -9,18 +9,22 @@ export type Magento1Scope = {
   soap: Magento1SoapClient;
 };
 
-export namespace Soap {
-  export function list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T> {
+export class Soap {
+  private constructor() {
+    return
+  }
+
+  static list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T> {
     return ({ soap }) =>
       async function* ({ input: filters }) {
-        const result = await soap.execute<T[] | null>(method, { filters: prepareFilters(filters) });
+        const result = await soap.execute<T[] | null>(method, { filters: Soap.prepareFilters(filters) });
         if (result !== null) {
           yield* result;
         }
       };
   }
 
-  function prepareFilters(restStyleFilters: any[]) {
+  private static prepareFilters(restStyleFilters: any[]) {
     return {
       complex_filter: {
         complexObjectArray: restStyleFilters.map(filter => {
@@ -34,8 +38,16 @@ export namespace Soap {
   }
 }
 
-export namespace Rest {
-  export function crud<ChildName extends string>(
+type Children<Name extends string> = {
+  [K in Name]: ResourceDefinition<Magento1Scope, { getRest: EndpointDefinition<Magento1Scope> }>;
+};
+
+export class Rest {
+  private constructor() {
+    return
+  }
+
+  static crud<ChildName extends string>(
     uriPattern: string,
     childNames: readonly ChildName[] = [],
   ) {
@@ -43,27 +55,27 @@ export namespace Rest {
 
     return {
       endpoints: {
-        createRest: create(uriPattern),
-        listRest: list(uriPattern),
+        createRest: Rest.create(uriPattern),
+        listRest: Rest.list(uriPattern),
       },
 
       documents: {
         idField: "entity_id",
 
-        listIds: listIds(uriPattern),
+        listIds: Rest.listIds(uriPattern),
 
         endpoints: {
-          deleteRest: del(docUriPattern),
-          getRest: get(docUriPattern),
-          updateRest: update(docUriPattern),
+          deleteRest: Rest.del(docUriPattern),
+          getRest: Rest.get(docUriPattern),
+          updateRest: Rest.update(docUriPattern),
         },
 
-        resources: children(docUriPattern, childNames),
+        resources: Rest.children(docUriPattern, childNames),
       },
     };
   }
 
-  export function read<ChildName extends string>(
+  static read<ChildName extends string>(
     uriPattern: string,
     childNames: readonly ChildName[] = [],
   ) {
@@ -71,28 +83,24 @@ export namespace Rest {
 
     return {
       endpoints: {
-        listRest: list(uriPattern),
+        listRest: Rest.list(uriPattern),
       },
 
       documents: {
         idField: "entity_id",
 
-        listIds: listIds(uriPattern),
+        listIds: Rest.listIds(uriPattern),
 
         endpoints: {
-          getRest: get(docUriPattern),
+          getRest: Rest.get(docUriPattern),
         },
 
-        resources: children(docUriPattern, childNames),
+        resources: Rest.children(docUriPattern, childNames),
       },
     };
   }
 
-  type Children<Name extends string> = {
-    [K in Name]: ResourceDefinition<Magento1Scope, { getRest: EndpointDefinition<Magento1Scope> }>;
-  };
-
-  function children<Name extends string>(
+  private static children<Name extends string>(
     parentUri: string,
     children: readonly Name[],
   ): Children<Name> {
@@ -102,7 +110,7 @@ export namespace Rest {
           childName,
           resource({
             endpoints: {
-              getRest: get(`${parentUri}/childName`),
+              getRest: Rest.get(`${parentUri}/childName`),
             },
           }),
         ),
@@ -110,7 +118,7 @@ export namespace Rest {
     ) as Children<Name>;
   }
 
-  function fn<I = any, O = any>(
+  private static fn<I = any, O = any>(
     uriPattern: string,
     _fn: (
       scope: Magento1RestClient,
@@ -126,51 +134,24 @@ export namespace Rest {
       };
   }
 
-  export const create = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
+  static create = (uriPattern: string) =>
+  Rest. fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
 
-  export const del = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
+  static del = (uriPattern: string) =>
+  Rest. fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
 
-  export const get = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
+  static get = (uriPattern: string) =>
+  Rest. fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 
-  export const list = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, filters) =>
+  static list = (uriPattern: string) =>
+  Rest. fn(uriPattern, (m2Client, uri, filters) =>
       m2Client.search<object>(uri, { sortKey: "entity_id", filters }),
     );
 
-  export const update = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
+  static update = (uriPattern: string) =>
+  Rest. fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 
-  class UriTemplate {
-    static uri(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string {
-      const uri = UriTemplate.applyValues(uriTemplate, fieldValues);
-      const missingValues = UriTemplate.fields(uri);
-      if (UriTemplate.fields(uri).length > 0) {
-        throw new Error(`Missing URI fields ${missingValues.join(", ")}`);
-      }
-      return uri;
-    }
-
-    static applyValues(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string {
-      return UriTemplate.fields(uriTemplate)
-        .filter((field, index) => (fieldValues[index] ?? null) !== null)
-        .reduce(
-          (uri, field, index) => uri.replace(`{${field}}`, String(fieldValues[index])),
-          uriTemplate,
-        );
-    }
-
-    static fields(uriTemplate: string): string[] {
-      // todo: convert to matchAll once we support ES2020
-      return (
-        uriTemplate.match(/\{[^}]+\}/g)?.map(match => match.substring(1, match.length - 1)) || []
-      );
-    }
-  }
-
-  function listIds(uriPattern: string) {
+  private static listIds(uriPattern: string) {
     return (scope: Magento1Scope) => (path: Path) => {
       const uri = UriTemplate.uri(uriPattern, Path.getDocIds(path));
       const docs = scope.rest.search<Record<string, DocId>>(uri, { sortKey: "entity_id" });
@@ -190,5 +171,32 @@ export async function useAgent<T>(fn: () => Promise<T>): Promise<T> {
       return await fn();
     }
     throw e;
+  }
+}
+
+class UriTemplate {
+  static uri(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string {
+    const uri = UriTemplate.applyValues(uriTemplate, fieldValues);
+    const missingValues = UriTemplate.fields(uri);
+    if (UriTemplate.fields(uri).length > 0) {
+      throw new Error(`Missing URI fields ${missingValues.join(", ")}`);
+    }
+    return uri;
+  }
+
+  static applyValues(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string {
+    return UriTemplate.fields(uriTemplate)
+      .filter((field, index) => (fieldValues[index] ?? null) !== null)
+      .reduce(
+        (uri, field, index) => uri.replace(`{${field}}`, String(fieldValues[index])),
+        uriTemplate,
+      );
+  }
+
+  static fields(uriTemplate: string): string[] {
+    // todo: convert to matchAll once we support ES2020
+    return (
+      uriTemplate.match(/\{[^}]+\}/g)?.map(match => match.substring(1, match.length - 1)) || []
+    );
   }
 }

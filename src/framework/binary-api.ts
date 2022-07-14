@@ -97,7 +97,7 @@ function decodeMaybeIncompletePath(encodedPath: string): [path: Path, invalidTai
   let remaining = encodedPath;
   const elements: Path.Element[] = [];
   while (remaining.length > 0) {
-    const match = remaining.match(/^((?:[^\.\[\]]+)(?:\[[^\]]*\])?)[\.$]*/);
+    const match = remaining.match(/^((?:[^.[\]]+)(?:\[[^\]]*\])?)[.$]*/);
     if (!match) {
       return [elements, remaining];
     }

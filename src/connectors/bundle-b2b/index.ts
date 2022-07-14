@@ -18,7 +18,7 @@ export const bundleB2b = connector({
 
   getScope: config => new BundleB2b(config),
 
-  getWarningMessage: async (client: BundleB2b) => {},
+  getWarningMessage: async (client: BundleB2b) => Promise.resolve(),
 
   resources: {
     companies: endpoint.crud("v3/io/companies"),

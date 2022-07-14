@@ -6,14 +6,18 @@ export interface Query {
   [key: string]: any;
 }
 
-export namespace endpoint {
-  export function crud(uriPattern: string, idField = "id") {
+export class endpoint {
+  private constructor() {
+    return
+  }
+
+  static crud(uriPattern: string, idField = "id") {
     const docUriPattern = `${uriPattern}/{id}`;
 
     return resource({
       endpoints: {
-        create: create(uriPattern),
-        list: list(uriPattern),
+        create: endpoint.create(uriPattern),
+        list: endpoint.list(uriPattern),
       },
 
       documents: {
@@ -22,15 +26,15 @@ export namespace endpoint {
         listIds: listIds(uriPattern, idField),
 
         endpoints: {
-          delete: del(docUriPattern),
-          get: get(docUriPattern),
-          update: update(docUriPattern),
+          delete: endpoint.del(docUriPattern),
+          get: endpoint.get(docUriPattern),
+          update: endpoint.update(docUriPattern),
         },
       },
     });
   }
 
-  export function fn<I = any, O = any>(
+  static fn<I = any, O = any>(
     uriPattern: string,
     _fn: (
       client: BundleB2b,
@@ -46,22 +50,22 @@ export namespace endpoint {
       };
   }
 
-  export const create = (uriPattern: string) =>
-    fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.post<object>(uri, data));
+  static create = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.post<object>(uri, data));
 
-  export const del = (uriPattern: string) =>
-    fn(uriPattern, (bB2bClient, uri, data) => bB2bClient.delete(uri, data));
+  static del = (uriPattern: string) =>
+  endpoint.  fn(uriPattern, (bB2bClient, uri, data) => bB2bClient.delete(uri, data));
 
-  export const get = (uriPattern: string) =>
-    fn(uriPattern, (bB2bClient, uri, data: Query | undefined) => bB2bClient.get<object>(uri, data));
+  static get = (uriPattern: string) =>
+  endpoint.  fn(uriPattern, (bB2bClient, uri, data: Query | undefined) => bB2bClient.get<object>(uri, data));
 
-  export const list = (uriPattern: string) =>
-    fn(uriPattern, (bB2bClient, uri, query: Query | undefined) =>
+  static list = (uriPattern: string) =>
+  endpoint.  fn(uriPattern, (bB2bClient, uri, query: Query | undefined) =>
       bB2bClient.list<object>(uri, query),
     );
 
-  export const update = (uriPattern: string) =>
-    fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.put<object>(uri, data));
+  static update = (uriPattern: string) =>
+  endpoint.  fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.put<object>(uri, data));
 }
 
 export class UriTemplate {

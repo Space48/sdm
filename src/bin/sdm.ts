@@ -128,7 +128,7 @@ async function runNonInteractiveSingleMessageMode(header: FullyQualifiedMessageH
 
 async function runInteractiveMode() {
   const scopeRef = await resolveScope(argsExcludingFlags[0], true);
-  while (true) {
+  for (;;) {
     const command = await askForCommand(scopeRef);
     let interrupted = false;
     const sigintListener = () => {
@@ -171,7 +171,7 @@ async function runInteractiveMode() {
 
 async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
   const scope = await app.requireScope(scopeRef);
-  while (true) {
+  for (;;) {
     process.stderr.write("Enter `help` to see a list of available commands.\n\n");
     const commandLine = await ask({
       question: `sdm ${BinaryApi.encodeHeader({ scope: scopeRef })}> `,
@@ -187,7 +187,9 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
     }
     try {
       return BinaryApi.decodeCommand(commandLine);
-    } catch {}
+    } catch {
+      continue
+    }
   }
 }
 
@@ -227,7 +229,7 @@ async function resolveConnectorInteractively(hint: string | undefined): Promise<
     process.exit(1);
   }
 
-  while (true) {
+  for (;;) {
     const choice = await askForConnector(availableConnectors);
     if (availableConnectors.includes(choice)) {
       return BinaryApi.decodeConnectorName(choice);
@@ -268,7 +270,7 @@ async function resolveScope(hint: string | undefined, interactive: boolean): Pro
     process.exit(1);
   }
 
-  while (true) {
+  for (;;) {
     const scopeStr = await askForScope();
     if (availableScopes.includes(scopeStr)) {
       return BinaryApi.decodeScope(scopeStr);

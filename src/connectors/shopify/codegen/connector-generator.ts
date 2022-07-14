@@ -82,7 +82,7 @@ type InferResourceDefn<
 > = ResourceDefinition<
   client.Scope,
   InferEndpointDefnMap<Res, Prop<Config, "endpoints", undefined>, "resource", Depth>,
-  {},
+  Record<string, never>,
   InferDocumentDefn<Res, Config, t.Number.Plus<"1", Depth>>
 >;
 
@@ -112,7 +112,7 @@ type InferDocumentDefn<
   Depth extends string,
 > = RemoveEmptyProps<{
   endpoints: InferEndpointDefnMap<Res, Prop<Config, "endpoints", undefined>, "document", Depth>;
-  resources: InferResourceDefnMap<Res["children"], Prop<Config, "resources", {}>, Depth>;
+  resources: InferResourceDefnMap<Res["children"], Prop<Config, "resources", Record<string, never>>, Depth>;
 }>;
 
 function endpointDefinitions(
@@ -294,7 +294,7 @@ type MakeValuesOptionalWhereAppropriate<T extends object> = PermitUndefinedIfPer
 
 type MakePropsPermittingUndefinedOptional<T> = MakePropsOptional<T, PropsPermittingUndefined<T>>;
 
-type PermitUndefinedIfPermitsEmptyObject<T> = {} extends T ? T | undefined : T;
+type PermitUndefinedIfPermitsEmptyObject<T> = Record<string, never> extends T ? T | undefined : T;
 
 type MakePropsOptional<T, OptionalProps extends keyof T> = t.Object.Merge<
   {

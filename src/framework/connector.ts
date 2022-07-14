@@ -18,6 +18,7 @@ export function connector<Config, Scope, Resources extends ResourceDefinitionMap
   try {
     const resources = resourceMap(definition.resources, []);
 
+    //eslint-disable-next-line no-inner-declarations
     function scopeFactory(configArg: Config | MutableReference<Config>): ConnectorScope {
       const config =
         configArg instanceof MutableReference
@@ -182,7 +183,7 @@ export interface ConnectorDefinition<
 export type Connector<
   Config = any,
   Scope = any,
-  Resources extends ResourceDefinitionMap<Scope> = {},
+  Resources extends ResourceDefinitionMap<Scope> = Record<string, any>,
 > = ResourceMap<Resources, false> & {
   $definition: ConnectorDefinition<Config, Scope, Resources>;
   (config: Config | MutableReference<Config>): ConnectorScope;
@@ -224,7 +225,7 @@ export type ResourceMap<
   T extends ResourceDefinitionMap = ResourceDefinitionMap,
   MultiPath extends boolean = boolean,
 > = { ___foobar: never } extends T
-  ? {} // make it an error downstream to reference non-existent resources in paths
+  ? Record<string, any> // make it an error downstream to reference non-existent resources in paths
   : {
       [K in keyof T]: T[K] extends object & ResourceDefinition<any, infer E, infer R, infer D>
         ? Resource<E, R, D, MultiPath>
@@ -289,8 +290,8 @@ export interface DocumentDefinition<Scope = any> {
 type Document<
   T extends DocumentDefinition = DocumentDefinition,
   MultiPath extends boolean = boolean,
-> = (T["resources"] extends ResourceDefinitionMap ? ResourceMap<T["resources"], MultiPath> : {}) &
-  (T["endpoints"] extends EndpointDefinitionMap ? EndpointMap<T["endpoints"], MultiPath> : {});
+  > = (T["resources"] extends ResourceDefinitionMap ? ResourceMap<T["resources"], MultiPath> : Record<string, any>) &
+  (T["endpoints"] extends EndpointDefinitionMap ? EndpointMap<T["endpoints"], MultiPath> : Record<string, any>);
 
 function document(document: DocumentDefinition, path: Path): Document {
   return deepMerge(
@@ -410,7 +411,9 @@ function createValidator<T>(schema: t.Type<T>): (value: T) => void {
  * A deep merge which will merge functions with objects where necessary
  */
 function deepMerge<
+  //eslint-disable-next-line @typescript-eslint/ban-types
   X extends Function | Record<string, any>,
+  //eslint-disable-next-line @typescript-eslint/ban-types
   Y extends Function | Record<string, any>,
 >(x: X, y: Y): X & Y {
   if (typeof x === "function" && typeof y === "function") {
@@ -437,6 +440,7 @@ function deepMergeProperty(property: string, x: Record<string, any>, y: Record<s
   return y[property];
 }
 
+//eslint-disable-next-line @typescript-eslint/ban-types
 function addPropertiesToFunction<X extends Function, Y extends Record<string, any>>(
   fn: X,
   properties: Y,
@@ -448,6 +452,7 @@ function addPropertiesToFunction<X extends Function, Y extends Record<string, an
 
 export type Path = Path.Element[];
 
+//eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Path {
   export const WILDCARD = "*";
   export type DocIdWildcard = typeof WILDCARD;
@@ -460,6 +465,7 @@ export namespace Path {
     return [head, tail];
   }
 
+  //eslint-disable-next-line no-inner-declarations
   function popResourceName(path: Path): [head: Path, tail: string] {
     const [head, tail] = pop(path);
     if (typeof tail !== "string") {
@@ -469,7 +475,7 @@ export namespace Path {
   }
 
   export function computeAllHeaders(
-    host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {},
+    host: ConnectorDefinition | ResourceDefinition | DocumentDefinition,
     path: Path = [],
   ): MessageHeader[] {
     const endpointNames = "endpoints" in host ? Object.keys(host.endpoints ?? {}) : [];
@@ -799,7 +805,9 @@ export class EndpointError extends Error {
  * I.e. when input is [Input<A> State<B> Input<C>], output is [Output<A> State<B> Output<C>]
  */
 export abstract class State {
-  private constructor() {}
+  private constructor() {
+    return
+  }
 
   static of<T>(value: T): State<T> {
     return { state: value };

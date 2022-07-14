@@ -60,7 +60,9 @@ export class LocalConfigRepository implements ConfigRepository {
     return this.conf.store;
   }
 
-  async import(config: any) {}
+  async import(config: any) {
+    return Promise.resolve()
+  }
 
   private scopeKey(scopeRef: ScopeRef) {
     return this.computeKey([...this.connectorsPath, scopeRef.connector, scopeRef.scope ?? ""]);

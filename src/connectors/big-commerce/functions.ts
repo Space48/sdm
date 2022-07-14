@@ -6,14 +6,18 @@ export interface Query {
   [key: string]: any;
 }
 
-export namespace endpoint {
-  export function crud(uriPattern: string, idField = "id") {
+export class endpoint {
+  private constructor() {
+    return
+  }
+
+  static crud(uriPattern: string, idField = "id") {
     const docUriPattern = `${uriPattern}/{id}`;
 
     return resource({
       endpoints: {
-        create: create(uriPattern),
-        list: list(uriPattern),
+        create: endpoint.create(uriPattern),
+        list: endpoint.list(uriPattern),
       },
 
       documents: {
@@ -22,15 +26,15 @@ export namespace endpoint {
         listIds: listIds(uriPattern, idField),
 
         endpoints: {
-          delete: del(docUriPattern),
-          get: get(docUriPattern),
-          update: update(docUriPattern),
+          delete: endpoint.del(docUriPattern),
+          get: endpoint.get(docUriPattern),
+          update: endpoint.update(docUriPattern),
         },
       },
     });
   }
 
-  export function fn<I = any, O = any>(
+  static fn<I = any, O = any>(
     uriPattern: string,
     _fn: (
       client: BigCommerce,
@@ -46,31 +50,35 @@ export namespace endpoint {
       };
   }
 
-  export const create = (uriPattern: string) =>
-    fn(uriPattern, (bcClient, uri, data: object) => bcClient.post<object>(uri, data));
+  static create = (uriPattern: string) =>
+  endpoint. fn(uriPattern, (bcClient, uri, data: object) => bcClient.post<object>(uri, data));
 
-  export const del = (uriPattern: string) =>
-    fn(uriPattern, (bcClient, uri, data) => bcClient.delete(uri, data));
+  static del = (uriPattern: string) =>
+  endpoint. fn(uriPattern, (bcClient, uri, data) => bcClient.delete(uri, data));
 
-  export const get = (uriPattern: string) =>
-    fn(uriPattern, (bcClient, uri, data: Query | undefined) => bcClient.get<object>(uri, data));
+  static get = (uriPattern: string) =>
+  endpoint. fn(uriPattern, (bcClient, uri, data: Query | undefined) => bcClient.get<object>(uri, data));
 
-  export const list = (uriPattern: string) =>
-    fn(uriPattern, (bcClient, uri, query: Query | undefined) => bcClient.list<object>(uri, query));
+  static list = (uriPattern: string) =>
+  endpoint. fn(uriPattern, (bcClient, uri, query: Query | undefined) => bcClient.list<object>(uri, query));
 
-  export const update = (uriPattern: string) =>
-    fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
+  static update = (uriPattern: string) =>
+  endpoint. fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
 }
 
 // Following functions are for compatibility with batch endpoints
-export namespace batch {
-  export function crud(uriPattern: string, idField = "id") {
+export class batch {
+  private constructor() {
+    return
+  }
+
+  static crud(uriPattern: string, idField = "id") {
     return {
       endpoints: {
-        create: createOneOrMany(uriPattern),
-        delete: deleteMany(uriPattern),
+        create: batch.createOneOrMany(uriPattern),
+        delete: batch.deleteMany(uriPattern),
         list: endpoint.list(uriPattern),
-        update: updateMany(uriPattern),
+        update: batch.updateMany(uriPattern),
       },
 
       documents: {
@@ -79,33 +87,33 @@ export namespace batch {
         listIds: listIds(uriPattern, idField),
 
         endpoints: {
-          delete: deleteOne(uriPattern),
-          get: getOne(uriPattern),
+          delete: batch.deleteOne(uriPattern),
+          get: batch.getOne(uriPattern),
         },
       },
     };
   }
 
-  export const createOneOrMany = (uriPattern: string) =>
+  static createOneOrMany = (uriPattern: string) =>
     endpoint.fn(uriPattern, (bcClient, uri, data: object) =>
       bcClient.post<object>(uri, Array.isArray(data) ? data : [data]),
     );
 
-  export const deleteOne = (uriPattern: string) =>
+  static deleteOne = (uriPattern: string) =>
     endpoint.fn(uriPattern, async (bcClient, uri, data, path) => {
       await bcClient.delete(uri, { ...data, "id:in": path[path.length - 1] });
     });
 
-  export const deleteMany = (uriPattern: string) =>
+  static deleteMany = (uriPattern: string) =>
     endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.delete(uri, data));
 
-  export const getOne = (uriPattern: string) =>
+  static getOne = (uriPattern: string) =>
     endpoint.fn(uriPattern, async (bcClient, uri, data, path) => {
       const result = await bcClient.get(uri, { ...data, "id:in": path[path.length - 1] });
       return result[0];
     });
 
-  export const updateMany = (uriPattern: string) =>
+  static updateMany = (uriPattern: string) =>
     endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
 }
 

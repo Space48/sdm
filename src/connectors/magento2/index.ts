@@ -20,7 +20,7 @@ export const magento2 = connector({
 
   getScope: config => new Magento2(config),
 
-  getWarningMessage: async (client: Magento2) => {},
+  getWarningMessage: async (client: Magento2) => Promise.resolve(),
 
   resources: {
     categories: mergeResources(

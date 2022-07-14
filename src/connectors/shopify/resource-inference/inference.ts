@@ -28,6 +28,7 @@ function inferResourcesFromShopifyModule() {
   const inferredResourcesFlat = readdirSync(pathToResources)
     .filter(filename => filename.endsWith(".js") && filename !== "index.js")
     .map((filename): FlatResourceData => {
+      //eslint-disable-next-line @typescript-eslint/no-var-requires
       const resourceConstructor = require(`${pathToResources}/${filename}`);
       const resource = new resourceConstructor(null);
       return {

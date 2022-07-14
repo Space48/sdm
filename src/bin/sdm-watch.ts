@@ -9,7 +9,7 @@ import {
 import Table from "cli-table3";
 import readline from "readline";
 import chalk from "chalk";
-const Duration = require("duration");
+import Duration from "duration";
 
 function main() {
   process.stdin.pause();

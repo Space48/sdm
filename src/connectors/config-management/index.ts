@@ -24,7 +24,7 @@ export const configManagementConnector = (
 
     getScopeName: () => "",
 
-    getWarningMessage: async () => {},
+    getWarningMessage: async () => Promise.resolve(),
 
     configSchema: t.null,
 

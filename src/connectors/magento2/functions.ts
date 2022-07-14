@@ -2,24 +2,28 @@ import Magento2, { Filter, SortKey } from "./client";
 import { DocId, EndpointDefinition, Path } from "../../framework";
 import { map, pipe } from "@space48/json-pipe";
 
-export namespace endpoint {
-  type CrudOptions = {
-    idField: string;
-    list: {
-      uri?: string;
-      sortKey: SortKey;
-      idField?: string;
-    };
+type CrudOptions = {
+  idField: string;
+  list: {
+    uri?: string;
+    sortKey: SortKey;
+    idField?: string;
   };
+};
 
-  export function crud<T extends CrudOptions>(uriPattern: string, options: T) {
+export class endpoint {
+  private constructor() {
+    return
+  }
+
+  static crud<T extends CrudOptions>(uriPattern: string, options: T) {
     const docUriPattern = `${uriPattern}/{id}`;
 
     return {
       endpoints: {
-        create: create(uriPattern),
-        createAsync: createAsync(uriPattern),
-        list: list(options.list.uri ?? uriPattern, options.list.sortKey),
+        create: endpoint.create(uriPattern),
+        createAsync: endpoint.createAsync(uriPattern),
+        list: endpoint.list(options.list.uri ?? uriPattern, options.list.sortKey),
       },
 
       documents: {
@@ -32,15 +36,15 @@ export namespace endpoint {
         ),
 
         endpoints: {
-          delete: del(docUriPattern),
-          get: get(docUriPattern),
-          update: update(docUriPattern),
+          delete: endpoint.del(docUriPattern),
+          get: endpoint.get(docUriPattern),
+          update:endpoint. update(docUriPattern),
         },
       },
     };
   }
 
-  export function fn<I = any, O = any>(
+  static fn<I = any, O = any>(
     uriPattern: string,
     _fn: (
       client: Magento2,
@@ -56,31 +60,31 @@ export namespace endpoint {
       };
   }
 
-  export const create = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
+  static create = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
 
-  export const createAsync = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data, true));
+  static createAsync = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data, true));
 
-  export const del = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
+  static del = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
 
-  export const get = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
+  static get = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 
-  export const list = (uriPattern: string, sortKey: SortKey) =>
-    fn(uriPattern, (m2Client, uri, filters: Filter[] | undefined) =>
+  static list = (uriPattern: string, sortKey: SortKey) =>
+  endpoint.fn(uriPattern, (m2Client, uri, filters: Filter[] | undefined) =>
       m2Client.search<object>(uri, { sortKey, filters }),
     );
 
-  export const update = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
+  static update = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 
-  export const updateAsync = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
+  static updateAsync = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
 
-  export const updateAsyncTEST = (uriPattern: string) =>
-    fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
+  static updateAsyncTEST = (uriPattern: string) =>
+  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
 }
 
 class UriTemplate {

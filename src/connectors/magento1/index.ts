@@ -75,7 +75,7 @@ export const magento1 = connector({
     return { rest, soap };
   },
 
-  getWarningMessage: async (scope: Magento1Scope) => {},
+  getWarningMessage: async (scope: Magento1Scope) => Promise.resolve(),
 
   resources: {
     categories: {
