@@ -113,7 +113,7 @@ export default class BundleB2b {
   private async fetch(agent: Agent, relativeUri: string, init?: RequestInit): Promise<any> {
     const config = this.config.get();
     const absoluteUri = `https://api.bundleb2b.net/api/${relativeUri}`;
-    const initResolved = this.init(agent, config.token ?? await this.refreshToken(), init);
+    const initResolved = this.init(agent, config.token ?? (await this.refreshToken()).token, init);
     // response body may only be consumed once, so we have to memoize the result here
     let responseText: Promise<string>;
     const response = await pRetry(
@@ -160,14 +160,14 @@ export default class BundleB2b {
     };
   }
 
-  private async refreshToken(): Promise<Config> {
+  private async refreshToken(): Promise<Required<Config>> {
     const config = this.config.get();
     const token = await this.getToken(config);
     const updatedConfig = { ...config, token };
     return updatedConfig;
   }
 
-  private async getToken(config: Config): Promise<Config["token"]> {
+  private async getToken(config: Config): Promise<NonNullable<Config["token"]>> {
     const now = Math.floor(Date.now() / 1000);
     const fourHoursFromNow = now + 4 * 3_600;
     const tokenResponse = await fetch("https://api.bundleb2b.net/api/io/auth/backend", {
