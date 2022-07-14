@@ -4,35 +4,37 @@ import R from "ramda";
 import { pipe } from "@space48/json-pipe";
 
 export interface ConfigRepository {
-  getScopes(): Promise<ScopeRef[]>
+  getScopes(): Promise<ScopeRef[]>;
 
-  getConfig<T = any>(scope: ScopeRef): Promise<T|undefined>
+  getConfig<T = any>(scope: ScopeRef): Promise<T | undefined>;
 
-  setConfig<T = any>(scope: ScopeRef, config: T): Promise<void>
+  setConfig<T = any>(scope: ScopeRef, config: T): Promise<void>;
 
-  removeConfig(scope: ScopeRef): Promise<boolean>
+  removeConfig(scope: ScopeRef): Promise<boolean>;
 
-  export(): Promise<any>
+  export(): Promise<any>;
 
-  import(config: Config): Promise<void>
+  import(config: Config): Promise<void>;
 }
 
 export class LocalConfigRepository implements ConfigRepository {
-  constructor(
-    private conf: Conf,
-  ) {}
+  constructor(private conf: Conf) {}
 
   async getScopes(): Promise<ScopeRef[]> {
     const key = this.computeKey(this.connectorsPath);
     return pipe(
       key.length ? this.conf.get(key) : this.conf.store,
       R.toPairs,
-      R.map(([connectorName, scopeConfigs]) => R.keys(scopeConfigs).map((scopeName): ScopeRef => ({
-        connector: connectorName,
-        scope: scopeName,
-      }))),
+      R.map(([connectorName, scopeConfigs]) =>
+        R.keys(scopeConfigs).map(
+          (scopeName): ScopeRef => ({
+            connector: connectorName,
+            scope: scopeName,
+          }),
+        ),
+      ),
       R.flatten,
-    )
+    );
   }
 
   async getConfig(scope: ScopeRef) {
@@ -58,27 +60,21 @@ export class LocalConfigRepository implements ConfigRepository {
     return this.conf.store;
   }
 
-  async import(config: any) {
-    
-  }
+  async import(config: any) {}
 
   private scopeKey(scopeRef: ScopeRef) {
-    return this.computeKey([
-      ...this.connectorsPath,
-      scopeRef.connector,
-      scopeRef.scope ?? '',
-    ]);
+    return this.computeKey([...this.connectorsPath, scopeRef.connector, scopeRef.scope ?? ""]);
   }
 
   private computeKey(path: string[]) {
-    return path.map(rawKey => rawKey.replace(/\./g, '\\.')).join('.')
+    return path.map(rawKey => rawKey.replace(/\./g, "\\.")).join(".");
   }
 
-  private readonly connectorsPath = ['connectors'];
+  private readonly connectorsPath = ["connectors"];
 }
 
 export type Config = {
   [connector: string]: {
-    [scope: string]: any
-  }
-}
+    [scope: string]: any;
+  };
+};

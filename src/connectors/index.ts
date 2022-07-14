@@ -15,5 +15,5 @@ export const regularConnectors = {
   magento1,
   magento2,
   shopify,
-  bundleB2b
+  bundleB2b,
 };

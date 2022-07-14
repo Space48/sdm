@@ -1,8 +1,24 @@
 #!/usr/bin/env node
 
-import { Command, ConnectorDefinition, EndpointError, FullyQualifiedMessageHeader, Path, ScopeRef, State } from "../framework";
+import {
+  Command,
+  ConnectorDefinition,
+  EndpointError,
+  FullyQualifiedMessageHeader,
+  Path,
+  ScopeRef,
+  State,
+} from "../framework";
 import * as readline from "readline";
-import { map, pipe, takeWhile, tap, readJsonLinesFrom, writeJsonLinesTo, writeTo } from "@space48/json-pipe";
+import {
+  map,
+  pipe,
+  takeWhile,
+  tap,
+  readJsonLinesFrom,
+  writeJsonLinesTo,
+  writeTo,
+} from "@space48/json-pipe";
 import chalk from "chalk";
 import { BinaryApi } from "../framework";
 import { Shell } from "../framework/docgen";
@@ -11,29 +27,35 @@ import { sdm } from "..";
 const app = sdm();
 
 enum Flag {
-  Force = 'force',
+  Force = "force",
 }
 const availableFlags = Object.values(Flag) as string[];
 
-const argsExcludingFlags = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
-const flags = process.argv.slice(2)
-  .filter(arg => arg.startsWith('--'))
+const argsExcludingFlags = process.argv.slice(2).filter(arg => !arg.startsWith("--"));
+const flags = process.argv
+  .slice(2)
+  .filter(arg => arg.startsWith("--"))
   .map(arg => arg.slice(2));
 const invalidFlags = flags.filter(flag => !availableFlags.includes(flag));
 if (invalidFlags.length > 0) {
-  const renderOptions = (options: string[]) => options.map(flag => `--${flag}`).join(', ');
-  process.stderr.write(`Invalid option${invalidFlags.length > 1 ? 's' : ''} ${renderOptions(invalidFlags)}. `);
+  const renderOptions = (options: string[]) => options.map(flag => `--${flag}`).join(", ");
+  process.stderr.write(
+    `Invalid option${invalidFlags.length > 1 ? "s" : ""} ${renderOptions(invalidFlags)}. `,
+  );
   process.stderr.write(`Valid options are ${renderOptions(availableFlags)}.\n`);
   process.exit(1);
 }
 
 async function main() {
   try {
-    if (argsExcludingFlags[0] === 'help') {
+    if (argsExcludingFlags[0] === "help") {
       await runHelpMode();
       process.exit(0);
     }
-    if (!process.stdin.isTTY || (argsExcludingFlags[0] && tryDecodeFQMessageHeader(argsExcludingFlags[0]))) {
+    if (
+      !process.stdin.isTTY ||
+      (argsExcludingFlags[0] && tryDecodeFQMessageHeader(argsExcludingFlags[0]))
+    ) {
       await runNonInteractiveMode();
       process.exit(0);
     }
@@ -52,7 +74,7 @@ async function runHelpMode() {
     Shell.explainCliUsageOnCli(connector.$definition, {
       connector: connectorName,
       scope: connector.$definition.scopeNameExample,
-    })
+    }),
   );
 }
 
@@ -78,21 +100,19 @@ async function runNonInteractiveMultiMessageMode(scopeRef: ScopeRef) {
 async function runNonInteractiveSingleMessageMode(header: FullyQualifiedMessageHeader) {
   const command: Command = {
     ...header,
-    input: argsExcludingFlags.length > 1 ? BinaryApi.decodeCommandInput(argsExcludingFlags[1]) : undefined,
+    input:
+      argsExcludingFlags.length > 1
+        ? BinaryApi.decodeCommandInput(argsExcludingFlags[1])
+        : undefined,
   };
   await warnUserIfNecessary(header);
   const scope = await app.requireScope(header.scope);
   if (process.stdin.isTTY || command.input !== undefined) {
     try {
-      await pipe(
-        scope.execute(command),
-        writeJsonLinesTo(process.stdout),
-      );
+      await pipe(scope.execute(command), writeJsonLinesTo(process.stdout));
     } catch (e) {
       console.error(
-        e instanceof EndpointError
-          ? JSON.stringify({error: e.normalize()}, null, 2)
-          : e
+        e instanceof EndpointError ? JSON.stringify({ error: e.normalize() }, null, 2) : e,
       );
       process.exit(1);
     }
@@ -114,13 +134,17 @@ async function runInteractiveMode() {
     const sigintListener = () => {
       interrupted = true;
     };
-    readlineInterface().once('SIGINT', sigintListener);
+    readlineInterface().once("SIGINT", sigintListener);
     try {
-      await warnUserIfNecessary({ scope: scopeRef, path: command.path, endpoint: command.endpoint });
+      await warnUserIfNecessary({
+        scope: scopeRef,
+        path: command.path,
+        endpoint: command.endpoint,
+      });
       const scope = await app.requireScope(scopeRef);
       let numOutputs = 0;
       if (!interrupted) {
-        process.stderr.write('\n');
+        process.stderr.write("\n");
         const startTime = Date.now();
         await pipe(
           scope.execute(command),
@@ -137,12 +161,10 @@ async function runInteractiveMode() {
       }
     } catch (e) {
       console.error(
-        e instanceof EndpointError
-          ? JSON.stringify({error: e.normalize()}, null, 2)
-          : e
+        e instanceof EndpointError ? JSON.stringify({ error: e.normalize() }, null, 2) : e,
       );
     } finally {
-      readlineInterface().removeListener('SIGINT', sigintListener);
+      readlineInterface().removeListener("SIGINT", sigintListener);
     }
   }
 }
@@ -150,16 +172,16 @@ async function runInteractiveMode() {
 async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
   const scope = await app.requireScope(scopeRef);
   while (true) {
-    process.stderr.write('Enter `help` to see a list of available commands.\n\n');
+    process.stderr.write("Enter `help` to see a list of available commands.\n\n");
     const commandLine = await ask({
       question: `sdm ${BinaryApi.encodeHeader({ scope: scopeRef })}> `,
       completer: (line: string) => {
-        const additionalSuggestions = 'help'.startsWith(line) ? ['help'] : [];
+        const additionalSuggestions = "help".startsWith(line) ? ["help"] : [];
         const commandSuggestions = suggestCommands(scope.connector.$definition, line);
         return [[...additionalSuggestions, ...commandSuggestions], line];
-      }
+      },
     });
-    if (commandLine === 'help') {
+    if (commandLine === "help") {
       process.stderr.write(Shell.explainInteractiveCliUsage(scope.connector.$definition));
       continue;
     }
@@ -177,8 +199,7 @@ function suggestCommands(connector: ConnectorDefinition, line: string): string[]
     if (Array.isArray(lastElement)) {
       // [full resource name, doc ID]
       const host = selectHost(path);
-      return Path.computeAllHeaders(host, path)
-        .map(BinaryApi.encodeHeader);
+      return Path.computeAllHeaders(host, path).map(BinaryApi.encodeHeader);
     } else {
       // partial resource name
       const hostPath = path.slice(0, -1);
@@ -192,9 +213,11 @@ function suggestCommands(connector: ConnectorDefinition, line: string): string[]
   }
 }
 
-async function resolveConnectorInteractively(hint: string|undefined): Promise<string> {
+async function resolveConnectorInteractively(hint: string | undefined): Promise<string> {
   const availableConnectors = Object.keys(app.connectors).map(BinaryApi.encodeConnectorName);
-  const availableConnectorsStr = `Available connectors: ${availableConnectors.map(connector => `\n\t${connector}`)}\n`;
+  const availableConnectorsStr = `Available connectors: ${availableConnectors.map(
+    connector => `\n\t${connector}`,
+  )}\n`;
 
   if (hint) {
     if (availableConnectors.includes(hint)) {
@@ -215,11 +238,10 @@ async function resolveConnectorInteractively(hint: string|undefined): Promise<st
 
 async function askForConnector(options: string[]): Promise<string> {
   const selection = await ask({
-    question:
-`
-${title('Available connectors')}
+    question: `
+${title("Available connectors")}
 
-${options.join('\n')}
+${options.join("\n")}
 
 Enter a connector: `,
     completer: (line: string) => [options.filter(connector => connector.startsWith(line)), line],
@@ -227,7 +249,7 @@ Enter a connector: `,
   return selection;
 }
 
-async function resolveScope(hint: string|undefined, interactive: boolean): Promise<ScopeRef> {
+async function resolveScope(hint: string | undefined, interactive: boolean): Promise<ScopeRef> {
   const availableScopes = await getAvailableScopes();
   const availableScopesStr = `Available scopes: ${availableScopes.map(scope => `\n\t${scope}`)}\n`;
 
@@ -235,7 +257,9 @@ async function resolveScope(hint: string|undefined, interactive: boolean): Promi
     if (availableScopes.includes(hint)) {
       return BinaryApi.decodeScope(hint);
     }
-    process.stderr.write(`Invalid scope '${hint}'. Use sdm-config to add new scopes. ${availableScopesStr}`);
+    process.stderr.write(
+      `Invalid scope '${hint}'. Use sdm-config to add new scopes. ${availableScopesStr}`,
+    );
     process.exit(1);
   }
 
@@ -243,24 +267,25 @@ async function resolveScope(hint: string|undefined, interactive: boolean): Promi
     process.stderr.write(`Scope must be specified. ${availableScopesStr}`);
     process.exit(1);
   }
-  
+
   while (true) {
     const scopeStr = await askForScope();
     if (availableScopes.includes(scopeStr)) {
       return BinaryApi.decodeScope(scopeStr);
     }
-    process.stderr.write(`Invalid scope '${scopeStr}'. Use sdm-config to add new scopes. ${availableScopesStr}`);
+    process.stderr.write(
+      `Invalid scope '${scopeStr}'. Use sdm-config to add new scopes. ${availableScopesStr}`,
+    );
   }
 }
 
 async function askForScope(): Promise<string> {
   const availableScopes = await getAvailableScopes();
   const selection = await ask({
-    question:
-`
-${title('Available scopes')}
+    question: `
+${title("Available scopes")}
 
-${availableScopes.join('\n')}
+${availableScopes.join("\n")}
 
 Enter a scope: `,
     completer: (line: string) => [availableScopes.filter(scope => scope.startsWith(line)), line],
@@ -272,14 +297,14 @@ async function getAvailableScopes(): Promise<string[]> {
   return (await app.listScopes()).map(scope => BinaryApi.encodeHeader({ scope }));
 }
 
-const safeEndpoints = ['get', 'list'];
+const safeEndpoints = ["get", "list"];
 async function warnUserIfNecessary(header: FullyQualifiedMessageHeader): Promise<void> {
   if (flags.includes(Flag.Force) || safeEndpoints.includes(header.endpoint)) {
     return;
   }
 
-  const scope = await app.requireScope(header.scope); 
-  const warning = await scope.getWarningMessage()
+  const scope = await app.requireScope(header.scope);
+  const warning = await scope.getWarningMessage();
   if (!warning) {
     return;
   }
@@ -288,25 +313,27 @@ async function warnUserIfNecessary(header: FullyQualifiedMessageHeader): Promise
 
   const delaySecs = 15;
   const interactiveMode = process.stdin.isTTY;
-  process.stderr.write(chalk.yellow(
-    interactiveMode
-      ? `Press enter or wait ${delaySecs}s to proceed with \`${commandHeader}\`. Press ctrl+c to abort.\n\n`
-      : `sdm will proceed with \`${commandHeader}\` in ${delaySecs}s. Press ctrl+c to abort.\n\n`
-  ));
+  process.stderr.write(
+    chalk.yellow(
+      interactiveMode
+        ? `Press enter or wait ${delaySecs}s to proceed with \`${commandHeader}\`. Press ctrl+c to abort.\n\n`
+        : `sdm will proceed with \`${commandHeader}\` in ${delaySecs}s. Press ctrl+c to abort.\n\n`,
+    ),
+  );
   const timeout = new Promise(resolve => setTimeout(resolve, delaySecs * 1000));
   await Promise.race([
     timeout,
     new Promise(resolve => {
       if (process.stdin.isTTY) {
-        process.stdin.once('data', resolve);
-        timeout.finally(() => process.stdin.removeListener('data', resolve));
+        process.stdin.once("data", resolve);
+        timeout.finally(() => process.stdin.removeListener("data", resolve));
       }
     }),
   ]);
 }
 
-let rl: readline.Interface|undefined = undefined;
-let rlCompleter: readline.Completer|undefined = undefined;
+let rl: readline.Interface | undefined = undefined;
+let rlCompleter: readline.Completer | undefined = undefined;
 function readlineInterface(): readline.Interface {
   if (!rl) {
     rl = readline.createInterface({
@@ -317,9 +344,11 @@ function readlineInterface(): readline.Interface {
   }
   return rl;
 }
-async function ask(options: {question: string, completer?: readline.Completer}): Promise<string> {
+async function ask(options: { question: string; completer?: readline.Completer }): Promise<string> {
   rlCompleter = options?.completer;
-  const result = await new Promise<string>(resolve => readlineInterface().question(options.question, resolve));
+  const result = await new Promise<string>(resolve =>
+    readlineInterface().question(options.question, resolve),
+  );
   rlCompleter = undefined;
   return result;
 }
@@ -328,7 +357,7 @@ function title(value: string) {
   return chalk.underline.bold(value);
 }
 
-function tryDecodeFQMessageHeader(text: string): FullyQualifiedMessageHeader|undefined {
+function tryDecodeFQMessageHeader(text: string): FullyQualifiedMessageHeader | undefined {
   try {
     return BinaryApi.decodeFQHeader(text);
   } catch {

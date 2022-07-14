@@ -2147,12 +2147,7 @@ export interface definitions {
      * |`read_and_sf_access`|Visible to other API consumers, including on storefront|
      * |`write_and_sf_access`|Open for reading and writing by other API consumers, including on storefront|
      */
-    permission_set:
-      | "app_only"
-      | "read"
-      | "write"
-      | "read_and_sf_access"
-      | "write_and_sf_access";
+    permission_set: "app_only" | "read" | "write" | "read_and_sf_access" | "write_and_sf_access";
     /** Namespace for the metafield, for organizational purposes. This is set set by the developer. Required for POST. */
     namespace: string;
     /** The name of the field, for example: `location_id`, `color`. Required for POST. */

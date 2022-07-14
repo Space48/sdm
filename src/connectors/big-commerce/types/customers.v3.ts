@@ -850,11 +850,7 @@ export interface parameters {
    *
    *  `include=addresses,storecredit,attributes,formfields`
    */
-  FilterCustomerIncludeParam:
-    | "addresses"
-    | "storecredit"
-    | "attributes"
-    | "formfields";
+  FilterCustomerIncludeParam: "addresses" | "storecredit" | "attributes" | "formfields";
   /**
    * Indicates whether to include customer address sub-resources:
    * * `formfields` - address form fields

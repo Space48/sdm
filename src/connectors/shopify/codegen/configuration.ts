@@ -3,12 +3,12 @@ import { computeResourceDefinitions } from "./connector-generator";
 /**
  * Here we configure endpoints which we have automatically inferred
  * from the API of shopify-api-node. Most endpoints are standard,
- * e.g. get, list, create, delete, etc., and do not need to be 
+ * e.g. get, list, create, delete, etc., and do not need to be
  * configured. We only configure endpoints which are non-standard.
- * 
+ *
  * `false` disables a resource or endpoint. In all cases, the disabled
  * endpoints can be enabled if they are needed -- just configure the
- * endpoint you need in the same way that other endpoints are 
+ * endpoint you need in the same way that other endpoints are
  * configured below.
  */
 
@@ -20,8 +20,8 @@ export const resourceDefinitions = computeResourceDefinitions({
         endpoints: {
           authors: false,
           tags: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
         },
       },
@@ -32,40 +32,40 @@ export const resourceDefinitions = computeResourceDefinitions({
   collection: {
     endpoints: {
       products: {
-        target: 'document',
-        type: 'flatMap',
+        target: "document",
+        type: "flatMap",
       },
     },
   },
   collectionListing: {
     endpoints: {
       productIds: false,
-    }
+    },
   },
   comment: false,
   customer: {
     endpoints: {
       accountActivationUrl: false,
       orders: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       search: false,
       sendInvite: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
     },
     resources: {
       customerAddress: {
         endpoints: {
           default: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
           set: {
-            target: 'resource',
-            type: 'map',
+            target: "resource",
+            type: "map",
           },
         },
       },
@@ -75,12 +75,12 @@ export const resourceDefinitions = computeResourceDefinitions({
   draftOrder: {
     endpoints: {
       complete: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       sendInvoice: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
     },
   },
@@ -88,27 +88,27 @@ export const resourceDefinitions = computeResourceDefinitions({
   giftCard: {
     endpoints: {
       disable: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       search: false,
-    }
+    },
   },
   inventoryLevel: {
     endpoints: {
       adjust: false,
       connect: false,
       set: {
-        target: 'resource',
-        type: 'map',
+        target: "resource",
+        type: "map",
       },
     },
   },
   location: {
     endpoints: {
       inventoryLevels: {
-        target: 'document',
-        type: 'flatMap',
+        target: "document",
+        type: "flatMap",
       },
     },
   },
@@ -116,43 +116,43 @@ export const resourceDefinitions = computeResourceDefinitions({
   order: {
     endpoints: {
       cancel: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       close: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       fulfillmentOrders: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
       list: {
-        params: {status: "any"},
+        params: { status: "any" },
       },
       open: {
-        target: 'document',
-        type: 'map',
+        target: "document",
+        type: "map",
       },
     },
     resources: {
       fulfillment: {
         endpoints: {
           cancel: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
           createV2: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
           complete: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
           open: {
-            target: 'document',
-            type: 'map',
+            target: "document",
+            type: "map",
           },
           updateTracking: false,
         },
@@ -160,8 +160,8 @@ export const resourceDefinitions = computeResourceDefinitions({
       refund: {
         endpoints: {
           calculate: {
-            target: 'resource',
-            type: 'map',
+            target: "resource",
+            type: "map",
           },
         },
       },
@@ -172,8 +172,8 @@ export const resourceDefinitions = computeResourceDefinitions({
       discountCode: {
         endpoints: {
           lookup: {
-            target: 'resource',
-            type: 'map',
+            target: "resource",
+            type: "map",
           },
         },
       },
@@ -189,7 +189,7 @@ export const resourceDefinitions = computeResourceDefinitions({
   shop: {
     endpoints: {
       get: {
-        target: 'resource',
+        target: "resource",
       },
     },
   },
@@ -202,8 +202,8 @@ export const resourceDefinitions = computeResourceDefinitions({
   user: {
     endpoints: {
       current: {
-        target: 'resource',
-        type: 'map',
+        target: "resource",
+        type: "map",
       },
     },
   },
