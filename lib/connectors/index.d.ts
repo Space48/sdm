@@ -1690,4 +1690,63 @@ export declare const regularConnectors: {
             };
         }>;
     }>;
+    bundleB2b: import("..").Connector<{
+        storeAlias: string;
+        storeHash: string;
+        credentials: {
+            email: string;
+            password: string;
+        };
+    } & {
+        token?: {
+            value: string;
+            expiration: number;
+        } | undefined;
+    }, import("./bundle-b2b/client").default, {
+        companies: {
+            endpoints: {
+                create: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: import("./bundle-b2b/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: import("..").EndpointDefinition<import("./bundle-b2b/client").default, any, void>;
+                    get: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                };
+            };
+        };
+        users: {
+            endpoints: {
+                create: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: import("./bundle-b2b/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: import("..").EndpointDefinition<import("./bundle-b2b/client").default, any, void>;
+                    get: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                };
+            };
+        };
+        addresses: {
+            endpoints: {
+                create: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                list: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+            };
+            documents: {
+                idField: string;
+                listIds: (client: import("./bundle-b2b/client").default) => (path: import("..").Path) => AsyncIterable<string | number>;
+                endpoints: {
+                    delete: import("..").EndpointDefinition<import("./bundle-b2b/client").default, any, void>;
+                    get: import("..").EndpointDefinition<import("./bundle-b2b/client").default, import("./bundle-b2b/functions").Query | undefined, object>;
+                    update: import("..").EndpointDefinition<import("./bundle-b2b/client").default, object, object>;
+                };
+            };
+        };
+    }>;
 };
