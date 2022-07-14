@@ -13,7 +13,7 @@ type CrudOptions = {
 
 export class endpoint {
   private constructor() {
-    return
+    return;
   }
 
   static crud<T extends CrudOptions>(uriPattern: string, options: T) {
@@ -38,7 +38,7 @@ export class endpoint {
         endpoints: {
           delete: endpoint.del(docUriPattern),
           get: endpoint.get(docUriPattern),
-          update:endpoint. update(docUriPattern),
+          update: endpoint.update(docUriPattern),
         },
       },
     };
@@ -61,30 +61,32 @@ export class endpoint {
   }
 
   static create = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
+    endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
 
   static createAsync = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data, true));
+    endpoint.fn(uriPattern, (m2Client, uri, data: object) =>
+      m2Client.post<object>(uri, data, true),
+    );
 
   static del = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
+    endpoint.fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
 
   static get = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
+    endpoint.fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 
   static list = (uriPattern: string, sortKey: SortKey) =>
-  endpoint.fn(uriPattern, (m2Client, uri, filters: Filter[] | undefined) =>
+    endpoint.fn(uriPattern, (m2Client, uri, filters: Filter[] | undefined) =>
       m2Client.search<object>(uri, { sortKey, filters }),
     );
 
   static update = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
+    endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 
   static updateAsync = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
+    endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
 
   static updateAsyncTEST = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
+    endpoint.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data, true));
 }
 
 class UriTemplate {

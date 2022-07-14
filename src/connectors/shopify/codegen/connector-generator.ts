@@ -112,7 +112,11 @@ type InferDocumentDefn<
   Depth extends string,
 > = RemoveEmptyProps<{
   endpoints: InferEndpointDefnMap<Res, Prop<Config, "endpoints", undefined>, "document", Depth>;
-  resources: InferResourceDefnMap<Res["children"], Prop<Config, "resources", Record<string, never>>, Depth>;
+  resources: InferResourceDefnMap<
+    Res["children"],
+    Prop<Config, "resources", Record<string, never>>,
+    Depth
+  >;
 }>;
 
 function endpointDefinitions(

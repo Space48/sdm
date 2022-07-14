@@ -11,13 +11,15 @@ export type Magento1Scope = {
 
 export class Soap {
   private constructor() {
-    return
+    return;
   }
 
   static list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T> {
     return ({ soap }) =>
       async function* ({ input: filters }) {
-        const result = await soap.execute<T[] | null>(method, { filters: Soap.prepareFilters(filters) });
+        const result = await soap.execute<T[] | null>(method, {
+          filters: Soap.prepareFilters(filters),
+        });
         if (result !== null) {
           yield* result;
         }
@@ -44,13 +46,10 @@ type Children<Name extends string> = {
 
 export class Rest {
   private constructor() {
-    return
+    return;
   }
 
-  static crud<ChildName extends string>(
-    uriPattern: string,
-    childNames: readonly ChildName[] = [],
-  ) {
+  static crud<ChildName extends string>(uriPattern: string, childNames: readonly ChildName[] = []) {
     const docUriPattern = `${uriPattern}/{id}`;
 
     return {
@@ -75,10 +74,7 @@ export class Rest {
     };
   }
 
-  static read<ChildName extends string>(
-    uriPattern: string,
-    childNames: readonly ChildName[] = [],
-  ) {
+  static read<ChildName extends string>(uriPattern: string, childNames: readonly ChildName[] = []) {
     const docUriPattern = `${uriPattern}/{id}`;
 
     return {
@@ -135,21 +131,21 @@ export class Rest {
   }
 
   static create = (uriPattern: string) =>
-  Rest. fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
+    Rest.fn(uriPattern, (m2Client, uri, data: object) => m2Client.post<object>(uri, data));
 
   static del = (uriPattern: string) =>
-  Rest. fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
+    Rest.fn(uriPattern, (m2Client, uri, data) => m2Client.delete(uri, data));
 
   static get = (uriPattern: string) =>
-  Rest. fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
+    Rest.fn(uriPattern, (m2Client, uri) => m2Client.get<object>(uri));
 
   static list = (uriPattern: string) =>
-  Rest. fn(uriPattern, (m2Client, uri, filters) =>
+    Rest.fn(uriPattern, (m2Client, uri, filters) =>
       m2Client.search<object>(uri, { sortKey: "entity_id", filters }),
     );
 
   static update = (uriPattern: string) =>
-  Rest. fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
+    Rest.fn(uriPattern, (m2Client, uri, data: object) => m2Client.put<object>(uri, data));
 
   private static listIds(uriPattern: string) {
     return (scope: Magento1Scope) => (path: Path) => {

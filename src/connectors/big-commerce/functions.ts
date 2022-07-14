@@ -8,7 +8,7 @@ export interface Query {
 
 export class endpoint {
   private constructor() {
-    return
+    return;
   }
 
   static crud(uriPattern: string, idField = "id") {
@@ -51,25 +51,29 @@ export class endpoint {
   }
 
   static create = (uriPattern: string) =>
-  endpoint. fn(uriPattern, (bcClient, uri, data: object) => bcClient.post<object>(uri, data));
+    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.post<object>(uri, data));
 
   static del = (uriPattern: string) =>
-  endpoint. fn(uriPattern, (bcClient, uri, data) => bcClient.delete(uri, data));
+    endpoint.fn(uriPattern, (bcClient, uri, data) => bcClient.delete(uri, data));
 
   static get = (uriPattern: string) =>
-  endpoint. fn(uriPattern, (bcClient, uri, data: Query | undefined) => bcClient.get<object>(uri, data));
+    endpoint.fn(uriPattern, (bcClient, uri, data: Query | undefined) =>
+      bcClient.get<object>(uri, data),
+    );
 
   static list = (uriPattern: string) =>
-  endpoint. fn(uriPattern, (bcClient, uri, query: Query | undefined) => bcClient.list<object>(uri, query));
+    endpoint.fn(uriPattern, (bcClient, uri, query: Query | undefined) =>
+      bcClient.list<object>(uri, query),
+    );
 
   static update = (uriPattern: string) =>
-  endpoint. fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
+    endpoint.fn(uriPattern, (bcClient, uri, data: object) => bcClient.put<object>(uri, data));
 }
 
 // Following functions are for compatibility with batch endpoints
 export class batch {
   private constructor() {
-    return
+    return;
   }
 
   static crud(uriPattern: string, idField = "id") {

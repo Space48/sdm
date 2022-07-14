@@ -8,7 +8,7 @@ export interface Query {
 
 export class endpoint {
   private constructor() {
-    return
+    return;
   }
 
   static crud(uriPattern: string, idField = "id") {
@@ -51,21 +51,23 @@ export class endpoint {
   }
 
   static create = (uriPattern: string) =>
-  endpoint.fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.post<object>(uri, data));
+    endpoint.fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.post<object>(uri, data));
 
   static del = (uriPattern: string) =>
-  endpoint.  fn(uriPattern, (bB2bClient, uri, data) => bB2bClient.delete(uri, data));
+    endpoint.fn(uriPattern, (bB2bClient, uri, data) => bB2bClient.delete(uri, data));
 
   static get = (uriPattern: string) =>
-  endpoint.  fn(uriPattern, (bB2bClient, uri, data: Query | undefined) => bB2bClient.get<object>(uri, data));
+    endpoint.fn(uriPattern, (bB2bClient, uri, data: Query | undefined) =>
+      bB2bClient.get<object>(uri, data),
+    );
 
   static list = (uriPattern: string) =>
-  endpoint.  fn(uriPattern, (bB2bClient, uri, query: Query | undefined) =>
+    endpoint.fn(uriPattern, (bB2bClient, uri, query: Query | undefined) =>
       bB2bClient.list<object>(uri, query),
     );
 
   static update = (uriPattern: string) =>
-  endpoint.  fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.put<object>(uri, data));
+    endpoint.fn(uriPattern, (bB2bClient, uri, data: object) => bB2bClient.put<object>(uri, data));
 }
 
 export class UriTemplate {

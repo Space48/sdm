@@ -135,7 +135,7 @@ export default class Magento2 {
       try {
         detail = await response.json();
       } catch {
-        detail = undefined
+        detail = undefined;
       }
       throw new EndpointError(`${response.status} ${response.statusText}`, { detail });
     }

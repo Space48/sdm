@@ -188,7 +188,7 @@ async function askForCommand(scopeRef: ScopeRef): Promise<Command> {
     try {
       return BinaryApi.decodeCommand(commandLine);
     } catch {
-      continue
+      continue;
     }
   }
 }

@@ -290,8 +290,12 @@ export interface DocumentDefinition<Scope = any> {
 type Document<
   T extends DocumentDefinition = DocumentDefinition,
   MultiPath extends boolean = boolean,
-  > = (T["resources"] extends ResourceDefinitionMap ? ResourceMap<T["resources"], MultiPath> : Record<string, any>) &
-  (T["endpoints"] extends EndpointDefinitionMap ? EndpointMap<T["endpoints"], MultiPath> : Record<string, any>);
+> = (T["resources"] extends ResourceDefinitionMap
+  ? ResourceMap<T["resources"], MultiPath>
+  : Record<string, any>) &
+  (T["endpoints"] extends EndpointDefinitionMap
+    ? EndpointMap<T["endpoints"], MultiPath>
+    : Record<string, any>);
 
 function document(document: DocumentDefinition, path: Path): Document {
   return deepMerge(
@@ -806,7 +810,7 @@ export class EndpointError extends Error {
  */
 export abstract class State {
   private constructor() {
-    return
+    return;
   }
 
   static of<T>(value: T): State<T> {

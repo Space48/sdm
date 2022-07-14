@@ -61,7 +61,7 @@ export class LocalConfigRepository implements ConfigRepository {
   }
 
   async import(config: any) {
-    return Promise.resolve()
+    return Promise.resolve();
   }
 
   private scopeKey(scopeRef: ScopeRef) {

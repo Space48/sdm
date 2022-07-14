@@ -11,7 +11,7 @@ import { pipe } from "@space48/json-pipe";
 
 export class Shell {
   private constructor() {
-    return
+    return;
   }
 
   static explainInteractiveCliUsage(connector: ConnectorDefinition): string {
@@ -97,7 +97,9 @@ ${commands}
       .map(header => Markdown.describeEndpointUsage(nestingLevel + 1, header))
       .join("\n\n");
 
-    return `${Markdown.pathTitle(nestingLevel, { path: Markdown.getPathExcludingDocId(headers[0].path) })}
+    return `${Markdown.pathTitle(nestingLevel, {
+      path: Markdown.getPathExcludingDocId(headers[0].path),
+    })}
 
 ${Markdown.title(nestingLevel + 1, "Endpoints")}
 
