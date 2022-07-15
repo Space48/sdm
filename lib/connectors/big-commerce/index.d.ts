@@ -1,6 +1,6 @@
-import BigCommerce, { Config } from './client';
-import { Query } from './functions';
-import * as f from '../../framework';
+import BigCommerce, { Config } from "./client";
+import { Query } from "./functions";
+import * as f from "../../framework";
 export declare type BigCommerceConfig = Config;
 export declare const bigCommerce: f.Connector<{
     storeAlias: string;

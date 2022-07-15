@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from "io-ts";
 import { MutableReference } from "../../framework";
 export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.IntersectionC<[t.TypeC<{

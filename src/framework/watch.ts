@@ -2,7 +2,7 @@ import { Command, ConnectorScope, OutputElement } from "./connector";
 import { onEnd, tap, compose, pipe, streamJson, transformJson } from "@space48/json-pipe";
 import ipc from "node-ipc";
 import { MessageHeader, Path } from ".";
-import { encodeHeader } from './binary-api';
+import { encodeHeader } from "./binary-api";
 import { throws } from "assert";
 import { time, timeStamp } from "console";
 
@@ -16,12 +16,12 @@ export function watchScope(scope: ConnectorScope): ConnectorScope {
           progress.recordOutput(output);
           yield output as any;
         }
-        progress.finish()
+        progress.finish();
       } catch (e) {
         progress.finish(e);
-        throw e
+        throw e;
       }
-    }
+    },
   };
 }
 
@@ -32,7 +32,7 @@ export function listenForProgress(listener: (state: ProcessSnapshot[]) => void):
   ipc.serve(() => {
     ipc.server.on(MessageType.ProcessState, (serializedProcessState: any) => {
       const processState = deserializeProcessState(serializedProcessState);
-      state = state.filter(({pid}) => pid !== processState.pid).concat(processState);
+      state = state.filter(({ pid }) => pid !== processState.pid).concat(processState);
       listener(state);
     });
   });
@@ -42,38 +42,38 @@ export function listenForProgress(listener: (state: ProcessSnapshot[]) => void):
 }
 
 export type ProcessSnapshot = Readonly<{
-  pid: number,
-  executions: ExecutionProgressSnapshot[],
+  pid: number;
+  executions: ExecutionProgressSnapshot[];
 }>;
 
 export type ExecutionProgressSnapshot = Readonly<{
   pid: number;
-  executionId: number,
-  error: string|null,
-  commands: CommandProgressSnapshot[],
-  timestamp: Date,
-  startTime: Date,
-  finishTime: Date|null,
-  scope: string,
-}>
+  executionId: number;
+  error: string | null;
+  commands: CommandProgressSnapshot[];
+  timestamp: Date;
+  startTime: Date;
+  finishTime: Date | null;
+  scope: string;
+}>;
 
 export type CommandProgressSnapshot = Readonly<{
-  commandId: number,
-  command: MessageHeader,
+  commandId: number;
+  command: MessageHeader;
   stats: {
-    timestamp: Date,
-    outputs: number,
-    outputs10: number,
-    outputs60: number,
-    outputs300: number,
-  },
+    timestamp: Date;
+    outputs: number;
+    outputs10: number;
+    outputs60: number;
+    outputs300: number;
+  };
 }>;
 
 class Client {
   // note that state is mutable
   private static activeExecutions: ExecutionProgress[] = [];
   private static finishedExecutions: ExecutionProgressSnapshot[] = [];
-  private static interval: NodeJS.Timeout|undefined = undefined;
+  private static interval: NodeJS.Timeout | undefined = undefined;
   private static connected = false;
 
   static reportProgress(scope: string, commandOrCommands: any): ExecutionProgress {
@@ -82,7 +82,7 @@ class Client {
       Client.activeExecutions = Client.activeExecutions.filter(_progress => _progress !== progress);
       Client.finishedExecutions = [...Client.finishedExecutions, finalProgress];
       if (Client.activeExecutions.length === 0) {
-        Client.broadcast({includeFinished: true});
+        Client.broadcast({ includeFinished: true });
         Client.stop();
       }
     });
@@ -93,7 +93,7 @@ class Client {
   private static start() {
     if (!Client.interval) {
       Client.ensureSocketCreated();
-      Client.interval = setInterval(() => Client.broadcast({includeFinished: false}), 1000);
+      Client.interval = setInterval(() => Client.broadcast({ includeFinished: false }), 1000);
     }
   }
 
@@ -104,16 +104,19 @@ class Client {
     }
   }
 
-  private static broadcast({includeFinished}: {includeFinished: boolean}) {
+  private static broadcast({ includeFinished }: { includeFinished: boolean }) {
     if (Client.connected) {
       const timestamp = new Date();
-      ipc.of[ipcId].emit(MessageType.ProcessState, serializeProcessState({
-        pid: process.pid,
-        executions: [
-          ...Client.activeExecutions.map(progress => progress.getSnapshot(timestamp)),
-          ...(includeFinished ? Client.finishedExecutions : []),
-        ],
-      }));
+      ipc.of[ipcId].emit(
+        MessageType.ProcessState,
+        serializeProcessState({
+          pid: process.pid,
+          executions: [
+            ...Client.activeExecutions.map(progress => progress.getSnapshot(timestamp)),
+            ...(includeFinished ? Client.finishedExecutions : []),
+          ],
+        }),
+      );
     }
   }
 
@@ -126,12 +129,12 @@ class Client {
 
     ipc.config.silent = true;
     ipc.connectTo(ipcId, () => {
-      ipc.of[ipcId].on('connect', () => {
+      ipc.of[ipcId].on("connect", () => {
         Client.connected = true;
-        Client.broadcast({includeFinished: true});
+        Client.broadcast({ includeFinished: true });
       });
-      ipc.of[ipcId].on('disconnect', () => Client.connected = false);
-      ipc.of[ipcId].on('destroy', () => {
+      ipc.of[ipcId].on("disconnect", () => (Client.connected = false));
+      ipc.of[ipcId].on("destroy", () => {
         Client.connected = false;
         Client.ensureSocketCreated();
       });
@@ -143,7 +146,7 @@ class ExecutionProgress {
   private multiCommand: boolean;
   private snapshot: Omit<ExecutionProgressSnapshot, "commands">;
   private checkpoints: Array<[number, number]> = [];
-  private outputCount: number = 0;
+  private outputCount = 0;
   private singletonCommandProgress: CommandProgress | undefined;
 
   private static nextExecutionId = 1;
@@ -152,10 +155,10 @@ class ExecutionProgress {
     scope: string,
     commandOrCommands: Command | Iterable<Command> | AsyncIterable<Command>,
     pid: number,
-    private onFinish: (result: ExecutionProgressSnapshot) => void
+    private onFinish: (result: ExecutionProgressSnapshot) => void,
   ) {
     this.multiCommand = isIterable(commandOrCommands);
-    if(!this.multiCommand) {
+    if (!this.multiCommand) {
       this.singletonCommandProgress = this.createCommandProgress(commandOrCommands as Command);
     }
     this.snapshot = {
@@ -166,18 +169,20 @@ class ExecutionProgress {
       executionId: ExecutionProgress.nextExecutionId++,
       finishTime: null,
       error: null,
-    }
+    };
   }
 
   getSnapshot(timestamp: Date): ExecutionProgressSnapshot {
     if (this.snapshot.finishTime) {
       timestamp = this.snapshot.finishTime;
     }
-    const commandProgresses = this.multiCommand  ? Object.values(this.commandProgresses) : [this.singletonCommandProgress!];
+    const commandProgresses = this.multiCommand
+      ? Object.values(this.commandProgresses)
+      : [this.singletonCommandProgress!];
     return {
       ...this.snapshot,
       timestamp,
-      commands: commandProgresses.map(progress => progress.getSnapshot(timestamp))
+      commands: commandProgresses.map(progress => progress.getSnapshot(timestamp)),
     };
   }
 
@@ -196,7 +201,7 @@ class ExecutionProgress {
     this.snapshot = {
       ...this.snapshot,
       error: error?.message ?? null,
-      finishTime: timestamp
+      finishTime: timestamp,
     };
     this.onFinish(this.getSnapshot(timestamp));
   }
@@ -209,11 +214,11 @@ class ExecutionProgress {
       path: strippedPath,
       endpoint: outputEl.endpoint,
     });
-    if(!this.commandProgresses[encodedHeader]) {
+    if (!this.commandProgresses[encodedHeader]) {
       this.commandProgresses[encodedHeader] = this.createCommandProgress({
         ...outputEl,
         path: strippedPath,
-      })
+      });
     }
     return this.commandProgresses[encodedHeader];
   }
@@ -224,32 +229,31 @@ class ExecutionProgress {
     return new CommandProgress({
       command: messageHeader,
       commandId: this.nextCommandId++,
-    })
+    });
   }
 
   private static stripDocIds(path: Path): Path {
     return path.map(pathElement => {
-      if(Array.isArray(pathElement)) {
+      if (Array.isArray(pathElement)) {
         return [pathElement[0], Path.WILDCARD];
       } else {
         return pathElement;
       }
-    })
+    });
   }
 
   private getOutputsSince(unixTimestampMs: number): number {
-    const index = this.checkpoints.findIndex(([checkpointTime]) => checkpointTime >= unixTimestampMs) - 1;
+    const index =
+      this.checkpoints.findIndex(([checkpointTime]) => checkpointTime >= unixTimestampMs) - 1;
     return index < 0 ? this.outputCount : this.outputCount - this.checkpoints[index][1];
   }
 }
 
 class CommandProgress {
-  private outputCount: number = 0;
+  private outputCount = 0;
   private checkpoints: Array<[number, number]> = [];
 
-  constructor(
-    private progress: Omit<CommandProgressSnapshot, 'stats'>,
-  ) {}
+  constructor(private progress: Omit<CommandProgressSnapshot, "stats">) {}
 
   recordOutput(): void {
     this.outputCount++;
@@ -266,21 +270,22 @@ class CommandProgress {
         outputs10: this.getOutputsSince(unixTimestampMs - 10_000),
         outputs60: this.getOutputsSince(unixTimestampMs - 60_000),
         outputs300: this.getOutputsSince(unixTimestampMs - 300_000),
-      }
+      },
     };
   }
 
   private getOutputsSince(unixTimestampMs: number): number {
-    const index = this.checkpoints.findIndex(([checkpointTime]) => checkpointTime >= unixTimestampMs) - 1;
+    const index =
+      this.checkpoints.findIndex(([checkpointTime]) => checkpointTime >= unixTimestampMs) - 1;
     return index < 0 ? this.outputCount : this.outputCount - this.checkpoints[index][1];
   }
 }
 
-const ipcId = 'sdm-watch';
+const ipcId = "sdm-watch";
 
 enum MessageType {
-  ProcessState = 'process_state',
-};
+  ProcessState = "process_state",
+}
 
 function serializeProcessState(state: ProcessSnapshot): any {
   return {
@@ -288,14 +293,14 @@ function serializeProcessState(state: ProcessSnapshot): any {
     executions: state.executions.map(executionProgress => ({
       ...executionProgress,
       startTime: executionProgress.startTime.toISOString(),
-      finishTime: executionProgress.finishTime?.toISOString() ?? null, 
+      finishTime: executionProgress.finishTime?.toISOString() ?? null,
       commands: executionProgress.commands.map(command => ({
         ...command,
         stats: {
           ...command.stats,
-          timestamp: command.stats.timestamp.toISOString()
-        }
-      }))
+          timestamp: command.stats.timestamp.toISOString(),
+        },
+      })),
     })),
   };
 }
@@ -312,9 +317,9 @@ function deserializeProcessState(state: any): ProcessSnapshot {
         ...command,
         stats: {
           ...command.stats,
-          timestamp: new Date(command.stats.timestamp)
-        }
-      })) 
+          timestamp: new Date(command.stats.timestamp),
+        },
+      })),
     })),
   };
 }

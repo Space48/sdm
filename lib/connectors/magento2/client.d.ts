@@ -1,5 +1,5 @@
 import { MutableReference } from "../../framework";
-import * as t from 'io-ts';
+import * as t from "io-ts";
 export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.IntersectionC<[t.TypeC<{
     baseUrl: t.StringC;
@@ -39,7 +39,7 @@ export declare type QueryParams = {
 };
 declare type QueryParam = QueryParams | string | number | QueryParam[];
 export declare type Filter = [string, FilterCondition, string | number | string[] | number[]];
-declare type FilterCondition = 'eq' | 'finset' | 'from' | 'gt' | 'gteq' | 'in' | 'like' | 'lt' | 'lteq' | 'moreq' | 'neq' | 'nfinset' | 'nin' | 'notnull' | 'null' | 'to';
+declare type FilterCondition = "eq" | "finset" | "from" | "gt" | "gteq" | "in" | "like" | "lt" | "lteq" | "moreq" | "neq" | "nfinset" | "nin" | "notnull" | "null" | "to";
 export declare type SortKey = {
     query: string;
     response: string;

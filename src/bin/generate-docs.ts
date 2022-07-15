@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import { Markdown } from "../framework/docgen";
 
-const docsDir = path.join(path.dirname(path.dirname(__dirname)), 'docs');
+const docsDir = path.join(path.dirname(path.dirname(__dirname)), "docs");
 
 function main() {
   const connectorsDocsDir = docsDir;
@@ -14,21 +14,18 @@ function main() {
     const connectorDocsDir = path.join(connectorsDocsDir, hyphenate(name));
     ensureDirExists(connectorDocsDir);
 
-    const cliDocPath = path.join(connectorDocsDir, 'reference.md');
+    const cliDocPath = path.join(connectorDocsDir, "reference.md");
     writeFileSync(cliDocPath, Markdown.explainUsage(connector.$definition, name));
   });
 }
 
 function ensureDirExists(path: string): void {
   if (!existsSync(path)) {
-    mkdirSync(path, {recursive: true});
+    mkdirSync(path, { recursive: true });
   }
 }
 
-const hyphenate = (value: string): string => (
-  value
-    .replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
-    .replace(/_/g, '-')
-);
+const hyphenate = (value: string): string =>
+  value.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`).replace(/_/g, "-");
 
 main();
