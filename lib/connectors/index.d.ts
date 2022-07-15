@@ -3,6 +3,7 @@ export * from "./config-management";
 export * from "./magento1";
 export * from "./magento2";
 export * from "./shopify";
+export * from "./bundle-b2b";
 export declare const regularConnectors: {
     bigCommerce: import("..").Connector<{
         storeAlias: string;
