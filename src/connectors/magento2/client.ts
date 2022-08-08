@@ -89,9 +89,18 @@ export default class Magento2 {
     const { filters = [], pageSize, currentPage = 1, sortOrders = [] } = options;
     const { items } = await this.get<{ items: T[] }>(uri, {
       searchCriteria: {
-        filterGroups: filters.map(([field, conditionType, value]) => ({
-          filters: [{ field, conditionType, value }],
-        })),
+        filterGroups: filters.map(([field, conditionType, value]) => {
+          if (Array.isArray(value)) {
+            return {
+              filters: value.map((orValue: number | string) => ({
+                field,
+                conditionType,
+                value: orValue,
+              })),
+            };
+          }
+          return { filters: [{ field, conditionType, value }] };
+        }),
         sortOrders: sortOrders.map(([field, direction]) => ({ field, direction })),
         pageSize,
         currentPage,
@@ -217,7 +226,7 @@ function flattenParam(name: string, value: QueryParam): [string, string][] {
   }
 }
 
-export type Filter = [string, FilterCondition, string | number | string[] | number[]];
+export type Filter = [string, FilterCondition, string | number | Array<string | number>];
 
 type FilterCondition =
   | "eq"
