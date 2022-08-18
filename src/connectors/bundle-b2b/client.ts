@@ -183,12 +183,14 @@ export default class BundleB2b {
     const now = Math.floor(Date.now() / 1000);
     const fourHoursFromNow = now + 4 * 3_600;
     const tokenResponse = await fetch("https://api.bundleb2b.net/api/io/auth/backend", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         storeHash: config.storeHash,
         ...config.credentials,
+        name: `sdm-${fourHoursFromNow}`,
         channelId: 1,
         beginAt: now,
         endAt: fourHoursFromNow,
@@ -198,8 +200,11 @@ export default class BundleB2b {
       throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
     }
     const token = await tokenResponse.json();
+    if (token.code === 422) {
+      throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
+    }
     return {
-      value: token.data[0].token,
+      value: token.data.token,
       expiration: fourHoursFromNow,
     };
   }
