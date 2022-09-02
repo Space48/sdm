@@ -38,7 +38,7 @@ export declare type QueryParams = {
     [param: string]: QueryParam;
 };
 declare type QueryParam = QueryParams | string | number | QueryParam[];
-export declare type Filter = [string, FilterCondition, string | number | string[] | number[]];
+export declare type Filter = [string, FilterCondition, string | number | Array<string | number>];
 declare type FilterCondition = "eq" | "finset" | "from" | "gt" | "gteq" | "in" | "like" | "lt" | "lteq" | "moreq" | "neq" | "nfinset" | "nin" | "notnull" | "null" | "to";
 export declare type SortKey = {
     query: string;
