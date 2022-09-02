@@ -52,6 +52,8 @@
  * [products.variants](#productsvariants)
  * [promotions](#promotions)
  * [store](#store)
+ * [wishlists](#wishlists)
+ * [wishlists[].items](#wishlistsitems)
 
 ## blog.posts
 
@@ -3199,6 +3201,119 @@ $ sdm 'big-commerce[some-store-alias].store.get' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.store.get(input?: unknown);
+```
+
+
+## wishlists
+
+### Endpoints
+
+ * [create](#wishlistscreate)
+ * [delete](#wishlistsdelete)
+ * [get](#wishlistsget)
+ * [list](#wishlistslist)
+ * [update](#wishlistsupdate)
+
+### wishlists.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.create(input?: unknown);
+```
+
+
+### wishlists[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists[id|*].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.$doc(id).delete(input?: unknown);
+const command = bigCommerce.wishlists.$all.delete(input?: unknown);
+```
+
+
+### wishlists[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists[id|*].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.$doc(id).get(input?: unknown);
+const command = bigCommerce.wishlists.$all.get(input?: unknown);
+```
+
+
+### wishlists.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.list(input?: unknown);
+```
+
+
+### wishlists[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists[id|*].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.$doc(id).update(input?: unknown);
+const command = bigCommerce.wishlists.$all.update(input?: unknown);
+```
+
+
+## wishlists[].items
+
+### Endpoints
+
+ * [create](#wishlistsitemscreate)
+ * [delete](#wishlistsitemsdelete)
+
+### wishlists[].items.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists[id|*].items.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.$doc(id).items.create(input?: unknown);
+const command = bigCommerce.wishlists.$all.items.create(input?: unknown);
+```
+
+
+### wishlists[].items[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].wishlists[id|*].items[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.wishlists.$doc(id).items.$doc(id).delete(input?: unknown);
+const command = bigCommerce.wishlists.$all.items.$doc(id).delete(input?: unknown);
 ```
 
 

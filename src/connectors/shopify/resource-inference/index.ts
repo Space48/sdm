@@ -5,4 +5,3 @@ export { InferredResource } from "./inference";
 export type InferredResources = typeof inferredResources;
 
 export { inferredResources };
-

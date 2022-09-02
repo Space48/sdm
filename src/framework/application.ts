@@ -5,12 +5,12 @@ import { watchScope } from "./watch";
 import R from "ramda";
 
 export type ApplicationConfig = {
-  readonly configRepository: ConfigRepository,
-  readonly connectors: Readonly<Record<string, Connector>>,
+  readonly configRepository: ConfigRepository;
+  readonly connectors: Readonly<Record<string, Connector>>;
 };
 
 export class Application {
-  constructor({configRepository, connectors}: ApplicationConfig) {
+  constructor({ configRepository, connectors }: ApplicationConfig) {
     this.configRepository = configRepository;
     this.connectors = connectors;
   }
@@ -19,17 +19,13 @@ export class Application {
   readonly connectors: Readonly<Record<string, Connector>>;
 
   async listScopes(): Promise<ScopeRef[]> {
-    const singletonScopes =
-      Object.entries(this.connectors)
-        .filter(([, connector]) => !connectorRequiresScopeConfig(connector))
-        .map(([name]): ScopeRef => ({connector: name, scope: null}));
+    const singletonScopes = Object.entries(this.connectors)
+      .filter(([, connector]) => !connectorRequiresScopeConfig(connector))
+      .map(([name]): ScopeRef => ({ connector: name, scope: null }));
 
     const configuredScopes = await this.configRepository.getScopes();
 
-    return [
-      ...singletonScopes,
-      ...configuredScopes,
-    ];
+    return [...singletonScopes, ...configuredScopes];
   }
 
   async requireScope(scopeRef: ScopeRef): Promise<ConnectorScope> {
@@ -40,7 +36,7 @@ export class Application {
     return maybeScope;
   }
 
-  async getScope(scopeRef: ScopeRef): Promise<ConnectorScope|undefined> {
+  async getScope(scopeRef: ScopeRef): Promise<ConnectorScope | undefined> {
     const connector = this.connectors[scopeRef.connector];
     if (!connector) {
       throw new Error(`Connector '${scopeRef.connector}' was not found.`);
@@ -65,18 +61,21 @@ export class Application {
           const configAge = Date.now() - configTimestamp;
           if (configAge > configTtl) {
             refreshing = true;
-            this.configRepository.getConfig(scopeRef)
+            this.configRepository
+              .getConfig(scopeRef)
               .then(latestConfig => {
                 if (!R.equals(config, latestConfig)) {
                   config = latestConfig;
                 }
                 configTimestamp = Date.now();
               })
-              .finally(() => refreshing = false);
+              .finally(() => (refreshing = false));
           }
         }
         if (configIsRequired && !config) {
-          throw new Error(`Connector '${scopeRef.connector}' scope '${scopeRef.scope}' has been disabled.`);
+          throw new Error(
+            `Connector '${scopeRef.connector}' scope '${scopeRef.scope}' has been disabled.`,
+          );
         }
         return config;
       },

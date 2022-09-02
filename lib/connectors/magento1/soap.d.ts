@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import * as t from 'io-ts';
+import * as t from "io-ts";
 import { Reference } from "../../framework";
 import { Agent } from "http";
 export declare type Magento1SoapConfig = t.TypeOf<typeof magento1SoapConfigSchema>;

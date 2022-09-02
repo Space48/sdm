@@ -1,5 +1,5 @@
-import { FlatMapAsyncOptions, Transform } from '@space48/json-pipe';
-import * as t from 'io-ts';
+import { FlatMapAsyncOptions, Transform } from "@space48/json-pipe";
+import * as t from "io-ts";
 export declare function connector<Config, Scope, Resources extends ResourceDefinitionMap<Scope>>(definition: ConnectorDefinition<Config, Scope, Resources>): Connector<Config, Scope, Resources>;
 export declare type ScopeRef = {
     connector: string;
@@ -49,7 +49,7 @@ export interface ConnectorDefinition<Config = any, Scope = any, Resources extend
      */
     getWarningMessage(scope: Scope): Promise<string | undefined | void>;
 }
-export declare type Connector<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = {}> = ResourceMap<Resources, false> & {
+export declare type Connector<Config = any, Scope = any, Resources extends ResourceDefinitionMap<Scope> = Record<string, any>> = ResourceMap<Resources, false> & {
     $definition: ConnectorDefinition<Config, Scope, Resources>;
     (config: Config | MutableReference<Config>): ConnectorScope;
 };
@@ -74,7 +74,7 @@ export interface ResourceDefinitionMap<Scope = any> {
 }
 export declare type ResourceMap<T extends ResourceDefinitionMap = ResourceDefinitionMap, MultiPath extends boolean = boolean> = {
     ___foobar: never;
-} extends T ? {} : {
+} extends T ? Record<string, any> : {
     [K in keyof T]: T[K] extends object & ResourceDefinition<any, infer E, infer R, infer D> ? Resource<E, R, D, MultiPath> : never;
 };
 export interface ResourceDefinition<Scope = any, Endpoints extends EndpointDefinitionMap<Scope> = EndpointDefinitionMap<Scope>, Resources extends ResourceDefinitionMap<Scope> = ResourceDefinitionMap<Scope>, Documents extends DocumentDefinition<Scope> = DocumentDefinition<Scope>> {
@@ -93,7 +93,7 @@ export interface DocumentDefinition<Scope = any> {
     readonly endpoints?: EndpointDefinitionMap<Scope>;
     readonly resources?: ResourceDefinitionMap<Scope>;
 }
-declare type Document<T extends DocumentDefinition = DocumentDefinition, MultiPath extends boolean = boolean> = (T['resources'] extends ResourceDefinitionMap ? ResourceMap<T['resources'], MultiPath> : {}) & (T['endpoints'] extends EndpointDefinitionMap ? EndpointMap<T['endpoints'], MultiPath> : {});
+declare type Document<T extends DocumentDefinition = DocumentDefinition, MultiPath extends boolean = boolean> = (T["resources"] extends ResourceDefinitionMap ? ResourceMap<T["resources"], MultiPath> : Record<string, any>) & (T["endpoints"] extends EndpointDefinitionMap ? EndpointMap<T["endpoints"], MultiPath> : Record<string, any>);
 export interface EndpointDefinitionMap<Scope = any> {
     readonly [key: string]: EndpointDefinition<Scope>;
 }
@@ -152,7 +152,7 @@ export declare namespace Path {
     type DocIdWildcard = typeof WILDCARD;
     type Element = string | [resource: string, documentId: DocId | DocIdWildcard];
     function pop(path: Path): [head: Path, tail: Path.Element | undefined];
-    function computeAllHeaders(host: ConnectorDefinition | ResourceDefinition | DocumentDefinition | {}, path?: Path): MessageHeader[];
+    function computeAllHeaders(host: ConnectorDefinition | ResourceDefinition | DocumentDefinition, path?: Path): MessageHeader[];
     function containsWildcard(path: Path): boolean;
     class InvalidPathError extends Error {
         constructor(path: Path, message?: string);

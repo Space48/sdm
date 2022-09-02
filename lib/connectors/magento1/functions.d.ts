@@ -5,11 +5,19 @@ export declare type Magento1Scope = {
     rest: Magento1RestClient;
     soap: Magento1SoapClient;
 };
-export declare namespace Soap {
-    function list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T>;
+export declare class Soap {
+    private constructor();
+    static list<T = any>(method: string): EndpointDefinition<Magento1Scope, any, T>;
+    private static prepareFilters;
 }
-export declare namespace Rest {
-    export function crud<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
+declare type Children<Name extends string> = {
+    [K in Name]: ResourceDefinition<Magento1Scope, {
+        getRest: EndpointDefinition<Magento1Scope>;
+    }>;
+};
+export declare class Rest {
+    private constructor();
+    static crud<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
         endpoints: {
             createRest: EndpointDefinition<Magento1Scope, object, object>;
             listRest: EndpointDefinition<Magento1Scope, any, object>;
@@ -25,7 +33,7 @@ export declare namespace Rest {
             resources: Children<ChildName>;
         };
     };
-    export function read<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
+    static read<ChildName extends string>(uriPattern: string, childNames?: readonly ChildName[]): {
         endpoints: {
             listRest: EndpointDefinition<Magento1Scope, any, object>;
         };
@@ -38,16 +46,14 @@ export declare namespace Rest {
             resources: Children<ChildName>;
         };
     };
-    type Children<Name extends string> = {
-        [K in Name]: ResourceDefinition<Magento1Scope, {
-            getRest: EndpointDefinition<Magento1Scope>;
-        }>;
-    };
-    export const create: (uriPattern: string) => EndpointDefinition<Magento1Scope, object, object>;
-    export const del: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, unknown>;
-    export const get: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, object>;
-    export const list: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, object>;
-    export const update: (uriPattern: string) => EndpointDefinition<Magento1Scope, object, object>;
-    export {};
+    private static children;
+    private static fn;
+    static create: (uriPattern: string) => EndpointDefinition<Magento1Scope, object, object>;
+    static del: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, unknown>;
+    static get: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, object>;
+    static list: (uriPattern: string) => EndpointDefinition<Magento1Scope, any, object>;
+    static update: (uriPattern: string) => EndpointDefinition<Magento1Scope, object, object>;
+    private static listIds;
 }
 export declare function useAgent<T>(fn: () => Promise<T>): Promise<T>;
+export {};

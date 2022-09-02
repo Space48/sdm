@@ -1,5 +1,5 @@
-import Magento2, { Config } from './client';
-import * as f from '../../framework';
+import Magento2, { Config } from "./client";
+import * as f from "../../framework";
 export declare type Magento2Config = Config;
 export declare const magento2: f.Connector<{
     baseUrl: string;

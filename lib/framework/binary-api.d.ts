@@ -3,7 +3,7 @@ import { FullyQualifiedMessageHeader, MessageHeader } from "./connector";
 export declare function decodeIncompletePath(encodedPath: string): Path;
 export declare function decodeFQHeader(encodedHeader: string): FullyQualifiedMessageHeader;
 export declare function decodeHeader(encodedHeader: string): MessageHeader;
-export declare function encodeHeader({ scope, path, endpoint }: Partial<FullyQualifiedMessageHeader>): string;
+export declare function encodeHeader({ scope, path, endpoint, }: Partial<FullyQualifiedMessageHeader>): string;
 export declare function decodeCommand(encodedCommand: string): Command;
 export declare function decodeCommandInput(encodedInput: string): any;
 export declare function decodeScope(encodedScopeRef: string): ScopeRef;
