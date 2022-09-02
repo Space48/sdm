@@ -78,8 +78,8 @@ export const bigCommerce = connector({
 
             documents: {
               endpoints: {
-                delete: endpoint.del("v3/carts/{id}"),
-                update: endpoint.update("v3/carts/{id}"),
+                delete: endpoint.del("v3/carts/{id}/items/{id}"),
+                update: endpoint.update("v3/carts/{id}/items/{id}"),
               },
             },
           },
