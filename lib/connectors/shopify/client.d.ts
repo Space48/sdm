@@ -1,6 +1,6 @@
-import * as t from 'io-ts';
-import Shopify from 'shopify-api-node';
-import { MutableReference } from '../../framework';
+import * as t from "io-ts";
+import Shopify from "shopify-api-node";
+import { MutableReference } from "../../framework";
 export declare type Config = t.TypeOf<typeof configSchema>;
 export declare const configSchema: t.TypeC<{
     shopName: t.StringC;

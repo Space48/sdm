@@ -1,6 +1,6 @@
 {
   "name": "@space48/sdm",
-  "version": "0.16.0",
+  "version": "0.18.2",
   "description": "Command line tools for piping data in and out of APIs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,6 +15,7 @@
     "build": "tsc",
     "docs": "node lib/bin/generate-docs",
     "infer-shopify-resources": "ts-node src/connectors/shopify/resource-inference/generate-shopify-resources",
+    "lint": "eslint --fix 'src/**/*.ts'",
     "clean": "rimraf lib",
     "prepare": "npm run clean && npm run build -- --build tsconfig.publish.json && npm run docs"
   },
@@ -65,8 +66,31 @@
     "@types/ramda": "^0.27.34",
     "@types/request": "^2.48.5",
     "@types/sax": "^1.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-security": "^1.5.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "prettier-eslint": "^15.0.1",
     "rimraf": "^3.0.2",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix"
+    ]
   }
 }

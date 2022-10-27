@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Agent } from "http";
 import { Reference } from "../../framework";
-import * as t from 'io-ts';
+import * as t from "io-ts";
 export declare type Magento1RestConfig = t.TypeOf<typeof magento1RestConfigSchema>;
 export declare const magento1RestConfigSchema: t.TypeC<{
     credentials: t.TypeC<{
@@ -38,7 +38,7 @@ export declare type QueryParams = {
     [param: string]: QueryParam;
 };
 declare type QueryParam = QueryParams | string | number | QueryParam[];
-declare type FilterCondition = 'eq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'in';
+declare type FilterCondition = "eq" | "gt" | "gteq" | "lt" | "lteq" | "in";
 declare type Filter = [string, FilterCondition, string | number | string[] | number[]];
-export declare function getAccessToken(baseUrl: string, credentials: Magento1RestConfig['credentials']): Promise<Magento1RestConfig['accessToken']>;
+export declare function getAccessToken(baseUrl: string, credentials: Magento1RestConfig["credentials"]): Promise<Magento1RestConfig["accessToken"]>;
 export {};

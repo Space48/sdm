@@ -7,7 +7,7 @@ export * from "./connectors/index";
 export * from "./framework";
 
 export function sdm() {
-  const configRepository = new LocalConfigRepository(new Conf);
+  const configRepository = new LocalConfigRepository(new Conf());
 
   return new Application({
     configRepository,

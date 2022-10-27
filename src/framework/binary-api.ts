@@ -2,7 +2,7 @@ import { Command, Path, ScopeRef } from ".";
 import json5 from "json5";
 import { FullyQualifiedMessageHeader, MessageHeader } from "./connector";
 
-const PATH_SEPARATOR = '.';
+const PATH_SEPARATOR = ".";
 
 export function decodeIncompletePath(encodedPath: string): Path {
   const [head, tail] = decodeMaybeIncompletePath(encodedPath);
@@ -12,41 +12,47 @@ export function decodeIncompletePath(encodedPath: string): Path {
 export function decodeFQHeader(encodedHeader: string): FullyQualifiedMessageHeader {
   const [connectorAndScope, ...path] = decodePath(encodedHeader);
   const endpoint = path.pop();
-  if (!(path.length > 0 && typeof endpoint === 'string')) {
+  if (!(path.length > 0 && typeof endpoint === "string")) {
     throw new Error();
   }
   const scope = Array.isArray(connectorAndScope)
     ? {
-      connector: getConnectorName(connectorAndScope[0]),
-      scope: connectorAndScope[1] as string,
-    }
+        connector: getConnectorName(connectorAndScope[0]),
+        scope: connectorAndScope[1] as string,
+      }
     : {
-      connector: getConnectorName(connectorAndScope),
-      scope: '',
-    };
-  return {scope, path, endpoint};
+        connector: getConnectorName(connectorAndScope),
+        scope: "",
+      };
+  return { scope, path, endpoint };
 }
 
 export function decodeHeader(encodedHeader: string): MessageHeader {
   const path = decodePath(encodedHeader);
   const endpoint = path.pop();
-  if (!(path.length > 0 && typeof endpoint === 'string')) {
+  if (!(path.length > 0 && typeof endpoint === "string")) {
     throw new Error();
   }
   return { path, endpoint };
 }
 
-export function encodeHeader({scope, path, endpoint}: Partial<FullyQualifiedMessageHeader>): string {
-  return encodePath([
-    scope?.scope ? [scope.connector, scope.scope] : scope?.connector,
-    ...(path ?? []),
-    endpoint,
-  ].filter(Boolean) as Path);
+export function encodeHeader({
+  scope,
+  path,
+  endpoint,
+}: Partial<FullyQualifiedMessageHeader>): string {
+  return encodePath(
+    [
+      scope?.scope ? [scope.connector, scope.scope] : scope?.connector,
+      ...(path ?? []),
+      endpoint,
+    ].filter(Boolean) as Path,
+  );
 }
 
 export function decodeCommand(encodedCommand: string): Command {
-  const [encodedHeader, ...encodedInputParts] = encodedCommand.split(' ');
-  const encodedInput = encodedInputParts.join(' ');
+  const [encodedHeader, ...encodedInputParts] = encodedCommand.split(" ");
+  const encodedInput = encodedInputParts.join(" ");
   return {
     ...decodeHeader(encodedHeader),
     input: encodedInput ? decodeCommandInput(encodedInput) : undefined,
@@ -58,20 +64,20 @@ export function decodeCommandInput(encodedInput: string): any {
 }
 
 export function decodeScope(encodedScopeRef: string): ScopeRef {
-  const pathEl = decodePathElement(encodedScopeRef); 
+  const pathEl = decodePathElement(encodedScopeRef);
   return Array.isArray(pathEl)
     ? {
-      connector: getConnectorName(pathEl[0]),
-      scope: pathEl[1] as string,
-    }
+        connector: getConnectorName(pathEl[0]),
+        scope: pathEl[1] as string,
+      }
     : {
-      connector: getConnectorName(pathEl),
-      scope: '',
-    };
+        connector: getConnectorName(pathEl),
+        scope: "",
+      };
 }
 
 export function decodeConnectorName(encodedConnectorName: string): string {
-  const connectorIdentifier = decodeIdentifier(encodedConnectorName)
+  const connectorIdentifier = decodeIdentifier(encodedConnectorName);
   return getConnectorName(connectorIdentifier);
 }
 
@@ -89,9 +95,9 @@ function decodePath(encodedPath: string): Path {
 
 function decodeMaybeIncompletePath(encodedPath: string): [path: Path, invalidTail?: string] {
   let remaining = encodedPath;
-  let elements: Path.Element[] = [];
+  const elements: Path.Element[] = [];
   while (remaining.length > 0) {
-    const match = remaining.match(/^((?:[^\.\[\]]+)(?:\[[^\]]*\])?)[\.$]*/);
+    const match = remaining.match(/^((?:[^.[\]]+)(?:\[[^\]]*\])?)[.$]*/);
     if (!match) {
       return [elements, remaining];
     }
@@ -106,7 +112,7 @@ function encodePath(path: Path): string {
     const encodedPathElements = path.map(encodePathElement);
     return encodedPathElements.join(PATH_SEPARATOR);
   } catch (e) {
-    console.log({path})
+    console.log({ path });
     throw e;
   }
 }
@@ -120,7 +126,7 @@ function decodePathElement(encodedPathElement: string): Path[number] {
 }
 
 function encodePathElement(pathElement: Path[number]): string {
-  if (typeof pathElement === 'string') {
+  if (typeof pathElement === "string") {
     return encodeIdentifier(pathElement);
   }
   return `${encodeIdentifier(pathElement[0])}[${pathElement[1]}]`;
@@ -145,14 +151,8 @@ function decodeIdentifier(encodedIdentifier: string): string {
   return camelCase(encodedIdentifier);
 }
 
-const hyphenate = (value: string): string => (
-  value
-    .replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
-    .replace(/_/g, '-')
-);
+const hyphenate = (value: string): string =>
+  value.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`).replace(/_/g, "-");
 
-const camelCase = (value: string): string => (
-  value
-    .replace(/^[A-Z]/, g => g.toLowerCase())
-    .replace(/[-_][a-z]/g, g => g[1].toUpperCase())
-);
+const camelCase = (value: string): string =>
+  value.replace(/^[A-Z]/, g => g.toLowerCase()).replace(/[-_][a-z]/g, g => g[1].toUpperCase());
