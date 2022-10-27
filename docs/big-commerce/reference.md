@@ -51,6 +51,7 @@
  * [products[].videos](#productsvideos)
  * [products.variants](#productsvariants)
  * [promotions](#promotions)
+ * [promotions[].codes](#promotionscodes)
  * [store](#store)
  * [wishlists](#wishlists)
  * [wishlists[].items](#wishlistsitems)
@@ -3182,6 +3183,71 @@ $ sdm 'big-commerce[some-store-alias].promotions[id|*].update' [input-as-json5]
 ```javascript
 const command = bigCommerce.promotions.$doc(id).update(input?: unknown);
 const command = bigCommerce.promotions.$all.update(input?: unknown);
+```
+
+
+## promotions[].codes
+
+### Endpoints
+
+ * [create](#promotionscodescreate)
+ * [delete](#promotionscodesdelete)
+ * [delete](#promotionscodesdelete)
+ * [list](#promotionscodeslist)
+
+### promotions[].codes.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].codes.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).codes.create(input?: unknown);
+const command = bigCommerce.promotions.$all.codes.create(input?: unknown);
+```
+
+
+### promotions[].codes.delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].codes.delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).codes.delete(input?: unknown);
+const command = bigCommerce.promotions.$all.codes.delete(input?: unknown);
+```
+
+
+### promotions[].codes[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].codes[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).codes.$doc(id).delete(input?: unknown);
+const command = bigCommerce.promotions.$all.codes.$doc(id).delete(input?: unknown);
+```
+
+
+### promotions[].codes.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].promotions[id|*].codes.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.promotions.$doc(id).codes.list(input?: unknown);
+const command = bigCommerce.promotions.$all.codes.list(input?: unknown);
 ```
 
 
