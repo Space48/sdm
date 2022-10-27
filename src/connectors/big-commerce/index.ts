@@ -374,7 +374,27 @@ export const bigCommerce = connector({
       },
     ),
 
-    promotions: endpoint.crud('v3/promotions'),
+    promotions: mergeResources(
+      endpoint.crud('v3/promotions'),
+      {
+        documents: {
+          resources: {
+            codes: {
+              endpoints: {
+                create: endpoint.create('v3/promotions/{id}/codes'),
+                delete: batch.deleteMany('v3/promotions/{id}/codes'),
+                list: endpoint.list('v3/promotions/{id}/codes')
+              },
+              documents: {
+                endpoints: {
+                  delete: endpoint.del('v3/promotions/{id}/codes/{code_id}')
+                }
+              }
+            }
+          }
+        }
+      }
+    ),
 
     store: {
       endpoints: {
