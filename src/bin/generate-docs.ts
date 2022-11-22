@@ -10,13 +10,18 @@ const docsDir = path.join(path.dirname(path.dirname(__dirname)), "docs");
 function main() {
   const connectorsDocsDir = docsDir;
 
+  let summaryMarkdown = "";
+
   Object.entries(regularConnectors).forEach(([name, connector]) => {
     const connectorDocsDir = path.join(connectorsDocsDir, hyphenate(name));
     ensureDirExists(connectorDocsDir);
 
     const cliDocPath = path.join(connectorDocsDir, "reference.md");
     writeFileSync(cliDocPath, Markdown.explainUsage(connector.$definition, name));
+
+    summaryMarkdown = summaryMarkdown.concat(Markdown.explainSummary(connector.$definition, name));
   });
+  writeFileSync(path.join(docsDir, "summary.md"), summaryMarkdown);
 }
 
 function ensureDirExists(path: string): void {

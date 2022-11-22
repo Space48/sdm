@@ -7,7 +7,9 @@
 
 ## Reference
 
+* [Summary of Connectors](summary.md)
 * [BigCommerce reference](big-commerce/reference.md)
 * [Magento 1 reference](magento2/reference.md)
 * [Magento 2 reference](magento2/reference.md)
 * [Shopify reference](shopify/reference.md)
+* [Bundle B2B](bundle-b2b)
