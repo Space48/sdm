@@ -51,6 +51,22 @@ export class Markdown {
     return;
   }
 
+  static explainSummary(connector: ConnectorDefinition, connectorName: string): string {
+    const commands = Markdown.describeCommands(1, connector, {
+      connector: connectorName,
+      scope: connector.scopeNameExample,
+    });
+
+    return `
+${Markdown.title(1, connectorName)}
+
+${Markdown.title(2, "Resources")}
+
+${Markdown.contents(0, commands)}
+
+`;
+  }
+
   static explainUsage(connector: ConnectorDefinition, connectorName: string): string {
     const commands = Markdown.describeCommands(1, connector, {
       connector: connectorName,
