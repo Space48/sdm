@@ -325,6 +325,19 @@ export declare const bigCommerce: f.Connector<{
                     };
                 };
             };
+            metafields: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    create: f.EndpointDefinition<BigCommerce, object, object>;
+                };
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        delete: f.EndpointDefinition<BigCommerce, any, void>;
+                        update: f.EndpointDefinition<BigCommerce, object, object>;
+                    };
+                };
+            };
         };
     }>;
     pages: {
@@ -636,6 +649,52 @@ export declare const bigCommerce: f.Connector<{
     store: {
         endpoints: {
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+        };
+    };
+    widgets: {
+        endpoints: {
+            list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+            create: f.EndpointDefinition<BigCommerce, object, object>;
+        };
+        documents: {
+            endpoints: {
+                get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                delete: f.EndpointDefinition<BigCommerce, any, void>;
+                update: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
+        resources: {
+            regions: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                };
+            };
+            templates: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    create: f.EndpointDefinition<BigCommerce, object, object>;
+                };
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        delete: f.EndpointDefinition<BigCommerce, any, void>;
+                        update: f.EndpointDefinition<BigCommerce, object, object>;
+                    };
+                };
+            };
+            placements: {
+                endpoints: {
+                    list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                    create: f.EndpointDefinition<BigCommerce, object, object>;
+                };
+                documents: {
+                    endpoints: {
+                        get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                        delete: f.EndpointDefinition<BigCommerce, any, void>;
+                        update: f.EndpointDefinition<BigCommerce, object, object>;
+                    };
+                };
+            };
         };
     };
     wishlists: f.ResourceDefinition<BigCommerce, {
