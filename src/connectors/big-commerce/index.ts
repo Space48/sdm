@@ -229,6 +229,19 @@ export const bigCommerce = connector({
               },
             },
           },
+          metafields: {
+            endpoints: {
+              list: endpoint.list("v3/orders/{id}/metafields"),
+              create: endpoint.create("v3/orders/{id}/metafields"),
+            },
+            documents: {
+              endpoints: {
+                get: endpoint.get("v3/orders/{id}/metafields/{id}"),
+                delete: endpoint.del("v3/orders/{id}/metafields/{id}"),
+                update: endpoint.update("v3/orders/{id}/metafields/{id}"),
+              },
+            },
+          },
         },
       },
 
@@ -349,31 +362,75 @@ export const bigCommerce = connector({
       },
     }),
 
-    promotions: mergeResources(
-      endpoint.crud('v3/promotions'),
-      {
-        documents: {
-          resources: {
-            codes: {
+    promotions: mergeResources(endpoint.crud("v3/promotions"), {
+      documents: {
+        resources: {
+          codes: {
+            endpoints: {
+              create: endpoint.create("v3/promotions/{id}/codes"),
+              delete: batch.deleteMany("v3/promotions/{id}/codes"),
+              list: endpoint.list("v3/promotions/{id}/codes"),
+            },
+            documents: {
               endpoints: {
-                create: endpoint.create('v3/promotions/{id}/codes'),
-                delete: batch.deleteMany('v3/promotions/{id}/codes'),
-                list: endpoint.list('v3/promotions/{id}/codes')
+                delete: endpoint.del("v3/promotions/{id}/codes/{code_id}"),
               },
-              documents: {
-                endpoints: {
-                  delete: endpoint.del('v3/promotions/{id}/codes/{code_id}')
-                }
-              }
-            }
-          }
-        }
-      }
-    ),
+            },
+          },
+        },
+      },
+    }),
 
     store: {
       endpoints: {
         get: endpoint.get("v2/store"),
+      },
+    },
+
+    widgets: {
+      endpoints: {
+        list: endpoint.list("v3/content/widgets"),
+        create: endpoint.create("v3/content/widgets"),
+      },
+      documents: {
+        endpoints: {
+          get: endpoint.get("v3/content/widgets/{id}"),
+          delete: endpoint.del("v3/content/widgets/{id}"),
+          update: endpoint.update("v3/content/widgets/{id}"),
+        },
+      },
+      resources: {
+        regions: {
+          endpoints: {
+            list: endpoint.list("v3/content/regions"),
+          },
+        },
+        templates: {
+          endpoints: {
+            list: endpoint.list("v3/content/widget-templates"),
+            create: endpoint.create("v3/content/widget-templates"),
+          },
+          documents: {
+            endpoints: {
+              get: endpoint.get("v3/content/widget-templates/{id}"),
+              delete: endpoint.del("v3/content/widget-templates/{id}"),
+              update: endpoint.update("v3/content/widget-templates/{id}"),
+            },
+          },
+        },
+        placements: {
+          endpoints: {
+            list: endpoint.list("v3/content/placements"),
+            create: endpoint.create("v3/content/placements"),
+          },
+          documents: {
+            endpoints: {
+              get: endpoint.get("v3/content/placements/{id}"),
+              delete: endpoint.del("v3/content/placements/{id}"),
+              update: endpoint.update("v3/content/placements/{id}"),
+            },
+          },
+        },
       },
     },
 
