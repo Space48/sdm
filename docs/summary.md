@@ -30,6 +30,7 @@
  * [orders[].products](#ordersproducts)
  * [orders[].coupons](#orderscoupons)
  * [orders[].shipments](#ordersshipments)
+ * [orders[].metafields](#ordersmetafields)
  * [orders.statuses](#ordersstatuses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
@@ -55,6 +56,10 @@
  * [promotions](#promotions)
  * [promotions[].codes](#promotionscodes)
  * [store](#store)
+ * [widgets](#widgets)
+ * [widgets.regions](#widgetsregions)
+ * [widgets.templates](#widgetstemplates)
+ * [widgets.placements](#widgetsplacements)
  * [wishlists](#wishlists)
  * [wishlists[].items](#wishlistsitems)
 

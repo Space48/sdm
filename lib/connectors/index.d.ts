@@ -328,6 +328,19 @@ export declare const regularConnectors: {
                         };
                     };
                 };
+                metafields: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    };
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                        };
+                    };
+                };
             };
         }>;
         pages: {
@@ -639,6 +652,52 @@ export declare const regularConnectors: {
         store: {
             endpoints: {
                 get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+            };
+        };
+        widgets: {
+            endpoints: {
+                list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+            };
+            documents: {
+                endpoints: {
+                    get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                    update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                };
+            };
+            resources: {
+                regions: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                    };
+                };
+                templates: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    };
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                        };
+                    };
+                };
+                placements: {
+                    endpoints: {
+                        list: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                        create: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                    };
+                    documents: {
+                        endpoints: {
+                            get: import("..").EndpointDefinition<import("./big-commerce/client").default, import("./big-commerce/functions").Query | undefined, object>;
+                            delete: import("..").EndpointDefinition<import("./big-commerce/client").default, any, void>;
+                            update: import("..").EndpointDefinition<import("./big-commerce/client").default, object, object>;
+                        };
+                    };
+                };
             };
         };
         wishlists: import("..").ResourceDefinition<import("./big-commerce/client").default, {

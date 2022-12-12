@@ -7,6 +7,7 @@ export declare class Shell {
 }
 export declare class Markdown {
     private constructor();
+    static explainSummary(connector: ConnectorDefinition, connectorName: string): string;
     static explainUsage(connector: ConnectorDefinition, connectorName: string): string;
     private static describeCommands;
     private static describeResourceUsage;

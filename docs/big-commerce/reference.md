@@ -28,6 +28,7 @@
  * [orders[].products](#ordersproducts)
  * [orders[].coupons](#orderscoupons)
  * [orders[].shipments](#ordersshipments)
+ * [orders[].metafields](#ordersmetafields)
  * [orders.statuses](#ordersstatuses)
  * [pages](#pages)
  * [payment-methods](#payment-methods)
@@ -53,6 +54,10 @@
  * [promotions](#promotions)
  * [promotions[].codes](#promotionscodes)
  * [store](#store)
+ * [widgets](#widgets)
+ * [widgets.regions](#widgetsregions)
+ * [widgets.templates](#widgetstemplates)
+ * [widgets.placements](#widgetsplacements)
  * [wishlists](#wishlists)
  * [wishlists[].items](#wishlistsitems)
 
@@ -1600,6 +1605,86 @@ $ sdm 'big-commerce[some-store-alias].orders[id|*].shipments[id].update' [input-
 ```javascript
 const command = bigCommerce.orders.$doc(id).shipments.$doc(id).update(input?: unknown);
 const command = bigCommerce.orders.$all.shipments.$doc(id).update(input?: unknown);
+```
+
+
+## orders[].metafields
+
+### Endpoints
+
+ * [create](#ordersmetafieldscreate)
+ * [delete](#ordersmetafieldsdelete)
+ * [get](#ordersmetafieldsget)
+ * [list](#ordersmetafieldslist)
+ * [update](#ordersmetafieldsupdate)
+
+### orders[].metafields.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].metafields.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).metafields.create(input?: unknown);
+const command = bigCommerce.orders.$all.metafields.create(input?: unknown);
+```
+
+
+### orders[].metafields[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].metafields[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).metafields.$doc(id).delete(input?: unknown);
+const command = bigCommerce.orders.$all.metafields.$doc(id).delete(input?: unknown);
+```
+
+
+### orders[].metafields[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].metafields[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).metafields.$doc(id).get(input?: unknown);
+const command = bigCommerce.orders.$all.metafields.$doc(id).get(input?: unknown);
+```
+
+
+### orders[].metafields.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].metafields.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).metafields.list(input?: unknown);
+const command = bigCommerce.orders.$all.metafields.list(input?: unknown);
+```
+
+
+### orders[].metafields[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].orders[id|*].metafields[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.orders.$doc(id).metafields.$doc(id).update(input?: unknown);
+const command = bigCommerce.orders.$all.metafields.$doc(id).update(input?: unknown);
 ```
 
 
@@ -3267,6 +3352,250 @@ $ sdm 'big-commerce[some-store-alias].store.get' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.store.get(input?: unknown);
+```
+
+
+## widgets
+
+### Endpoints
+
+ * [create](#widgetscreate)
+ * [delete](#widgetsdelete)
+ * [get](#widgetsget)
+ * [list](#widgetslist)
+ * [update](#widgetsupdate)
+
+### widgets.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.create(input?: unknown);
+```
+
+
+### widgets[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.$doc(id).delete(input?: unknown);
+```
+
+
+### widgets[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.$doc(id).get(input?: unknown);
+```
+
+
+### widgets.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.list(input?: unknown);
+```
+
+
+### widgets[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.$doc(id).update(input?: unknown);
+```
+
+
+## widgets.regions
+
+### Endpoints
+
+ * [list](#widgetsregionslist)
+
+### widgets.regions.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.regions.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.regions.list(input?: unknown);
+```
+
+
+## widgets.templates
+
+### Endpoints
+
+ * [create](#widgetstemplatescreate)
+ * [delete](#widgetstemplatesdelete)
+ * [get](#widgetstemplatesget)
+ * [list](#widgetstemplateslist)
+ * [update](#widgetstemplatesupdate)
+
+### widgets.templates.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.templates.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.templates.create(input?: unknown);
+```
+
+
+### widgets.templates[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.templates[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.templates.$doc(id).delete(input?: unknown);
+```
+
+
+### widgets.templates[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.templates[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.templates.$doc(id).get(input?: unknown);
+```
+
+
+### widgets.templates.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.templates.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.templates.list(input?: unknown);
+```
+
+
+### widgets.templates[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.templates[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.templates.$doc(id).update(input?: unknown);
+```
+
+
+## widgets.placements
+
+### Endpoints
+
+ * [create](#widgetsplacementscreate)
+ * [delete](#widgetsplacementsdelete)
+ * [get](#widgetsplacementsget)
+ * [list](#widgetsplacementslist)
+ * [update](#widgetsplacementsupdate)
+
+### widgets.placements.create
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.placements.create' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.placements.create(input?: unknown);
+```
+
+
+### widgets.placements[].delete
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.placements[id].delete' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.placements.$doc(id).delete(input?: unknown);
+```
+
+
+### widgets.placements[].get
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.placements[id].get' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.placements.$doc(id).get(input?: unknown);
+```
+
+
+### widgets.placements.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.placements.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.placements.list(input?: unknown);
+```
+
+
+### widgets.placements[].update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].widgets.placements[id].update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.widgets.placements.$doc(id).update(input?: unknown);
 ```
 
 
