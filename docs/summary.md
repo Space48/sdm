@@ -53,6 +53,7 @@
  * [products[].variants[].metafields](#productsvariantsmetafields)
  * [products[].videos](#productsvideos)
  * [products.variants](#productsvariants)
+ * [products.channel-assignments](#productschannel-assignments)
  * [promotions](#promotions)
  * [promotions[].codes](#promotionscodes)
  * [store](#store)

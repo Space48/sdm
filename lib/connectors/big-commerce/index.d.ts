@@ -402,6 +402,12 @@ export declare const bigCommerce: f.Connector<{
                 update: f.EndpointDefinition<BigCommerce, object, object>;
             };
         };
+        channelAssignments: {
+            endpoints: {
+                list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
+                update: f.EndpointDefinition<BigCommerce, object, object>;
+            };
+        };
     }, {
         idField: string;
         listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
