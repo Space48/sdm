@@ -304,6 +304,13 @@ export const bigCommerce = connector({
             update: batch.updateMany("v3/catalog/variants"),
           },
         },
+
+        channelAssignments: {
+          endpoints: {
+            list: endpoint.list("v3/catalog/products/channel-assignments"),
+            update: batch.updateMany("v3/catalog/products/channel-assignments"),
+          },
+        },
       },
 
       documents: {

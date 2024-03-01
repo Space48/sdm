@@ -51,6 +51,7 @@
  * [products[].variants[].metafields](#productsvariantsmetafields)
  * [products[].videos](#productsvideos)
  * [products.variants](#productsvariants)
+ * [products.channel-assignments](#productschannel-assignments)
  * [promotions](#promotions)
  * [promotions[].codes](#promotionscodes)
  * [store](#store)
@@ -3190,6 +3191,39 @@ $ sdm 'big-commerce[some-store-alias].products.variants.update' [input-as-json5]
 *TypeScript*
 ```javascript
 const command = bigCommerce.products.variants.update(input?: unknown);
+```
+
+
+## products.channel-assignments
+
+### Endpoints
+
+ * [list](#productschannel-assignmentslist)
+ * [update](#productschannel-assignmentsupdate)
+
+### products.channel-assignments.list
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].products.channel-assignments.list' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.products.channelAssignments.list(input?: unknown);
+```
+
+
+### products.channel-assignments.update
+
+*CLI*
+```sh
+$ sdm 'big-commerce[some-store-alias].products.channel-assignments.update' [input-as-json5]
+```
+
+*TypeScript*
+```javascript
+const command = bigCommerce.products.channelAssignments.update(input?: unknown);
 ```
 
 
