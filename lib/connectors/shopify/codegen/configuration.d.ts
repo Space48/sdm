@@ -10,15 +10,6 @@
  * configured below.
  */
 export declare const resourceDefinitions: {
-    location: import("../../..").ResourceDefinition<import("../client").Scope, {
-        list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
-        count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
-    }, Record<string, never>, {
-        endpoints: {
-            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
-            inventoryLevels: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
-        };
-    }>;
     comment: import("../../..").ResourceDefinition<import("../client").Scope, {
         list: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IComment>;
         create: import("../../..").EndpointDefinition<import("../client").Scope, import("shopify-api-node").ICreateComment, import("shopify-api-node").IComment>;
@@ -527,6 +518,15 @@ export declare const resourceDefinitions: {
             connect: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
             delete: import("../../..").EndpointDefinition<import("../client").Scope, undefined, void>;
             adjust: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
+        };
+    }>;
+    location: import("../../..").ResourceDefinition<import("../client").Scope, {
+        list: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
+        count: import("../../..").EndpointDefinition<import("../client").Scope, undefined, number>;
+    }, Record<string, never>, {
+        endpoints: {
+            get: import("../../..").EndpointDefinition<import("../client").Scope, undefined, import("shopify-api-node").ILocation>;
+            inventoryLevels: import("../../..").EndpointDefinition<import("../client").Scope, any, import("shopify-api-node").IInventoryLevel>;
         };
     }>;
     marketingEvent: import("../../..").ResourceDefinition<import("../client").Scope, {

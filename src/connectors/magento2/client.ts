@@ -149,7 +149,7 @@ export default class Magento2 {
       throw new EndpointError(`${response.status} ${response.statusText}`, { detail });
     }
 
-    return await response.json();
+    return (await response.json()) as T;
   }
 
   private async refreshToken(): Promise<Config> {

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "strict": true,
     "outDir": "lib",
     "removeComments": false,
@@ -9,9 +9,10 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": ["ES2019"],
+    "lib": ["ES2019", "DOM"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "declaration": true,
     "strictNullChecks": true
   },

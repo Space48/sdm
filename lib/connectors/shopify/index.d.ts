@@ -8,15 +8,6 @@ export declare const shopify: f.Connector<{
         password: string;
     };
 }, client.Scope, {
-    location: f.ResourceDefinition<client.Scope, {
-        list: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocation>;
-        count: f.EndpointDefinition<client.Scope, undefined, number>;
-    }, Record<string, never>, {
-        endpoints: {
-            get: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocation>;
-            inventoryLevels: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
-        };
-    }>;
     comment: f.ResourceDefinition<client.Scope, {
         list: f.EndpointDefinition<client.Scope, any, Shopify.IComment>;
         create: f.EndpointDefinition<client.Scope, Shopify.ICreateComment, Shopify.IComment>;
@@ -525,6 +516,15 @@ export declare const shopify: f.Connector<{
             connect: f.EndpointDefinition<client.Scope, undefined, Shopify.IInventoryLevel>;
             delete: f.EndpointDefinition<client.Scope, undefined, void>;
             adjust: f.EndpointDefinition<client.Scope, undefined, Shopify.IInventoryLevel>;
+        };
+    }>;
+    location: f.ResourceDefinition<client.Scope, {
+        list: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocation>;
+        count: f.EndpointDefinition<client.Scope, undefined, number>;
+    }, Record<string, never>, {
+        endpoints: {
+            get: f.EndpointDefinition<client.Scope, undefined, Shopify.ILocation>;
+            inventoryLevels: f.EndpointDefinition<client.Scope, any, Shopify.IInventoryLevel>;
         };
     }>;
     marketingEvent: f.ResourceDefinition<client.Scope, {

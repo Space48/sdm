@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { regularConnectors } from "../connectors";
+import { regularConnectors } from "../connectors/index.js";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
-import { Markdown } from "../framework/docgen";
+import { Markdown } from "../framework/docgen.js";
 
 const docsDir = path.join(path.dirname(path.dirname(__dirname)), "docs");
 

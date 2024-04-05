@@ -1083,15 +1083,6 @@ export declare const regularConnectors: {
             password: string;
         };
     }, import("./shopify/client").Scope, {
-        location: import("..").ResourceDefinition<import("./shopify/client").Scope, {
-            list: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ILocation>;
-            count: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, number>;
-        }, Record<string, never>, {
-            endpoints: {
-                get: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ILocation>;
-                inventoryLevels: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;
-            };
-        }>;
         comment: import("..").ResourceDefinition<import("./shopify/client").Scope, {
             list: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IComment>;
             create: import("..").EndpointDefinition<import("./shopify/client").Scope, import("shopify-api-node").ICreateComment, import("shopify-api-node").IComment>;
@@ -1600,6 +1591,15 @@ export declare const regularConnectors: {
                 connect: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
                 delete: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, void>;
                 adjust: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").IInventoryLevel>;
+            };
+        }>;
+        location: import("..").ResourceDefinition<import("./shopify/client").Scope, {
+            list: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ILocation>;
+            count: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, number>;
+        }, Record<string, never>, {
+            endpoints: {
+                get: import("..").EndpointDefinition<import("./shopify/client").Scope, undefined, import("shopify-api-node").ILocation>;
+                inventoryLevels: import("..").EndpointDefinition<import("./shopify/client").Scope, any, import("shopify-api-node").IInventoryLevel>;
             };
         }>;
         marketingEvent: import("..").ResourceDefinition<import("./shopify/client").Scope, {

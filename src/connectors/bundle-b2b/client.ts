@@ -199,7 +199,7 @@ export default class BundleB2b {
     if (!tokenResponse.ok) {
       throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
     }
-    const token = await tokenResponse.json();
+    const token = (await tokenResponse.json()) as { code: number; data: { token: string } };
     if (token.code === 422) {
       throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
     }

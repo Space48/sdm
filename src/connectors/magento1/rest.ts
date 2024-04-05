@@ -136,7 +136,7 @@ export class Magento1RestClient {
   }
 
   private async fetch<T>(relativeUri: string, init?: RequestInit): Promise<T> {
-    return await useAgent(async () => {
+    return (await useAgent(async () => {
       const url = `${this.baseUrl.get().replace(/\/+$/, "")}/api/rest/${relativeUri}`;
       const auth = this.authHeaderFn.get()(init?.method || "GET", url);
       const response = await fetch(url, this.init({ auth, init }));
@@ -144,7 +144,7 @@ export class Magento1RestClient {
         throw new Error(`${response.status} ${response.statusText}\n\n${await response.text()}`);
       }
       return await response.json();
-    });
+    })) as T;
   }
 
   private init({ auth, init }: { auth: string; init?: RequestInit }): RequestInit {
