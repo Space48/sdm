@@ -19,7 +19,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -39,7 +39,7 @@ export declare const bigCommerce: f.Connector<{
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -60,7 +60,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -106,7 +106,7 @@ export declare const bigCommerce: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -127,7 +127,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -143,7 +143,7 @@ export declare const bigCommerce: f.Connector<{
             list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
         };
         documents: {
-            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                 update: f.EndpointDefinition<BigCommerce, object, object>;
@@ -165,7 +165,7 @@ export declare const bigCommerce: f.Connector<{
             };
             documents: {
                 idField: string;
-                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, any, any>;
@@ -192,7 +192,7 @@ export declare const bigCommerce: f.Connector<{
             };
         }, {
             idField: string;
-            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                 get: f.EndpointDefinition<BigCommerce, any, any>;
@@ -225,7 +225,7 @@ export declare const bigCommerce: f.Connector<{
             };
             documents: {
                 idField: string;
-                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -235,7 +235,7 @@ export declare const bigCommerce: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, any, any>;
@@ -248,7 +248,7 @@ export declare const bigCommerce: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                 get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -272,7 +272,7 @@ export declare const bigCommerce: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -347,7 +347,7 @@ export declare const bigCommerce: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                 get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -373,7 +373,7 @@ export declare const bigCommerce: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -410,7 +410,7 @@ export declare const bigCommerce: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -425,7 +425,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -440,7 +440,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -455,7 +455,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -470,7 +470,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -485,7 +485,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -498,7 +498,7 @@ export declare const bigCommerce: f.Connector<{
                 list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
             } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
                 idField: string;
-                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -511,7 +511,7 @@ export declare const bigCommerce: f.Connector<{
                         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
                     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
                         idField: string;
-                        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                         endpoints: {
                             delete: f.EndpointDefinition<BigCommerce, any, void>;
                             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -538,7 +538,7 @@ export declare const bigCommerce: f.Connector<{
                 list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
             } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
                 idField: string;
-                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -553,7 +553,7 @@ export declare const bigCommerce: f.Connector<{
                         };
                         documents: {
                             idField: string;
-                            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                             endpoints: {
                                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                                 get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -570,7 +570,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -583,7 +583,7 @@ export declare const bigCommerce: f.Connector<{
                 list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
             } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
                 idField: string;
-                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<BigCommerce, any, void>;
                     get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -598,7 +598,7 @@ export declare const bigCommerce: f.Connector<{
                         };
                         documents: {
                             idField: string;
-                            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                            listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                             endpoints: {
                                 delete: f.EndpointDefinition<BigCommerce, any, void>;
                                 get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -615,7 +615,7 @@ export declare const bigCommerce: f.Connector<{
                 };
                 documents: {
                     idField: string;
-                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+                    listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
                     endpoints: {
                         delete: f.EndpointDefinition<BigCommerce, any, void>;
                         get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -630,7 +630,7 @@ export declare const bigCommerce: f.Connector<{
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -708,7 +708,7 @@ export declare const bigCommerce: f.Connector<{
         list: f.EndpointDefinition<BigCommerce, Query | undefined, object>;
     } & f.EndpointDefinitionMap<BigCommerce>, f.ResourceDefinitionMap<BigCommerce>, {
         idField: string;
-        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: BigCommerce) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<BigCommerce, any, void>;
             get: f.EndpointDefinition<BigCommerce, Query | undefined, object>;

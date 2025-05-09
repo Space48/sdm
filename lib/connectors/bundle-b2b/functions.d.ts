@@ -12,7 +12,7 @@ export declare class endpoint {
         };
         documents: {
             idField: string;
-            listIds: (client: BundleB2b) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (client: BundleB2b) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 delete: EndpointDefinition<BundleB2b, any, void>;
                 get: EndpointDefinition<BundleB2b, Query | undefined, object>;
@@ -32,4 +32,4 @@ export declare class UriTemplate {
     static applyValues(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string;
     static fields(uriTemplate: string): string[];
 }
-export declare function listIds(uriPattern: string, idField?: string): (client: BundleB2b) => (path: Path) => AsyncIterable<string | number>;
+export declare function listIds(uriPattern: string, idField?: string): (client: BundleB2b) => (path: Path) => AsyncIterable<DocId>;

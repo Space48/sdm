@@ -79,7 +79,7 @@ export declare const magento1: f.Connector<{
         listSoap: f.EndpointDefinition<Magento1Scope, any, any>;
     }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
-        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             deleteRest: f.EndpointDefinition<Magento1Scope, any, unknown>;
             getRest: f.EndpointDefinition<Magento1Scope, any, object>;
@@ -108,18 +108,18 @@ export declare const magento1: f.Connector<{
         listSoap: f.EndpointDefinition<Magento1Scope, any, any>;
     }, f.ResourceDefinitionMap<Magento1Scope>, {
         idField: string;
-        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             getRest: f.EndpointDefinition<Magento1Scope, any, object>;
         };
         resources: {
-            items: f.ResourceDefinition<Magento1Scope, {
-                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
-            }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
             addresses: f.ResourceDefinition<Magento1Scope, {
                 getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
             comments: f.ResourceDefinition<Magento1Scope, {
+                getRest: f.EndpointDefinition<Magento1Scope, any, any>;
+            }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
+            items: f.ResourceDefinition<Magento1Scope, {
                 getRest: f.EndpointDefinition<Magento1Scope, any, any>;
             }, f.ResourceDefinitionMap<Magento1Scope>, f.DocumentDefinition<Magento1Scope>>;
         };
@@ -158,7 +158,7 @@ export declare const magento1: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (scope: Magento1Scope) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             deleteRest: f.EndpointDefinition<Magento1Scope, any, unknown>;
             getRest: f.EndpointDefinition<Magento1Scope, any, object>;

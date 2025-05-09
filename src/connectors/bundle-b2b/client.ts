@@ -1,10 +1,14 @@
-import fetch, { RequestInit } from "node-fetch";
+import type { RequestInfo, RequestInit } from "node-fetch";
 import { stringify } from "query-string";
 import pRetry from "p-retry";
 import * as t from "io-ts";
 import { EndpointError, MutableReference } from "../../framework";
 import { Agent } from "https";
 import R from "ramda";
+
+// dynamically import node-fetch to avoid issues with ESM and CommonJS
+const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  import("node-fetch").then(mod => mod.default(...args));
 
 const listConcurrency = 50;
 
@@ -199,7 +203,7 @@ export default class BundleB2b {
     if (!tokenResponse.ok) {
       throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
     }
-    const token = await tokenResponse.json();
+    const token = (await tokenResponse.json()) as Token;
     if (token.code === 422) {
       throw new Error(`Cannot refresh BundleB2B token for ${config.storeHash}`);
     }
@@ -209,6 +213,13 @@ export default class BundleB2b {
     };
   }
 }
+
+type Token = {
+  code: number;
+  data: {
+    token: string;
+  };
+};
 
 function unwrap(content: any) {
   return content?.data === undefined ? content : content.data;

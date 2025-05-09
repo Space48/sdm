@@ -28,7 +28,7 @@ export declare const magento2: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<Magento2, any, unknown>;
             get: f.EndpointDefinition<Magento2, any, object>;
@@ -43,7 +43,7 @@ export declare const magento2: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<Magento2, any, unknown>;
                 get: f.EndpointDefinition<Magento2, any, object>;
@@ -57,7 +57,7 @@ export declare const magento2: f.Connector<{
         };
         documents: Pick<{
             idField: string;
-            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<Magento2, any, unknown>;
                 get: f.EndpointDefinition<Magento2, any, object>;
@@ -76,7 +76,7 @@ export declare const magento2: f.Connector<{
             list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
         } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2>, {
             idField: string;
-            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<Magento2, any, unknown>;
                 get: f.EndpointDefinition<Magento2, any, object>;
@@ -100,7 +100,7 @@ export declare const magento2: f.Connector<{
             };
             documents: {
                 idField: string;
-                listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+                listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
                 endpoints: {
                     delete: f.EndpointDefinition<Magento2, any, unknown>;
                     get: f.EndpointDefinition<Magento2, any, object>;
@@ -114,7 +114,7 @@ export declare const magento2: f.Connector<{
             list: f.EndpointDefinition<Magento2, import("./client").Filter[] | undefined, object>;
         } & f.EndpointDefinitionMap<Magento2>, f.ResourceDefinitionMap<Magento2>, {
             idField: string;
-            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<Magento2, any, unknown>;
                 get: f.EndpointDefinition<Magento2, any, object>;
@@ -157,7 +157,7 @@ export declare const magento2: f.Connector<{
         };
     }, {
         idField: string;
-        listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<string | number>;
+        listIds: (client: Magento2) => (path: f.Path) => AsyncIterable<f.DocId>;
         endpoints: {
             delete: f.EndpointDefinition<Magento2, any, unknown>;
             get: f.EndpointDefinition<Magento2, any, object>;

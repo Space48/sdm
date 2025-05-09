@@ -18,7 +18,7 @@ export declare class endpoint {
         };
         documents: {
             idField: string;
-            listIds: (client: Magento2) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (client: Magento2) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 delete: EndpointDefinition<Magento2, any, unknown>;
                 get: EndpointDefinition<Magento2, any, object>;

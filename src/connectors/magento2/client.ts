@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import type { RequestInfo, RequestInit } from "node-fetch";
 import { stringify } from "query-string";
 import { EndpointError, MutableReference } from "../../framework";
 import * as t from "io-ts";
@@ -7,6 +7,10 @@ import { Agent as HttpsAgent } from "https";
 import { parse as parseUrl } from "url";
 import R from "ramda";
 import { boolean } from "fp-ts";
+
+// dynamically import node-fetch to avoid issues with ESM and CommonJS
+const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  import("node-fetch").then(mod => mod.default(...args));
 
 export type Config = t.TypeOf<typeof configSchema>;
 
@@ -149,7 +153,7 @@ export default class Magento2 {
       throw new EndpointError(`${response.status} ${response.statusText}`, { detail });
     }
 
-    return await response.json();
+    return (await response.json()) as unknown as T;
   }
 
   private async refreshToken(): Promise<Config> {

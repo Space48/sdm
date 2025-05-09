@@ -1,5 +1,5 @@
 import { Magento1RestClient } from "./rest";
-import { EndpointDefinition, Path, ResourceDefinition } from "../../framework";
+import { DocId, EndpointDefinition, Path, ResourceDefinition } from "../../framework";
 import { Magento1SoapClient } from "./soap";
 export declare type Magento1Scope = {
     rest: Magento1RestClient;
@@ -24,7 +24,7 @@ export declare class Rest {
         };
         documents: {
             idField: string;
-            listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 deleteRest: EndpointDefinition<Magento1Scope, any, unknown>;
                 getRest: EndpointDefinition<Magento1Scope, any, object>;
@@ -39,7 +39,7 @@ export declare class Rest {
         };
         documents: {
             idField: string;
-            listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (scope: Magento1Scope) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 getRest: EndpointDefinition<Magento1Scope, any, object>;
             };

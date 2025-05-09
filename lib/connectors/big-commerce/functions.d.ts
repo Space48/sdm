@@ -12,7 +12,7 @@ export declare class endpoint {
         };
         documents: {
             idField: string;
-            listIds: (client: BigCommerce) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 delete: EndpointDefinition<BigCommerce, any, void>;
                 get: EndpointDefinition<BigCommerce, Query | undefined, object>;
@@ -38,7 +38,7 @@ export declare class batch {
         };
         documents: {
             idField: string;
-            listIds: (client: BigCommerce) => (path: Path) => AsyncIterable<string | number>;
+            listIds: (client: BigCommerce) => (path: Path) => AsyncIterable<DocId>;
             endpoints: {
                 delete: EndpointDefinition<BigCommerce, any, void>;
                 get: EndpointDefinition<BigCommerce, any, any>;
@@ -56,4 +56,4 @@ export declare class UriTemplate {
     static applyValues(uriTemplate: string, fieldValues: ReadonlyArray<DocId>): string;
     static fields(uriTemplate: string): string[];
 }
-export declare function listIds(uriPattern: string, idField?: string): (client: BigCommerce) => (path: Path) => AsyncIterable<string | number>;
+export declare function listIds(uriPattern: string, idField?: string): (client: BigCommerce) => (path: Path) => AsyncIterable<DocId>;

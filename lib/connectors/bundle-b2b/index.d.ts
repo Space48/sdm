@@ -21,7 +21,7 @@ export declare const bundleB2b: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BundleB2b, any, void>;
                 get: f.EndpointDefinition<BundleB2b, import("./functions").Query | undefined, object>;
@@ -36,7 +36,7 @@ export declare const bundleB2b: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BundleB2b, any, void>;
                 get: f.EndpointDefinition<BundleB2b, import("./functions").Query | undefined, object>;
@@ -51,7 +51,7 @@ export declare const bundleB2b: f.Connector<{
         };
         documents: {
             idField: string;
-            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<string | number>;
+            listIds: (client: BundleB2b) => (path: f.Path) => AsyncIterable<f.DocId>;
             endpoints: {
                 delete: f.EndpointDefinition<BundleB2b, any, void>;
                 get: f.EndpointDefinition<BundleB2b, import("./functions").Query | undefined, object>;

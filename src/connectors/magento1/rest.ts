@@ -1,4 +1,4 @@
-import fetch, { RequestInit } from "node-fetch";
+import type { RequestInfo, RequestInit } from "node-fetch";
 import { Agent } from "http";
 import { stringify } from "query-string";
 import open from "open";
@@ -9,6 +9,10 @@ import * as t from "io-ts";
 import R from "ramda";
 import { useAgent } from "./functions";
 import { mergeUnordered, pipe } from "@space48/json-pipe";
+
+// dynamically import node-fetch to avoid issues with ESM and CommonJS
+const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  import("node-fetch").then(mod => mod.default(...args));
 
 export type Magento1RestConfig = t.TypeOf<typeof magento1RestConfigSchema>;
 
@@ -143,7 +147,7 @@ export class Magento1RestClient {
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}\n\n${await response.text()}`);
       }
-      return await response.json();
+      return (await response.json()) as unknown as T;
     });
   }
 

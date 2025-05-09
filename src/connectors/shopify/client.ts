@@ -78,7 +78,7 @@ const backoff =
     const run = async () => {
       try {
         return await fn(...args);
-      } catch (e) {
+      } catch (e: any) {
         const actionError = new EndpointError(e.message, {
           detail:
             typeof e.response?.body === "object" ? e.response.body.errors ?? e.response.body : null,
