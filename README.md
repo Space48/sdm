@@ -26,11 +26,11 @@ packages, you must first configure the @space48 scope in npm.
     npm login --registry=https://npm.pkg.github.com --scope=@space48
     ```
 
-### Enable node 14
+### Enable node 20
 
-sdm uses node 14. Use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to enable node 14:
+sdm uses node 20. Use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to enable node 20:
 ```bash
-nvm use 14
+nvm use 20
 ```
 
 
