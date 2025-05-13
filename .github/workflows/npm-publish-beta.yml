@@ -32,13 +32,16 @@ jobs:
           # Get the current version from package.json
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           
+          # Generate a timestamp for uniqueness
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          
           # For PR: use PR number in version
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BETA_VERSION="$CURRENT_VERSION-beta.pr.${{ github.event.pull_request.number }}"
+            BETA_VERSION="$CURRENT_VERSION-beta.pr.${{ github.event.pull_request.number }}.$TIMESTAMP"
           else
             # For develop: use commit hash
             SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-            BETA_VERSION="$CURRENT_VERSION-beta.$SHORT_SHA"
+            BETA_VERSION="$CURRENT_VERSION-beta.$SHORT_SHA.$TIMESTAMP"
           fi
           
           # Set output for use in next step
