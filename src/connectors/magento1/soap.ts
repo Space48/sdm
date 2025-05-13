@@ -35,9 +35,10 @@ export class Magento1SoapClient {
     const { clientPromise, loginResult, requestOptions } = state;
     const client = await clientPromise;
     const { sessionId, wsiCompliance } = await loginResult;
-    const [result] = await useAgent(() =>
+    const response = await useAgent(() =>
       client[`${method}Async`]({ sessionId, ...args }, requestOptions),
     );
+    const result = Array.isArray(response) && response.length > 0 ? response[0] : response;
     return wsiCompliance
       ? extractWsiValue(result.result)
       : extractNonWsiValue(Object.values(result)[0]);

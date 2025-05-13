@@ -40,7 +40,11 @@ export class Shell {
       R.toPairs,
       R.map(
         ([encodedResourcePath, encodedEndpointNames]) =>
-          `${commandPrefix}${encodedResourcePath}\n ↳ ${encodedEndpointNames.sort().join(", ")}\n`,
+          `${commandPrefix}${encodedResourcePath}\n ↳ ${
+            Array.isArray(encodedEndpointNames)
+              ? encodedEndpointNames.sort().join(", ")
+              : String(encodedEndpointNames)
+          }\n`,
       ),
     );
   }
