@@ -1,6 +1,8 @@
 SDM
 ===
 
+[![NPM Publish](https://github.com/Space48/sdm/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/Space48/sdm/actions/workflows/npm-publish.yml)
+
 ## Installation
 ------------
 
