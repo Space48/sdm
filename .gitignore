@@ -4,3 +4,4 @@ node_modules
 .npmrc
 /scratch
 package-lock.json
+/lib
