@@ -54,3 +54,22 @@ jobs:
         run: npm publish --tag beta --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Comment on PR with published version
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = process.env.BETA_VERSION;
+            const packageName = '@space48/sdm';
+            const installCmd = `npm install ${packageName}@${version}`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 Beta version published: **${version}**\n\nYou can install this version with:\n\`\`\`bash\n${installCmd}\n\`\`\``
+            });
+        env:
+          BETA_VERSION: ${{ steps.beta-version.outputs.version }}

@@ -23,7 +23,48 @@ jobs:
       - name: Build
         run: npm run build
         
+      - name: Get package version
+        id: package-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Publish to npm
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Find related PRs and comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = process.env.PACKAGE_VERSION;
+            const packageName = '@space48/sdm';
+            const installCmd = `npm install ${packageName}@${version}`;
+            
+            // Get the commit message to find PR number
+            const { data: commit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha
+            });
+            
+            // Look for PR references in the commit message (like "Merge pull request #123")
+            const prMatch = commit.commit.message.match(/Merge pull request #(\d+)/i);
+            
+            if (prMatch && prMatch[1]) {
+              const prNumber = parseInt(prMatch[1], 10);
+              
+              // Comment on the PR
+              await github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `🚀 New version published: **${version}**\n\nThis version has been published to npm and is now available.\n\nYou can install it with:\n\`\`\`bash\n${installCmd}\n\`\`\``
+              });
+              
+              console.log(`Commented on PR #${prNumber} about the new release ${version}`);
+            } else {
+              console.log('No PR reference found in the commit message. Skipping comment.');
+            }
+        env:
+          PACKAGE_VERSION: ${{ steps.package-version.outputs.version }}
