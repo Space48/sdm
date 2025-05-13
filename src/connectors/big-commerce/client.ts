@@ -141,7 +141,7 @@ export default class BigCommerce {
               (data.errors && JSON.stringify(data.errors) !== "{}" ? data.errors : data.title) ||
               data,
           )
-          .catch(),
+          .catch(() => `Error parsing response: ${response.statusText}`),
       });
     }
     if (response.status === 204) {
