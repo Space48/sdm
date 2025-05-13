@@ -18,7 +18,7 @@ export function watchScope(scope: ConnectorScope): ConnectorScope {
         }
         progress.finish();
       } catch (e) {
-        progress.finish(e);
+        progress.finish(e instanceof Error ? e : new Error(String(e)));
         throw e;
       }
     },

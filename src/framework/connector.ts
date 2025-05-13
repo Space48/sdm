@@ -99,7 +99,7 @@ export function connector<Config, Scope, Resources extends ResourceDefinitionMap
 
     return connector;
   } catch (e) {
-    throw new InvalidConnectorDefinition(e);
+    throw new InvalidConnectorDefinition(e instanceof Error ? e.message : String(e));
   }
 }
 

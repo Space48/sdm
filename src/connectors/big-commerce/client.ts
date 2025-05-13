@@ -1,10 +1,14 @@
-import fetch, { RequestInit } from "node-fetch";
+import type { RequestInfo, RequestInit } from "node-fetch";
 import { stringify } from "query-string";
 import pRetry from "p-retry";
 import * as t from "io-ts";
 import { EndpointError, MutableReference } from "../../framework";
 import { Agent } from "https";
 import R from "ramda";
+
+// dynamically import node-fetch to avoid issues with ESM and CommonJS
+const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  import("node-fetch").then(mod => mod.default(...args));
 
 const listConcurrency = 50;
 
@@ -137,7 +141,7 @@ export default class BigCommerce {
               (data.errors && JSON.stringify(data.errors) !== "{}" ? data.errors : data.title) ||
               data,
           )
-          .catch(),
+          .catch(() => `Error parsing response: ${response.statusText}`),
       });
     }
     if (response.status === 204) {

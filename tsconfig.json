@@ -9,11 +9,18 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": ["ES2019"],
+    "lib": [
+      "DOM",
+      "ES2019",
+      "ESNext"
+    ],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true,
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
 }
