@@ -14,17 +14,13 @@ npm i @space48/sdm
 Pre-requisites for installation
 -------------------------------
 
-### Configure @space48 npm scope
+### Install sdm
 
-sdm is distributed as a private npm package in the @space48 scope. To install sdm and other private Space 48 npm
-packages, you must first configure the @space48 scope in npm.
+Install sdm from npm:
 
-1. [Create a github access token](https://github.com/settings/tokens/new) with `read packages` and `repo` privileges
-2. Configure npm so that you can install sdm and other private Space 48 packages using your email and token created in Step 1 as yur username & password
-
-    ```bash
-    npm login --registry=https://npm.pkg.github.com --scope=@space48
-    ```
+```bash
+npm install @space48/sdm
+```
 
 ### Enable node 20
 
