@@ -31,7 +31,7 @@ export class Scope {
       const client = new Shopify({
         shopName: currentConfig.shopName,
         ...currentConfig.credentials,
-        apiVersion: "2020-10",
+        apiVersion: "2025-07",
       });
       const requestFn = (client as any).request.bind(client);
       (client as any).request = backoff(requestFn);
